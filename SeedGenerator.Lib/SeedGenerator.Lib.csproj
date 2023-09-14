@@ -7,11 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SkiaSharp" Version="2.88.3" />
+    <None Remove="Resources\Cmc7.ttf" />
+    <None Remove="Resources\Fonts\OcrbRegular.ttf" />
+    <None Remove="Resources\OCRB Regular.ttf" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SeedGenerator.Interfaces\SeedGenerator.Interfaces.csproj" />
+    <EmbeddedResource Include="Resources\Fonts\Cmc7.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\OcrbRegular.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="2.88.3" />
+    <PackageReference Include="Svg" Version="3.4.4" />
   </ItemGroup>
 
   <ItemGroup>

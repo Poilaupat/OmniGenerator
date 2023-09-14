@@ -21,7 +21,7 @@ namespace SeedGenerator.Lib.Image
             int pixelHeigth = (int)(height / 2.54 * resolution);
             int pixelWidth = (int)(width / 2.54 * resolution);
 
-            SKImageInfo ii = new SKImageInfo(pixelHeigth, pixelWidth, SKColorType.Gray8);
+            SKImageInfo ii = new SKImageInfo(pixelWidth, pixelHeigth, SKColorType.Gray8);
             return SKSurface.Create(ii);
         }
     }

@@ -59,25 +59,5 @@ namespace SeedGenerator.Lib.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] Cmc7 {
-            get {
-                object obj = ResourceManager.GetObject("Cmc7", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] OCRB_Regular {
-            get {
-                object obj = ResourceManager.GetObject("OCRB Regular", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }

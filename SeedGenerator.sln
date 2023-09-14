@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeedGenerator.Cli", "SeedGenerator.Cli\SeedGenerator.Cli.csproj", "{1DFA7A9C-2B0C-4007-B06F-CCB8A512B269}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeedGenerator.Cli", "SeedGenerator.Cli\SeedGenerator.Cli.csproj", "{1DFA7A9C-2B0C-4007-B06F-CCB8A512B269}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeedGenerator.Lib", "SeedGenerator.Lib\SeedGenerator.Lib.csproj", "{2C34E6E8-DAC2-43B8-B8AC-F3A72CC1891A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeedGenerator.Interfaces", "SeedGenerator.Interfaces\SeedGenerator.Interfaces.csproj", "{6DEACE62-B905-4DDB-8657-97C39A8C4774}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeedGenerator.Lib", "SeedGenerator.Lib\SeedGenerator.Lib.csproj", "{2C34E6E8-DAC2-43B8-B8AC-F3A72CC1891A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{2C34E6E8-DAC2-43B8-B8AC-F3A72CC1891A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C34E6E8-DAC2-43B8-B8AC-F3A72CC1891A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C34E6E8-DAC2-43B8-B8AC-F3A72CC1891A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6DEACE62-B905-4DDB-8657-97C39A8C4774}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6DEACE62-B905-4DDB-8657-97C39A8C4774}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6DEACE62-B905-4DDB-8657-97C39A8C4774}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6DEACE62-B905-4DDB-8657-97C39A8C4774}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
