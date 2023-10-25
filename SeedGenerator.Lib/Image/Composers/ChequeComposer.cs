@@ -65,6 +65,11 @@ namespace SeedGenerator.Lib.Image.Composers
             doc.Children.Add(group);
 
             group.Children.Add(new SvgCircle() { ID = "circle", CenterX = 50, CenterY = 50, Radius = 10, Fill = new SvgColourServer(System.Drawing.ColorTranslator.FromHtml("#FFFFFF")) });
+            var txt = new SvgText() { ID = "cmc7" };
+            var txtContent = new SvgContentNode { Content = "1234567 123456789012 123456789012" };
+            txt.Nodes.Add(txtContent);
+            group.Children.Add(txt);
+
 
             doc.Draw().Save(@"C:\Users\Ruben\Documents\Dev\Work\svg.png", System.Drawing.Imaging.ImageFormat.Png);
         }

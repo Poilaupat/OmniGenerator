@@ -1,6 +1,6 @@
 ﻿namespace SeedGenerator.Lib.Interfaces
 {
-    public interface IImageComposer
+    public interface IImageGenerator
     {
 
     }

@@ -27,7 +27,10 @@ namespace SeedGenerator.Lib.Fonts
             using (var fontStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(fontPath))
             using (var ms = new MemoryStream())
             {
-                fontStream.CopyTo(ms);
+                if (fontStream is not null)
+                {
+                    fontStream.CopyTo(ms);
+                }
                 return ms.ToArray();
             }
         }
