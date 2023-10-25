@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeedGenerator.Lib.MetaData
+namespace SeedGenerator.Lib.MetaData.Generators
 {
     public class MetaDataGeneratorCollection
     {
@@ -17,7 +17,7 @@ namespace SeedGenerator.Lib.MetaData
 
         public void Add(MetaDataGeneratorBase item)
         {
-            if(this.Contains(item.Name))
+            if (Contains(item.Name))
             {
                 throw new ArgumentException($"A metadata generator with name '{item.Name}' was already added");
             }
@@ -25,9 +25,9 @@ namespace SeedGenerator.Lib.MetaData
             Generators.Add(item);
         }
 
-        public void AddRange(IEnumerable<MetaDataGeneratorBase> items) 
+        public void AddRange(IEnumerable<MetaDataGeneratorBase> items)
         {
-            foreach(var item in items)
+            foreach (var item in items)
             {
                 Add(item);
             }
@@ -44,7 +44,7 @@ namespace SeedGenerator.Lib.MetaData
                     var targetMetadata = metadatas[dependantGenerator.DependantUpon];
                     dependantGenerator.DependantValue = targetMetadata.Value;
                 }
-                
+
                 metadatas.Add(generator.Name, new MetaDataItem(generator.Name, generator.NextValue()));
             }
 

@@ -7,8 +7,9 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
 using SeedGenerator.Lib.MetaData;
+using SeedGenerator.Lib.Param.MetaData;
 
-namespace SeedGenerator.Lib.Serialization
+namespace SeedGenerator.Lib.Param.Serialization
 {
     public class PolymorphicTypeResolver : DefaultJsonTypeInfoResolver
     {
@@ -18,14 +19,14 @@ namespace SeedGenerator.Lib.Serialization
 
             jsonTypeInfo.PolymorphismOptions = jsonTypeInfo.Type switch
             {
-                Type mdgb when mdgb == typeof(MetaDataGeneratorBase) => ResolveMetaDataGeneratorDerivedTypes(),
+                Type t when t == typeof(MetaDataParamBase) => ResolveMetaDataParamDerivedTypes(),
                 _ => null,
             };
 
             return jsonTypeInfo;
         }
 
-        private JsonPolymorphismOptions ResolveMetaDataGeneratorDerivedTypes()
+        private JsonPolymorphismOptions ResolveMetaDataParamDerivedTypes()
         {
             return new JsonPolymorphismOptions
             {
@@ -34,10 +35,10 @@ namespace SeedGenerator.Lib.Serialization
                 UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FailSerialization,
                 DerivedTypes =
                 {
-                    new JsonDerivedType(typeof(MetaDataGeneratorRegex), "regex"),
-                    new JsonDerivedType(typeof(MetaDataGeneratorFixedValue), "fixed"),
-                    new JsonDerivedType(typeof(MetaDataGeneratorList), "list"),
-                    new JsonDerivedType(typeof(MetaDataGeneratorKeyRlmc), "rlmc"),
+                    new JsonDerivedType(typeof(MetaDataParamRegex), "regex"),
+                    new JsonDerivedType(typeof(MetaDataParamFixedValue), "fixed"),
+                    new JsonDerivedType(typeof(MetaDataParamList), "list"),
+                    new JsonDerivedType(typeof(MetaDataParamKeyCalculator), "key"),
                 }
             };
         }

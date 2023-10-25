@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeedGenerator.Lib.MetaData
+namespace SeedGenerator.Lib.MetaData.Generators
 {
     public class MetaDataGeneratorList : MetaDataGeneratorBase
     {
         public string ListPath { get; }
 
-        public MetaDataGeneratorList(string name, string listpath) 
+        public MetaDataGeneratorList(string name, string listpath)
             : base(name)
         {
             ListPath = listpath;
@@ -23,7 +23,7 @@ namespace SeedGenerator.Lib.MetaData
 
             if (list.Length > 0)
             {
-                return list[new Random().Next(0, list.Length)]; 
+                return list[new Random().Next(0, list.Length)];
             }
             else
             {
@@ -31,8 +31,8 @@ namespace SeedGenerator.Lib.MetaData
             }
         }
 
-        
 
-        
+
+
     }
 }

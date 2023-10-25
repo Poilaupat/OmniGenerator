@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Fare;
 
-namespace SeedGenerator.Lib.MetaData
+namespace SeedGenerator.Lib.MetaData.Generators
 {
     public class MetaDataGeneratorRegex : MetaDataGeneratorBase
     {

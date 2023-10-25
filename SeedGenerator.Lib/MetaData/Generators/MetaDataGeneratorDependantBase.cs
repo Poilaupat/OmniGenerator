@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace SeedGenerator.Lib.MetaData
+namespace SeedGenerator.Lib.MetaData.Generators
 {
     public abstract class MetaDataGeneratorDependantBase : MetaDataGeneratorBase
     {
@@ -16,7 +16,7 @@ namespace SeedGenerator.Lib.MetaData
         public string? DependantValue { get; set; }
 
 
-        public MetaDataGeneratorDependantBase(string name, string dependantUpon) 
+        public MetaDataGeneratorDependantBase(string name, string dependantUpon)
             : base(name)
         {
             DependantUpon = dependantUpon;

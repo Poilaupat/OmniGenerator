@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeedGenerator.Lib.MetaData
+namespace SeedGenerator.Lib.MetaData.Generators
 {
     internal class MetaDataGeneratorComparer : IComparer<MetaDataGeneratorBase>
     {
