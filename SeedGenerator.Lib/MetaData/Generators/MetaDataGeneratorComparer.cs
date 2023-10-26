@@ -1,12 +1,4 @@
-﻿using Microsoft.ProgramSynthesis.Transformation.Text.Build.RuleNodeTypes;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SeedGenerator.Lib.MetaData.Generators
+﻿namespace SeedGenerator.Lib.MetaData.Generators
 {
     internal class MetaDataGeneratorComparer : IComparer<MetaDataGeneratorBase>
     {

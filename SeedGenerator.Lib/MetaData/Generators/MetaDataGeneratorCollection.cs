@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 
 namespace SeedGenerator.Lib.MetaData.Generators
 {
     public class MetaDataGeneratorCollection
     {
         public List<MetaDataGeneratorBase> Generators { get; } = new List<MetaDataGeneratorBase>();
+
+        public MetaDataGeneratorCollection(IEnumerable<MetaDataGeneratorBase> generators) 
+        { 
+            AddRange(generators);
+        }
 
         public bool Contains(string name) => Generators.Any(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 

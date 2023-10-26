@@ -1,12 +1,7 @@
 ﻿using SeedGenerator.Lib.MetaData;
 using SeedGenerator.Lib.MetaData.Generators;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SeedGenerator.Lib.Document
+namespace SeedGenerator.Lib
 {
     public class Document
     {
