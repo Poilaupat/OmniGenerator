@@ -1,12 +1,12 @@
 ﻿using Fare;
 
-namespace SeedGenerator.Lib.MetaData.Generators
+namespace SeedGenerator.Lib.Fields.Generators
 {
-    public class MetaDataGeneratorRegex : MetaDataGeneratorBase
+    public class FieldGeneratorRegex : FieldGeneratorBase
     {
         public string Pattern { get; set; }
 
-        public MetaDataGeneratorRegex(string name, string pattern)
+        public FieldGeneratorRegex(string name, string pattern)
             : base(name)
         {
             Pattern = pattern;

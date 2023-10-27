@@ -1,15 +1,15 @@
-﻿namespace SeedGenerator.Lib.MetaData.Generators
+﻿namespace SeedGenerator.Lib.Fields.Generators
 {
-    internal class MetaDataGeneratorComparer : IComparer<MetaDataGeneratorBase>
+    internal class FieldGeneratorComparer : IComparer<FieldGeneratorBase>
     {
-        public int Compare(MetaDataGeneratorBase? x, MetaDataGeneratorBase? y)
+        public int Compare(FieldGeneratorBase? x, FieldGeneratorBase? y)
         {
             if (x is null || y is null)
                 throw new ArgumentNullException();
 
-            if (x is MetaDataGeneratorDependantBase || y is MetaDataGeneratorDependantBase)
+            if (x is FieldGeneratorDependantBase || y is FieldGeneratorDependantBase)
             {
-                if (x is MetaDataGeneratorDependantBase xd && y is MetaDataGeneratorDependantBase yd)
+                if (x is FieldGeneratorDependantBase xd && y is FieldGeneratorDependantBase yd)
                 {
                     if (xd.DependantUpon.Equals(y.Name, StringComparison.InvariantCultureIgnoreCase)
                             && yd.DependantUpon.Equals(x.Name, StringComparison.InvariantCultureIgnoreCase))
@@ -19,7 +19,7 @@
                     else
                         return -1;
                 }
-                else if (x is MetaDataGeneratorDependantBase)
+                else if (x is FieldGeneratorDependantBase)
                 {
                     return 1;
                 }

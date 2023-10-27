@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SeedGenerator.Lib.MetaData.Generators
+namespace SeedGenerator.Lib.Fields.Generators
 {
-    public abstract class MetaDataGeneratorDependantBase : MetaDataGeneratorBase
+    public abstract class FieldGeneratorDependantBase : FieldGeneratorBase
     {
         public string DependantUpon { get; }
 
@@ -10,7 +10,7 @@ namespace SeedGenerator.Lib.MetaData.Generators
         public string? DependantValue { get; set; }
 
 
-        public MetaDataGeneratorDependantBase(string name, string dependantUpon)
+        public FieldGeneratorDependantBase(string name, string dependantUpon)
             : base(name)
         {
             DependantUpon = dependantUpon;

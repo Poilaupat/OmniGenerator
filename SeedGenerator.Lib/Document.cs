@@ -1,15 +1,15 @@
-﻿using SeedGenerator.Lib.MetaData;
-using SeedGenerator.Lib.MetaData.Generators;
+﻿using SeedGenerator.Lib.Fields;
+using SeedGenerator.Lib.Fields.Generators;
 
 namespace SeedGenerator.Lib
 {
     public class Document
     {
-        public MetaDataCollection MetaDatas { get; set; }
+        public FieldCollection Fields { get; set; }
 
-        public Document(MetaDataGeneratorCollection generators)
+        public Document(FieldGeneratorCollection generators)
         {
-            MetaDatas = generators.GenerateMetaData();
+            Fields = generators.GenerateMetaData();
         }
     }
 }

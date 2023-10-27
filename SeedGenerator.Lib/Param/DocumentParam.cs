@@ -1,4 +1,4 @@
-﻿using SeedGenerator.Lib.Param.MetaData;
+﻿using SeedGenerator.Lib.Param.FieldParams;
 using System.Text.Json.Serialization;
 
 namespace SeedGenerator.Lib.Param
@@ -9,6 +9,6 @@ namespace SeedGenerator.Lib.Param
         public string? Name { get; set; }
 
         [JsonPropertyName("metadatas")]
-        public List<MetaDataParamBase>? MetaDatas { get; set; }
+        public List<FieldParamBase>? FieldParams { get; set; }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SeedGenerator.Lib.Param.MetaData
+namespace SeedGenerator.Lib.Param.FieldParams
 {
-    public class MetaDataParamRegex : MetaDataParamBase
+    public class FieldParamRegex : FieldParamBase
     {
         [JsonPropertyName("pattern")]
         public string? Pattern { get; set; }

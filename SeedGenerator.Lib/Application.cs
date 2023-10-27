@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
-using SeedGenerator.Lib.MetaData.Generators;
+using SeedGenerator.Lib.Fields.Generators;
 using SeedGenerator.Lib.Param;
 using SeedGenerator.Lib.Param.Serialization;
 using System.Text.Encodings.Web;
@@ -34,7 +34,7 @@ namespace SeedGenerator.Lib
 
                 if (chequeParam is not null)
                 {
-                    var generators = new MetaDataGeneratorCollection(_mapper.Map<List<MetaDataGeneratorBase>>(chequeParam.MetaDatas));
+                    var generators = new FieldGeneratorCollection(_mapper.Map<List<FieldGeneratorBase>>(chequeParam.FieldParams));
 
                     var docs = new List<Document>();
                     for (int i = 0; i < 100; i++)

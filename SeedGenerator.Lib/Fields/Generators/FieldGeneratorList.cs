@@ -1,12 +1,12 @@
 ﻿using SeedGenerator.Lib.Tools;
 
-namespace SeedGenerator.Lib.MetaData.Generators
+namespace SeedGenerator.Lib.Fields.Generators
 {
-    public class MetaDataGeneratorList : MetaDataGeneratorBase
+    public class FieldGeneratorList : FieldGeneratorBase
     {
         public string ListPath { get; }
 
-        public MetaDataGeneratorList(string name, string listpath)
+        public FieldGeneratorList(string name, string listpath)
             : base(name)
         {
             ListPath = listpath;

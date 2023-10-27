@@ -1,11 +1,11 @@
-﻿namespace SeedGenerator.Lib.MetaData
+﻿namespace SeedGenerator.Lib.Fields
 {
-    public class MetaDataItem
+    public class Field
     {
         public string Name { get; set; }
         public string Value { get; set; }
 
-        public MetaDataItem(string name, string value) 
+        public Field(string name, string value) 
         { 
             Name = name;
             Value = value;

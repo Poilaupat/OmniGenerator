@@ -1,10 +1,10 @@
-﻿namespace SeedGenerator.Lib.MetaData.Generators
+﻿namespace SeedGenerator.Lib.Fields.Generators
 {
-    public class MetaDataGeneratorFixedValue : MetaDataGeneratorBase
+    public class FieldGeneratorFixedValue : FieldGeneratorBase
     {
         public string FixedValue { get; }
 
-        public MetaDataGeneratorFixedValue(string name, string fixedvalue)
+        public FieldGeneratorFixedValue(string name, string fixedvalue)
             : base(name)
         {
             FixedValue = fixedvalue;

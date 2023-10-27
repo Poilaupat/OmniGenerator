@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SeedGenerator.Lib.Param.MetaData
+namespace SeedGenerator.Lib.Param.FieldParams
 {
-    public class MetaDataParamList : MetaDataParamBase
+    public class FieldParamList : FieldParamBase
     {
         [JsonPropertyName("list-path")]
         public string? ListPath { get; set; }

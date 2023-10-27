@@ -1,12 +1,12 @@
 ﻿using SeedGenerator.Lib.Tools;
 
-namespace SeedGenerator.Lib.MetaData.Generators
+namespace SeedGenerator.Lib.Fields.Generators
 {
-    public class MetaDataGeneratorKeyCalculator : MetaDataGeneratorDependantBase
+    public class FieldGeneratorKeyCalculator : FieldGeneratorDependantBase
     {
         public string KeyType { get; set; }
 
-        public MetaDataGeneratorKeyCalculator(string name, string dependantUpon, string keyType)
+        public FieldGeneratorKeyCalculator(string name, string dependantUpon, string keyType)
             : base(name, dependantUpon)
         {
             KeyType = keyType;

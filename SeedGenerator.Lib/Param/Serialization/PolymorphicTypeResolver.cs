@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization.Metadata;
 using System.Text.Json.Serialization;
 using System.Text.Json;
-using SeedGenerator.Lib.Param.MetaData;
+using SeedGenerator.Lib.Param.FieldParams;
 
 namespace SeedGenerator.Lib.Param.Serialization
 {
@@ -13,7 +13,7 @@ namespace SeedGenerator.Lib.Param.Serialization
 
             jsonTypeInfo.PolymorphismOptions = jsonTypeInfo.Type switch
             {
-                Type t when t == typeof(MetaDataParamBase) => ResolveMetaDataParamDerivedTypes(),
+                Type t when t == typeof(FieldParamBase) => ResolveMetaDataParamDerivedTypes(),
                 _ => null,
             };
 
@@ -29,10 +29,10 @@ namespace SeedGenerator.Lib.Param.Serialization
                 UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FailSerialization,
                 DerivedTypes =
                 {
-                    new JsonDerivedType(typeof(MetaDataParamRegex), "regex"),
-                    new JsonDerivedType(typeof(MetaDataParamFixedValue), "fixed"),
-                    new JsonDerivedType(typeof(MetaDataParamList), "list"),
-                    new JsonDerivedType(typeof(MetaDataParamKeyCalculator), "key"),
+                    new JsonDerivedType(typeof(FieldParamRegex), "regex"),
+                    new JsonDerivedType(typeof(FieldParamFixedValue), "fixed"),
+                    new JsonDerivedType(typeof(FieldParamList), "list"),
+                    new JsonDerivedType(typeof(FieldParamKeyCalculator), "key"),
                 }
             };
         }

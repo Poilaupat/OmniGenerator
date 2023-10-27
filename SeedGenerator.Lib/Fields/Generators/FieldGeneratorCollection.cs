@@ -1,19 +1,19 @@
 ﻿using System.Data;
 
-namespace SeedGenerator.Lib.MetaData.Generators
+namespace SeedGenerator.Lib.Fields.Generators
 {
-    public class MetaDataGeneratorCollection
+    public class FieldGeneratorCollection
     {
-        public List<MetaDataGeneratorBase> Generators { get; } = new List<MetaDataGeneratorBase>();
+        public List<FieldGeneratorBase> Generators { get; } = new List<FieldGeneratorBase>();
 
-        public MetaDataGeneratorCollection(IEnumerable<MetaDataGeneratorBase> generators) 
+        public FieldGeneratorCollection(IEnumerable<FieldGeneratorBase> generators) 
         { 
             AddRange(generators);
         }
 
         public bool Contains(string name) => Generators.Any(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
-        public void Add(MetaDataGeneratorBase item)
+        public void Add(FieldGeneratorBase item)
         {
             if (Contains(item.Name))
             {
@@ -23,7 +23,7 @@ namespace SeedGenerator.Lib.MetaData.Generators
             Generators.Add(item);
         }
 
-        public void AddRange(IEnumerable<MetaDataGeneratorBase> items)
+        public void AddRange(IEnumerable<FieldGeneratorBase> items)
         {
             foreach (var item in items)
             {
@@ -31,19 +31,19 @@ namespace SeedGenerator.Lib.MetaData.Generators
             }
         }
 
-        public MetaDataCollection GenerateMetaData()
+        public FieldCollection GenerateMetaData()
         {
-            MetaDataCollection metadatas = new MetaDataCollection();
+            FieldCollection metadatas = new FieldCollection();
 
-            foreach (var generator in Generators.OrderBy(x => x, new MetaDataGeneratorComparer()))
+            foreach (var generator in Generators.OrderBy(x => x, new FieldGeneratorComparer()))
             {
-                if (generator is MetaDataGeneratorDependantBase dependantGenerator)
+                if (generator is FieldGeneratorDependantBase dependantGenerator)
                 {
                     var targetMetadata = metadatas[dependantGenerator.DependantUpon];
                     dependantGenerator.DependantValue = targetMetadata.Value;
                 }
 
-                metadatas.Add(generator.Name, new MetaDataItem(generator.Name, generator.NextValue()));
+                metadatas.Add(generator.Name, new Field(generator.Name, generator.NextValue()));
             }
 
             return metadatas;

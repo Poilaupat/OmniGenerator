@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SeedGenerator.Lib.Param.MetaData
+namespace SeedGenerator.Lib.Param.FieldParams
 {
-    public abstract class MetaDataParamBase
+    public abstract class FieldParamBase
     {
         [JsonPropertyName("name"), JsonPropertyOrder(0)]
         public string? Name {  get; set; }
