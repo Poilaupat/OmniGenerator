@@ -1,6 +1,6 @@
 ﻿namespace SeedGenerator.Lib.Fields.Generators
 {
-    public abstract class FieldGeneratorBase
+    internal abstract class FieldGeneratorBase
     {
         public string Name { get; }
 

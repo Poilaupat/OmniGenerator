@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SeedGenerator.Lib
 {
-    public class Packet
+    internal class Packet
     {
         public FieldCollection Fields { get; set; }
         public List<Document> Documents { get; set; } = new List<Document>();

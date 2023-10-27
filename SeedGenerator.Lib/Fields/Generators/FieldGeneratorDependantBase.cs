@@ -2,7 +2,7 @@
 
 namespace SeedGenerator.Lib.Fields.Generators
 {
-    public abstract class FieldGeneratorDependantBase : FieldGeneratorBase
+    internal abstract class FieldGeneratorDependantBase : FieldGeneratorBase
     {
         public string DependantUpon { get; }
 

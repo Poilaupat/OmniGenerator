@@ -2,7 +2,7 @@
 
 namespace SeedGenerator.Lib.Fields.Generators
 {
-    public class FieldGeneratorRegex : FieldGeneratorBase
+    internal class FieldGeneratorRegex : FieldGeneratorBase
     {
         public string Pattern { get; set; }
 

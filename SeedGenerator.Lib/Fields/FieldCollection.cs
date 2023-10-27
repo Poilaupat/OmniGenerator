@@ -1,6 +1,6 @@
 ﻿namespace SeedGenerator.Lib.Fields
 {
-    public class FieldCollection
+    internal class FieldCollection
     {
         private Dictionary<string, Field> _items = new Dictionary<string, Field>();
 

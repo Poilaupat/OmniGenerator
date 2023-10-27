@@ -3,7 +3,7 @@ using SeedGenerator.Lib.Fields.Generators;
 
 namespace SeedGenerator.Lib
 {
-    public class Document
+    internal class Document
     {
         public FieldCollection Fields { get; set; }
 

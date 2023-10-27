@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SeedGenerator.Lib.Param
 {
-    public class DocumentParam
+    internal class DocumentParam
     {
         [JsonPropertyName("name")]
         public string? Name { get; set; }

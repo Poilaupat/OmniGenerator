@@ -2,7 +2,7 @@
 
 namespace SeedGenerator.Lib.Param.FieldParams
 {
-    public class FieldParamRegex : FieldParamBase
+    internal class FieldParamRegex : FieldParamBase
     {
         [JsonPropertyName("pattern")]
         public string? Pattern { get; set; }

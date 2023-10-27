@@ -2,7 +2,7 @@
 
 namespace SeedGenerator.Lib.Fields.Generators
 {
-    public class FieldGeneratorKeyCalculator : FieldGeneratorDependantBase
+    internal class FieldGeneratorKeyCalculator : FieldGeneratorDependantBase
     {
         public string KeyType { get; set; }
 

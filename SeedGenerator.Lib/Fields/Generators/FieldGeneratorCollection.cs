@@ -2,7 +2,7 @@
 
 namespace SeedGenerator.Lib.Fields.Generators
 {
-    public class FieldGeneratorCollection
+    internal class FieldGeneratorCollection
     {
         public List<FieldGeneratorBase> Generators { get; } = new List<FieldGeneratorBase>();
 

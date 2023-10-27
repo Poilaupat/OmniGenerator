@@ -5,7 +5,7 @@ using SeedGenerator.Lib.Param.FieldParams;
 
 namespace SeedGenerator.Lib.Param.Serialization
 {
-    public class PolymorphicTypeResolver : DefaultJsonTypeInfoResolver
+    internal class PolymorphicTypeResolver : DefaultJsonTypeInfoResolver
     {
         public override JsonTypeInfo GetTypeInfo(Type type, JsonSerializerOptions options)
         {
