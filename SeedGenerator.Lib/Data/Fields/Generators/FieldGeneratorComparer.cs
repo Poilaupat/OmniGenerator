@@ -1,4 +1,4 @@
-﻿namespace SeedGenerator.Lib.Fields.Generators
+﻿namespace SeedGenerator.Lib.Data.Fields.Generators
 {
     internal class FieldGeneratorComparer : IComparer<FieldGeneratorBase>
     {

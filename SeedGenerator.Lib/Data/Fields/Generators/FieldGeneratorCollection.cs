@@ -1,13 +1,13 @@
 ﻿using System.Data;
 
-namespace SeedGenerator.Lib.Fields.Generators
+namespace SeedGenerator.Lib.Data.Fields.Generators
 {
     internal class FieldGeneratorCollection
     {
         public List<FieldGeneratorBase> Generators { get; } = new List<FieldGeneratorBase>();
 
-        public FieldGeneratorCollection(IEnumerable<FieldGeneratorBase> generators) 
-        { 
+        public FieldGeneratorCollection(IEnumerable<FieldGeneratorBase> generators)
+        {
             AddRange(generators);
         }
 
@@ -31,22 +31,22 @@ namespace SeedGenerator.Lib.Fields.Generators
             }
         }
 
-        public FieldCollection GenerateMetaData()
+        public FieldCollection GenerateFields()
         {
-            FieldCollection metadatas = new FieldCollection();
+            FieldCollection fields = new FieldCollection();
 
             foreach (var generator in Generators.OrderBy(x => x, new FieldGeneratorComparer()))
             {
                 if (generator is FieldGeneratorDependantBase dependantGenerator)
                 {
-                    var targetMetadata = metadatas[dependantGenerator.DependantUpon];
-                    dependantGenerator.DependantValue = targetMetadata.Value;
+                    var targetField = fields[dependantGenerator.DependantUpon];
+                    dependantGenerator.DependantValue = targetField.Value;
                 }
 
-                metadatas.Add(generator.Name, new Field(generator.Name, generator.NextValue()));
+                fields.Add(generator.Name, new Field(generator.Name, generator.NextValue()));
             }
 
-            return metadatas;
+            return fields;
         }
     }
 }

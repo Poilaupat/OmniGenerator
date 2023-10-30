@@ -1,7 +1,7 @@
-﻿using SeedGenerator.Lib.Fields;
-using SeedGenerator.Lib.Fields.Generators;
+﻿using SeedGenerator.Lib.Data.Fields;
+using SeedGenerator.Lib.Data.Fields.Generators;
 
-namespace SeedGenerator.Lib
+namespace SeedGenerator.Lib.Data
 {
     internal class Document
     {
@@ -9,7 +9,7 @@ namespace SeedGenerator.Lib
 
         public Document(FieldGeneratorCollection generators)
         {
-            Fields = generators.GenerateMetaData();
+            Fields = generators.GenerateFields();
         }
     }
 }

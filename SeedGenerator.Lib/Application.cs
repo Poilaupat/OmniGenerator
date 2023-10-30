@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
-using SeedGenerator.Lib.Fields.Generators;
+using SeedGenerator.Lib.Data;
+using SeedGenerator.Lib.Data.Fields.Generators;
 using SeedGenerator.Lib.Param;
 using SeedGenerator.Lib.Param.Serialization;
 using System.Text.Encodings.Web;

@@ -1,6 +1,6 @@
 {
   "name": "cheque",
-  "metadatas": [
+  "fields": [
     {
       "$type": "regex",
       "name": "Cmc7",

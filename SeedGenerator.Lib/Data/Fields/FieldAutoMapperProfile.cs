@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using SeedGenerator.Lib.Fields.Generators;
+using SeedGenerator.Lib.Data.Fields.Generators;
 using SeedGenerator.Lib.Param.FieldParams;
 
-namespace SeedGenerator.Lib.Fields
+namespace SeedGenerator.Lib.Data.Fields
 {
     internal class FieldAutoMapperProfile : Profile
     {
-        public FieldAutoMapperProfile() 
+        public FieldAutoMapperProfile()
         {
             CreateMap<FieldParamBase, FieldGeneratorBase>()
                 .Include<FieldParamRegex, FieldGeneratorRegex>()

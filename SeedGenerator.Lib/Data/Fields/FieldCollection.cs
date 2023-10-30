@@ -1,4 +1,4 @@
-﻿namespace SeedGenerator.Lib.Fields
+﻿namespace SeedGenerator.Lib.Data.Fields
 {
     internal class FieldCollection
     {

@@ -1,12 +1,9 @@
-﻿using System.Text.Json.Serialization;
-
-namespace SeedGenerator.Lib.Fields.Generators
+﻿namespace SeedGenerator.Lib.Data.Fields.Generators
 {
     internal abstract class FieldGeneratorDependantBase : FieldGeneratorBase
     {
         public string DependantUpon { get; }
 
-        [JsonIgnore]
         public string? DependantValue { get; set; }
 
 

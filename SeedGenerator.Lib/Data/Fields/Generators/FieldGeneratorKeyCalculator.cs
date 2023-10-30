@@ -1,6 +1,6 @@
 ﻿using SeedGenerator.Lib.Tools;
 
-namespace SeedGenerator.Lib.Fields.Generators
+namespace SeedGenerator.Lib.Data.Fields.Generators
 {
     internal class FieldGeneratorKeyCalculator : FieldGeneratorDependantBase
     {
@@ -14,9 +14,11 @@ namespace SeedGenerator.Lib.Fields.Generators
 
         public override string NextValue()
         {
+            var depvalue = DependantValue ?? "0";
+
             return KeyType switch
             {
-                "rlmc" => ComputeRlmcKey(DependantValue ?? "0"),
+                "rlmc" => ComputeRlmcKey(depvalue),
                 _ => throw new Exception($"Unknown key type")
             };
         }
