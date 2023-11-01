@@ -6,6 +6,9 @@
 
         public FieldGeneratorBase(string name)
         {
+            if(string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException($"The property {nameof(name)} must be specified");
+
             Name = name;
         }
 

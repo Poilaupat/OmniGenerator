@@ -1,4 +1,6 @@
-﻿namespace SeedGenerator.Lib.Data.Fields.Generators
+﻿using System.Linq;
+
+namespace SeedGenerator.Lib.Data.Fields.Generators
 {
     internal class FieldGeneratorComparer : IComparer<FieldGeneratorBase>
     {
@@ -11,10 +13,10 @@
             {
                 if (x is FieldGeneratorDependantBase xd && y is FieldGeneratorDependantBase yd)
                 {
-                    if (xd.DependantUpon.Equals(y.Name, StringComparison.InvariantCultureIgnoreCase)
-                            && yd.DependantUpon.Equals(x.Name, StringComparison.InvariantCultureIgnoreCase))
+                    if (xd.Dependances.Keys.Contains(y.Name)
+                            && yd.Dependances.Keys.Contains(x.Name))
                         return x.Name.CompareTo(y.Name);
-                    else if (xd.DependantUpon.Equals(y.Name, StringComparison.InvariantCultureIgnoreCase))
+                    else if (xd.Dependances.Keys.Contains(y.Name))
                         return 1;
                     else
                         return -1;

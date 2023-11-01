@@ -33,6 +33,8 @@ namespace SeedGenerator.Lib.Param.Serialization
                     new JsonDerivedType(typeof(FieldParamFixedValue), "fixed"),
                     new JsonDerivedType(typeof(FieldParamList), "list"),
                     new JsonDerivedType(typeof(FieldParamKeyCalculator), "key"),
+                    new JsonDerivedType(typeof(FieldParamComposite), "composite"),
+                    new JsonDerivedType(typeof(FieldParamAmount), "amount"),
                 }
             };
         }

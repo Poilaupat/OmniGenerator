@@ -12,12 +12,17 @@ namespace SeedGenerator.Lib.Data.Fields
                 .Include<FieldParamRegex, FieldGeneratorRegex>()
                 .Include<FieldParamList, FieldGeneratorList>()
                 .Include<FieldParamFixedValue, FieldGeneratorFixedValue>()
-                .Include<FieldParamKeyCalculator, FieldGeneratorKeyCalculator>();
+                .Include<FieldParamKeyCalculator, FieldGeneratorKeyCalculator>()
+                .Include<FieldParamComposite, FieldGeneratorComposite>()
+                .Include<FieldParamAmount, FieldGeneratorAmount>();
 
             CreateMap<FieldParamRegex, FieldGeneratorRegex>();
             CreateMap<FieldParamList, FieldGeneratorList>();
             CreateMap<FieldParamFixedValue, FieldGeneratorFixedValue>();
             CreateMap<FieldParamKeyCalculator, FieldGeneratorKeyCalculator>();
+            CreateMap<FieldParamComposite, FieldGeneratorComposite>();
+            CreateMap<FieldParamAmount, FieldGeneratorAmount>();
+
         }
     }
 }

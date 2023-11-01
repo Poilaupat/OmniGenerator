@@ -2,15 +2,18 @@
 {
     internal abstract class FieldGeneratorDependantBase : FieldGeneratorBase
     {
-        public string DependantUpon { get; }
-
-        public string? DependantValue { get; set; }
+        public Dictionary<string, string?> Dependances { get; set; } = new Dictionary<string, string?>();
 
 
         public FieldGeneratorDependantBase(string name, string dependantUpon)
             : base(name)
         {
-            DependantUpon = dependantUpon;
+            string[] dependanceNames = dependantUpon.Split(new[] { ',', ';', '|' });
+            
+            foreach(var dependanceName in  dependanceNames)
+            {
+                Dependances[dependanceName] = null;
+            }
         }
     }
 }

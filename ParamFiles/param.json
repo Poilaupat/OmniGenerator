@@ -7,6 +7,12 @@
       "pattern": "\\d{7} \\d{9}908 \\d{12}"
     },
     {
+      "$type": "amount",
+      "name": "Amount",
+      "min": 15.50,
+      "max": 78.97
+    },
+    {
       "$type": "regex",
       "name": "TéléphoneFixe",
       "pattern": "(+33 |0)(1|2|3|4|5) \\d{2} \\d{2} \\d{2} \\d{2}"
@@ -36,6 +42,12 @@
       "$type": "fixed",
       "name": "Banque",
       "fixed-value": "Crédit du Nord"
+    },
+    {
+      "$type": "composite",
+      "name": "FancyName",
+      "dependant-upon":"Nom;Prénom;Amount",
+      "format": "Prénom : {{Prénom}} Nom : {{Nom}} ({{Amount:C2}})"
     }
   ]
 }

@@ -10,11 +10,17 @@ namespace SeedGenerator.Lib.Data.Fields.Generators
             : base(name, dependantUpon)
         {
             KeyType = keyType;
+
+            int dependances = dependantUpon.Split(';').Count();
+            if(dependances > 1)
+            {
+                throw new ArgumentException($"{keyType} generator support only one dependance");
+            }
         }
 
         public override string NextValue()
         {
-            var depvalue = DependantValue ?? "0";
+            var depvalue = Dependances.FirstOrDefault().Value ?? "0";
 
             return KeyType switch
             {

@@ -39,10 +39,12 @@ namespace SeedGenerator.Lib.Data.Fields.Generators
             {
                 if (generator is FieldGeneratorDependantBase dependantGenerator)
                 {
-                    var targetField = fields[dependantGenerator.DependantUpon];
-                    dependantGenerator.DependantValue = targetField.Value;
+                    foreach (var dependance in dependantGenerator.Dependances.Keys)
+                    {
+                        var dependanceTarget = fields[dependance];
+                        dependantGenerator.Dependances[dependance] = dependanceTarget.Value;
+                    }
                 }
-
                 fields.Add(generator.Name, new Field(generator.Name, generator.NextValue()));
             }
 
