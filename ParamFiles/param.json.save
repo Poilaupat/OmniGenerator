@@ -1,0 +1,53 @@
+{
+  "name": "cheque",
+  "fields": [
+    {
+      "$type": "regex",
+      "name": "Cmc7",
+      "pattern": "\\d{7} \\d{9}908 \\d{12}"
+    },
+    {
+      "$type": "amount",
+      "name": "Amount",
+      "min": 15.50,
+      "max": 78.97
+    },
+    {
+      "$type": "regex",
+      "name": "TéléphoneFixe",
+      "pattern": "(+33 |0)(1|2|3|4|5) \\d{2} \\d{2} \\d{2} \\d{2}"
+    },
+    {
+      "$type": "regex",
+      "name": "TéléphoneMobile",
+      "pattern": "(+33 |0)(6|9) \\d{2} \\d{2} \\d{2} \\d{2}"
+    },
+    {
+      "$type": "key",
+      "name": "Rlmc",
+      "dependant-upon": "Cmc7",
+      "key-type": "rlmc"
+    },
+    {
+      "$type": "list",
+      "name": "Prénom",
+      "list-path": ".\\Resources\\Lists\\first_names.txt"
+    },
+    {
+      "$type": "list",
+      "name": "Nom",
+      "list-path": ".\\Resources\\Lists\\last_names.txt"
+    },
+    {
+      "$type": "fixed",
+      "name": "Banque",
+      "fixed-value": "Crédit du Nord"
+    },
+    {
+      "$type": "composite",
+      "name": "FancyName",
+      "dependant-upon":"Nom;Prénom;Amount",
+      "format": "Prénom : {{Prénom}} Nom : {{Nom}} ({{Amount:C2}})"
+    }
+  ]
+}

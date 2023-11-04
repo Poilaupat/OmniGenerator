@@ -4,7 +4,7 @@ namespace SeedGenerator.Lib.Param
 {
     internal class GroupParam : ElementParam
     {
-        [JsonPropertyName("documents")]
-        public List<DocumentParam> Documents { get; set; } = new List<DocumentParam>();
+        [JsonPropertyName("elements")]
+        public List<ElementParam> Elements { get; set; } = new List<ElementParam>();
     }
 }

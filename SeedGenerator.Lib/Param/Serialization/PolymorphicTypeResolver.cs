@@ -13,14 +13,15 @@ namespace SeedGenerator.Lib.Param.Serialization
 
             jsonTypeInfo.PolymorphismOptions = jsonTypeInfo.Type switch
             {
-                Type t when t == typeof(FieldParamBase) => ResolveMetaDataParamDerivedTypes(),
+                Type t when t == typeof(FieldParamBase) => ResolveFieldParamDerivedTypes(),
+                Type t when t == typeof(ElementParam) => ResolveElementParamDerivedTypes(),
                 _ => null,
             };
 
             return jsonTypeInfo;
         }
 
-        private JsonPolymorphismOptions ResolveMetaDataParamDerivedTypes()
+        private JsonPolymorphismOptions ResolveFieldParamDerivedTypes()
         {
             return new JsonPolymorphismOptions
             {
@@ -35,6 +36,21 @@ namespace SeedGenerator.Lib.Param.Serialization
                     new JsonDerivedType(typeof(FieldParamKeyCalculator), "key"),
                     new JsonDerivedType(typeof(FieldParamComposite), "composite"),
                     new JsonDerivedType(typeof(FieldParamAmount), "amount"),
+                }
+            };
+        }
+
+        private JsonPolymorphismOptions ResolveElementParamDerivedTypes()
+        {
+            return new JsonPolymorphismOptions
+            {
+                TypeDiscriminatorPropertyName = "$type",
+                IgnoreUnrecognizedTypeDiscriminators = true,
+                UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FailSerialization,
+                DerivedTypes =
+                {
+                    new JsonDerivedType(typeof(DocumentParam), "document"),
+                    new JsonDerivedType(typeof(GroupParam), "group"),
                 }
             };
         }
