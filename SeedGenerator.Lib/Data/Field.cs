@@ -1,6 +1,6 @@
-﻿namespace SeedGenerator.Lib.Data.Fields
+﻿namespace SeedGenerator.Lib.Data
 {
-    internal class Field
+    public class Field
     {
         public string Name { get; set; }
         public string Value { get; set; }

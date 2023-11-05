@@ -1,4 +1,4 @@
-﻿namespace SeedGenerator.Lib.Data.Fields.Generators
+﻿namespace SeedGenerator.Lib.Data.Generators
 {
     internal abstract class FieldGeneratorDependantBase : FieldGeneratorBase
     {
@@ -9,8 +9,8 @@
             : base(name)
         {
             string[] dependanceNames = dependantUpon.Split(new[] { ',', ';', '|' });
-            
-            foreach(var dependanceName in  dependanceNames)
+
+            foreach (var dependanceName in dependanceNames)
             {
                 Dependances[dependanceName] = null;
             }

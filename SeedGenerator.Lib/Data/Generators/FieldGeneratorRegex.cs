@@ -1,6 +1,6 @@
 ﻿using Fare;
 
-namespace SeedGenerator.Lib.Data.Fields.Generators
+namespace SeedGenerator.Lib.Data.Generators
 {
     internal class FieldGeneratorRegex : FieldGeneratorBase
     {

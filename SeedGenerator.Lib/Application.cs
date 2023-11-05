@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.ProgramSynthesis.Utils;
 using SeedGenerator.Lib.Data;
-using SeedGenerator.Lib.Data.Fields.Generators;
+using SeedGenerator.Lib.Data.Generators;
 using SeedGenerator.Lib.Param;
 using SeedGenerator.Lib.Param.FieldParams;
 using SeedGenerator.Lib.Param.Serialization;
@@ -37,14 +37,8 @@ namespace SeedGenerator.Lib
 
             if (param is not null)
             {
-                Dictionary<string, FieldGeneratorCollection> generators = param
-                    .RootParams
-                    .GetAllDocuments()
-                    .ToDictionary(x => x.Name, y => new FieldGeneratorCollection(_mapper.Map<List<FieldGeneratorBase>>(y.FieldParams)));
-
-                generators.Add("packet", new FieldGeneratorCollection(_mapper.Map<List<FieldGeneratorBase>>(param.FieldParams)));
-
-                var packet = new Packet(param, generators);
+                var generator = new PacketGenerator(param, _mapper);
+                var packet = generator.GeneratePacket();
             }
         }
     }

@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Mustache;
 
-namespace SeedGenerator.Lib.Data.Fields.Generators
+namespace SeedGenerator.Lib.Data.Generators
 {
     internal class FieldGeneratorComposite : FieldGeneratorDependantBase
     {
         public string Format { get; set; }
 
-        public FieldGeneratorComposite(string name, string dependantUpon, string format) 
+        public FieldGeneratorComposite(string name, string dependantUpon, string format)
             : base(name, dependantUpon)
         {
             Format = format;

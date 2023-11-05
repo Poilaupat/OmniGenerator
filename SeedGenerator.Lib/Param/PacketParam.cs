@@ -1,5 +1,4 @@
-﻿using SeedGenerator.Lib.Data.Fields.Generators;
-using SeedGenerator.Lib.Param.FieldParams;
+﻿using SeedGenerator.Lib.Param.FieldParams;
 using System.Text.Json.Serialization;
 
 namespace SeedGenerator.Lib.Param

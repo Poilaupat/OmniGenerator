@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace SeedGenerator.Lib.Data.Fields.Generators
+namespace SeedGenerator.Lib.Data.Generators
 {
     internal class FieldGeneratorCollection
     {

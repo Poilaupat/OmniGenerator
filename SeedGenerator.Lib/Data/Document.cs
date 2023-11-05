@@ -1,18 +1,14 @@
-﻿using SeedGenerator.Lib.Data.Fields;
-using SeedGenerator.Lib.Data.Fields.Generators;
-
-namespace SeedGenerator.Lib.Data
+﻿namespace SeedGenerator.Lib.Data
 {
-    internal class Document
+    public class Document
     {
         public string Name { get; set; }
 
-        public FieldCollection Fields { get; set; }
+        public FieldCollection? Fields { get; set; }
 
-        public Document(string name, FieldGeneratorCollection generators)
+        public Document(string name)
         {
             Name = name;
-            Fields = generators.GenerateFields();
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using SeedGenerator.Lib.Data.Fields.Generators;
+using SeedGenerator.Lib.Data.Generators;
 using SeedGenerator.Lib.Param.FieldParams;
 
-namespace SeedGenerator.Lib.Data.Fields
+namespace SeedGenerator.Lib.AutoMapper
 {
     internal class FieldAutoMapperProfile : Profile
     {

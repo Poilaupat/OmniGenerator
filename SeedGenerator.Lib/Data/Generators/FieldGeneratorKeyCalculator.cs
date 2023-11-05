@@ -1,6 +1,6 @@
 ﻿using SeedGenerator.Lib.Tools;
 
-namespace SeedGenerator.Lib.Data.Fields.Generators
+namespace SeedGenerator.Lib.Data.Generators
 {
     internal class FieldGeneratorKeyCalculator : FieldGeneratorDependantBase
     {
@@ -12,7 +12,7 @@ namespace SeedGenerator.Lib.Data.Fields.Generators
             KeyType = keyType;
 
             int dependances = dependantUpon.Split(';').Count();
-            if(dependances > 1)
+            if (dependances > 1)
             {
                 throw new ArgumentException($"{keyType} generator support only one dependance");
             }
