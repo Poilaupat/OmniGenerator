@@ -18,6 +18,11 @@
         "max-occurs": 1,
         "fields": [
           {
+            "$type": "fixed",
+            "name": "encline",
+            "value": "01"
+          },
+          {
             "$type": "regex",
             "name": "numremise",
             "pattern": "\\d{7}"
@@ -27,8 +32,8 @@
       {
         "$type": "group",
         "name": "remittance",
-        "min-occurs": 1,
-        "max-occurs": 1,
+        "min-occurs": 2,
+        "max-occurs": 10,
         "elements": [
           {
             "$type": "document",
@@ -37,8 +42,13 @@
             "max-occurs": 3,
             "fields": [
               {
+                "$type": "fixed",
+                "name": "encline",
+                "value": "12"
+              },
+              {
                 "$type": "regex",
-                "name": "numrcoupon",
+                "name": "numcoupon",
                 "pattern": "\\d{7}"
               }
             ]
@@ -49,6 +59,11 @@
             "min-occurs": 1,
             "max-occurs": 3,
             "fields": [
+              {
+                "$type": "fixed",
+                "name": "encline",
+                "value": "03"
+              },
               {
                 "$type": "regex",
                 "name": "cmc7",

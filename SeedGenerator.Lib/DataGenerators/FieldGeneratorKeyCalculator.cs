@@ -1,6 +1,6 @@
 ﻿using SeedGenerator.Lib.Tools;
 
-namespace SeedGenerator.Lib.Data.Generators
+namespace SeedGenerator.Lib.Builders
 {
     internal class FieldGeneratorKeyCalculator : FieldGeneratorDependantBase
     {

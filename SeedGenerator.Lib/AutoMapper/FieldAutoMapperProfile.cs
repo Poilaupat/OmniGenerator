@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using SeedGenerator.Lib.Data.Generators;
+using SeedGenerator.Lib.Builders;
 using SeedGenerator.Lib.Param.FieldParams;
 
 namespace SeedGenerator.Lib.AutoMapper

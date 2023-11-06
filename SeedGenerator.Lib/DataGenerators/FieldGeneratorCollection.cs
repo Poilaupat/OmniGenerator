@@ -1,17 +1,18 @@
 ﻿using System.Data;
+using SeedGenerator.Lib.Data;
 
-namespace SeedGenerator.Lib.Data.Generators
+namespace SeedGenerator.Lib.Builders
 {
     internal class FieldGeneratorCollection
     {
-        public List<FieldGeneratorBase> Generators { get; } = new List<FieldGeneratorBase>();
+        public List<FieldGeneratorBase> Builders { get; } = new List<FieldGeneratorBase>();
 
-        public FieldGeneratorCollection(IEnumerable<FieldGeneratorBase> generators)
+        public FieldGeneratorCollection(IEnumerable<FieldGeneratorBase> builders)
         {
-            AddRange(generators);
+            AddRange(builders);
         }
 
-        public bool Contains(string name) => Generators.Any(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+        public bool Contains(string name) => Builders.Any(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
         public void Add(FieldGeneratorBase item)
         {
@@ -20,7 +21,7 @@ namespace SeedGenerator.Lib.Data.Generators
                 throw new ArgumentException($"A metadata generator with name '{item.Name}' was already added");
             }
 
-            Generators.Add(item);
+            Builders.Add(item);
         }
 
         public void AddRange(IEnumerable<FieldGeneratorBase> items)
@@ -35,17 +36,17 @@ namespace SeedGenerator.Lib.Data.Generators
         {
             FieldCollection fields = new FieldCollection();
 
-            foreach (var generator in Generators.OrderBy(x => x, new FieldGeneratorComparer()))
+            foreach (var builder in Builders.OrderBy(x => x, new FieldGeneratorComparer()))
             {
-                if (generator is FieldGeneratorDependantBase dependantGenerator)
+                if (builder is FieldGeneratorDependantBase dependantBuilder)
                 {
-                    foreach (var dependance in dependantGenerator.Dependances.Keys)
+                    foreach (var dependance in dependantBuilder.Dependances.Keys)
                     {
                         var dependanceTarget = fields[dependance];
-                        dependantGenerator.Dependances[dependance] = dependanceTarget.Value;
+                        dependantBuilder.Dependances[dependance] = dependanceTarget.Value;
                     }
                 }
-                fields.Add(generator.Name, new Field(generator.Name, generator.NextValue()));
+                fields.Add(builder.Name, new Field(builder.Name, builder.NextValue()));
             }
 
             return fields;

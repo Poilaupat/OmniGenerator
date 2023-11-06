@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeedGenerator.Lib.Data.Generators
+namespace SeedGenerator.Lib.Builders
 {
     internal class FieldGeneratorAmount : FieldGeneratorBase
     {

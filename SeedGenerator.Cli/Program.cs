@@ -4,9 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using SeedGenerator.Cli;
 using SeedGenerator.Lib;
 
-
 IConfiguration configuration = Startup.GetConfiguration();
 IServiceCollection services = Startup.ConfigureServices(configuration);
 ServiceProvider provider = services.BuildServiceProvider();
 
-await provider.GetRequiredService<Application>().Run(args);
+var builder = provider.GetRequiredService<SeedBuilder>();
+
+await builder.LoadParam(@"C:\Users\Ruben\source\repos\SeedGenerator\ParamFiles\param.json");
+var packetData = builder.BuildSeed(@"C:\Users\Ruben\source\repos\SeedGenerator\Output");
+;

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Mustache;
 
-namespace SeedGenerator.Lib.Data.Generators
+namespace SeedGenerator.Lib.Builders
 {
     internal class FieldGeneratorComposite : FieldGeneratorDependantBase
     {

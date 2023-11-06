@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SeedGenerator.Lib;
+using SeedGenerator.Lib.Interfaces;
+using SeedGenerator.Plugins.Packagers;
 
 namespace SeedGenerator.Cli
 {
@@ -28,7 +30,8 @@ namespace SeedGenerator.Cli
                     cfg.AddMaps(new[] { "SeedGenerator.Lib" });
                 }).CreateMapper()
             );
-            services.AddTransient<Application>();
+            services.AddTransient<SeedBuilder>();
+            services.AddTransient<IPackager, ZipPackager>();
             return services;
         }
     }

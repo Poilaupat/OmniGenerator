@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SeedGenerator.Lib.Data;
 using SeedGenerator.Lib.Param;
 using System;
 using System.Collections.Generic;
@@ -6,35 +7,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeedGenerator.Lib.Data.Generators
+namespace SeedGenerator.Lib.Builders
 {
-    internal class PacketGenerator
+    internal class PacketDataGenerator
     {
         private FieldGeneratorCollection _packetFieldGenerators;
-        private Dictionary<string, FieldGeneratorCollection> _documentFieldGenerators;    
-        
+        private Dictionary<string, FieldGeneratorCollection> _documentFieldGenerators;
+
         public PacketParam Param { get; set; }
 
-        public PacketGenerator(PacketParam param, IMapper mapper) 
+        public PacketDataGenerator(PacketParam param, IMapper mapper)
         {
             Param = param;
 
             _packetFieldGenerators = new FieldGeneratorCollection(mapper.Map<List<FieldGeneratorBase>>(Param.FieldParams));
-            
+
             _documentFieldGenerators = Param
                     .RootParams
                     .GetAllDocuments()
                     .ToDictionary(x => x.Name, y => new FieldGeneratorCollection(mapper.Map<List<FieldGeneratorBase>>(y.FieldParams)));
         }
 
-        public Packet GeneratePacket()
+        public PacketData GeneratePacketData()
         {
             var packetFields = _packetFieldGenerators.GenerateFields();
-            var documents = GenerateDocuments(Param.RootParams).ToList();
-            return new Packet(packetFields, documents);
+            var documents = GenerateDocumentsData(Param.RootParams).ToList();
+            return new PacketData(packetFields, documents);
         }
 
-        private IEnumerable<Document> GenerateDocuments(GroupParam groupParam)
+        private IEnumerable<DocumentData> GenerateDocumentsData(GroupParam groupParam)
         {
             int occurences = new Random().Next(groupParam.MinOccurs, groupParam.MaxOccurs);
 
@@ -44,8 +45,8 @@ namespace SeedGenerator.Lib.Data.Generators
                 {
                     var docs = element switch
                     {
-                        DocumentParam childDocumentParam => GenerateDocuments(childDocumentParam),
-                        GroupParam childGroupParam => GenerateDocuments(childGroupParam),
+                        DocumentParam childDocumentParam => GenerateDocumentsData(childDocumentParam),
+                        GroupParam childGroupParam => GenerateDocumentsData(childGroupParam),
                         null => throw new ArgumentNullException(),
                         _ => throw new ArgumentException("Unexpected type"),
                     };
@@ -56,16 +57,16 @@ namespace SeedGenerator.Lib.Data.Generators
             }
         }
 
-        private IEnumerable<Document> GenerateDocuments(DocumentParam documentParam)
+        private IEnumerable<DocumentData> GenerateDocumentsData(DocumentParam documentParam)
         {
             int occurences = new Random().Next(documentParam.MinOccurs, documentParam.MaxOccurs);
 
             for (int i = 0; i < occurences; i++)
             {
-                var document = new Document(documentParam.Name);
+                var document = new DocumentData(documentParam.Name);
                 if (_documentFieldGenerators.ContainsKey(documentParam.Name))
                     document.Fields = _documentFieldGenerators[documentParam.Name].GenerateFields();
-                
+
                 yield return document;
             }
         }

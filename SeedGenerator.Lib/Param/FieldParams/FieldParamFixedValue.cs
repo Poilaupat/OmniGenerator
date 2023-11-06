@@ -4,7 +4,7 @@ namespace SeedGenerator.Lib.Param.FieldParams
 {
     internal class FieldParamFixedValue : FieldParamBase
     {
-        [JsonPropertyName("fixed-value")]
+        [JsonPropertyName("value")]
         public string? FixedValue { get; set; }
     } 
 }

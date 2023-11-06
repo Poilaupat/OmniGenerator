@@ -1,12 +1,12 @@
 ﻿namespace SeedGenerator.Lib.Data
 {
-    public class Document
+    public class DocumentData
     {
         public string Name { get; set; }
 
         public FieldCollection? Fields { get; set; }
 
-        public Document(string name)
+        public DocumentData(string name)
         {
             Name = name;
         }
