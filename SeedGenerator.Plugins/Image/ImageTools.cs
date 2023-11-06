@@ -1,6 +1,6 @@
 ﻿using SkiaSharp;
 
-namespace SeedGenerator.Lib.Image
+namespace SeedGenerator.Plugins.Image
 {
     public static class ImageTools
     {

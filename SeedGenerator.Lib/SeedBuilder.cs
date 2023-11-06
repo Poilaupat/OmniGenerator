@@ -15,14 +15,16 @@ namespace SeedGenerator.Lib
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly IPackager _packager;
+        private readonly IImageComposer _imageComposer;
         
         private PacketParam? _param;
 
-        public SeedBuilder(IConfiguration configuration, IMapper mapper, IPackager packager)
+        public SeedBuilder(IConfiguration configuration, IMapper mapper, IPackager packager, IImageComposer imageComposer)
         {
             _configuration = configuration;
             _mapper = mapper;
             _packager = packager;
+            _imageComposer = imageComposer;
         }
 
         public async Task LoadParam(string paramFilePath)
@@ -41,6 +43,7 @@ namespace SeedGenerator.Lib
         public async Task BuildSeed(string outputPath)
         {
             var packetData = GenerateSeedData();
+            await _imageComposer.ComposeDocumentImagesAsync(packetData);
             await _packager.GenerateFilesAsync(packetData, outputPath);
         }
 

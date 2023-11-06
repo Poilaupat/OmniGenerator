@@ -1,9 +1,9 @@
 ﻿using SkiaSharp;
 using System.Reflection;
 
-namespace SeedGenerator.Lib.Fonts
+namespace SeedGenerator.Plugins.Image.Fonts
 {
-    internal class Font
+    internal class FontUtility
     {
         public static SKTypeface GetFontFromResource(string fontName)
         {

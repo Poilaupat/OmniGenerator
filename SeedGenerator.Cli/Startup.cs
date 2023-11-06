@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SeedGenerator.Lib;
 using SeedGenerator.Lib.Interfaces;
+using SeedGenerator.Plugins.Image.Composers;
 using SeedGenerator.Plugins.Packagers;
 
 namespace SeedGenerator.Cli
@@ -32,6 +33,7 @@ namespace SeedGenerator.Cli
             );
             services.AddTransient<SeedBuilder>();
             services.AddTransient<IPackager, ZipPackager>();
+            services.AddTransient<IImageComposer, ChequeComposer>();
             return services;
         }
     }
