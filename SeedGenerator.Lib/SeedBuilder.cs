@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using SeedGenerator.Lib.Builders;
 using SeedGenerator.Lib.Data;
+using SeedGenerator.Lib.Image;
 using SeedGenerator.Lib.Interfaces;
 using SeedGenerator.Lib.Param;
 using SeedGenerator.Lib.Param.Serialization;
@@ -16,7 +17,7 @@ namespace SeedGenerator.Lib
         private readonly IMapper _mapper;
         private readonly IPackager _packager;
         private readonly IImageComposer _imageComposer;
-        
+
         private PacketParam? _param;
 
         public SeedBuilder(IConfiguration configuration, IMapper mapper, IPackager packager, IImageComposer imageComposer)
@@ -44,6 +45,18 @@ namespace SeedGenerator.Lib
         {
             var packetData = GenerateSeedData();
             await _imageComposer.ComposeDocumentImagesAsync(packetData);
+
+            foreach (var doc in packetData.Documents)
+            {
+                if (doc.Image is not null && doc.Fields is not null)
+                {
+                    using (var bitmap = ImageTools.RenderSvg(doc.Image, 200))
+                    {
+                        bitmap.Save($@"C:\Users\Ruben\source\repos\SeedGenerator\Output\svg2.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                    }
+                }
+            }
+
             await _packager.GenerateFilesAsync(packetData, outputPath);
         }
 

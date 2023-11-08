@@ -5,6 +5,7 @@ using SkiaSharp;
 using Svg;
 using System.Drawing;
 using System.Reflection;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SeedGenerator.Plugins.Image.Composers
 {
@@ -13,10 +14,13 @@ namespace SeedGenerator.Plugins.Image.Composers
         public int WidthMM { get; } = 180;
         public int HeightMM { get; } = 85;
 
-        public ChequeComposer() 
+        //public readonly string _privateFontsBasePath;
+
+        public ChequeComposer()
         {
             string basePath = Assembly.GetExecutingAssembly().Location;
-            SvgFontManager.PrivateFontPathList.Add($"{basePath}\\Image\\Fonts\\Resources\\Cmc7.ttf");
+            //SvgFontManager.PrivateFontPathList.Add($"{basePath}\\Image\\Fonts\\Resources\\Cmc7.ttf");
+            //_privateFontsBasePath = $"{basePath}\\Image\\Fonts\\Resources\\";
         }
 
 
@@ -47,7 +51,10 @@ namespace SeedGenerator.Plugins.Image.Composers
         //}
         public async Task ComposeDocumentImagesAsync(PacketData packet)
         {
-            foreach(var doc in packet.Documents)
+            var fontData = FontUtility.GetFont("Cmc7.ttf");
+            SvgFontManager.PrivateFontDataList.Add(fontData);
+
+            foreach (var doc in packet.Documents)
             {
                 ComposeDocumentImage(doc);
             }
@@ -57,11 +64,9 @@ namespace SeedGenerator.Plugins.Image.Composers
 
         private void ComposeDocumentImage(DocumentData document)
         {
-            //var fontData = FontUtility.GetFont("Cmc7.ttf");
-            //SvgFontManager.PrivateFontDataList.Add(fontData);
-
             if (document.Name == "cheque" && document.Fields is not null)
             {
+
                 var svg = new SvgDocument();
                 svg.ViewBox = new SvgViewBox(0, 0, WidthMM, HeightMM);
                 svg.Fill = new SvgColourServer(Color.White);
@@ -74,6 +79,7 @@ namespace SeedGenerator.Plugins.Image.Composers
                 var cmc7 = new SvgText() { ID = "cmc7" };
                 cmc7.X.Add(new SvgUnit(SvgUnitType.Pixel, 10));
                 cmc7.Y.Add(new SvgUnit(SvgUnitType.Pixel, 10));
+                cmc7.FontFamily = "CMC7";
                 cmc7.FontSize = new SvgUnit(6);
                 cmc7.Fill = new SvgColourServer(Color.Black);
                 var txtContent = new SvgContentNode { Content = document.Fields["cmc7"].Value };
@@ -81,10 +87,30 @@ namespace SeedGenerator.Plugins.Image.Composers
                 svg.Children.Add(cmc7);
 
                 document.Image = svg;
+
+                float resolution = 200f;
+                float rasterX = resolution * WidthMM / 25.4f;
+                float rasterY = resolution * HeightMM / 25.4f;
+
+                using (var b = new Bitmap((int)rasterX, (int)rasterY))
+                {
+                    using (var g = Graphics.FromImage(b))
+                    {
+                        g.Clear(Color.White);
+                        var b2 = svg.Draw((int)rasterX, (int)rasterY);
+                        g.DrawImage(b2, 0, 0);
+                    }
+
+                    b.SetResolution(resolution, resolution);
+
+                    // Now save b as a JPEG like you normally would
+                    b.Save(@"C:\Users\Ruben\source\repos\SeedGenerator\Output\svg.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                }
             }
 
-            //doc.Draw().Save(@"C:\Users\Ruben\Documents\Dev\Work\svg.png", System.Drawing.Imaging.ImageFormat.Png);
         }
+
+
 
     }
 }

@@ -17,7 +17,7 @@ namespace SeedGenerator.Plugins.Image.Fonts
 
         public static byte[] GetFont(string fontName)
         {
-            string fontPath = $"SeedGenerator.Lib.Resources.Fonts.{fontName}";
+            string fontPath = $"SeedGenerator.Plugins.Resources.{fontName}";
 
             using (var fontStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(fontPath))
             using (var ms = new MemoryStream())

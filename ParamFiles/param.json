@@ -8,8 +8,8 @@
   ],
   "root": {
     "name": "root",
-    "min-occurs": 10,
-    "max-occurs": 25,
+    "min-occurs": 1,
+    "max-occurs": 1,
     "elements": [
       {
         "$type": "document",
@@ -32,14 +32,14 @@
       {
         "$type": "group",
         "name": "remittance",
-        "min-occurs": 2,
-        "max-occurs": 10,
+        "min-occurs": 1,
+        "max-occurs": 1,
         "elements": [
           {
             "$type": "document",
             "name": "coupon",
             "min-occurs": 1,
-            "max-occurs": 3,
+            "max-occurs": 1,
             "fields": [
               {
                 "$type": "fixed",
@@ -56,8 +56,8 @@
           {
             "$type": "document",
             "name": "cheque",
-            "min-occurs": 1,
-            "max-occurs": 3,
+            "min-occurs": 2,
+            "max-occurs": 2,
             "fields": [
               {
                 "$type": "fixed",
