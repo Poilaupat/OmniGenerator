@@ -2,14 +2,22 @@
 {
     public class FieldCollection
     {
-        private Dictionary<string, Field> _items = new Dictionary<string, Field>();
+        private Dictionary<string, Field> _items { get; } = new Dictionary<string, Field>();
 
         public void Add(string key, Field item)
         {
             if (_items.ContainsKey(key))
-                throw new Exception($"A field with the same key already exists ({key})");
+                _items[key] = item;
 
             _items.Add(key, item);
+        }
+
+        public void AddRange(FieldCollection collection)
+        {
+            foreach(var item in collection._items)
+            {
+                Add(item.Key, item.Value);
+            }
         }
 
         public Field this[string key] => _items[key];

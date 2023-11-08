@@ -32,8 +32,20 @@
       {
         "$type": "group",
         "name": "remittance",
-        "min-occurs": 1,
-        "max-occurs": 1,
+        "fields":[
+          {
+            "$type": "list",
+            "name": "prenom",
+            "list-path": ".\\Resources\\Lists\\first_names.txt"
+          },
+          {
+            "$type": "list",
+            "name": "nom",
+            "list-path": ".\\Resources\\Lists\\last_names.txt"
+          }
+        ],
+        "min-occurs": 2,
+        "max-occurs": 2,
         "elements": [
           {
             "$type": "document",

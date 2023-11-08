@@ -6,7 +6,7 @@ namespace SeedGenerator.Lib.Data
     {
         public string Name { get; set; }
 
-        public FieldCollection? Fields { get; set; }
+        public FieldCollection Fields { get; set; } = new FieldCollection();
 
         public SvgDocument? Image { get; set; }
 

@@ -13,6 +13,7 @@ namespace SeedGenerator.Lib.Builders
     {
         private FieldGeneratorCollection _packetFieldGenerators;
         private Dictionary<string, FieldGeneratorCollection> _documentFieldGenerators;
+        private Dictionary<string, FieldGeneratorCollection> _groupFieldGenerators;
 
         public PacketParam Param { get; set; }
 
@@ -23,9 +24,14 @@ namespace SeedGenerator.Lib.Builders
             _packetFieldGenerators = new FieldGeneratorCollection(mapper.Map<List<FieldGeneratorBase>>(Param.FieldParams));
 
             _documentFieldGenerators = Param
-                    .RootParams
-                    .GetAllDocuments()
-                    .ToDictionary(x => x.Name, y => new FieldGeneratorCollection(mapper.Map<List<FieldGeneratorBase>>(y.FieldParams)));
+                .RootParams
+                .GetAllDocuments()
+                .ToDictionary(x => x.Name, y => new FieldGeneratorCollection(mapper.Map<List<FieldGeneratorBase>>(y.FieldParams)));
+
+            _groupFieldGenerators = Param
+                .RootParams
+                .GetAllGroups()
+                .ToDictionary(x => x.Name, y => new FieldGeneratorCollection(mapper.Map<List<FieldGeneratorBase>>(y.FieldParams)));
         }
 
         public PacketData GeneratePacketData()
@@ -41,11 +47,15 @@ namespace SeedGenerator.Lib.Builders
 
             for (int i = 0; i < occurences; i++)
             {
+                FieldCollection grpFields = new FieldCollection();
+                if (_groupFieldGenerators.ContainsKey(groupParam.Name))
+                    grpFields.AddRange(_groupFieldGenerators[groupParam.Name].GenerateFields());
+
                 foreach (var element in groupParam.Elements)
                 {
                     var docs = element switch
                     {
-                        DocumentParam childDocumentParam => GenerateDocumentsData(childDocumentParam),
+                        DocumentParam childDocumentParam => GenerateDocumentsData(childDocumentParam, grpFields),
                         GroupParam childGroupParam => GenerateDocumentsData(childGroupParam),
                         null => throw new ArgumentNullException(),
                         _ => throw new ArgumentException("Unexpected type"),
@@ -57,15 +67,16 @@ namespace SeedGenerator.Lib.Builders
             }
         }
 
-        private IEnumerable<DocumentData> GenerateDocumentsData(DocumentParam documentParam)
+        private IEnumerable<DocumentData> GenerateDocumentsData(DocumentParam documentParam, FieldCollection parentGroupFields)
         {
             int occurences = new Random().Next(documentParam.MinOccurs, documentParam.MaxOccurs);
 
             for (int i = 0; i < occurences; i++)
             {
                 var document = new DocumentData(documentParam.Name);
+                document.Fields.AddRange(parentGroupFields);
                 if (_documentFieldGenerators.ContainsKey(documentParam.Name))
-                    document.Fields = _documentFieldGenerators[documentParam.Name].GenerateFields();
+                    document.Fields.AddRange(_documentFieldGenerators[documentParam.Name].GenerateFields());
 
                 yield return document;
             }

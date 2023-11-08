@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using Microsoft.ProgramSynthesis;
+using SeedGenerator.Lib.Param.FieldParams;
+using System.Text.Json.Serialization;
 
 namespace SeedGenerator.Lib.Param
 {
@@ -6,6 +8,9 @@ namespace SeedGenerator.Lib.Param
     {
         [JsonPropertyName("elements")]
         public List<ElementParam> Elements { get; set; } = new List<ElementParam>();
+
+        [JsonPropertyName("fields")]
+        public List<FieldParamBase> FieldParams { get; set; } = new List<FieldParamBase> { };
 
         public IEnumerable<DocumentParam> GetAllDocuments()
         {
@@ -20,6 +25,22 @@ namespace SeedGenerator.Lib.Param
                 .SelectMany(x => x.GetAllDocuments()))
             {
                 yield return doc;
+            }
+        }
+
+        public IEnumerable<GroupParam> GetAllGroups()
+        {
+            foreach(var grp in Elements.Where(x => x is GroupParam))
+            {
+                yield return (GroupParam)grp;
+            }
+
+            foreach (var grp in Elements
+                .Where(x => x is GroupParam)
+                .Cast<GroupParam>()
+                .SelectMany(x => x.GetAllGroups()))
+            {
+                yield return grp;
             }
         }
     }
