@@ -1,21 +1,10 @@
-﻿using SkiaSharp;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace SeedGenerator.Plugins.Image.Fonts
 {
     internal class FontUtility
     {
-        public static SKTypeface GetFontFromResource(string fontName)
-        {
-            string fontPath = $"SeedGenerator.Lib.Resources.Fonts.{fontName}";
-            using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream(fontPath))
-            {
-                var font = SKTypeface.FromStream(resource);
-                return font;
-            }
-        }
-
-        public static byte[] GetFont(string fontName)
+        public static byte[] GetFontBytes(string fontName)
         {
             string fontPath = $"SeedGenerator.Plugins.Resources.{fontName}";
 
