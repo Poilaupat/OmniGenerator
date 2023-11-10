@@ -43,21 +43,28 @@ namespace SeedGenerator.Lib
 
         public async Task BuildSeed(string outputPath)
         {
-            var packetData = GenerateSeedData();
-            await _imageComposer.ComposeDocumentImagesAsync(packetData);
-
-            foreach (var doc in packetData.Documents)
+            try
             {
-                if (doc.Image is not null && doc.Fields is not null)
+                var packetData = GenerateSeedData();
+                _imageComposer.ComposeDocumentImagesAsync(packetData);
+
+                foreach (var doc in packetData.Documents)
                 {
-                    using (var bitmap = ImageTools.RenderSvg(doc.Image, 200))
+                    if (doc.Image is not null && doc.Fields is not null)
                     {
-                        bitmap.Save($@"C:\Users\Ruben\source\repos\SeedGenerator\Output\svg2.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                        using (var bitmap = ImageTools.RenderSvg(doc.Image, 200))
+                        {
+                            bitmap.Save($@"C:\Users\Ruben\source\repos\SeedGenerator\Output\svg2.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                        }
                     }
                 }
-            }
 
-            await _packager.GenerateFilesAsync(packetData, outputPath);
+                await _packager.GenerateFilesAsync(packetData, outputPath);
+            }
+            catch
+            {
+
+            }
         }
 
         private PacketData GenerateSeedData()

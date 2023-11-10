@@ -20,6 +20,6 @@
             }
         }
 
-        public Field this[string key] => _items[key];
+        public Field this[string key] => _items[key.Replace("-", "_")];
     }
 }

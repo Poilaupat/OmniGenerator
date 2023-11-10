@@ -17,9 +17,9 @@ namespace SeedGenerator.Lib.Builders
                             && yd.Dependances.Keys.Contains(x.Name))
                         return x.Name.CompareTo(y.Name);
                     else if (xd.Dependances.Keys.Contains(y.Name))
-                        return 1;
-                    else
                         return -1;
+                    else
+                        return 1;
                 }
                 else if (x is FieldGeneratorDependantBase)
                 {

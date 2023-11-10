@@ -36,14 +36,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\Lists\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <None Update="Resources\Lists\addresses.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Lists\first_names.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Lists\last_names.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Lists\zipcodes_cities.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -9,7 +9,13 @@ namespace SeedGenerator.Lib.Param.FieldParams
 {
     internal class FieldParamComposite : FieldParamDependantBase
     {
+        private string? _format;
+
         [JsonPropertyName("format")]
-        public string? Format { get; set; }
+        public string? Format 
+        { 
+            get { return _format; }
+            set { _format = value?.Replace("-", "_"); }
+        }
     }
 }

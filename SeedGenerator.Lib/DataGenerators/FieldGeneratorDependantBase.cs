@@ -1,4 +1,6 @@
-﻿namespace SeedGenerator.Lib.Builders
+﻿using System.Text.RegularExpressions;
+
+namespace SeedGenerator.Lib.Builders
 {
     internal abstract class FieldGeneratorDependantBase : FieldGeneratorBase
     {
@@ -8,7 +10,7 @@
         public FieldGeneratorDependantBase(string name, string dependantUpon)
             : base(name)
         {
-            string[] dependanceNames = dependantUpon.Split(new[] { ',', ';', '|' });
+            string[] dependanceNames = Regex.Replace(dependantUpon, @"\s", string.Empty).Split(new[] { ',', ';', '|' });
 
             foreach (var dependanceName in dependanceNames)
             {
