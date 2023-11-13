@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace SeedGenerator.Lib.Builders
+namespace SeedGenerator.Lib.DataGenerators
 {
     internal abstract class FieldGeneratorDependantBase : FieldGeneratorBase
     {

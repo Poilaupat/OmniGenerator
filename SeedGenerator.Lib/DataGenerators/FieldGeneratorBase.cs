@@ -1,4 +1,4 @@
-﻿namespace SeedGenerator.Lib.Builders
+﻿namespace SeedGenerator.Lib.DataGenerators
 {
     internal abstract class FieldGeneratorBase
     {

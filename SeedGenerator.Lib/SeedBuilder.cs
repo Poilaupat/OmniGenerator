@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
-using SeedGenerator.Lib.Builders;
+using SeedGenerator.Lib.DataGenerators;
 using SeedGenerator.Lib.Data;
 using SeedGenerator.Lib.Interfaces;
 using SeedGenerator.Lib.Param;

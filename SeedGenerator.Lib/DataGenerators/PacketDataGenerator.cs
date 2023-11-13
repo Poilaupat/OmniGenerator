@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeedGenerator.Lib.Builders
+namespace SeedGenerator.Lib.DataGenerators
 {
     internal class PacketDataGenerator
     {

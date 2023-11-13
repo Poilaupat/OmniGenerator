@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using SeedGenerator.Lib.Builders;
+using SeedGenerator.Lib.DataGenerators;
 using SeedGenerator.Lib.Param.FieldParams;
 
 namespace SeedGenerator.Lib.AutoMapper
@@ -14,7 +14,8 @@ namespace SeedGenerator.Lib.AutoMapper
                 .Include<FieldParamFixedValue, FieldGeneratorFixedValue>()
                 .Include<FieldParamKeyCalculator, FieldGeneratorKeyCalculator>()
                 .Include<FieldParamComposite, FieldGeneratorComposite>()
-                .Include<FieldParamAmount, FieldGeneratorAmount>();
+                .Include<FieldParamAmount, FieldGeneratorAmount>()
+                .Include<FieldParamDate, FieldGeneratorDate>();
 
             CreateMap<FieldParamRegex, FieldGeneratorRegex>();
             CreateMap<FieldParamList, FieldGeneratorList>();
@@ -22,6 +23,7 @@ namespace SeedGenerator.Lib.AutoMapper
             CreateMap<FieldParamKeyCalculator, FieldGeneratorKeyCalculator>();
             CreateMap<FieldParamComposite, FieldGeneratorComposite>();
             CreateMap<FieldParamAmount, FieldGeneratorAmount>();
+            CreateMap<FieldParamDate, FieldGeneratorDate>();
 
         }
     }

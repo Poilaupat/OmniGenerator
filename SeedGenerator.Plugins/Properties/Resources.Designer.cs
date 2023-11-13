@@ -63,6 +63,16 @@ namespace SeedGenerator.Plugins.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] BeautyWind {
+            get {
+                object obj = ResourceManager.GetObject("BeautyWind", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] Cmc7 {
             get {
                 object obj = ResourceManager.GetObject("Cmc7", resourceCulture);

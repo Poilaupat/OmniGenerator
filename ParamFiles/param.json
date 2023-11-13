@@ -160,6 +160,12 @@
                 "$type": "list",
                 "name": "place",
                 "list-path": ".\\Resources\\Lists\\zipcodes_cities.txt"
+              },
+              {
+                "$type": "date",
+                "name": "date",
+                "day-diff-min": 3,
+                "day-diff-max" : 400
               }
             ]
           }

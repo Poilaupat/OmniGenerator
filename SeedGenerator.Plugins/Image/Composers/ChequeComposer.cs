@@ -20,6 +20,7 @@ namespace SeedGenerator.Plugins.Image.Composers
         {
             SvgFontManager.PrivateFontDataList.Add(FontUtility.GetFontBytes("Cmc7.ttf"));
             SvgFontManager.PrivateFontDataList.Add(FontUtility.GetFontBytes("OcrbRegular.ttf"));
+            //SvgFontManager.PrivateFontDataList.Add(FontUtility.GetFontBytes("BeautyWind.ttf"));
         }
 
         public void ComposeDocumentImagesAsync(PacketData packet)
@@ -83,8 +84,10 @@ namespace SeedGenerator.Plugins.Image.Composers
                 AddText(svg, $"{document.Fields["payee-name"].Value}", "payee", 10f, 32f, "Arial", 3f, Color.Black);
 
                 //Place
-                AddText(svg, $"{document.Fields["place"].Value.Split(" ")[1]}", "payee", 132f, 39.5f, "Arial", 2f, Color.Black);
+                AddText(svg, $"{string.Join(' ', document.Fields["place"].Value.Split(" ").Skip(1))}", "payee", 132f, 39.5f, "Arial", 2f, Color.Black);
 
+                //Date
+                AddText(svg, $"{document.Fields["date"].Value}", "date", 132f, 44f, "Arial", 2f, Color.Black);
 
                 document.Image = svg;
             }
