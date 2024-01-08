@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.ML;
 using SeedGenerator.Lib.DataGenerators;
 using SeedGenerator.Lib.Param.FieldParams;
+using System.Text.RegularExpressions;
 
 namespace SeedGenerator.Lib.AutoMapper
 {
@@ -8,23 +10,35 @@ namespace SeedGenerator.Lib.AutoMapper
     {
         public FieldAutoMapperProfile()
         {
-            CreateMap<FieldParamBase, FieldGeneratorBase>()
-                .Include<FieldParamRegex, FieldGeneratorRegex>()
-                .Include<FieldParamList, FieldGeneratorList>()
-                .Include<FieldParamFixedValue, FieldGeneratorFixedValue>()
-                .Include<FieldParamKeyCalculator, FieldGeneratorKeyCalculator>()
-                .Include<FieldParamComposite, FieldGeneratorComposite>()
-                .Include<FieldParamAmount, FieldGeneratorAmount>()
-                .Include<FieldParamDate, FieldGeneratorDate>();
+            // Base Types
+            CreateMap<FieldParamBase, FieldGeneratorBase>();
 
-            CreateMap<FieldParamRegex, FieldGeneratorRegex>();
-            CreateMap<FieldParamList, FieldGeneratorList>();
-            CreateMap<FieldParamFixedValue, FieldGeneratorFixedValue>();
-            CreateMap<FieldParamKeyCalculator, FieldGeneratorKeyCalculator>();
-            CreateMap<FieldParamComposite, FieldGeneratorComposite>();
-            CreateMap<FieldParamAmount, FieldGeneratorAmount>();
-            CreateMap<FieldParamDate, FieldGeneratorDate>();
+            CreateMap<FieldParamDependantBase, FieldGeneratorDependantBase>()
+                .IncludeBase<FieldParamBase, FieldGeneratorBase>();
 
+
+            //Derived types based upon FieldParamBase
+            CreateMap<FieldParamRegex, FieldGeneratorRegex>()
+                .IncludeBase<FieldParamBase, FieldGeneratorBase>();
+
+            CreateMap<FieldParamList, FieldGeneratorList>()
+                .IncludeBase<FieldParamBase, FieldGeneratorBase>();
+
+            CreateMap<FieldParamFixedValue, FieldGeneratorFixedValue>()
+                .IncludeBase<FieldParamBase, FieldGeneratorBase>();
+
+            CreateMap<FieldParamAmount, FieldGeneratorAmount>()
+                .IncludeBase<FieldParamBase, FieldGeneratorBase>();
+
+            CreateMap<FieldParamDate, FieldGeneratorDate>()
+                .IncludeBase<FieldParamBase, FieldGeneratorBase>();
+
+            //Derived types based upon FieldParamDependantBase
+            CreateMap<FieldParamKeyCalculator, FieldGeneratorKeyCalculator>()
+                .IncludeBase<FieldParamDependantBase, FieldGeneratorDependantBase>();
+
+            CreateMap<FieldParamComposite, FieldGeneratorComposite>()
+                .IncludeBase<FieldParamDependantBase, FieldGeneratorDependantBase>();
         }
     }
 }
