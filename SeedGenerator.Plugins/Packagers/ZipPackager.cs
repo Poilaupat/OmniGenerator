@@ -29,12 +29,12 @@ namespace SeedGenerator.Plugins.Packagers
 
                 foreach (var doc in packet.Documents)
                 {
-                    if (doc.Name == "cheque" && doc.Image is not null && doc.Fields is not null)
+                    if (doc.Name == "cheque" && doc.RectoImage is not null && doc.Fields is not null)
                     {
                         string svgxml;
                         using (var ms = new MemoryStream())
                         {
-                            doc.Image.Write(ms);
+                            doc.RectoImage.Write(ms);
                             svgxml = Encoding.UTF8.GetString(ms.GetBuffer(), 0, (int)ms.Length);
                         }
 

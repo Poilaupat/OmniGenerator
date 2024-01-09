@@ -16,22 +16,33 @@ namespace SeedGenerator.Lib
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly IPackager _packager;
-        private readonly IImageComposer _imageComposer;
+        private readonly IImageComposerProcessor _imageComposerProcessor;
 
         private PacketParam? _param;
 
-        public SeedBuilderApplication(IConfiguration configuration, IMapper mapper, IPackager packager, IImageComposer imageComposer)
+        public SeedBuilderApplication(IConfiguration configuration, IMapper mapper, IPackager packager, IImageComposerProcessor imageComposerProcessor)
         {
             _configuration = configuration;
             _mapper = mapper;
             _packager = packager;
-            _imageComposer = imageComposer;
+            _imageComposerProcessor = imageComposerProcessor;
         }
 
         public async Task Run(string paramFilePath, string outputPath)
         {
             await LoadParam(paramFilePath);
-            await BuildSeed(outputPath); 
+
+            if (_param is not null)
+            {
+                //Packet data generation
+                var packetData = new PacketDataGenerator(_param, _mapper).GeneratePacketData();
+
+                //Packet images generation
+                await _imageComposerProcessor.ProcessAsync(packetData);
+
+                //Packet files generation
+                await _packager.GenerateFilesAsync(packetData, outputPath);
+            }
         }
 
         private async Task LoadParam(string paramFilePath)
@@ -45,42 +56,11 @@ namespace SeedGenerator.Lib
 
             string jsonparam = await File.ReadAllTextAsync(paramFilePath);
             _param = JsonSerializer.Deserialize<PacketParam>(jsonparam, options);
-        }
 
-        private async Task BuildSeed(string outputPath)
-        {
-            try
+            if(_param is null)
             {
-                var packetData = GenerateSeedData();
-                _imageComposer.ComposeDocumentImagesAsync(packetData);
-
-                foreach (var doc in packetData.Documents)
-                {
-                    if (doc.Image is not null && doc.Fields is not null)
-                    {
-                        using (var bitmap = ImageTools.RenderSvg(doc.Image, 200))
-                        {
-                            bitmap.Save($@"C:\Users\RDE\source\repos\Poilaupat\SeedGenerator\Output\svg2.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
-                        }
-                    }
-                }
-
-                await _packager.GenerateFilesAsync(packetData, outputPath);
+                throw new Exception("Invalid configuration");
             }
-            catch
-            {
-
-            }
-        }
-
-        private PacketData GenerateSeedData()
-        {
-            if (_param is null)
-                throw new NullReferenceException($"No param was provided");
-
-
-            var packetDataBuilder = new PacketDataGenerator(_param, _mapper);
-            return packetDataBuilder.GeneratePacketData();
         }
     }
 }

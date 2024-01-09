@@ -2,6 +2,7 @@
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using SeedGenerator.Lib;
+using SeedGenerator.Lib.Images;
 using SeedGenerator.Lib.Interfaces;
 using SeedGenerator.Plugins.Image.Composers;
 using SeedGenerator.Plugins.Packagers;
@@ -21,8 +22,15 @@ namespace SeedGenerator.Cli
             builder.RegisterInstance(config).As<IConfiguration>();
             builder.RegisterInstance(mapper).As<IMapper>();
             builder.RegisterType<PlainPackager>().As<IPackager>();
-            builder.RegisterType<ChequeComposer>().As<IImageComposer>();
-            builder.RegisterType<ChequeRedComposer>().As<IImageComposer>();
+            
+            builder.RegisterType<ImageComposerProcessor>().As<IImageComposerProcessor>();
+            builder.RegisterType<ChequeComposer>()
+                .As<IImageComposer>()
+                .WithMetadata<IImageComposerMetadata>(m => m.For(icm => icm.DocumentName, "cheque"));
+            builder.RegisterType<CouponSepaComposer>().As<IImageComposer>()
+                .WithMetadata<IImageComposerMetadata>(m => m.For(icm => icm.DocumentName, "coupon"));
+
+
             return builder.Build();
         }
 

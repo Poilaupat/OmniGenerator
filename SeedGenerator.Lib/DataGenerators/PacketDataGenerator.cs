@@ -15,6 +15,8 @@ namespace SeedGenerator.Lib.DataGenerators
         private Dictionary<string, FieldGeneratorCollection> _documentFieldGenerators;
         private Dictionary<string, FieldGeneratorCollection> _groupFieldGenerators;
 
+        long _docId = 1;
+
         public PacketParam Param { get; set; }
 
         public PacketDataGenerator(PacketParam param, IMapper mapper)
@@ -73,7 +75,7 @@ namespace SeedGenerator.Lib.DataGenerators
 
             for (int i = 0; i < occurences; i++)
             {
-                var document = new DocumentData(documentParam.Name);
+                var document = new DocumentData(_docId++, documentParam.Name);
                 document.Fields.AddRange(parentGroupFields);
                 if (_documentFieldGenerators.ContainsKey(documentParam.Name))
                     document.Fields.AddRange(_documentFieldGenerators[documentParam.Name].GenerateFields());

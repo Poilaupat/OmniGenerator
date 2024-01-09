@@ -1,4 +1,5 @@
 ﻿using SeedGenerator.Lib.Data;
+using SeedGenerator.Lib.ImageComposers;
 using SeedGenerator.Lib.Interfaces;
 using SeedGenerator.Lib.Tools;
 using SeedGenerator.Plugins.Image.Fonts;
@@ -11,98 +12,82 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace SeedGenerator.Plugins.Image.Composers
 {
-    public class ChequeComposer : IImageComposer
+    public class ChequeComposer : ImageComposerBase
     {
-        public int Width { get; } = 175;
-        public int Height { get; } = 80;
-
-        static ChequeComposer()
+        public ChequeComposer()
         {
+            Width = 175;
+            Height = 80;
+
             SvgFontManager.PrivateFontDataList.Add(FontUtility.GetFontBytes("Cmc7.ttf"));
             SvgFontManager.PrivateFontDataList.Add(FontUtility.GetFontBytes("OcrbRegular.ttf"));
-            //SvgFontManager.PrivateFontDataList.Add(FontUtility.GetFontBytes("BeautyWind.ttf"));
         }
 
-        public void ComposeDocumentImagesAsync(PacketData packet)
+        public override void ComposeDocumentImages(DocumentData document)
         {
-            foreach (var doc in packet.Documents)
-            {
-                ComposeDocumentImage(doc);
-            }
+            ComposeDocumentImageRecto(document);
         }
 
-        private void ComposeDocumentImage(DocumentData document)
+        private void ComposeDocumentImageRecto(DocumentData document)
         {
-            if (document.Name == "cheque")
-            {
-                var svg = new SvgDocument();
-                svg.ViewBox = new SvgViewBox(0, 0, Width, Height);
+            var svg = new SvgDocument();
+            svg.ViewBox = new SvgViewBox(0, 0, Width, Height);
 
-                DrawBackground(svg);
+            DrawRectoBackground(svg);
 
-                //CMC7 with separator chars
-                string[] cmc7 = document.Fields["cmc7"].Value.Split(" ");
-                AddText(svg, $"{{{cmc7[0]} {{{cmc7[1]}}} {cmc7[2]}[", "cmc7", 6f, 74f, "CMC7", 4f, Color.Black);
-                //RLMC Key
-                AddText(svg, $"({document.Fields["rlmc"].Value})", "rlmc", 163f, 62f, "Arial", 3f, Color.Black);
-                
-                //NumCheque
-                AddText(svg, $"N° {cmc7[0]}", "numcheque", 8f, 63f, "TimesNewRoman", 3f, Color.Black);
-                
-                //Ocrb1
-                AddText(svg, $"{cmc7[0]}{cmc7[1]}", "ocrb1", 138f, 5f, "OCRB", 2.5f, Color.Black);
-                //Ocrb2
-                AddText(svg, cmc7[2], "ocrb2", 150.5f, 9f, "OCRB", 2.5f, Color.Black);
-                
-                //Bank Name
-                AddText(svg, document.Fields["bank-name"].Value, "bank-name", 8f, 42.5f, "TimesNewRoman", 2f, Color.Black);
-                //Bank Address
-                AddText(svg, document.Fields["bank-address"].Value, "bank-address", 8f, 45f, "TimesNewRoman", 2f, Color.Black);
-                //Bank ZipCode and City
-                AddText(svg, document.Fields["bank-zip-city"].Value, "bank-zipcity", 8f, 47.5f, "TimesNewRoman", 2f, Color.Black);
-                //Bank Phone
-                AddText(svg, $"TEL {document.Fields["bank-phone"].Value}", "bank-phone", 8f, 50f, "TimesNewRoman", 2f, Color.Black);
+            //CMC7 with separator chars
+            string[] cmc7 = document.Fields["cmc7"].Value.Split(" ");
+            DrawText(svg, $"{{{cmc7[0]} {{{cmc7[1]}}} {cmc7[2]}[", "cmc7", 6f, 74f, "CMC7", 4f, Color.Black);
+            //RLMC Key
+            DrawText(svg, $"({document.Fields["rlmc"].Value})", "rlmc", 163f, 62f, "Arial", 3f, Color.Black);
 
-                //Payor Name
-                AddText(svg, $"{document.Fields["payor-name"].Value.ToUpper()}", "payor-name", 61f, 42.5f, "TimesNewRoman", 2f, Color.Black);
-                //Payor Address
-                AddText(svg, document.Fields["payor-address"].Value, "payor-address", 61f, 45f, "TimesNewRoman", 2f, Color.Black);
-                //Payor ZipCode and City
-                AddText(svg, document.Fields["payor-zip-city"].Value, "payor-zipcity", 61f, 47.5f, "TimesNewRoman", 2f, Color.Black);
+            //NumCheque
+            DrawText(svg, $"N° {cmc7[0]}", "numcheque", 8f, 63f, "TimesNewRoman", 3f, Color.Black);
 
-                //Lar
-                var amountparts = document.Fields["amount"].Value.Split(",");
-                string lar = $"{NumberToWords.Convert(int.Parse(amountparts[0]))} euros";
-                if (amountparts.Length > 1)
-                    lar += $" et {NumberToWords.Convert(int.Parse(amountparts[1]))} centimes";
-                AddText(svg, lar, "lar", 40f, 19.5f, "Arial", 3f, Color.Black);
+            //Ocrb1
+            DrawText(svg, $"{cmc7[0]}{cmc7[1]}", "ocrb1", 138f, 5f, "OCRB", 2.5f, Color.Black);
+            //Ocrb2
+            DrawText(svg, cmc7[2], "ocrb2", 150.5f, 9f, "OCRB", 2.5f, Color.Black);
 
-                //Car
-                AddText(svg, $"{document.Fields["amount"].Value} €", "car", 132f, 31f, "Arial", 3f, Color.Black);
+            //Bank Name
+            DrawText(svg, document.Fields["bank-name"].Value, "bank-name", 8f, 42.5f, "TimesNewRoman", 2f, Color.Black);
+            //Bank Address
+            DrawText(svg, document.Fields["bank-address"].Value, "bank-address", 8f, 45f, "TimesNewRoman", 2f, Color.Black);
+            //Bank ZipCode and City
+            DrawText(svg, document.Fields["bank-zip-city"].Value, "bank-zipcity", 8f, 47.5f, "TimesNewRoman", 2f, Color.Black);
+            //Bank Phone
+            DrawText(svg, $"TEL {document.Fields["bank-phone"].Value}", "bank-phone", 8f, 50f, "TimesNewRoman", 2f, Color.Black);
 
-                //Payee
-                AddText(svg, $"{document.Fields["payee-name"].Value}", "payee", 10f, 32f, "Arial", 3f, Color.Black);
+            //Payor Name
+            DrawText(svg, $"{document.Fields["payor-name"].Value.ToUpper()}", "payor-name", 61f, 42.5f, "TimesNewRoman", 2f, Color.Black);
+            //Payor Address
+            DrawText(svg, document.Fields["payor-address"].Value, "payor-address", 61f, 45f, "TimesNewRoman", 2f, Color.Black);
+            //Payor ZipCode and City
+            DrawText(svg, document.Fields["payor-zip-city"].Value, "payor-zipcity", 61f, 47.5f, "TimesNewRoman", 2f, Color.Black);
 
-                //Place
-                AddText(svg, $"{string.Join(' ', document.Fields["place"].Value.Split(" ").Skip(1))}", "payee", 132f, 39.5f, "Arial", 2f, Color.Black);
+            //Lar
+            var amountparts = document.Fields["amount"].Value.Split(",");
+            string lar = $"{NumberToWords.Convert(int.Parse(amountparts[0]))} euros";
+            if (amountparts.Length > 1)
+                lar += $" et {NumberToWords.Convert(int.Parse(amountparts[1]))} centimes";
+            DrawText(svg, lar, "lar", 40f, 19.5f, "Arial", 3f, Color.Black);
 
-                //Date
-                AddText(svg, $"{document.Fields["date"].Value}", "date", 132f, 44f, "Arial", 2f, Color.Black);
+            //Car
+            DrawText(svg, $"{document.Fields["amount"].Value} €", "car", 132f, 31f, "Arial", 3f, Color.Black);
 
-                document.Image = svg;
-            }
+            //Payee
+            DrawText(svg, $"{document.Fields["payee-name"].Value}", "payee", 10f, 32f, "Arial", 3f, Color.Black);
+
+            //Place
+            DrawText(svg, $"{string.Join(' ', document.Fields["place"].Value.Split(" ").Skip(1))}", "payee", 132f, 39.5f, "Arial", 2f, Color.Black);
+
+            //Date
+            DrawText(svg, $"{document.Fields["date"].Value}", "date", 132f, 44f, "Arial", 2f, Color.Black);
+
+            document.RectoImage = svg;
         }
 
-        private void AddText(SvgDocument svg, string text, string id, float x, float y, string fontFamilly, float fontSize, Color color)
-        {
-            var tag = new SvgText() { ID = id, FontFamily = fontFamilly, FontSize = new SvgUnit(fontSize), Fill = new SvgColourServer(color) };
-            tag.X.Add(new SvgUnit(x));
-            tag.Y.Add(new SvgUnit(y));
-            tag.Nodes.Add(new SvgContentNode { Content = text });
-            svg.Children.Add(tag);
-        }
-
-        private void DrawBackground(SvgDocument svg)
+        private void DrawRectoBackground(SvgDocument svg)
         {
             svg.Fill = new SvgColourServer(Color.White);
 
@@ -163,7 +148,7 @@ namespace SeedGenerator.Plugins.Image.Composers
             banklogo.Nodes.Add(new SvgContentNode { Content = $"SPECIMEN" });
             svg.Children.Add(banklogo);
 
-            AddText(svg, "Payable en France", "paymention3", 8f, 39f, "TimesNewRoman", 2f, Color.Black);
+            DrawText(svg, "Payable en France", "paymention3", 8f, 39f, "TimesNewRoman", 2f, Color.Black);
 
             svg.Children.Add(new SvgLine { ID = "payee-line", StartX = 8f, StartY = 32.5f, EndX = 113, EndY = 32.5f, Stroke = new SvgColourServer(Color.DarkBlue), StrokeWidth = 0.2f });
 

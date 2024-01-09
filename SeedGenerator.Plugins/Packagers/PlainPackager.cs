@@ -26,13 +26,13 @@ namespace SeedGenerator.Plugins.Packagers
 
             foreach (var doc in packet.Documents)
             {
-                if (doc.Name == "cheque" && doc.Image is not null && doc.Fields is not null)
+                if (doc.RectoImage is not null && doc.Fields is not null)
                 {
-                    if (doc.Image is not null && doc.Fields is not null)
+                    if (doc.RectoImage is not null && doc.Fields is not null)
                     {
-                        using (var bitmap = ImageTools.RenderSvg(doc.Image, 200))
+                        using (var bitmap = ImageTools.RenderSvg(doc.RectoImage, 200))
                         {
-                            var jpgFilePath = Path.Combine(seedpath, $"{doc.Fields["cmc7"].Value}.jpg");
+                            var jpgFilePath = Path.Combine(seedpath, $"{doc.Id:000000}.jpg");
                             bitmap.Save(jpgFilePath, System.Drawing.Imaging.ImageFormat.Jpeg);
                         }
                     }
