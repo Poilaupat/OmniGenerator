@@ -7,7 +7,7 @@ using System.Text;
 
 namespace SeedGenerator.Plugins.Packagers
 {
-    public class ZipPackager : IPackager
+    public class ZipPackager : DebugPackagerBase, IPackager
     {
         public async Task GenerateFilesAsync(PacketData packet, string path)
         {
@@ -45,25 +45,6 @@ namespace SeedGenerator.Plugins.Packagers
                             await sw.WriteLineAsync(svgxml);
                         }
                     }
-                }
-            }
-        }
-
-        private IEnumerable<string> GetTxtFileContent(PacketData packet)
-        {
-            yield return $"00 {DateTime.Now:yyyyMMddHHmmss} {packet.Fields["numlot"].Value}";
-
-            foreach (var document in packet.Documents)
-            {
-                if (document.Fields is not null)
-                {
-                    yield return document.Name switch
-                    {
-                        "slip" => $"{document.Fields["encline"].Value} {document.Fields["numremise"].Value}",
-                        "coupon" => $"{document.Fields["encline"].Value} {document.Fields["numcoupon"].Value}",
-                        "cheque" => $"{document.Fields["encline"].Value} {document.Fields["cmc7"].Value}",
-                        _ => throw new Exception("Unexpected document type"),
-                    };
                 }
             }
         }

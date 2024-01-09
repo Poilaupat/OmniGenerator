@@ -11,7 +11,7 @@ using System.Text.Json;
 
 namespace SeedGenerator.Lib
 {
-    public class SeedBuilder
+    public class SeedBuilderApplication
     {
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
@@ -20,7 +20,7 @@ namespace SeedGenerator.Lib
 
         private PacketParam? _param;
 
-        public SeedBuilder(IConfiguration configuration, IMapper mapper, IPackager packager, IImageComposer imageComposer)
+        public SeedBuilderApplication(IConfiguration configuration, IMapper mapper, IPackager packager, IImageComposer imageComposer)
         {
             _configuration = configuration;
             _mapper = mapper;
@@ -28,7 +28,13 @@ namespace SeedGenerator.Lib
             _imageComposer = imageComposer;
         }
 
-        public async Task LoadParam(string paramFilePath)
+        public async Task Run(string paramFilePath, string outputPath)
+        {
+            await LoadParam(paramFilePath);
+            await BuildSeed(outputPath); 
+        }
+
+        private async Task LoadParam(string paramFilePath)
         {
             var options = new JsonSerializerOptions
             {
@@ -41,7 +47,7 @@ namespace SeedGenerator.Lib
             _param = JsonSerializer.Deserialize<PacketParam>(jsonparam, options);
         }
 
-        public async Task BuildSeed(string outputPath)
+        private async Task BuildSeed(string outputPath)
         {
             try
             {
@@ -54,7 +60,7 @@ namespace SeedGenerator.Lib
                     {
                         using (var bitmap = ImageTools.RenderSvg(doc.Image, 200))
                         {
-                            bitmap.Save($@"C:\Users\Ruben\source\repos\SeedGenerator\Output\svg2.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                            bitmap.Save($@"C:\Users\RDE\source\repos\Poilaupat\SeedGenerator\Output\svg2.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
                         }
                     }
                 }

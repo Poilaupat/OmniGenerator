@@ -1,15 +1,10 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Autofac;
 using SeedGenerator.Cli;
 using SeedGenerator.Lib;
 
-IConfiguration configuration = Startup.GetConfiguration();
-IServiceCollection services = Startup.ConfigureServices(configuration);
-ServiceProvider provider = services.BuildServiceProvider();
+string paramFilePath = @"C:\Users\RDE\source\repos\Poilaupat\SeedGenerator\ParamFiles\param.json";
+string outputFolderPath = @"D:\Work\6 - Autres projets\SeedGenerator\Output";
 
-var builder = provider.GetRequiredService<SeedBuilder>();
-
-await builder.LoadParam(@"C:\Users\Ruben\source\repos\SeedGenerator\ParamFiles\param.json");
-var packetData = builder.BuildSeed(@"C:\Users\Ruben\source\repos\SeedGenerator\Output");
-;
+var container = Startup.CreateContainer();
+await container.Resolve<SeedBuilderApplication>().Run(paramFilePath, outputFolderPath);

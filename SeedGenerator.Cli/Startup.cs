@@ -1,16 +1,32 @@
-﻿using AutoMapper;
+﻿using Autofac;
+using AutoMapper;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using SeedGenerator.Lib;
 using SeedGenerator.Lib.Interfaces;
 using SeedGenerator.Plugins.Image.Composers;
 using SeedGenerator.Plugins.Packagers;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SeedGenerator.Cli
 {
     internal class Startup
     {
-        public static IConfiguration GetConfiguration()
+        public static IContainer CreateContainer()
+        {
+            var config = GetConfiguration();
+            var mapper = GetMapper();
+
+            var builder = new ContainerBuilder();
+            builder.RegisterType<SeedBuilderApplication>();
+            builder.RegisterInstance(config).As<IConfiguration>();
+            builder.RegisterInstance(mapper).As<IMapper>();
+            builder.RegisterType<PlainPackager>().As<IPackager>();
+            builder.RegisterType<ChequeComposer>().As<IImageComposer>();
+            builder.RegisterType<ChequeRedComposer>().As<IImageComposer>();
+            return builder.Build();
+        }
+
+        private static IConfiguration GetConfiguration()
         {
             IConfiguration configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
@@ -20,21 +36,12 @@ namespace SeedGenerator.Cli
             return configuration;
         }
 
-
-        public static IServiceCollection ConfigureServices(IConfiguration configuration)
+        private static IMapper GetMapper()
         {
-            IServiceCollection services = new ServiceCollection();
-            services.AddSingleton<IConfiguration>(configuration);
-            services.AddSingleton<IMapper>(_ =>
-                new MapperConfiguration(cfg =>
-                {
-                    cfg.AddMaps(new[] { "SeedGenerator.Lib" });
-                }).CreateMapper()
-            );
-            services.AddTransient<SeedBuilder>();
-            services.AddTransient<IPackager, ZipPackager>();
-            services.AddTransient<IImageComposer, ChequeComposer>();
-            return services;
+            return new MapperConfiguration(cfg =>
+            {
+                cfg.AddMaps(new[] { "SeedGenerator.Lib" });
+            }).CreateMapper();
         }
     }
 }
