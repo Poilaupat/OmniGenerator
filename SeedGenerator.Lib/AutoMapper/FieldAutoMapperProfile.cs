@@ -11,34 +11,34 @@ namespace SeedGenerator.Lib.AutoMapper
         public FieldAutoMapperProfile()
         {
             // Base Types
-            CreateMap<FieldParamBase, FieldGeneratorBase>();
+            CreateMap<FieldParamBase, AbstractFieldGenerator>();
 
-            CreateMap<FieldParamDependantBase, FieldGeneratorDependantBase>()
-                .IncludeBase<FieldParamBase, FieldGeneratorBase>();
+            CreateMap<FieldParamDependantBase, AbstractFieldGeneratorDependant>()
+                .IncludeBase<FieldParamBase, AbstractFieldGenerator>();
 
 
             //Derived types based upon FieldParamBase
             CreateMap<FieldParamRegex, FieldGeneratorRegex>()
-                .IncludeBase<FieldParamBase, FieldGeneratorBase>();
+                .IncludeBase<FieldParamBase, AbstractFieldGenerator>();
 
             CreateMap<FieldParamList, FieldGeneratorList>()
-                .IncludeBase<FieldParamBase, FieldGeneratorBase>();
+                .IncludeBase<FieldParamBase, AbstractFieldGenerator>();
 
             CreateMap<FieldParamFixedValue, FieldGeneratorFixedValue>()
-                .IncludeBase<FieldParamBase, FieldGeneratorBase>();
+                .IncludeBase<FieldParamBase, AbstractFieldGenerator>();
 
             CreateMap<FieldParamAmount, FieldGeneratorAmount>()
-                .IncludeBase<FieldParamBase, FieldGeneratorBase>();
+                .IncludeBase<FieldParamBase, AbstractFieldGenerator>();
 
             CreateMap<FieldParamDate, FieldGeneratorDate>()
-                .IncludeBase<FieldParamBase, FieldGeneratorBase>();
+                .IncludeBase<FieldParamBase, AbstractFieldGenerator>();
 
             //Derived types based upon FieldParamDependantBase
             CreateMap<FieldParamKeyCalculator, FieldGeneratorKeyCalculator>()
-                .IncludeBase<FieldParamDependantBase, FieldGeneratorDependantBase>();
+                .IncludeBase<FieldParamDependantBase, AbstractFieldGeneratorDependant>();
 
             CreateMap<FieldParamComposite, FieldGeneratorComposite>()
-                .IncludeBase<FieldParamDependantBase, FieldGeneratorDependantBase>();
+                .IncludeBase<FieldParamDependantBase, AbstractFieldGeneratorDependant>();
         }
     }
 }

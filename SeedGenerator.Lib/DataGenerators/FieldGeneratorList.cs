@@ -2,7 +2,7 @@
 
 namespace SeedGenerator.Lib.DataGenerators
 {
-    internal class FieldGeneratorList : FieldGeneratorBase
+    internal class FieldGeneratorList : AbstractFieldGenerator
     {
         public string ListPath { get; }
 

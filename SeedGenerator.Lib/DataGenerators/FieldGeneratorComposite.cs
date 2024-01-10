@@ -7,7 +7,7 @@ using Mustache;
 
 namespace SeedGenerator.Lib.DataGenerators
 {
-    internal class FieldGeneratorComposite : FieldGeneratorDependantBase
+    internal class FieldGeneratorComposite : AbstractFieldGeneratorDependant
     {
         public string Format { get; set; }
 

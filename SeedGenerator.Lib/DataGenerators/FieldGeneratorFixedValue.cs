@@ -1,6 +1,6 @@
 ﻿namespace SeedGenerator.Lib.DataGenerators
 {
-    internal class FieldGeneratorFixedValue : FieldGeneratorBase
+    internal class FieldGeneratorFixedValue : AbstractFieldGenerator
     {
         public string FixedValue { get; }
 

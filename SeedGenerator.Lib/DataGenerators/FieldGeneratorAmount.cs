@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SeedGenerator.Lib.DataGenerators
 {
-    internal class FieldGeneratorAmount : FieldGeneratorBase
+    internal class FieldGeneratorAmount : AbstractFieldGenerator
     {
         public float Min { get; }
 

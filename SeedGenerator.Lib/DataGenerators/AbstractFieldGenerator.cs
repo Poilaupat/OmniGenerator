@@ -1,10 +1,10 @@
 ﻿namespace SeedGenerator.Lib.DataGenerators
 {
-    internal abstract class FieldGeneratorBase
+    internal abstract class AbstractFieldGenerator
     {
         public string Name { get; }
 
-        public FieldGeneratorBase(string name)
+        public AbstractFieldGenerator(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException($"The property {nameof(name)} must be specified");

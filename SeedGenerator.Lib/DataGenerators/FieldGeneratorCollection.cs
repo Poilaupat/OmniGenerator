@@ -5,16 +5,16 @@ namespace SeedGenerator.Lib.DataGenerators
 {
     internal class FieldGeneratorCollection
     {
-        public List<FieldGeneratorBase> Builders { get; } = new List<FieldGeneratorBase>();
+        public List<AbstractFieldGenerator> Builders { get; } = new List<AbstractFieldGenerator>();
 
-        public FieldGeneratorCollection(IEnumerable<FieldGeneratorBase> builders)
+        public FieldGeneratorCollection(IEnumerable<AbstractFieldGenerator> builders)
         {
             AddRange(builders);
         }
 
         public bool Contains(string name) => Builders.Any(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
-        public void Add(FieldGeneratorBase item)
+        public void Add(AbstractFieldGenerator item)
         {
             if (Contains(item.Name))
             {
@@ -24,7 +24,7 @@ namespace SeedGenerator.Lib.DataGenerators
             Builders.Add(item);
         }
 
-        public void AddRange(IEnumerable<FieldGeneratorBase> items)
+        public void AddRange(IEnumerable<AbstractFieldGenerator> items)
         {
             foreach (var item in items)
             {
@@ -38,7 +38,7 @@ namespace SeedGenerator.Lib.DataGenerators
 
             foreach (var builder in Builders.OrderBy(x => x, new FieldGeneratorComparer()))
             {
-                if (builder is FieldGeneratorDependantBase dependantBuilder)
+                if (builder is AbstractFieldGeneratorDependant dependantBuilder)
                 {
                     foreach (var dependance in dependantBuilder.Dependances.Keys)
                     {

@@ -1,4 +1,8 @@
 {
+  "$type": "group",
+  "name": "root",
+  "min-occurs": 1,
+  "max-occurs": 1,
   "fields": [
     {
       "$type": "regex",
@@ -6,171 +10,166 @@
       "pattern": "\\d{9}"
     }
   ],
-  "root": {
-    "name": "root",
-    "min-occurs": 1,
-    "max-occurs": 1,
-    "elements": [
-      {
-        "$type": "document",
-        "name": "slip",
-        "min-occurs": 1,
-        "max-occurs": 1,
-        "fields": [
-          {
-            "$type": "fixed",
-            "name": "encline",
-            "value": "01"
-          },
-          {
-            "$type": "regex",
-            "name": "numremise",
-            "pattern": "\\d{7}"
-          }
-        ]
-      },
-      {
-        "$type": "group",
-        "name": "remittance",
-        "fields":[
-          {
-            "$type": "list",
-            "name": "payor-firstname",
-            "list-path": ".\\Resources\\Lists\\first_names.txt"
-          },
-          {
-            "$type": "list",
-            "name": "payor-lastname",
-            "list-path": ".\\Resources\\Lists\\last_names.txt"
-          },
-          {
-            "$type": "composite",
-            "name": "payor-name",
-            "dependant-upon": "payor-firstname, payor-lastname",
-            "format": "{{payor-firstname}} {{payor-lastname}}"
-          },
-          {
-            "$type": "list",
-            "name": "payor-zip-city",
-            "list-path": ".\\Resources\\Lists\\zipcodes_cities.txt"
-          },
-          {
-            "$type": "list",
-            "name": "payor-lane",
-            "list-path": ".\\Resources\\Lists\\addresses.txt"
-          },
-          {
-            "$type": "regex",
-            "name": "payor-lane-number",
-            "pattern": "\\d{1,3}"
-          },              
-          {
-            "$type": "composite",
-            "name": "payor-address",
-            "dependant-upon": "payor-lane,payor-lane-number",
-            "format": " {{payor-lane-number}} {{payor-lane}}"
-          }
-        ],
-        "min-occurs": 2,
-        "max-occurs": 2,
-        "elements": [
-          {
-            "$type": "document",
-            "name": "coupon",
-            "min-occurs": 1,
-            "max-occurs": 1,
-            "fields": [
-              {
-                "$type": "fixed",
-                "name": "encline",
-                "value": "12"
-              },
-              {
-                "$type": "regex",
-                "name": "numcoupon",
-                "pattern": "\\d{7}"
-              }
-            ]
-          },
-          {
-            "$type": "document",
-            "name": "cheque",
-            "min-occurs": 2,
-            "max-occurs": 2,
-            "fields": [
-              {
-                "$type": "fixed",
-                "name": "encline",
-                "value": "03"
-              },
-              {
-                "$type": "amount",
-                "name": "amount",
-                "min": 10,
-                "max": 9999
-              },
-              {
-                "$type": "regex",
-                "name": "cmc7",
-                "pattern": "\\d{7} \\d{9}908 \\d{12}"
-              },
-              {
-                "$type": "key",
-                "name": "rlmc",
-                "dependant-upon": "cmc7",
-                "key-type": "rlmc"
-              },
-              {
-                "$type": "fixed",
-                "name": "bank-name",
-                "value": "Banque Specimen"
-              },
-              {
-                "$type": "list",
-                "name": "bank-zip-city",
-                "list-path": ".\\Resources\\Lists\\zipcodes_cities.txt"
-              },
-              {
-                "$type": "list",
-                "name": "bank-lane",
-                "list-path": ".\\Resources\\Lists\\addresses.txt"
-              },
-              {
-                "$type": "regex",
-                "name": "bank-lane-number",
-                "pattern": "\\d{1,3}"
-              },              
-              {
-                "$type": "composite",
-                "name": "bank-address",
-                "dependant-upon": "bank-lane,bank-lane-number",
-                "format": " {{bank-lane-number}} {{bank-lane}}"
-              },              
-              {
-                "$type": "regex",
-                "name": "bank-phone",
-                "pattern": "0(2|3|4|5) \\d{2} \\d{2} \\d{2} \\d{2}"
-              },              
-              {
-                "$type": "fixed",
-                "name": "payee-name",
-                "value": "Sith Delapille"
-              },
-              {
-                "$type": "list",
-                "name": "place",
-                "list-path": ".\\Resources\\Lists\\zipcodes_cities.txt"
-              },
-              {
-                "$type": "date",
-                "name": "date",
-                "day-diff-min": 3,
-                "day-diff-max" : 400
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
+  "elements": [
+    {
+      "$type": "document",
+      "name": "slip",
+      "min-occurs": 1,
+      "max-occurs": 1,
+      "fields": [
+        {
+          "$type": "fixed",
+          "name": "encline",
+          "value": "01"
+        },
+        {
+          "$type": "regex",
+          "name": "numremise",
+          "pattern": "\\d{7}"
+        }
+      ]
+    },
+    {
+      "$type": "group",
+      "name": "remittance",
+      "min-occurs": 2,
+      "max-occurs": 2,
+      "fields": [
+        {
+          "$type": "list",
+          "name": "payor-firstname",
+          "list-path": ".\\Resources\\Lists\\first_names.txt"
+        },
+        {
+          "$type": "list",
+          "name": "payor-lastname",
+          "list-path": ".\\Resources\\Lists\\last_names.txt"
+        },
+        {
+          "$type": "composite",
+          "name": "payor-name",
+          "dependant-upon": "payor-firstname, payor-lastname",
+          "format": "{{payor-firstname}} {{payor-lastname}}"
+        },
+        {
+          "$type": "list",
+          "name": "payor-zip-city",
+          "list-path": ".\\Resources\\Lists\\zipcodes_cities.txt"
+        },
+        {
+          "$type": "list",
+          "name": "payor-lane",
+          "list-path": ".\\Resources\\Lists\\addresses.txt"
+        },
+        {
+          "$type": "regex",
+          "name": "payor-lane-number",
+          "pattern": "\\d{1,3}"
+        },
+        {
+          "$type": "composite",
+          "name": "payor-address",
+          "dependant-upon": "payor-lane,payor-lane-number",
+          "format": " {{payor-lane-number}} {{payor-lane}}"
+        }
+      ],
+      "elements": [
+        {
+          "$type": "document",
+          "name": "coupon",
+          "min-occurs": 1,
+          "max-occurs": 1,
+          "fields": [
+            {
+              "$type": "fixed",
+              "name": "encline",
+              "value": "12"
+            },
+            {
+              "$type": "regex",
+              "name": "numcoupon",
+              "pattern": "\\d{7}"
+            }
+          ]
+        },
+        {
+          "$type": "document",
+          "name": "cheque",
+          "min-occurs": 1,
+          "max-occurs": 4,
+          "fields": [
+            {
+              "$type": "fixed",
+              "name": "encline",
+              "value": "03"
+            },
+            {
+              "$type": "amount",
+              "name": "amount",
+              "min": 10,
+              "max": 9999
+            },
+            {
+              "$type": "regex",
+              "name": "cmc7",
+              "pattern": "\\d{7} \\d{9}908 \\d{12}"
+            },
+            {
+              "$type": "key",
+              "name": "rlmc",
+              "dependant-upon": "cmc7",
+              "key-type": "rlmc"
+            },
+            {
+              "$type": "fixed",
+              "name": "bank-name",
+              "value": "Banque Specimen"
+            },
+            {
+              "$type": "list",
+              "name": "bank-zip-city",
+              "list-path": ".\\Resources\\Lists\\zipcodes_cities.txt"
+            },
+            {
+              "$type": "list",
+              "name": "bank-lane",
+              "list-path": ".\\Resources\\Lists\\addresses.txt"
+            },
+            {
+              "$type": "regex",
+              "name": "bank-lane-number",
+              "pattern": "\\d{1,3}"
+            },
+            {
+              "$type": "composite",
+              "name": "bank-address",
+              "dependant-upon": "bank-lane,bank-lane-number",
+              "format": " {{bank-lane-number}} {{bank-lane}}"
+            },
+            {
+              "$type": "regex",
+              "name": "bank-phone",
+              "pattern": "0(2|3|4|5) \\d{2} \\d{2} \\d{2} \\d{2}"
+            },
+            {
+              "$type": "fixed",
+              "name": "payee-name",
+              "value": "Sith Delapille"
+            },
+            {
+              "$type": "list",
+              "name": "place",
+              "list-path": ".\\Resources\\Lists\\zipcodes_cities.txt"
+            },
+            {
+              "$type": "date",
+              "name": "date",
+              "day-diff-min": 3,
+              "day-diff-max": 400
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

@@ -18,7 +18,7 @@ namespace SeedGenerator.Lib
         private readonly IPackager _packager;
         private readonly IImageComposerProcessor _imageComposerProcessor;
 
-        private PacketParam? _param;
+        private GroupParam? _param;
 
         public SeedBuilderApplication(IConfiguration configuration, IMapper mapper, IPackager packager, IImageComposerProcessor imageComposerProcessor)
         {
@@ -55,7 +55,7 @@ namespace SeedGenerator.Lib
             };
 
             string jsonparam = await File.ReadAllTextAsync(paramFilePath);
-            _param = JsonSerializer.Deserialize<PacketParam>(jsonparam, options);
+            _param = JsonSerializer.Deserialize<GroupParam>(jsonparam, options);
 
             if(_param is null)
             {

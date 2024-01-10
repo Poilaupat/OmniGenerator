@@ -2,16 +2,16 @@
 
 namespace SeedGenerator.Lib.DataGenerators
 {
-    internal class FieldGeneratorComparer : IComparer<FieldGeneratorBase>
+    internal class FieldGeneratorComparer : IComparer<AbstractFieldGenerator>
     {
-        public int Compare(FieldGeneratorBase? x, FieldGeneratorBase? y)
+        public int Compare(AbstractFieldGenerator? x, AbstractFieldGenerator? y)
         {
             if (x is null || y is null)
                 throw new ArgumentNullException();
 
-            if (x is FieldGeneratorDependantBase || y is FieldGeneratorDependantBase)
+            if (x is AbstractFieldGeneratorDependant || y is AbstractFieldGeneratorDependant)
             {
-                if (x is FieldGeneratorDependantBase xd && y is FieldGeneratorDependantBase yd)
+                if (x is AbstractFieldGeneratorDependant xd && y is AbstractFieldGeneratorDependant yd)
                 {
                     if (xd.Dependances.Keys.Contains(y.Name)
                             && yd.Dependances.Keys.Contains(x.Name))
@@ -21,7 +21,7 @@ namespace SeedGenerator.Lib.DataGenerators
                     else
                         return 1;
                 }
-                else if (x is FieldGeneratorDependantBase)
+                else if (x is AbstractFieldGeneratorDependant)
                 {
                     return 1;
                 }

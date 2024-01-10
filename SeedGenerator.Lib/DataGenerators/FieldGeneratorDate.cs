@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SeedGenerator.Lib.DataGenerators
 {
-    internal class FieldGeneratorDate : FieldGeneratorBase
+    internal class FieldGeneratorDate : AbstractFieldGenerator
     {
         public int DayDiffMin { get; set; }
         public int DayDiffMax { get; set; }

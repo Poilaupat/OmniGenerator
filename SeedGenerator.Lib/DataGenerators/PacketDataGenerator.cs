@@ -17,29 +17,27 @@ namespace SeedGenerator.Lib.DataGenerators
 
         long _docId = 1;
 
-        public PacketParam Param { get; set; }
+        public GroupParam Param { get; set; }
 
-        public PacketDataGenerator(PacketParam param, IMapper mapper)
+        public PacketDataGenerator(GroupParam param, IMapper mapper)
         {
             Param = param;
 
-            _packetFieldGenerators = new FieldGeneratorCollection(mapper.Map<List<FieldGeneratorBase>>(Param.FieldParams));
+            _packetFieldGenerators = new FieldGeneratorCollection(mapper.Map<List<AbstractFieldGenerator>>(Param.FieldParams));
 
             _documentFieldGenerators = Param
-                .RootParams
                 .GetAllDocuments()
-                .ToDictionary(x => x.Name, y => new FieldGeneratorCollection(mapper.Map<List<FieldGeneratorBase>>(y.FieldParams)));
+                .ToDictionary(x => x.Name, y => new FieldGeneratorCollection(mapper.Map<List<AbstractFieldGenerator>>(y.FieldParams)));
 
             _groupFieldGenerators = Param
-                .RootParams
                 .GetAllGroups()
-                .ToDictionary(x => x.Name, y => new FieldGeneratorCollection(mapper.Map<List<FieldGeneratorBase>>(y.FieldParams)));
+                .ToDictionary(x => x.Name, y => new FieldGeneratorCollection(mapper.Map<List<AbstractFieldGenerator>>(y.FieldParams)));
         }
 
         public PacketData GeneratePacketData()
         {
             var packetFields = _packetFieldGenerators.GenerateFields();
-            var documents = GenerateDocumentsData(Param.RootParams).ToList();
+            var documents = GenerateDocumentsData(Param).ToList();
             return new PacketData(packetFields, documents);
         }
 
