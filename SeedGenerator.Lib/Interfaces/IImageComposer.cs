@@ -5,6 +5,6 @@ namespace SeedGenerator.Lib.Interfaces
 {
     public interface IImageComposer
     {
-        void ComposeDocumentImages(DocumentData document);
+        void ComposeDocumentImages(Document document);
     }
 }

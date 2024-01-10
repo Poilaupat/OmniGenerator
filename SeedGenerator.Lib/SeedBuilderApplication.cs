@@ -18,8 +18,6 @@ namespace SeedGenerator.Lib
         private readonly IPackager _packager;
         private readonly IImageComposerProcessor _imageComposerProcessor;
 
-        private GroupParam? _param;
-
         public SeedBuilderApplication(IConfiguration configuration, IMapper mapper, IPackager packager, IImageComposerProcessor imageComposerProcessor)
         {
             _configuration = configuration;
@@ -30,36 +28,18 @@ namespace SeedGenerator.Lib
 
         public async Task Run(string paramFilePath, string outputPath)
         {
-            await LoadParam(paramFilePath);
+            var param = await RootParam.FromFileAsync(paramFilePath);
 
-            if (_param is not null)
+            if (param is not null)
             {
-                //Packet data generation
-                var packetData = new PacketDataGenerator(_param, _mapper).GeneratePacketData();
+                //Data generation
+                var root = new DataGenerator(param, _mapper).Process();
 
-                //Packet images generation
-                await _imageComposerProcessor.ProcessAsync(packetData);
+                //Images generation
+                await _imageComposerProcessor.ProcessAsync(root);
 
-                //Packet files generation
-                await _packager.GenerateFilesAsync(packetData, outputPath);
-            }
-        }
-
-        private async Task LoadParam(string paramFilePath)
-        {
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                TypeInfoResolver = new PolymorphicTypeResolver(),
-            };
-
-            string jsonparam = await File.ReadAllTextAsync(paramFilePath);
-            _param = JsonSerializer.Deserialize<GroupParam>(jsonparam, options);
-
-            if(_param is null)
-            {
-                throw new Exception("Invalid configuration");
+                //Seed files generation
+                await _packager.ProcessAsync(root, outputPath);
             }
         }
     }

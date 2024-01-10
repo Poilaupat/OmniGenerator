@@ -23,12 +23,12 @@ namespace SeedGenerator.Plugins.Image.Composers
             SvgFontManager.PrivateFontDataList.Add(FontUtility.GetFontBytes("OcrbRegular.ttf"));
         }
 
-        public override void ComposeDocumentImages(DocumentData document)
+        public override void ComposeDocumentImages(Lib.Data.Document document)
         {
             ComposeDocumentImageRecto(document);
         }
 
-        private void ComposeDocumentImageRecto(DocumentData document)
+        private void ComposeDocumentImageRecto(Lib.Data.Document document)
         {
             var svg = new SvgDocument();
             svg.ViewBox = new SvgViewBox(0, 0, Width, Height);

@@ -15,7 +15,7 @@ namespace SeedGenerator.Lib.ImageComposers
         public int Width { get; protected set; }
         public int Height { get; protected set; }
 
-        public abstract void ComposeDocumentImages(DocumentData document);
+        public abstract void ComposeDocumentImages(Document document);
 
         //Helpers
         protected void DrawText(SvgDocument svg, string text, string id, float x, float y, string fontFamilly, float fontSize, Color color)

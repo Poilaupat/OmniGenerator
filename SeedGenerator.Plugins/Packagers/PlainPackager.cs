@@ -12,34 +12,45 @@ namespace SeedGenerator.Plugins.Packagers
 {
     public class PlainPackager : DebugPackagerBase, IPackager
     {
-        public async Task GenerateFilesAsync(PacketData packet, string path)
+        public async Task ProcessAsync(Root root, string path)
         {
-            var seedname = $"{DateTime.Now:yyyyMMddHHmmss}_{packet.Fields["numlot"].Value}";
+            var seedname = $"{DateTime.Now:yyyyMMddHHmmss}_{root.Fields["numlot"].Value}";
             var seedpath = Path.Combine(path, seedname);
 
             if (!Directory.Exists(seedpath))
                 Directory.CreateDirectory(seedpath);
 
             var txtfile = Path.Combine(seedpath, $"{seedname}.txt");
-            File.WriteAllLines(txtfile, GetTxtFileContent(packet));
+            File.WriteAllLines(txtfile, GetTxtFileContent(root));
 
-
-            foreach (var doc in packet.Documents)
+            foreach (var document in root.GetDocuments(true))
             {
-                if (doc.RectoImage is not null && doc.Fields is not null)
-                {
-                    if (doc.RectoImage is not null && doc.Fields is not null)
-                    {
-                        using (var bitmap = ImageTools.RenderSvg(doc.RectoImage, 200))
-                        {
-                            var jpgFilePath = Path.Combine(seedpath, $"{doc.Id:000000}.jpg");
-                            bitmap.Save(jpgFilePath, System.Drawing.Imaging.ImageFormat.Jpeg);
-                        }
-                    }
-                }
+                WriteDocumentImages(document, seedpath);
             }
 
             await Task.CompletedTask;
+        }
+
+        private void WriteDocumentImages(Document document, string seedpath)
+        {
+            if (document.RectoImage is not null)
+            {
+                using (var bitmap = ImageTools.RenderSvg(document.RectoImage, 200))
+                {
+                    bitmap.Save(
+                        Path.Combine(seedpath, $"R{document.Id:000000}.jpg"),
+                        System.Drawing.Imaging.ImageFormat.Jpeg);
+                }
+            }
+            if (document.VersoImage is not null)
+            {
+                using (var bitmap = ImageTools.RenderSvg(document.VersoImage, 200))
+                {
+                    bitmap.Save(
+                        Path.Combine(seedpath, $"V{document.Id:000000}.jpg"),
+                        System.Drawing.Imaging.ImageFormat.Jpeg);
+                }
+            }
         }
     }
 }

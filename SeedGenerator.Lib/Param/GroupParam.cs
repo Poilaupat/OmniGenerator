@@ -12,7 +12,7 @@ namespace SeedGenerator.Lib.Param
         [JsonPropertyName("fields")]
         public List<FieldParamBase> FieldParams { get; set; } = new List<FieldParamBase> { };
 
-        public IEnumerable<DocumentParam> GetAllDocuments()
+        public IEnumerable<DocumentParam> GetAllDocumentParams()
         {
             foreach (var doc in Elements.Where(x => x is DocumentParam))
             {
@@ -22,13 +22,13 @@ namespace SeedGenerator.Lib.Param
             foreach (var doc in Elements
                 .Where(x => x is GroupParam)
                 .Cast<GroupParam>()
-                .SelectMany(x => x.GetAllDocuments()))
+                .SelectMany(x => x.GetAllDocumentParams()))
             {
                 yield return doc;
             }
         }
 
-        public IEnumerable<GroupParam> GetAllGroups()
+        public IEnumerable<GroupParam> GetAllGroupParams()
         {
             foreach(var grp in Elements.Where(x => x is GroupParam))
             {
@@ -38,7 +38,7 @@ namespace SeedGenerator.Lib.Param
             foreach (var grp in Elements
                 .Where(x => x is GroupParam)
                 .Cast<GroupParam>()
-                .SelectMany(x => x.GetAllGroups()))
+                .SelectMany(x => x.GetAllGroupParams()))
             {
                 yield return grp;
             }

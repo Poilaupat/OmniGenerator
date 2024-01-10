@@ -18,19 +18,22 @@ namespace SeedGenerator.Lib.Images
             _composers = composers;
         }
 
-        public async Task ProcessAsync(PacketData packetData)
+        public async Task ProcessAsync(Root root)
         {
-            foreach (var grp in packetData.Documents.GroupBy(x => x.Name))
+            var docByNamesGrp = root.GetDocuments(true)
+                .GroupBy(x => x.Name);
+
+            foreach (var docByName in docByNamesGrp)
             {
                 //Getting a suitable IImageComposer implementation from DI container for the current document type
-                var composer = _composers.SingleOrDefault(x => (x.Metadata["DocumentName"] ?? string.Empty).Equals(grp.Key));
+                var composer = _composers.SingleOrDefault(x => (x.Metadata["DocumentName"] ?? string.Empty).Equals(docByName.Key));
 
                 if (composer is not null)
                 {
                     //Compositing image(s)
-                    foreach (var doc in grp)
+                    foreach (var doc in docByName)
                     {
-                        composer.Value.ComposeDocumentImages(doc);
+                        composer.Value.ComposeDocumentImages((Document)doc);
                     }
                 }
             }

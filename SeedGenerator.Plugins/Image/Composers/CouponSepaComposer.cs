@@ -19,12 +19,12 @@ namespace SeedGenerator.Plugins.Image.Composers
             Height = 80;
         }
 
-        public override void ComposeDocumentImages(DocumentData document)
+        public override void ComposeDocumentImages(Document document)
         {
             ComposeDocumentImageRecto(document);
         }
 
-        private void ComposeDocumentImageRecto(DocumentData document)
+        private void ComposeDocumentImageRecto(Document document)
         {
             var svg = new SvgDocument();
             svg.ViewBox = new SvgViewBox(0, 0, Width, Height);

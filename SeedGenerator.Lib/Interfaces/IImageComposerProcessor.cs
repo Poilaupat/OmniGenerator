@@ -9,6 +9,6 @@ namespace SeedGenerator.Lib.Interfaces
 {
     public interface IImageComposerProcessor
     {
-        Task ProcessAsync(PacketData packetData);
+        Task ProcessAsync(Root root);
     }
 }

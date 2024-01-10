@@ -4,6 +4,6 @@ namespace SeedGenerator.Lib.Interfaces
 {
     public interface IPackager
     {
-        Task GenerateFilesAsync(PacketData packet, string path);
+        Task ProcessAsync(Root root, string path);
     }
 }

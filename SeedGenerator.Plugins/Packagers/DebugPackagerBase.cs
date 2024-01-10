@@ -9,11 +9,11 @@ namespace SeedGenerator.Plugins.Packagers
 {
     public class DebugPackagerBase
     {
-        protected virtual IEnumerable<string> GetTxtFileContent(PacketData packet)
+        protected virtual IEnumerable<string> GetTxtFileContent(Root root)
         {
-            yield return $"00 {DateTime.Now:yyyyMMddHHmmss} {packet.Fields["numlot"].Value}";
+            yield return $"00 {DateTime.Now:yyyyMMddHHmmss} {root.Fields["numlot"].Value}";
 
-            foreach (var document in packet.Documents)
+            foreach (var document in root.GetDocuments(true))
             {
                 if (document.Fields is not null)
                 {

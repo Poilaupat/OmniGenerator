@@ -14,9 +14,12 @@
 
         public void AddRange(FieldCollection collection)
         {
-            foreach(var item in collection._items)
+            if (collection is not null)
             {
-                Add(item.Key, item.Value);
+                foreach (var item in collection._items)
+                {
+                    Add(item.Key, item.Value);
+                }
             }
         }
 
