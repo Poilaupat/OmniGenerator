@@ -5,14 +5,31 @@ namespace SeedGenerator.Lib.DataGenerators
 {
     internal class FieldGeneratorCollection
     {
-        public List<AbstractFieldGenerator> Builders { get; } = new List<AbstractFieldGenerator>();
+        IList<AbstractFieldGenerator> _generators = new List<AbstractFieldGenerator>();
 
-        public FieldGeneratorCollection(IEnumerable<AbstractFieldGenerator> builders)
+        public IList<AbstractFieldGenerator> FieldGenerators => _generators;
+
+        public IEnumerable<AbstractFieldGenerator> DeterministicFieldGenerators => _generators
+            .Where(x => x.GetType()?.BaseType?.Equals(typeof(AbstractFieldGenerator)) ?? false);
+
+        public IEnumerable<AbstractFieldGeneratorDependant> DependentFieldGenerators => _generators
+            .Where(x => x.GetType()?.BaseType?.Equals(typeof(AbstractFieldGeneratorDependant)) ?? false &&
+                x.GetType() != typeof(FieldGeneratorAggregate))
+            .Cast<AbstractFieldGeneratorDependant>()
+            .OrderBy(x => x, new FieldGeneratorComparer());
+
+        public IEnumerable<FieldGeneratorAggregate> AggregateFieldGenerators => _generators
+            .Where(x => x.GetType() == typeof(FieldGeneratorAggregate))
+            .Cast<FieldGeneratorAggregate>();
+
+
+
+        public FieldGeneratorCollection(IEnumerable<AbstractFieldGenerator> fieldGenerators)
         {
-            AddRange(builders);
+            AddRange(fieldGenerators);
         }
 
-        public bool Contains(string name) => Builders.Any(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+        public bool Contains(string name) => _generators.Any(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
         public void Add(AbstractFieldGenerator item)
         {
@@ -21,7 +38,7 @@ namespace SeedGenerator.Lib.DataGenerators
                 throw new ArgumentException($"A metadata generator with name '{item.Name}' was already added");
             }
 
-            Builders.Add(item);
+            _generators.Add(item);
         }
 
         public void AddRange(IEnumerable<AbstractFieldGenerator> items)
@@ -36,17 +53,19 @@ namespace SeedGenerator.Lib.DataGenerators
         {
             FieldCollection fields = new FieldCollection();
 
-            foreach (var builder in Builders.OrderBy(x => x, new FieldGeneratorComparer()))
+            foreach (var fieldGenerator in DeterministicFieldGenerators)
             {
-                if (builder is AbstractFieldGeneratorDependant dependantBuilder)
+                fields.Add(fieldGenerator.Name, new Field(fieldGenerator.Name, fieldGenerator.NextValue()));
+            }
+
+            foreach (var fieldGenerator in DependentFieldGenerators)
+            {
+                foreach (var dependance in fieldGenerator.Dependances.Keys)
                 {
-                    foreach (var dependance in dependantBuilder.Dependances.Keys)
-                    {
-                        var dependanceTarget = fields[dependance];
-                        dependantBuilder.Dependances[dependance] = dependanceTarget.Value;
-                    }
+                    var dependanceTarget = fields[dependance];
+                    fieldGenerator.Dependances[dependance] = dependanceTarget.Value;
                 }
-                fields.Add(builder.Name, new Field(builder.Name, builder.NextValue()));
+                fields.Add(fieldGenerator.Name, new Field(fieldGenerator.Name, fieldGenerator.NextValue()));
             }
 
             return fields;

@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace SeedGenerator.Lib.Param
 {
-    internal class GroupParam : ElementParam
+    public class GroupParam : ElementParam
     {
         [JsonPropertyName("elements")]
         public List<ElementParam> Elements { get; set; } = new List<ElementParam>();
@@ -12,35 +12,41 @@ namespace SeedGenerator.Lib.Param
         [JsonPropertyName("fields")]
         public List<FieldParamBase> FieldParams { get; set; } = new List<FieldParamBase> { };
 
-        public IEnumerable<DocumentParam> GetAllDocumentParams()
+        public IEnumerable<DocumentParam> GetDocumentParams(bool recursive)
         {
             foreach (var doc in Elements.Where(x => x is DocumentParam))
             {
                 yield return (DocumentParam)doc;
             }
 
-            foreach (var doc in Elements
-                .Where(x => x is GroupParam)
-                .Cast<GroupParam>()
-                .SelectMany(x => x.GetAllDocumentParams()))
+            if (recursive)
             {
-                yield return doc;
+                foreach (var doc in Elements
+                    .Where(x => x is GroupParam)
+                    .Cast<GroupParam>()
+                    .SelectMany(x => x.GetDocumentParams(recursive)))
+                {
+                    yield return doc;
+                }
             }
         }
 
-        public IEnumerable<GroupParam> GetAllGroupParams()
+        public IEnumerable<GroupParam> GetGroupParams(bool recursive)
         {
-            foreach(var grp in Elements.Where(x => x is GroupParam))
+            foreach (var grp in Elements.Where(x => x is GroupParam))
             {
                 yield return (GroupParam)grp;
             }
 
-            foreach (var grp in Elements
-                .Where(x => x is GroupParam)
-                .Cast<GroupParam>()
-                .SelectMany(x => x.GetAllGroupParams()))
+            if (recursive)
             {
-                yield return grp;
+                foreach (var grp in Elements
+                    .Where(x => x is GroupParam)
+                    .Cast<GroupParam>()
+                    .SelectMany(x => x.GetGroupParams(true)))
+                {
+                    yield return grp;
+                }
             }
         }
     }

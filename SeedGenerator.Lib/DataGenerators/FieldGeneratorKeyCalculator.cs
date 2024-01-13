@@ -11,10 +11,9 @@ namespace SeedGenerator.Lib.DataGenerators
         {
             KeyType = keyType;
 
-            int dependances = dependantUpon.Split(';').Count();
-            if (dependances > 1)
+            if (Dependances.Count > 1)
             {
-                throw new ArgumentException($"{keyType} generator support only one dependance");
+                throw new ArgumentException($"{name} generator support only one dependance");
             }
         }
 

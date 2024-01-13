@@ -11,17 +11,17 @@ using System.Text.Json;
 
 namespace SeedGenerator.Lib
 {
-    public class SeedBuilderApplication
+    public class Application
     {
         private readonly IConfiguration _configuration;
-        private readonly IMapper _mapper;
+        private readonly IRootBuilder _rootBuilder;
         private readonly IPackager _packager;
         private readonly IImageComposerProcessor _imageComposerProcessor;
 
-        public SeedBuilderApplication(IConfiguration configuration, IMapper mapper, IPackager packager, IImageComposerProcessor imageComposerProcessor)
+        public Application(IConfiguration configuration, IRootBuilder rootBuilder, IPackager packager, IImageComposerProcessor imageComposerProcessor)
         {
             _configuration = configuration;
-            _mapper = mapper;
+            _rootBuilder = rootBuilder;
             _packager = packager;
             _imageComposerProcessor = imageComposerProcessor;
         }
@@ -33,7 +33,7 @@ namespace SeedGenerator.Lib
             if (param is not null)
             {
                 //Data generation
-                var root = new DataGenerator(param, _mapper).Process();
+                var root = _rootBuilder.Build(param);
 
                 //Images generation
                 await _imageComposerProcessor.ProcessAsync(root);

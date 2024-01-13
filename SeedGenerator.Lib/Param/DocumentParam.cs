@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SeedGenerator.Lib.Param
 {
-    internal class DocumentParam : ElementParam
+    public class DocumentParam : ElementParam
     {
         [JsonPropertyName("fields")]
         public List<FieldParamBase> FieldParams { get; set; } = new List<FieldParamBase>();

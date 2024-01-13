@@ -2,7 +2,7 @@
 
 namespace SeedGenerator.Lib.Param.FieldParams
 {
-    internal abstract class FieldParamBase
+    public abstract class FieldParamBase
     {
         private string? _name;
 

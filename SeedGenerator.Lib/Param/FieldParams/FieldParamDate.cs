@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SeedGenerator.Lib.Param.FieldParams
 {
-    internal class FieldParamDate : FieldParamBase
+    public class FieldParamDate : FieldParamBase
     {
         [JsonPropertyName("day-diff-min")]
         public int DayDiffMin { get; set; }

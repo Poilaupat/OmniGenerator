@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SeedGenerator.Lib.Param.FieldParams
 {
-    internal class FieldParamComposite : FieldParamDependantBase
+    public class FieldParamComposite : FieldParamDependantBase
     {
         private string? _format;
 

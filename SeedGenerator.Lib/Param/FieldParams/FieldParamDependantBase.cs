@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SeedGenerator.Lib.Param.FieldParams
 {
-    internal abstract class FieldParamDependantBase : FieldParamBase
+    public abstract class FieldParamDependantBase : FieldParamBase
     {
         private string? _dependantUpon;
 

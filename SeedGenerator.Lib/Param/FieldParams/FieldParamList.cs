@@ -2,7 +2,7 @@
 
 namespace SeedGenerator.Lib.Param.FieldParams
 {
-    internal class FieldParamList : FieldParamBase
+    public class FieldParamList : FieldParamBase
     {
         [JsonPropertyName("list-path")]
         public string? ListPath { get; set; }

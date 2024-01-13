@@ -12,5 +12,10 @@
                 yield return document;
             }
         }
+
+        public void GenerateAggregateFields()
+        {
+
+        }
     }
 }

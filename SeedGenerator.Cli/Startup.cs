@@ -2,11 +2,11 @@
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using SeedGenerator.Lib;
+using SeedGenerator.Lib.Data;
 using SeedGenerator.Lib.Images;
 using SeedGenerator.Lib.Interfaces;
 using SeedGenerator.Plugins.Image.Composers;
 using SeedGenerator.Plugins.Packagers;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SeedGenerator.Cli
 {
@@ -18,7 +18,8 @@ namespace SeedGenerator.Cli
             var mapper = GetMapper();
 
             var builder = new ContainerBuilder();
-            builder.RegisterType<SeedBuilderApplication>();
+            builder.RegisterType<Application>();
+            builder.RegisterType<RootBuilder>().As<IRootBuilder>();
             builder.RegisterInstance(config).As<IConfiguration>();
             builder.RegisterInstance(mapper).As<IMapper>();
             builder.RegisterType<PlainPackager>().As<IPackager>();

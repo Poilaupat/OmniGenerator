@@ -2,7 +2,7 @@
 
 namespace SeedGenerator.Lib.Param
 {
-    internal abstract class ElementParam
+    public abstract class ElementParam
     {
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;

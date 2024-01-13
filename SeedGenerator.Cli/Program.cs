@@ -7,4 +7,4 @@ string paramFilePath = @"C:\Users\RDE\source\repos\Poilaupat\SeedGenerator\Param
 string outputFolderPath = @"D:\Work\6 - Autres projets\SeedGenerator\Output";
 
 var container = Startup.CreateContainer();
-await container.Resolve<SeedBuilderApplication>().Run(paramFilePath, outputFolderPath);
+await container.Resolve<Application>().Run(paramFilePath, outputFolderPath);

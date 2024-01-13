@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SeedGenerator.Lib.Param.FieldParams
 {
-    internal class FieldParamAmount : FieldParamBase
+    public class FieldParamAmount : FieldParamBase
     {
         [JsonPropertyName("min")]
         public float Min { get; set; } = 0.01f;

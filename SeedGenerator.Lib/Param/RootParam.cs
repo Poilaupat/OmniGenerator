@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SeedGenerator.Lib.Param
 {
-    internal class RootParam
+    public class RootParam
     {
         [JsonPropertyName("fields")]
         public List<FieldParamBase> FieldParams { get; set; } = new List<FieldParamBase> { };
@@ -37,16 +37,6 @@ namespace SeedGenerator.Lib.Param
             }
 
             return (RootParam)param;
-        }
-
-        public IEnumerable<DocumentParam> GetAllDocumentParams()
-        {
-            return RootGroupParam.GetAllDocumentParams();
-        }
-
-        public IEnumerable<GroupParam> GetAllGroupParams()
-        {
-            return RootGroupParam.GetAllGroupParams();
         }
     }
 }

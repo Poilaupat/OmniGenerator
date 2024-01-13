@@ -2,7 +2,7 @@
 
 namespace SeedGenerator.Lib.Param.FieldParams
 {
-    internal class FieldParamKeyCalculator : FieldParamDependantBase
+    public class FieldParamKeyCalculator : FieldParamDependantBase
     {
         [JsonPropertyName("key-type")]
         public string? KeyType { get; set; }
