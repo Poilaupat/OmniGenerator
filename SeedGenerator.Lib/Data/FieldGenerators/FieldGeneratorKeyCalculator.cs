@@ -1,8 +1,8 @@
 ﻿using SeedGenerator.Lib.Tools;
 
-namespace SeedGenerator.Lib.DataGenerators
+namespace SeedGenerator.Lib.Data.FieldGenerators
 {
-    internal class FieldGeneratorKeyCalculator : AbstractFieldGeneratorDependant
+    internal class FieldGeneratorKeyCalculator : AbstractFieldGeneratorOneFieldDependant
     {
         public string KeyType { get; set; }
 
@@ -10,11 +10,6 @@ namespace SeedGenerator.Lib.DataGenerators
             : base(name, dependantUpon)
         {
             KeyType = keyType;
-
-            if (Dependances.Count > 1)
-            {
-                throw new ArgumentException($"{name} generator support only one dependance");
-            }
         }
 
         public override string NextValue()

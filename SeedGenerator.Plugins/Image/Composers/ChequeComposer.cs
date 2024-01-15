@@ -1,14 +1,8 @@
-﻿using SeedGenerator.Lib.Data;
-using SeedGenerator.Lib.ImageComposers;
-using SeedGenerator.Lib.Interfaces;
+﻿using SeedGenerator.Lib.ImageComposers;
 using SeedGenerator.Lib.Tools;
 using SeedGenerator.Plugins.Image.Fonts;
 using Svg;
 using System.Drawing;
-using System.Reflection;
-using System.Reflection.Metadata;
-using System.Xml.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SeedGenerator.Plugins.Image.Composers
 {

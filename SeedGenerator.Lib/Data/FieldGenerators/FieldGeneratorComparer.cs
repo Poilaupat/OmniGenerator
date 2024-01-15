@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace SeedGenerator.Lib.DataGenerators
+﻿namespace SeedGenerator.Lib.Data.FieldGenerators
 {
     internal class FieldGeneratorComparer : IComparer<AbstractFieldGenerator>
     {

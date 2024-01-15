@@ -1,13 +1,13 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace SeedGenerator.Lib.DataGenerators
+namespace SeedGenerator.Lib.Data.FieldGenerators
 {
     internal abstract class AbstractFieldGeneratorDependant : AbstractFieldGenerator
     {
         public Dictionary<string, string?> Dependances { get; set; } = new Dictionary<string, string?>();
 
 
-        public AbstractFieldGeneratorDependant(string name, string dependantUpon)
+        protected AbstractFieldGeneratorDependant(string name, string dependantUpon)
             : base(name)
         {
             string[] dependanceNames = Regex.Replace(dependantUpon, @"\s", string.Empty).Split(new[] { ',', ';', '|' });

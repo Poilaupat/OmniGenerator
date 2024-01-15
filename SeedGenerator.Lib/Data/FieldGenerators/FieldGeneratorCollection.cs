@@ -1,19 +1,18 @@
 ﻿using System.Data;
-using SeedGenerator.Lib.Data;
 
-namespace SeedGenerator.Lib.DataGenerators
+namespace SeedGenerator.Lib.Data.FieldGenerators
 {
     internal class FieldGeneratorCollection
     {
-        IList<AbstractFieldGenerator> _generators = new List<AbstractFieldGenerator>();
+        private IList<AbstractFieldGenerator> _generators = new List<AbstractFieldGenerator>();
 
         public IList<AbstractFieldGenerator> FieldGenerators => _generators;
 
         public IEnumerable<AbstractFieldGenerator> DeterministicFieldGenerators => _generators
-            .Where(x => x.GetType()?.BaseType?.Equals(typeof(AbstractFieldGenerator)) ?? false);
+            .Where(x => x.GetType().BaseType?.Equals(typeof(AbstractFieldGenerator)) ?? false);
 
         public IEnumerable<AbstractFieldGeneratorDependant> DependentFieldGenerators => _generators
-            .Where(x => x.GetType()?.BaseType?.Equals(typeof(AbstractFieldGeneratorDependant)) ?? false &&
+            .Where(x => x.GetType().IsSubclassOf(typeof(AbstractFieldGeneratorDependant)) &&
                 x.GetType() != typeof(FieldGeneratorAggregate))
             .Cast<AbstractFieldGeneratorDependant>()
             .OrderBy(x => x, new FieldGeneratorComparer());
@@ -69,6 +68,11 @@ namespace SeedGenerator.Lib.DataGenerators
             }
 
             return fields;
+        }
+
+        public override string ToString()
+        {
+            return $"Field count = {_generators.Count}";
         }
     }
 }

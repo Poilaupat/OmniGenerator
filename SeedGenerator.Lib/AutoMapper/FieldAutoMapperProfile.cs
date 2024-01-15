@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.ML;
-using SeedGenerator.Lib.DataGenerators;
+using SeedGenerator.Lib.Data.FieldGenerators;
 using SeedGenerator.Lib.Param.FieldParams;
-using System.Text.RegularExpressions;
 
 namespace SeedGenerator.Lib.AutoMapper
 {

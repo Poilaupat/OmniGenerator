@@ -2,27 +2,32 @@
 {
     public class FieldCollection
     {
-        private Dictionary<string, Field> _items { get; } = new Dictionary<string, Field>();
+        private Dictionary<string, Field> _fields { get; } = new Dictionary<string, Field>();
 
-        public void Add(string key, Field item)
+        public void Add(string key, Field field)
         {
-            if (_items.ContainsKey(key))
-                _items[key] = item;
+            if (_fields.ContainsKey(key))
+                _fields[key] = field;
 
-            _items.Add(key, item);
+            _fields.Add(key, field);
         }
 
         public void AddRange(FieldCollection collection)
         {
             if (collection is not null)
             {
-                foreach (var item in collection._items)
+                foreach (var field in collection._fields)
                 {
-                    Add(item.Key, item.Value);
+                    Add(field.Key, field.Value);
                 }
             }
         }
 
-        public Field this[string key] => _items[key.Replace("-", "_")];
+        public Field this[string key] => _fields[key.Replace("-", "_")];
+
+        public override string ToString()
+        {
+            return $"Field count = {_fields.Count}";
+        }
     }
 }

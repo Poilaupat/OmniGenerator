@@ -1,4 +1,4 @@
-﻿namespace SeedGenerator.Lib.DataGenerators
+﻿namespace SeedGenerator.Lib.Data.FieldGenerators
 {
     internal class FieldGeneratorFixedValue : AbstractFieldGenerator
     {

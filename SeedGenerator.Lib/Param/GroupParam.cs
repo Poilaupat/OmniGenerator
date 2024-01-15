@@ -1,5 +1,4 @@
-﻿using Microsoft.ProgramSynthesis;
-using SeedGenerator.Lib.Param.FieldParams;
+﻿using SeedGenerator.Lib.Param.FieldParams;
 using System.Text.Json.Serialization;
 
 namespace SeedGenerator.Lib.Param

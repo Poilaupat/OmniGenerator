@@ -1,13 +1,7 @@
 ﻿using AutoMapper;
-using Mustache;
-using SeedGenerator.Lib.DataGenerators;
+using SeedGenerator.Lib.Data.FieldGenerators;
 using SeedGenerator.Lib.Interfaces;
 using SeedGenerator.Lib.Param;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SeedGenerator.Lib.Data
 {
@@ -25,12 +19,12 @@ namespace SeedGenerator.Lib.Data
 
         public Root Build(RootParam rootParam)
         {
-            var root = new Root();
-
             var groups = GenerateGroups(rootParam.RootGroupParam);
-            root.Groups.AddRange(groups);
+            var root = new Root(groups);
 
-            GenerateFields(root, rootParam);
+            var holder = new FieldGeneratorHolder(rootParam, _mapper);
+            GenerateFields(root, holder);
+            GenerateAggregateFields(root, holder);
 
             return root;
         }
@@ -42,10 +36,13 @@ namespace SeedGenerator.Lib.Data
 
         private IEnumerable<Group> GenerateGroups(GroupParam groupParam)
         {
+            List<Group> groups = new List<Group>();
+
             int occurences = GetRandomOccurence(groupParam.MinOccurs, groupParam.MaxOccurs);
             for (int i = 0; i < occurences; i++)
             {
                 Group group = new Group(_grpId++, groupParam.Name);
+                groups.Add(group);
 
                 foreach (var docParam in groupParam.GetDocumentParams(false))
                 {
@@ -57,57 +54,46 @@ namespace SeedGenerator.Lib.Data
                     group.Elements.AddRange(GenerateGroups(subGroupParam));
                 }
 
-                yield return group;
             }
+
+            return groups;
         }
 
         private IEnumerable<Document> GenerateDocuments(DocumentParam documentParam)
         {
+            List<Document> documents = new List<Document>();
+
             int occurences = GetRandomOccurence(documentParam.MinOccurs, documentParam.MaxOccurs);
             for (int i = 0; i < occurences; i++)
             {
                 var document = new Document(_docId++, documentParam.Name);
-                yield return document;
+                documents.Add(document);
             }
+            return documents;
         }
 
 
-        private void GenerateFields(Root root, RootParam rootParam)
+        private void GenerateFields(Root root, FieldGeneratorHolder holder)
         {
-            // Root field generators
-            var rootFieldGenerators = new FieldGeneratorCollection(_mapper.Map<List<AbstractFieldGenerator>>(rootParam.FieldParams));
-
-            // Document field generators
-            var documentFieldGenerators = rootParam
-                .RootGroupParam
-                .GetDocumentParams(true)
-                .ToDictionary(x => x.Name, y => new FieldGeneratorCollection(_mapper.Map<List<AbstractFieldGenerator>>(y.FieldParams)));
-
-            // Group field generators
-            var groupFieldGenerators = rootParam
-               .RootGroupParam
-               .GetGroupParams(true)
-               .ToDictionary(x => x.Name, y => new FieldGeneratorCollection(_mapper.Map<List<AbstractFieldGenerator>>(y.FieldParams)));
-
-            // Root fields
-            if (rootFieldGenerators is not null)
+            // Generating root fields
+            if (holder.RootFieldGenerators is not null)
             {
-                var fields = rootFieldGenerators.GenerateFields();
+                var fields = holder.RootFieldGenerators.GenerateFields();
                 root.Fields.AddRange(fields);
             }
 
-            // Group fields
+            // Generating group fields
             var groups = root.Groups.Union(root.Groups.SelectMany(x => x.GetGroups(true)));
-            foreach(var group in groups)
+            foreach (var group in groups)
             {
                 FieldCollection? groupFields = null;
-                if (groupFieldGenerators.ContainsKey(group.Name))
+                if (holder.GroupFieldGenerators.ContainsKey(group.Name))
                 {
-                    groupFields = groupFieldGenerators[group.Name].GenerateFields();
+                    groupFields = holder.GroupFieldGenerators[group.Name].GenerateFields();
                     group.Fields.AddRange(groupFields);
                 }
 
-                // Document fields (Note : There is a copy of the fields of direct parent group on each document)
+                // Generating document fields (Note : There is a copy of the fields of direct parent group on each document)
                 foreach (var document in group.GetDocuments(false))
                 {
                     if (groupFields is not null)
@@ -115,12 +101,49 @@ namespace SeedGenerator.Lib.Data
                         document.Fields.AddRange(groupFields);
                     }
 
-                    if (documentFieldGenerators.ContainsKey(document.Name))
+                    if (holder.DocumentFieldGenerators.ContainsKey(document.Name))
                     {
-                        var fields = documentFieldGenerators[document.Name].GenerateFields();
+                        var fields = holder.DocumentFieldGenerators[document.Name].GenerateFields();
                         document.Fields.AddRange(fields);
                     }
                 }
+            }
+        }
+
+        private void GenerateAggregateFields(Root root, FieldGeneratorHolder holder)
+        {
+            foreach (var group in root.Groups)
+            {
+                GenerateAggregateFields(group, holder);
+            }
+        }
+
+        private void GenerateAggregateFields(Group group, FieldGeneratorHolder holder)
+        {
+            if (holder.GroupFieldGenerators.ContainsKey(group.Name))
+            {
+                foreach (var generator in holder.GroupFieldGenerators[group.Name].AggregateFieldGenerators)
+                {
+                    generator.Group = group;
+                    group.Fields.Add(generator.Name, new Field(generator.Name, generator.NextValue()));
+                }
+            }
+
+            foreach (var document in group.GetDocuments(false))
+            {
+                if (holder.DocumentFieldGenerators.ContainsKey(document.Name))
+                {
+                    foreach (var generator in holder.DocumentFieldGenerators[document.Name].AggregateFieldGenerators)
+                    {
+                        generator.Group = group;
+                        document.Fields.Add(generator.Name, new Field(generator.Name, generator.NextValue()));
+                    }
+                }
+            }
+
+            foreach (var subGroup in group.GetGroups(false))
+            {
+                GenerateAggregateFields(subGroup, holder);
             }
         }
     }

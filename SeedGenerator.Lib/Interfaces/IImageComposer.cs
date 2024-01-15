@@ -1,5 +1,4 @@
 ﻿using SeedGenerator.Lib.Data;
-using Svg;
 
 namespace SeedGenerator.Lib.Interfaces
 {

@@ -1,5 +1,4 @@
-﻿using Microsoft.ProgramSynthesis.Transformation.Formula.Build.UnnamedConversionNodeTypes;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace SeedGenerator.Lib.Param.FieldParams
 {

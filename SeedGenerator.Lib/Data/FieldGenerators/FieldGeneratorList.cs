@@ -1,6 +1,6 @@
 ﻿using SeedGenerator.Lib.Tools;
 
-namespace SeedGenerator.Lib.DataGenerators
+namespace SeedGenerator.Lib.Data.FieldGenerators
 {
     internal class FieldGeneratorList : AbstractFieldGenerator
     {
