@@ -53,11 +53,11 @@ namespace SeedGenerator.Plugins.Image.Composers
             DrawText(svg, $"TEL {document.Fields["bank-phone"].Value}", "bank-phone", 8f, 50f, "TimesNewRoman", 2f, Color.Black);
 
             //Payor Name
-            DrawText(svg, $"{document.Fields["payor-name"].Value.ToUpper()}", "payor-name", 61f, 42.5f, "TimesNewRoman", 2f, Color.Black);
+            DrawText(svg, $"{document.Parent.Fields["payor-name"].Value.ToUpper()}", "payor-name", 61f, 42.5f, "TimesNewRoman", 2f, Color.Black);
             //Payor Address
-            DrawText(svg, document.Fields["payor-address"].Value, "payor-address", 61f, 45f, "TimesNewRoman", 2f, Color.Black);
+            DrawText(svg, document.Parent.Fields["payor-address"].Value, "payor-address", 61f, 45f, "TimesNewRoman", 2f, Color.Black);
             //Payor ZipCode and City
-            DrawText(svg, document.Fields["payor-zip-city"].Value, "payor-zipcity", 61f, 47.5f, "TimesNewRoman", 2f, Color.Black);
+            DrawText(svg, document.Parent.Fields["payor-zip-city"].Value, "payor-zipcity", 61f, 47.5f, "TimesNewRoman", 2f, Color.Black);
 
             //Lar
             var amountparts = document.Fields["amount"].Value.Split(",");

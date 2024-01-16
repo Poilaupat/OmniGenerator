@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.ProgramSynthesis.Transformation.Text.Build.NodeTypes;
 using SeedGenerator.Lib.Param;
 
 namespace SeedGenerator.Lib.Data.FieldGenerators
@@ -28,9 +29,8 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
             // Group field generators
             _groupFieldGenerators = rootParam
                .RootGroupParam
-               .GetGroupParams(true)
+               .GetGroupParamsAndSelf(true)
                .ToDictionary(x => x.Name, y => new FieldGeneratorCollection(mapper.Map<List<AbstractFieldGenerator>>(y.FieldParams)));
-
         }
     }
 }

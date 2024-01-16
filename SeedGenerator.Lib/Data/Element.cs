@@ -8,6 +8,8 @@
 
         public string Name { get; set; }
 
+        public Group? Parent { get; set; }
+
         public FieldCollection Fields { get; set; } = new FieldCollection();
 
         public Element(string type, string name, long id) 
@@ -15,6 +17,11 @@
             Type = type;
             Name = name;
             Id = id;
+        }
+
+        public override string ToString()
+        {
+            return $"{this.GetType().Name} ({Name}, {Id})";
         }
     }
 }

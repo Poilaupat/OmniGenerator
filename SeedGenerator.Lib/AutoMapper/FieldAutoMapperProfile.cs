@@ -37,6 +37,9 @@ namespace SeedGenerator.Lib.AutoMapper
 
             CreateMap<FieldParamComposite, FieldGeneratorComposite>()
                 .IncludeBase<FieldParamDependantBase, AbstractFieldGeneratorDependant>();
+
+            CreateMap<FieldParamAggregate, FieldGeneratorAggregate>()
+                .IncludeBase<FieldParamDependantBase, AbstractFieldGeneratorDependant>();
         }
     }
 }

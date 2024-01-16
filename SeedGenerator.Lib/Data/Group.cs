@@ -2,7 +2,7 @@
 {
     public class Group : Element
     {
-        public List<Element> Elements { get; set; } = new List<Element>();
+        private IList<Element> _elements = new List<Element>();
 
         public Group(long id, string name)
             : base("group", name, id)
@@ -10,59 +10,65 @@
 
         }
 
-        public IEnumerable<Group> GetGroups(bool recursive = false)
+        public void Add(Element element)
         {
-            var groups = Elements.Where(x => x is Group).Cast<Group>();
-            foreach (var group in groups)
+            element.Parent = this;
+            _elements.Add(element);
+        }
+
+        public void AddRange(IEnumerable<Element> elements)
+        {
+            foreach (var element in elements)
             {
-                if(recursive)
+                Add(element);
+            }
+        }
+
+        public IEnumerable<Element> GetElements(string? name, bool recursive = false)
+        {
+            foreach(var element in _elements)
+            {
+                if(name is null || element.Name.Equals(name))
                 {
-                    foreach(var subGroup in group.GetGroups(recursive))
-                    {
-                        yield return subGroup;
-                    }
+                    yield return element;
                 }
 
-                yield return group;
+                if(recursive && element is Group group)
+                {
+                    foreach(var subElement in group.GetElements(name, recursive))
+                    {
+                        yield return subElement;
+                    }
+                }
             }
+        }
+
+        public IEnumerable<Group> GetGroups(bool recursive = false)
+        {
+            return GetElements(null, recursive)
+                .Where(x => x is Group)
+                .Cast<Group>();
         }
 
         public IEnumerable<Group> GetGroups(string name, bool recursive = false)
         {
-            return GetGroups(recursive)
-                .Where(x => x.Name == name);
+            return GetElements(name, recursive)
+                .Where(x => x is Group)
+                .Cast<Group>();
         }
 
-        public IEnumerable<Document> GetDocuments(bool recusive = false)
+        public IEnumerable<Document> GetDocuments(bool recursive = false)
         {
-            foreach(var element in Elements)
-            {
-                switch (element)
-                {
-                    case Document document:
-                        yield return document;
-                        break;
-
-                    case Group group:
-                        if(recusive) 
-                        {
-                            foreach(var document in group.GetDocuments(recusive))
-                            {
-                                yield return document;
-                            }
-                        }
-                        break;
-
-                    default:
-                        throw new Exception($"{element.GetType().Name} was an unexpected type");
-                }
-            }
+            return GetElements(null, recursive)
+                .Where(x => x is Document)
+                .Cast<Document>();
         }
 
-        public IEnumerable<Document> GetDocuments(string name, bool recusive = false)
+        public IEnumerable<Document> GetDocuments(string name, bool recursive = false)
         {
-            return GetDocuments(recusive)
-                .Where(document => document.Name == name);
+            return GetElements(name, recursive)
+                .Where(x => x is Document)
+                .Cast<Document>();
         }
     }
 }

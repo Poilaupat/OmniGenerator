@@ -37,6 +37,7 @@ namespace SeedGenerator.Lib.Param.Serialization
                     new JsonDerivedType(typeof(FieldParamComposite), "composite"),
                     new JsonDerivedType(typeof(FieldParamAmount), "amount"),
                     new JsonDerivedType(typeof(FieldParamDate), "date"),
+                    new JsonDerivedType(typeof(FieldParamAggregate), "aggregate"),
                 }
             };
         }

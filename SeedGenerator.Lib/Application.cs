@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using SeedGenerator.Lib.Exceptions;
 using SeedGenerator.Lib.Interfaces;
 using SeedGenerator.Lib.Param;
 
@@ -21,19 +22,30 @@ namespace SeedGenerator.Lib
 
         public async Task Run(string paramFilePath, string outputPath)
         {
-            var param = await RootParam.FromFileAsync(paramFilePath);
-
-            if (param is not null)
+            RootParam param;
+            try
             {
-                //Data generation
-                var root = _rootBuilder.Build(param);
-
-                //Images generation
-                await _imageComposerProcessor.ProcessAsync(root);
-
-                //Seed files generation
-                await _packager.ProcessAsync(root, outputPath);
+                param = await ParamTools.GetParamFromFileAsync(paramFilePath);               
             }
+            catch (ParamException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return;
+            }
+
+            //Data generation
+            var root = _rootBuilder.Build(param);
+
+            //Images generation
+            await _imageComposerProcessor.ProcessAsync(root);
+
+            //Seed files generation
+            await _packager.ProcessAsync(root, outputPath);
         }
     }
 }

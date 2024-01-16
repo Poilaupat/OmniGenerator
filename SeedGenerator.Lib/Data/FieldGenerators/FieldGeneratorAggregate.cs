@@ -2,33 +2,26 @@
 {
     internal class FieldGeneratorAggregate : AbstractFieldGeneratorOneFieldDependant
     {
-        public enum EFFieldAggregateType
-        {
-            Count,
-            Sum,
-        }
-
-        public enum EScope
-        {
-            Overall,
-            DirectParent,
-        }
-
         public EFFieldAggregateType AggregateType { get; set; }
         public EScope Scope { get; set; }
-        public string TargetDocument { get; set; }
+        public string TargetElement { get; set; }
         public Group? Group { get; set; }
 
-        public FieldGeneratorAggregate(string name, string dependantUpon, EFFieldAggregateType aggregateType, EScope scope, string targetDocument)
+        public FieldGeneratorAggregate(string name, string dependantUpon, EFFieldAggregateType aggregateType, EScope scope, string targetElement)
             : base(name, dependantUpon)
         {
             AggregateType = aggregateType;
             Scope = scope;
-            TargetDocument = targetDocument;
+            TargetElement = targetElement;
         }
 
         public override string NextValue()
         {
+            if (Group is null)
+            {
+                throw new NullReferenceException($"{nameof(Group)} property must be set before generating value");
+            }
+
             return AggregateType switch
             {
                 EFFieldAggregateType.Count => ComputeCountAggregate(),
@@ -39,28 +32,18 @@
 
         private string ComputeSumAggregate()
         {
-            if (Group is null)
-            {
-                throw new NullReferenceException($"{nameof(Group)} property must be set before generating value");
-            }
-
             return Group
-                .GetDocuments(TargetDocument, Scope == EScope.Overall)
+                ?.GetElements(TargetElement, Scope == EScope.Overall)
                 .Sum(x => Convert.ToDouble(x.Fields[Dependances.Single().Key].Value))
-                .ToString();
+                .ToString() ?? string.Empty;
         }
 
         private string ComputeCountAggregate()
         {
-            if (Group is null)
-            {
-                throw new NullReferenceException($"{nameof(Group)} property must be set before generating value");
-            }
-
             return Group
-                .GetDocuments(TargetDocument, Scope == EScope.Overall)
+                ?.GetElements(TargetElement, Scope == EScope.Overall)
                 .Count()
-                .ToString();
+                .ToString() ?? string.Empty;
         }
     }
 }

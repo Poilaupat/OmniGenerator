@@ -46,12 +46,12 @@ namespace SeedGenerator.Lib.Data
 
                 foreach (var docParam in groupParam.GetDocumentParams(false))
                 {
-                    group.Elements.AddRange(GenerateDocuments(docParam));
+                    group.AddRange(GenerateDocuments(docParam));
                 }
 
                 foreach (var subGroupParam in groupParam.GetGroupParams(false))
                 {
-                    group.Elements.AddRange(GenerateGroups(subGroupParam));
+                    group.AddRange(GenerateGroups(subGroupParam));
                 }
 
             }
@@ -93,14 +93,9 @@ namespace SeedGenerator.Lib.Data
                     group.Fields.AddRange(groupFields);
                 }
 
-                // Generating document fields (Note : There is a copy of the fields of direct parent group on each document)
+                // Generating document fields
                 foreach (var document in group.GetDocuments(false))
                 {
-                    if (groupFields is not null)
-                    {
-                        document.Fields.AddRange(groupFields);
-                    }
-
                     if (holder.DocumentFieldGenerators.ContainsKey(document.Name))
                     {
                         var fields = holder.DocumentFieldGenerators[document.Name].GenerateFields();
@@ -126,18 +121,6 @@ namespace SeedGenerator.Lib.Data
                 {
                     generator.Group = group;
                     group.Fields.Add(generator.Name, new Field(generator.Name, generator.NextValue()));
-                }
-            }
-
-            foreach (var document in group.GetDocuments(false))
-            {
-                if (holder.DocumentFieldGenerators.ContainsKey(document.Name))
-                {
-                    foreach (var generator in holder.DocumentFieldGenerators[document.Name].AggregateFieldGenerators)
-                    {
-                        generator.Group = group;
-                        document.Fields.Add(generator.Name, new Field(generator.Name, generator.NextValue()));
-                    }
                 }
             }
 

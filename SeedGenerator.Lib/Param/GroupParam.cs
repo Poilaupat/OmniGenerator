@@ -48,5 +48,15 @@ namespace SeedGenerator.Lib.Param
                 }
             }
         }
+
+        public IEnumerable<GroupParam> GetGroupParamsAndSelf(bool recursive)
+        {
+            yield return this;
+
+            foreach(var subgroup in GetGroupParams(recursive))
+            {
+                yield return subgroup;
+            }
+        }
     }
 }

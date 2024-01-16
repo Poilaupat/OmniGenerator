@@ -11,6 +11,24 @@
     "name": "remittance",
     "min-occurs": 1,
     "max-occurs": 5,
+    "fields": [
+      {
+        "$type": "aggregate",
+        "name": "total",
+        "aggregate-type": "Sum",
+        "scope": "Overall",
+        "target-element": "cheque",
+        "dependant-upon": "amount"
+      },
+      {
+        "$type": "aggregate",
+        "name": "count",
+        "aggregate-type": "Count",
+        "scope": "Overall",
+        "target-element": "cheque",
+        "dependant-upon": ""
+      }
+    ],
     "elements": [
       {
         "$type": "document",
@@ -72,6 +90,22 @@
             "name": "payor-address",
             "dependant-upon": "payor-lane,payor-lane-number",
             "format": " {{payor-lane-number}} {{payor-lane}}"
+          },
+          {
+            "$type": "aggregate",
+            "name": "total",
+            "aggregate-type": "Sum",
+            "scope": "DirectChildren",
+            "target-element": "cheque",
+            "dependant-upon": "amount"
+          },
+          {
+            "$type": "aggregate",
+            "name": "count",
+            "aggregate-type": "Count",
+            "scope": "DirectChildren",
+            "target-element": "cheque",
+            "dependant-upon": ""
           }
         ],
         "elements": [
