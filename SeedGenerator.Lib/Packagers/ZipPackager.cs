@@ -3,7 +3,7 @@ using SeedGenerator.Lib.Interfaces;
 using SeedGenerator.Lib.Tools;
 using System.IO.Compression;
 
-namespace SeedGenerator.Plugins.Packagers
+namespace SeedGenerator.Lib.Packagers
 {
     public class ZipPackager : DebugPackagerBase, IPackager
     {

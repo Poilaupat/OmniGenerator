@@ -3,10 +3,10 @@ using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using SeedGenerator.Lib;
 using SeedGenerator.Lib.Data;
-using SeedGenerator.Lib.Images;
+using SeedGenerator.Lib.Image;
+using SeedGenerator.Lib.Image.Composer;
 using SeedGenerator.Lib.Interfaces;
-using SeedGenerator.Plugins.Image.Composers;
-using SeedGenerator.Plugins.Packagers;
+using SeedGenerator.Lib.Packagers;
 
 namespace SeedGenerator.Cli
 {

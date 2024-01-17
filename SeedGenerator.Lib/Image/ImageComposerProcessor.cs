@@ -2,7 +2,7 @@
 using SeedGenerator.Lib.Data;
 using SeedGenerator.Lib.Interfaces;
 
-namespace SeedGenerator.Lib.Images
+namespace SeedGenerator.Lib.Image
 {
     public class ImageComposerProcessor : IImageComposerProcessor
     {
@@ -20,7 +20,7 @@ namespace SeedGenerator.Lib.Images
 
             foreach (var docByName in docByNamesGrp)
             {
-                //Getting a suitable IImageComposer implementation from DI container for the current document type
+                //Getting the appropriate IImageComposer implementation from DI container for the current document type
                 var composer = _composers.SingleOrDefault(x => (x.Metadata["DocumentName"] ?? string.Empty).Equals(docByName.Key));
 
                 if (composer is not null)
@@ -28,7 +28,10 @@ namespace SeedGenerator.Lib.Images
                     //Compositing image(s)
                     foreach (var doc in docByName)
                     {
-                        composer.Value.ComposeDocumentImages((Document)doc);
+                        var recto = composer.Value.ComposeImageRecto(doc);
+                        var verso = composer.Value.ComposeImageVerso(doc);
+                        doc.RectoImage = recto;
+                        doc.VersoImage = verso;
                     }
                 }
             }

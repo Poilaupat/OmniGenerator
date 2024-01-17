@@ -8,7 +8,14 @@
 
   <ItemGroup>
     <None Remove="Resources\Cmc7.ttf" />
+    <None Remove="Resources\Fonts\Cmc7.ttf" />
+    <None Remove="Resources\Fonts\OcrbRegular.ttf" />
     <None Remove="Resources\OCRB Regular.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Fonts\Cmc7.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\OcrbRegular.ttf" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,7 +38,7 @@
 
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

@@ -1,6 +1,6 @@
 ﻿using SeedGenerator.Lib.Data;
 
-namespace SeedGenerator.Plugins.Packagers
+namespace SeedGenerator.Lib.Packagers
 {
     public class DebugPackagerBase
     {

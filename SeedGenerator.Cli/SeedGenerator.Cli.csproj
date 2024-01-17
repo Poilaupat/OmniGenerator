@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SeedGenerator.Lib\SeedGenerator.Lib.csproj" />
-    <ProjectReference Include="..\SeedGenerator.Plugins\SeedGenerator.Plugins.csproj" />
   </ItemGroup>
 
   <ItemGroup>

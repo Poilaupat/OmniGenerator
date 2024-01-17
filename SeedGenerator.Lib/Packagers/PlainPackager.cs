@@ -2,7 +2,7 @@
 using SeedGenerator.Lib.Interfaces;
 using SeedGenerator.Lib.Tools;
 
-namespace SeedGenerator.Plugins.Packagers
+namespace SeedGenerator.Lib.Packagers
 {
     public class PlainPackager : DebugPackagerBase, IPackager
     {
@@ -32,7 +32,7 @@ namespace SeedGenerator.Plugins.Packagers
                 using (var bitmap = ImageTools.RenderSvg(document.RectoImage, 200))
                 {
                     bitmap.Save(
-                        Path.Combine(seedpath, $"R{document.Id:000000}.jpg"),
+                        Path.Combine(seedpath, $"{document.Id:000000}R.jpg"),
                         System.Drawing.Imaging.ImageFormat.Jpeg);
                 }
             }
@@ -41,7 +41,7 @@ namespace SeedGenerator.Plugins.Packagers
                 using (var bitmap = ImageTools.RenderSvg(document.VersoImage, 200))
                 {
                     bitmap.Save(
-                        Path.Combine(seedpath, $"V{document.Id:000000}.jpg"),
+                        Path.Combine(seedpath, $"{document.Id:000000}V.jpg"),
                         System.Drawing.Imaging.ImageFormat.Jpeg);
                 }
             }

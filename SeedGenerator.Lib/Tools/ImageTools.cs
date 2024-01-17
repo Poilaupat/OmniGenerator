@@ -11,10 +11,11 @@ namespace SeedGenerator.Lib.Tools
             int rasterY = (int)(vrtlResolution * svg.ViewBox.Height / 25.4f);
 
             var raster = new Bitmap(rasterX, rasterY);
-            using (var g = Graphics.FromImage(raster))
+            using ( var g = Graphics.FromImage(raster))
             {
                 g.Clear(Color.White);
-                g.DrawImage(svg.Draw(rasterX, rasterY), 0, 0);
+                var svgBitmap = svg.Draw(rasterX, rasterY);
+                g.DrawImage(svgBitmap, 0, 0);
             }
             raster.SetResolution(hztlResolution, vrtlResolution);
 
