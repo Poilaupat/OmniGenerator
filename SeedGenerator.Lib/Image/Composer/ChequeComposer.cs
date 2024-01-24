@@ -12,14 +12,14 @@ namespace SeedGenerator.Lib.Image.Composer
             Width = 175;
             Height = 80;
 
-            SvgFontManager.PrivateFontDataList.Add(SvgHelpers.GetFontBytes("Cmc7.ttf"));
-            SvgFontManager.PrivateFontDataList.Add(SvgHelpers.GetFontBytes("OcrbRegular.ttf"));
+            SvgFontManager.PrivateFontDataList.Add(ImageTools.GetFontBytes("Cmc7.ttf"));
+            SvgFontManager.PrivateFontDataList.Add(ImageTools.GetFontBytes("OcrbRegular.ttf"));
         }
 
 
         public override SvgDocument ComposeImageRecto(Document document)
         {
-            var svg = SvgHelpers.NewBlankSvg(Width, Height);
+            var svg = ImageTools.NewBlankSvg(Width, Height);
 
             DrawRectoBackground(svg);
 

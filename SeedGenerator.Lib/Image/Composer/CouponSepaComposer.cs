@@ -1,4 +1,5 @@
 ﻿using SeedGenerator.Lib.Data;
+using SeedGenerator.Lib.Tools;
 using Svg;
 using System.Drawing;
 
@@ -14,7 +15,7 @@ namespace SeedGenerator.Lib.Image.Composer
 
         public override SvgDocument ComposeImageRecto(Document document)
         {
-            var svg = SvgHelpers.NewBlankSvg(Width, Height);
+            var svg = ImageTools.NewBlankSvg(Width, Height);
 
             DrawRectoBackground(svg);
 
@@ -23,7 +24,7 @@ namespace SeedGenerator.Lib.Image.Composer
 
         private void DrawRectoBackground(SvgDocument svg)
         {
-            svg.DrawText("Coupon S€PA", "title", 6.5f, 16f, "Arial", 20, Color.Black);
+            svg.DrawText("TIP S€PA", "title", 79f, 16f, "Arial", 12, Color.Black);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using SeedGenerator.Lib.Data;
 using SeedGenerator.Lib.Interfaces;
+using SeedGenerator.Lib.Tools;
 using Svg;
 using System.Drawing;
 
@@ -12,12 +13,12 @@ namespace SeedGenerator.Lib.Image.Composer
 
         public virtual SvgDocument ComposeImageRecto(Document document)
         {
-            return SvgHelpers.NewBlankSvg(Width, Height);
+            return ImageTools.NewBlankSvg(Width, Height);
         }
 
         public virtual SvgDocument ComposeImageVerso(Document document)
         {
-            return SvgHelpers.NewBlankSvg(Width, Height);
+            return ImageTools.NewBlankSvg(Width, Height);
         }
     }
 }

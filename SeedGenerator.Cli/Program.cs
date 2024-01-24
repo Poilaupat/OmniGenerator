@@ -3,8 +3,8 @@ using Autofac;
 using SeedGenerator.Cli;
 using SeedGenerator.Lib;
 
-string paramFilePath = @"C:\Users\RDE\source\repos\Poilaupat\SeedGenerator\ParamFiles\param.json";
-string outputFolderPath = @"D:\Work\6 - Autres projets\SeedGenerator\Output";
+string paramFilePath = @"..\..\..\..\ParamFiles\param.json";
+string outputFolderPath = @"..\..\..\..\Output";
 
 var container = Startup.CreateContainer();
 await container.Resolve<Application>().Run(paramFilePath, outputFolderPath);
