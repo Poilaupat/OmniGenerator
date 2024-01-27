@@ -14,9 +14,9 @@ namespace SeedGenerator.Lib.Packagers
                 {
                     yield return document.Name switch
                     {
-                        "slip" => $"{document.Fields["encline"].Value} {document.Fields["numremise"].Value}",
-                        "coupon" => $"{document.Fields["encline"].Value} {document.Fields["numcoupon"].Value}",
-                        "cheque" => $"{document.Fields["encline"].Value} {document.Fields["cmc7"].Value}",
+                        "slip" => $"{document.Fields["encline"].Value} {document.Id}",
+                        "coupon" => $"{document.Fields["encline"].Value} {document.Id}",
+                        "cheque" => $"{document.Fields["encline"].Value} {document.Id}",
                         _ => throw new Exception("Unexpected document type"),
                     };
                 }

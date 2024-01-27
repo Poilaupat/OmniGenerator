@@ -13,6 +13,6 @@
             Name = name;
         }
 
-        public abstract string NextValue();
+        public abstract object NextValue();
     }
 }

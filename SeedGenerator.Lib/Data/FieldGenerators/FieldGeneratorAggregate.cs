@@ -15,7 +15,7 @@
             TargetElement = targetElement;
         }
 
-        public override string NextValue()
+        public override object NextValue()
         {
             if (Group is null)
             {

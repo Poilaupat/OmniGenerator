@@ -12,7 +12,7 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
             Pattern = pattern;
         }
 
-        public override string NextValue()
+        public override object NextValue()
         {
             var xeger = new Xeger(Pattern, new Random());
             return xeger.Generate();

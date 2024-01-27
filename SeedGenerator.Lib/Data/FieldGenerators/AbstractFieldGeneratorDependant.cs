@@ -4,7 +4,7 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
 {
     internal abstract class AbstractFieldGeneratorDependant : AbstractFieldGenerator
     {
-        public Dictionary<string, string?> Dependances { get; set; } = new Dictionary<string, string?>();
+        public Dictionary<string, object?> Dependances { get; set; } = new Dictionary<string, object?>();
 
 
         protected AbstractFieldGeneratorDependant(string name, string dependantUpon)

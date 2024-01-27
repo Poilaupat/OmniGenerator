@@ -12,7 +12,7 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
             Format = format;
         }
 
-        public override string NextValue()
+        public override object NextValue()
         {
             FormatCompiler compiler = new FormatCompiler();
             Generator generator = compiler.Compile(Format);

@@ -12,7 +12,7 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
             ListPath = listpath;
         }
 
-        public override string NextValue()
+        public override object NextValue()
         {
             var list = ListCache.GetList(ListPath);
 
