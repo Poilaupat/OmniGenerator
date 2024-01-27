@@ -1,10 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using SeedGenerator.Lib.Data.FieldGenerators;
+using System.Text.Json.Serialization;
 
 namespace SeedGenerator.Lib.Param.FieldParams
 {
     public class FieldParamKeyCalculator : FieldParamDependantBase
     {
         [JsonPropertyName("key-type")]
-        public string? KeyType { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public EKeyType KeyType { get; set; } = EKeyType.Rlmc;
     }
 }

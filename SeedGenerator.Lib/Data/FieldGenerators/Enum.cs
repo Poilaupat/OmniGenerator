@@ -23,4 +23,12 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
         Euro,
         Cent,
     }
+
+    public enum EKeyType
+    {
+        Rlmc,
+        Rib,
+        Tip,
+        TipGroup6
+    }
 }

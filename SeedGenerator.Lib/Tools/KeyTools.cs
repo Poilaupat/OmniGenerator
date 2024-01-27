@@ -4,20 +4,12 @@ namespace SeedGenerator.Lib.Tools
 {
     internal static class KeyTools
     {
-        public static string ComputeTipSepaHighLineGroup1Key(string numericstring, int modulo)
-        {
-            int twoDigitsKey = 11 - ComputeModulo(numericstring, 11, false);
-            int oneDigitKey = ComputeModulo(twoDigitsKey.ToString(), 10, false);
-            return oneDigitKey.ToString();
-        }
-
-        public static string ComputeRIBKey(string rib)
+        public static string ComputeRibKey(string rib)
         {
             string numericstring = string.Concat(rib, "00");
             var key = 97 - ComputeModulo(numericstring, 97, true);
             return key.ToString("00");
         }
-
 
         public static string ComputeRlmcKey(string z4, string z3, string z2)
         {
@@ -34,6 +26,8 @@ namespace SeedGenerator.Lib.Tools
 
         public static string ComputeTipKey(string numericstring)
         {
+            numericstring = Regex.Replace(numericstring, @"\s", "");
+            
             if (!Regex.IsMatch(numericstring, @"\d+"))
             {
                 throw new ArgumentException("Parameter numericstring must contain only digits");
@@ -49,14 +43,23 @@ namespace SeedGenerator.Lib.Tools
             return key.ToString("00");
         }
 
+        public static string ComputeTipGroup6Key(string numericstring)
+        {
+            int twoDigitsKey = 11 - ComputeModulo(numericstring, 11, false);
+            int oneDigitKey = ComputeModulo(twoDigitsKey.ToString(), 10, false);
+            return oneDigitKey.ToString();
+        }
+
         private static int ComputeModulo(string numericstring, int modulo, bool replaceLetters)
         {
+            numericstring = Regex.Replace(numericstring, @"\s", "");
+
             if (replaceLetters)
             {
                 numericstring = ReplaceLetters(numericstring);
             }
 
-            if (!Regex.IsMatch(numericstring, @"\d+"))
+            if (!Regex.IsMatch(numericstring, @"^\d+$"))
             {
                 throw new ArgumentException("Input string contains non supported caracters");
             }

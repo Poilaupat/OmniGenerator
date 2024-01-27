@@ -4,28 +4,26 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
 {
     internal class FieldGeneratorKeyCalculator : AbstractFieldGeneratorOneFieldDependant
     {
-        public string KeyType { get; set; }
+        public EKeyType KeyType { get; set; }
 
-        public FieldGeneratorKeyCalculator(string name, string dependantUpon, string keyType)
+        public FieldGeneratorKeyCalculator(string name, string dependantUpon, EKeyType keyType)
             : base(name, dependantUpon)
         {
             KeyType = keyType;
         }
 
-        public override string NextValue()
+        public override object NextValue()
         {
-            var depvalue = Dependances.FirstOrDefault().Value ?? "0";
+            var depvalue = Dependances.SingleOrDefault().Value?.ToString() ?? "0";
 
             return KeyType switch
             {
-                "rlmc" => ComputeRlmcKey(depvalue),
-                _ => throw new Exception($"Unknown key type")
+                EKeyType.Rlmc => KeyTools.ComputeRlmcKey(depvalue),
+                EKeyType.Rib => KeyTools.ComputeRibKey(depvalue),
+                EKeyType.Tip => KeyTools.ComputeTipKey(depvalue),
+                EKeyType.TipGroup6 => KeyTools.ComputeTipGroup6Key(depvalue),
+                _ => throw new Exception($"Key type {KeyType} is not supported")
             };
-        }
-
-        private string ComputeRlmcKey(string numericString)
-        {
-            return KeyTools.ComputeRlmcKey(numericString);
         }
     }
 }
