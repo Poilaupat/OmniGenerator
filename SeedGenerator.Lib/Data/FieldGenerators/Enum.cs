@@ -17,4 +17,10 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
         Overall,
         DirectChildren,
     }
+
+    public enum EAmountFormat
+    {
+        Euro,
+        Cent,
+    }
 }

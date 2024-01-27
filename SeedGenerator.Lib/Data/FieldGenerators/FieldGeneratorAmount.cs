@@ -6,16 +6,34 @@
 
         public float Max { get; }
 
-        public FieldGeneratorAmount(string name, float min, float max)
+        public EAmountFormat Format { get; }
+
+        public FieldGeneratorAmount(string name, float min, float max, EAmountFormat format)
             : base(name)
         {
             Min = min;
             Max = max;
+            Format = format;
         }
 
-        public override string NextValue()
+        public override object NextValue()
         {
-            return (new Random().Next((int)(Min * 100f), (int)(Max * 100f)) / 100f).ToString();
+            return Format switch
+            {
+                EAmountFormat.Euro => NextFloatValue(),
+                EAmountFormat.Cent => NextIntValue(),
+                _ => throw new InvalidOperationException($"The value {Format} is not supported")
+            };
+        }
+
+        private float NextFloatValue()
+        {
+            return new Random().Next((int)(Min * 100f), (int)(Max * 100f)) / 100f;
+        }
+
+        private int NextIntValue()
+        {
+            return new Random().Next((int)(Min) * 100, (int)(Max) * 100);
         }
     }
 }
