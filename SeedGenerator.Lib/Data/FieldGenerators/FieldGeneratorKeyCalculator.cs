@@ -6,22 +6,22 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
     {
         public EKeyType KeyType { get; set; }
 
-        public FieldGeneratorKeyCalculator(string name, string dependantUpon, EKeyType keyType)
-            : base(name, dependantUpon)
+        public FieldGeneratorKeyCalculator(string name, string dependentUpon, EKeyType keyType)
+            : base(name, dependentUpon)
         {
             KeyType = keyType;
         }
 
-        public override object NextValue()
+        protected override object NextValue()
         {
-            var depvalue = Dependances.SingleOrDefault().Value?.ToString() ?? "0";
+            var dependency = Dependences.Single();
 
             return KeyType switch
             {
-                EKeyType.Rlmc => KeyTools.ComputeRlmcKey(depvalue),
-                EKeyType.Rib => KeyTools.ComputeRibKey(depvalue),
-                EKeyType.Tip => KeyTools.ComputeTipKey(depvalue),
-                EKeyType.TipGroup6 => KeyTools.ComputeTipGroup6Key(depvalue),
+                EKeyType.Rlmc => KeyTools.ComputeRlmcKey((string)dependency.LastValue),
+                EKeyType.Rib => KeyTools.ComputeRibKey((string)dependency.LastValue),
+                EKeyType.Tip => KeyTools.ComputeTipKey((string)dependency.LastValue),
+                EKeyType.TipGroup6 => KeyTools.ComputeTipGroup6Key((string)dependency.LastValue),
                 _ => throw new Exception($"Key type {KeyType} is not supported")
             };
         }

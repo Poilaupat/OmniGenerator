@@ -11,7 +11,7 @@
             DayDiffMax = dayDiffMax;
         }
 
-        public override object NextValue()
+        protected override object NextValue()
         {
             int diff = new Random().Next(DayDiffMin, DayDiffMax);
             return DateTime.Today.AddDays(-diff).ToString("dd/MM/yyyy");

@@ -2,12 +2,12 @@
 {
     internal abstract class AbstractFieldGeneratorOneFieldDependant : AbstractFieldGeneratorDependant
     {
-        protected AbstractFieldGeneratorOneFieldDependant(string name, string dependantUpon) 
-            : base(name, dependantUpon)
+        protected AbstractFieldGeneratorOneFieldDependant(string name, string dependentUpon) 
+            : base(name, dependentUpon)
         {
-            if (Dependances.Count > 1)
+            if (DependenceNames.Count > 1)
             {
-                throw new ArgumentException($"{name} generator support only one dependance");
+                throw new ArgumentException($"{name} generator support only one dependence");
             }
         }
     }

@@ -16,7 +16,7 @@
             Format = format;
         }
 
-        public override object NextValue()
+        protected override object NextValue()
         {
             return Format switch
             {

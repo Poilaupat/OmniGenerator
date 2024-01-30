@@ -2,6 +2,18 @@
 {
     internal abstract class AbstractFieldGenerator
     {
+        private object? _lastValue;
+
+        public object LastValue 
+        { 
+            get
+            {
+                if (_lastValue is null)
+                    throw new InvalidOperationException($"No value was generated. Call SetNewValue first.");
+                return _lastValue;
+            }
+        }
+
         public string Name { get; }
 
         protected AbstractFieldGenerator(string name)
@@ -13,6 +25,11 @@
             Name = name;
         }
 
-        public abstract object NextValue();
+        public virtual void SetNewValue()
+        {
+            _lastValue = NextValue();
+        }
+
+        protected abstract object NextValue();
     }
 }

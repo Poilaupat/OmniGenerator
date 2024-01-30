@@ -10,7 +10,7 @@
             FixedValue = fixedvalue;
         }
 
-        public override object NextValue()
+        protected override object NextValue()
         {
             return FixedValue;
         }

@@ -7,15 +7,15 @@
         public string TargetElement { get; set; }
         public Group? Group { get; set; }
 
-        public FieldGeneratorAggregate(string name, string dependantUpon, EFFieldAggregateType aggregateType, EScope scope, string targetElement)
-            : base(name, dependantUpon)
+        public FieldGeneratorAggregate(string name, string dependentUpon, EFFieldAggregateType aggregateType, EScope scope, string targetElement)
+            : base(name, dependentUpon)
         {
             AggregateType = aggregateType;
             Scope = scope;
             TargetElement = targetElement;
         }
 
-        public override object NextValue()
+        protected override object NextValue()
         {
             if (Group is null)
             {
@@ -34,7 +34,7 @@
         {
             return Group
                 ?.GetElements(TargetElement, Scope == EScope.Overall)
-                .Sum(x => Convert.ToDouble(x.Fields[Dependances.Single().Key].Value))
+                .Sum(x => Convert.ToDouble(x.Fields[DependenceNames.Single()].Value))
                 .ToString() ?? string.Empty;
         }
 

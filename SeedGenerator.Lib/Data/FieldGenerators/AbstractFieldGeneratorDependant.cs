@@ -4,17 +4,19 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
 {
     internal abstract class AbstractFieldGeneratorDependant : AbstractFieldGenerator
     {
-        public Dictionary<string, object?> Dependances { get; set; } = new Dictionary<string, object?>();
+        public List<string> DependenceNames { get; private set; } = new List<string>();
+
+        public List<AbstractFieldGenerator> Dependences { get; } = new List<AbstractFieldGenerator>();
 
 
-        protected AbstractFieldGeneratorDependant(string name, string dependantUpon)
+        protected AbstractFieldGeneratorDependant(string name, string dependentUpon)
             : base(name)
         {
-            string[] dependanceNames = Regex.Replace(dependantUpon, @"\s", string.Empty).Split(new[] { ',', ';', '|' });
+            string[] dependenceNames = Regex.Replace(dependentUpon, @"\s", string.Empty).Split(new[] { ',', ';', '|' });
 
-            foreach (var dependanceName in dependanceNames)
+            foreach (var dependenceName in dependenceNames)
             {
-                Dependances[dependanceName] = null;
+                DependenceNames.Add(dependenceName);
             }
         }
     }
