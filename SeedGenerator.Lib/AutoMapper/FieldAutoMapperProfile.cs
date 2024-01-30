@@ -22,7 +22,7 @@ namespace SeedGenerator.Lib.AutoMapper
             CreateMap<FieldParamList, FieldGeneratorList>()
                 .IncludeBase<FieldParamBase, AbstractFieldGenerator>();
 
-            CreateMap<FieldParamFixedValue, FieldGeneratorFixedValue>()
+            CreateMap<FieldParamConstant, FieldGeneratorConstant>()
                 .IncludeBase<FieldParamBase, AbstractFieldGenerator>();
 
             CreateMap<FieldParamAmount, FieldGeneratorAmount>()

@@ -2,9 +2,9 @@
 
 namespace SeedGenerator.Lib.Param.FieldParams
 {
-    public class FieldParamFixedValue : FieldParamBase
+    public class FieldParamConstant : FieldParamBase
     {
         [JsonPropertyName("value")]
-        public string? FixedValue { get; set; }
+        public string? Constant { get; set; }
     } 
 }

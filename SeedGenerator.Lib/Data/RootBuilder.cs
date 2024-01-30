@@ -87,10 +87,9 @@ namespace SeedGenerator.Lib.Data
             var groups = root.Groups.Union(root.Groups.SelectMany(x => x.GetGroups(true)));
             foreach (var group in groups)
             {
-                FieldCollection? groupFields = null;
                 if (fgc.GroupFieldGenerators.ContainsKey(group.Name))
                 {
-                    groupFields = fgc.GenerateGroupFields(group.Name);
+                    var groupFields = fgc.GenerateGroupFields(group.Name);
                     group.Fields.AddRange(groupFields);
                 }
 
