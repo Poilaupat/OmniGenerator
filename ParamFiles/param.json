@@ -142,7 +142,8 @@
                 "$type": "amount",
                 "name": "amount",
                 "min": 10,
-                "max": 9999
+                "max": 9999,
+                "format": "Euro"
               },
               {
                 "$type": "regex",
