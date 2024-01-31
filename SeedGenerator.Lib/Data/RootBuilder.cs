@@ -77,7 +77,7 @@ namespace SeedGenerator.Lib.Data
         private void GenerateFields(Root root, FieldGeneratorCollection fgc)
         {
             // Generating root fields
-            if (fgc.RootFieldGenerators is not null)
+            if (fgc.RootHasFields())
             {
                 var fields = fgc.GenerateRootFields();
                 root.Fields.AddRange(fields);
@@ -87,47 +87,34 @@ namespace SeedGenerator.Lib.Data
             var groups = root.Groups.Union(root.Groups.SelectMany(x => x.GetGroups(true)));
             foreach (var group in groups)
             {
-                if (fgc.GroupFieldGenerators.ContainsKey(group.Name))
+                if (fgc.ElementHasFields(group.Name))
                 {
-                    var groupFields = fgc.GenerateGroupFields(group.Name);
+                    var groupFields = fgc.GenerateFields(group.Name);
                     group.Fields.AddRange(groupFields);
                 }
 
                 // Generating document fields
                 foreach (var document in group.GetDocuments(false))
                 {
-                    if (fgc.DocumentFieldGenerators.ContainsKey(document.Name))
+                    if (fgc.ElementHasFields(document.Name))
                     {
-                        var fields = fgc.GenerateDocumentFields(document.Name);
+                        var fields = fgc.GenerateFields(document.Name);
                         document.Fields.AddRange(fields);
                     }
                 }
             }
         }
 
-        private void GenerateAggregateFields(Root root, FieldGeneratorCollection holder)
+        private void GenerateAggregateFields(Root root, FieldGeneratorCollection fgc)
         {
-            foreach (var group in root.Groups)
+            var groups = root.Groups.Union(root.Groups.SelectMany(x => x.GetGroups(true)));
+            foreach (var group in groups)
             {
-                GenerateAggregateFields(group, holder);
-            }
-        }
-
-        private void GenerateAggregateFields(Group group, FieldGeneratorCollection holder)
-        {
-            if (holder.GroupFieldGenerators.ContainsKey(group.Name))
-            {
-                foreach (var generator in holder.GroupFieldGenerators[group.Name].FilterAggregateFieldGenerators())
+                if (fgc.ElementHasFields(group.Name))
                 {
-                    generator.Group = group;
-                    generator.SetNewValue();
-                    group.Fields.Add(generator.Name, new Field(generator.Name, generator.LastValue));
+                    var aggregateGroupFields = fgc.GenerateAggregateFields(group.Name, group);
+                    group.Fields.AddRange(aggregateGroupFields);
                 }
-            }
-
-            foreach (var subGroup in group.GetGroups(false))
-            {
-                GenerateAggregateFields(subGroup, holder);
             }
         }
     }

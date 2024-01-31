@@ -8,6 +8,8 @@ namespace SeedGenerator.Lib.Param
 {
     public class RootParam
     {
+        public static string Name { get; } = "root";
+
         [JsonPropertyName("fields")]
         public List<FieldParamBase> FieldParams { get; set; } = new List<FieldParamBase> { };
 
