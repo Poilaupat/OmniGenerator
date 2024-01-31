@@ -121,9 +121,87 @@
                 "value": "12"
               },
               {
+                "$type": "amount",
+                "name": "amount",
+                "min": 10,
+                "max": 9999,
+                "format": "Cent"
+              },
+              {
+                "$type": "fixed",
+                "name": "codecentre",
+                "value": "06"
+              },
+              {
+                "$type": "fixed",
+                "name": "codenature",
+                "value": "7"
+              },
+              {
+                "$type": "composite",
+                "name": "group1",
+                "dependent-upon": "codenature, codecentre, amount",
+                "format": "{{codenature}}{{codecentre}} {{amount:00000000}}"
+              },
+              {
+                "$type": "key",
+                "name": "key-group-1",
+                "dependent-upon": "group1",
+                "key-type": "tip"
+              },
+              {
+                "$type":"fixed",
+                "name": "doctype",
+                "value": "9"
+              },
+              {
                 "$type": "regex",
-                "name": "numcoupon",
-                "pattern": "\\d{7}"
+                "name": "codeapp",
+                "pattern": "(2|3|4|5|6)"
+              },
+              {
+                "$type": "regex",
+                "name": "codique",
+                "pattern": "\\d{6}"
+              },
+              {
+                "$type": "regex",
+                "name": "refop",
+                "pattern": "\\d{17}"
+              },
+              {
+                "$type": "composite",
+                "name": "group2",
+                "dependent-upon": "doctype, codeapp, codique, refop",
+                "format": "{{refop}}{{codique}}{{codeapp}}{{doctype}}"
+              },
+              {
+                "$type": "key",
+                "name": "key-group-2",
+                "dependent-upon": "group2",
+                "key-type": "tip"
+              },
+              {
+                "$type": "fixed",
+                "name": "codeetablissement",
+                "value": "0001"
+              },
+              {
+                "$type": "regex",
+                "name": "codeemetteur",
+                "pattern": "(920033|930033|930044|940033|940044|950033|960033)"
+              },
+              {
+                "$type":"composite",
+                "name": "group3",
+                "dependent-upon": "codeetablissement, codeemetteur",
+                "format": "{{codeemetteur}}{{codeetablissement}}"
+              },
+              {
+                "$type": "key",
+                "name": "key-group-3",
+                "dependent-upon": "group3",
+                "key-type": "tip"
               }
             ]
           },
