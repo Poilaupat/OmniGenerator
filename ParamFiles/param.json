@@ -18,7 +18,7 @@
         "aggregate-type": "Sum",
         "scope": "Overall",
         "target-element": "cheque",
-        "dependant-upon": "amount"
+        "dependent-upon": "amount"
       },
       {
         "$type": "aggregate",
@@ -26,7 +26,7 @@
         "aggregate-type": "Count",
         "scope": "Overall",
         "target-element": "cheque",
-        "dependant-upon": ""
+        "dependent-upon": ""
       }
     ],
     "elements": [
@@ -67,7 +67,7 @@
           {
             "$type": "composite",
             "name": "payor-name",
-            "dependant-upon": "payor-firstname, payor-lastname",
+            "dependent-upon": "payor-firstname, payor-lastname",
             "format": "{{payor-firstname}} {{payor-lastname}}"
           },
           {
@@ -88,7 +88,7 @@
           {
             "$type": "composite",
             "name": "payor-address",
-            "dependant-upon": "payor-lane,payor-lane-number",
+            "dependent-upon": "payor-lane,payor-lane-number",
             "format": " {{payor-lane-number}} {{payor-lane}}"
           },
           {
@@ -97,7 +97,7 @@
             "aggregate-type": "Sum",
             "scope": "DirectChildren",
             "target-element": "cheque",
-            "dependant-upon": "amount"
+            "dependent-upon": "amount"
           },
           {
             "$type": "aggregate",
@@ -105,7 +105,7 @@
             "aggregate-type": "Count",
             "scope": "DirectChildren",
             "target-element": "cheque",
-            "dependant-upon": ""
+            "dependent-upon": ""
           }
         ],
         "elements": [
@@ -153,7 +153,7 @@
               {
                 "$type": "key",
                 "name": "rlmc",
-                "dependant-upon": "cmc7",
+                "dependent-upon": "cmc7",
                 "key-type": "rlmc"
               },
               {
@@ -179,7 +179,7 @@
               {
                 "$type": "composite",
                 "name": "bank-address",
-                "dependant-upon": "bank-lane,bank-lane-number",
+                "dependent-upon": "bank-lane,bank-lane-number",
                 "format": " {{bank-lane-number}} {{bank-lane}}"
               },
               {
