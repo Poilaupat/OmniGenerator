@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeedGenerator.Cli", "SeedGe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeedGenerator.Lib", "SeedGenerator.Lib\SeedGenerator.Lib.csproj", "{2C34E6E8-DAC2-43B8-B8AC-F3A72CC1891A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeedGenerator.Test", "SeedGenerator.Test\SeedGenerator.Test.csproj", "{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2C34E6E8-DAC2-43B8-B8AC-F3A72CC1891A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C34E6E8-DAC2-43B8-B8AC-F3A72CC1891A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C34E6E8-DAC2-43B8-B8AC-F3A72CC1891A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
