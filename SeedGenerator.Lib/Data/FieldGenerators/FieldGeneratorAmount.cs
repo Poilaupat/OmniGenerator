@@ -1,6 +1,6 @@
 ﻿namespace SeedGenerator.Lib.Data.FieldGenerators
 {
-    internal class FieldGeneratorAmount : AbstractFieldGenerator
+    internal class FieldGeneratorAmount : AbstractFieldGenerator<int>
     {
         public int Min { get; }
 
@@ -13,7 +13,7 @@
             Max = max;
         }
 
-        protected override object NextValue()
+        protected override int GenerateValue()
         {
             return new Random().Next(Min, Max);
         }

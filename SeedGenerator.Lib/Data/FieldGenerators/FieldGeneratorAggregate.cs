@@ -1,6 +1,6 @@
 ﻿namespace SeedGenerator.Lib.Data.FieldGenerators
 {
-    internal class FieldGeneratorAggregate : AbstractFieldGeneratorOneFieldDependant
+    internal class FieldGeneratorAggregate : AbstractFieldGeneratorOneFieldDependant<int>
     {
         public EFFieldAggregateType AggregateType { get; set; }
         public EScope Scope { get; set; }
@@ -15,7 +15,7 @@
             TargetElement = targetElement;
         }
 
-        protected override object NextValue()
+        protected override int GenerateValue()
         {
             if (Group is null)
             {
@@ -26,24 +26,23 @@
             {
                 EFFieldAggregateType.Count => ComputeCountAggregate(),
                 EFFieldAggregateType.Sum => ComputeSumAggregate(),
-                _ => string.Empty,
+                _ => 0,
             };
         }
 
-        private string ComputeSumAggregate()
+        private int ComputeSumAggregate()
         {
             return Group
                 ?.GetElements(TargetElement, Scope == EScope.Overall)
-                .Sum(x => Convert.ToDouble(x.Fields[DependenceNames.Single()].Value))
-                .ToString() ?? string.Empty;
+                .Sum(x => Convert.ToInt32(x.Fields[DependenceNames.Single()].Value))
+                ?? 0;
         }
 
-        private string ComputeCountAggregate()
+        private int ComputeCountAggregate()
         {
             return Group
                 ?.GetElements(TargetElement, Scope == EScope.Overall)
-                .Count()
-                .ToString() ?? string.Empty;
+                .Count() ?? 0;
         }
     }
 }

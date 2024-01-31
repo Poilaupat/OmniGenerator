@@ -1,4 +1,5 @@
 ﻿using Mustache;
+using SeedGenerator.Lib.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
 {
     internal static class FieldGeneratorExtensions
     {
-        public static IEnumerable<AbstractFieldGenerator> FilterNonAggregateFieldGenerators(this IEnumerable<AbstractFieldGenerator> fields)
+        public static IEnumerable<IFieldGenerator> FilterNonAggregateFieldGenerators(this IEnumerable<IFieldGenerator> fields)
         {
             return fields
                .Where(x => x is not FieldGeneratorAggregate)
@@ -18,16 +19,16 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
                .ToList();
         }
 
-        public static IEnumerable<AbstractFieldGeneratorDependant> FilterDependantFieldGenerators(this IEnumerable<AbstractFieldGenerator> fields)
+        public static IEnumerable<IFieldGeneratorDependent> FilterDependantFieldGenerators(this IEnumerable<IFieldGenerator> fields)
         {
             return fields
-                .Where(x => x is not FieldGeneratorAggregate && x.GetType().IsSubclassOf(typeof(AbstractFieldGeneratorDependant)))
-                .Cast<AbstractFieldGeneratorDependant>()
+                .Where(x => x is not FieldGeneratorAggregate && x is IFieldGeneratorDependent)
+                .Cast<IFieldGeneratorDependent>()
                 .OrderBy(x => x, new FieldGeneratorComparer())
                 .ToList();
         }
 
-        public static IEnumerable<FieldGeneratorAggregate> FilterAggregateFieldGenerators(this IEnumerable<AbstractFieldGenerator> fields)
+        public static IEnumerable<FieldGeneratorAggregate> FilterAggregateFieldGenerators(this IEnumerable<IFieldGenerator> fields)
         {
             return fields
                 .Where(x => x.GetType() == typeof(FieldGeneratorAggregate))
@@ -35,7 +36,7 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
                 .ToList();
         }
 
-        public static Dictionary<string, List<AbstractFieldGenerator>> SetCollateralDependencies(this Dictionary<string, List<AbstractFieldGenerator>> generatorsByElements)
+        public static Dictionary<string, List<IFieldGenerator>> SetCollateralDependencies(this Dictionary<string, List<IFieldGenerator>> generatorsByElements)
         {
             foreach(var generators in generatorsByElements.Values)
             {
@@ -45,7 +46,7 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
             return generatorsByElements;
         }
 
-        public static IEnumerable<AbstractFieldGenerator> SetCollateralDependencies(this IEnumerable<AbstractFieldGenerator> generators)
+        public static IEnumerable<IFieldGenerator> SetCollateralDependencies(this IEnumerable<IFieldGenerator> generators)
         {
             foreach (var generator in generators.FilterDependantFieldGenerators())
             {

@@ -1,6 +1,6 @@
 ﻿namespace SeedGenerator.Lib.Data.FieldGenerators
 {
-    internal class FieldGeneratorDate : AbstractFieldGenerator
+    internal class FieldGeneratorDate : AbstractFieldGenerator<DateTime>
     {
         public int DayDiffMin { get; set; }
         public int DayDiffMax { get; set; }
@@ -11,10 +11,10 @@
             DayDiffMax = dayDiffMax;
         }
 
-        protected override object NextValue()
+        protected override DateTime GenerateValue()
         {
             int diff = new Random().Next(DayDiffMin, DayDiffMax);
-            return DateTime.Today.AddDays(-diff).ToString("dd/MM/yyyy");
+            return DateTime.Today.AddDays(-diff);
         }
     }
 }

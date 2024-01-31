@@ -2,7 +2,7 @@
 
 namespace SeedGenerator.Lib.Data.FieldGenerators
 {
-    internal class FieldGeneratorKeyCalculator : AbstractFieldGeneratorOneFieldDependant
+    internal class FieldGeneratorKeyCalculator : AbstractFieldGeneratorOneFieldDependant<string>
     {
         public EKeyType KeyType { get; set; }
 
@@ -12,7 +12,7 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
             KeyType = keyType;
         }
 
-        protected override object NextValue()
+        protected override string GenerateValue()
         {
             var dependency = Dependences.Single();
 

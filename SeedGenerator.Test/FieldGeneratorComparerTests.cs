@@ -1,4 +1,5 @@
 using SeedGenerator.Lib.Data.FieldGenerators;
+using SeedGenerator.Lib.Interfaces;
 using System.CodeDom;
 
 namespace SeedGenerator.Test
@@ -16,7 +17,7 @@ namespace SeedGenerator.Test
             var d = new FieldGeneratorKeyCalculator("DField", "CField", EKeyType.Rib);
 
             var fields =
-                new AbstractFieldGenerator[] { a, b, c, d }
+                new IFieldGenerator[] { a, b, c, d }
                 .SetCollateralDependencies();
 
             Assert.That(c.IsDependentUpon(a), Is.True); // Direct relation
@@ -54,9 +55,10 @@ namespace SeedGenerator.Test
             var c = new FieldGeneratorRegex("CField", ".*");
 
             var fields = 
-                new AbstractFieldGenerator[] { b, a, c }
+                new IFieldGenerator[] { b, a, c }
                 .SetCollateralDependencies()
-                .OrderBy(x => x, new FieldGeneratorComparer());
+                .OrderBy(x => x, new FieldGeneratorComparer())
+                .ToList();
 
             Assert.That(fields.ElementAt(0).Name, Is.EqualTo(c.Name));
             Assert.That(fields.ElementAt(1).Name, Is.EqualTo(a.Name));
@@ -73,9 +75,10 @@ namespace SeedGenerator.Test
             var ak = new FieldGeneratorKeyCalculator("AKField", "AField", EKeyType.Rlmc);
 
             var fields = 
-                new AbstractFieldGenerator[] { ak, a, b, c, d }
+                new IFieldGenerator[] { ak, a, b, c, d }
                 .SetCollateralDependencies()
-                .OrderBy(x => x, new FieldGeneratorComparer()).ToArray();
+                .OrderBy(x => x, new FieldGeneratorComparer()).ToArray()
+                .ToList();
 
             Assert.That(fields.ElementAt(0).Name, Is.EqualTo(d.Name));
             Assert.That(fields.ElementAt(1).Name, Is.EqualTo(c.Name));
@@ -84,9 +87,10 @@ namespace SeedGenerator.Test
             Assert.That(fields.ElementAt(4).Name, Is.EqualTo(ak.Name));
 
             fields =
-                new AbstractFieldGenerator[] { d, c, b, a, ak }
+                new IFieldGenerator[] { d, c, b, a, ak }
                 .SetCollateralDependencies()
-                .OrderBy(x => x, new FieldGeneratorComparer()).ToArray();
+                .OrderBy(x => x, new FieldGeneratorComparer()).ToArray()
+                .ToList();
 
             Assert.That(fields.ElementAt(0).Name, Is.EqualTo(d.Name));
             Assert.That(fields.ElementAt(1).Name, Is.EqualTo(c.Name));

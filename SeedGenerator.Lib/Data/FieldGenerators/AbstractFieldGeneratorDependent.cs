@@ -1,12 +1,14 @@
-﻿using System.Text.RegularExpressions;
+﻿using SeedGenerator.Lib.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace SeedGenerator.Lib.Data.FieldGenerators
 {
-    internal abstract class AbstractFieldGeneratorDependant : AbstractFieldGenerator
+    internal abstract class AbstractFieldGeneratorDependant<T> : AbstractFieldGenerator<T>, IFieldGeneratorDependent
+        where T : notnull
     {
         public List<string> DependenceNames { get; private set; } = new List<string>();
 
-        public List<AbstractFieldGenerator> Dependences { get; } = new List<AbstractFieldGenerator>();
+        public List<IFieldGenerator> Dependences { get; } = new List<IFieldGenerator>();
 
 
         protected AbstractFieldGeneratorDependant(string name, string dependentUpon)
@@ -20,16 +22,16 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
             }
         }
 
-        public bool IsDependentUpon(AbstractFieldGenerator generator)
+        public bool IsDependentUpon(IFieldGenerator generator)
         {
             foreach(var dependence in Dependences)
             {
                 if(generator.Name == dependence.Name)
                     return true;
 
-                if(dependence is AbstractFieldGeneratorDependant afgd)
+                if(dependence is IFieldGeneratorDependent dependentDependence)
                 {
-                    return afgd.IsDependentUpon(generator);
+                    return dependentDependence.IsDependentUpon(generator);
                 }
             }
 

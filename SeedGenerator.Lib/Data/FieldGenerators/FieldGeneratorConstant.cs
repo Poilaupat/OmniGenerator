@@ -1,6 +1,6 @@
 ﻿namespace SeedGenerator.Lib.Data.FieldGenerators
 {
-    internal class FieldGeneratorConstant : AbstractFieldGenerator
+    internal class FieldGeneratorConstant : AbstractFieldGenerator<string>
     {
         public string Constant { get; }
 
@@ -10,7 +10,7 @@
             Constant = constant;
         }
 
-        protected override object NextValue()
+        protected override string GenerateValue()
         {
             return Constant;
         }

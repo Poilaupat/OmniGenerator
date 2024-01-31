@@ -1,8 +1,9 @@
 ﻿namespace SeedGenerator.Lib.Data.FieldGenerators
 {
-    internal abstract class AbstractFieldGeneratorOneFieldDependant : AbstractFieldGeneratorDependant
+    internal abstract class AbstractFieldGeneratorOneFieldDependant<T> : AbstractFieldGeneratorDependant<T>
+        where T : notnull
     {
-        protected AbstractFieldGeneratorOneFieldDependant(string name, string dependentUpon) 
+        protected AbstractFieldGeneratorOneFieldDependant(string name, string dependentUpon)
             : base(name, dependentUpon)
         {
             if (DependenceNames.Count > 1)

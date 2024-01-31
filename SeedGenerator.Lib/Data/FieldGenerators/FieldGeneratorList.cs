@@ -2,7 +2,7 @@
 
 namespace SeedGenerator.Lib.Data.FieldGenerators
 {
-    internal class FieldGeneratorList : AbstractFieldGenerator
+    internal class FieldGeneratorList : AbstractFieldGenerator<string>
     {
         public string ListPath { get; }
 
@@ -12,7 +12,7 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
             ListPath = listpath;
         }
 
-        protected override object NextValue()
+        protected override string GenerateValue()
         {
             var list = ListCache.GetList(ListPath);
 

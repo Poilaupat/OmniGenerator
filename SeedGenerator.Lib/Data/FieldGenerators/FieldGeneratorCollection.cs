@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.ProgramSynthesis.Transformation.Text.Build.NodeTypes;
+using SeedGenerator.Lib.Interfaces;
 using SeedGenerator.Lib.Param;
 using System.Data;
 using System.Reflection.Metadata.Ecma335;
@@ -8,20 +9,20 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
 {
     internal class FieldGeneratorCollection
     {
-        public Dictionary<string, List<AbstractFieldGenerator>> Generators { get; }
-            = new Dictionary<string, List<AbstractFieldGenerator>>();
+        public Dictionary<string, List<IFieldGenerator>> Generators { get; }
+            = new Dictionary<string, List<IFieldGenerator>>();
 
         public FieldGeneratorCollection(RootParam rootParam, IMapper mapper)
         {
             //Root field generators (this is why the name 'root' is reserved in param)
-            Generators.Add(RootParam.Name, mapper.Map<List<AbstractFieldGenerator>>(rootParam.FieldParams));
+            Generators.Add(RootParam.Name, mapper.Map<List<IFieldGenerator>>(rootParam.FieldParams));
 
             //Document field generators
             rootParam
                 .RootGroupParam
                 .GetDocumentParams(true)
                 .ToDictionary(x => x.Name, y => mapper
-                    .Map<List<AbstractFieldGenerator>>(y.FieldParams)
+                    .Map<List<IFieldGenerator>>(y.FieldParams)
                     .OrderBy(x => x, new FieldGeneratorComparer())
                     .ToList())
                 .ToList()
@@ -32,7 +33,7 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
                .RootGroupParam
                .GetGroupParamsAndSelf(true)
                .ToDictionary(x => x.Name, y => mapper
-                    .Map<List<AbstractFieldGenerator>>(y.FieldParams)
+                    .Map<List<IFieldGenerator>>(y.FieldParams)
                     .OrderBy(x => x, new FieldGeneratorComparer())
                     .ToList())
                .ToList()
@@ -51,27 +52,27 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
             return Generators.ContainsKey(name);
         }
 
-        private FieldCollection GenerateFields(IEnumerable<AbstractFieldGenerator> generators)
+        private FieldCollection GenerateFields(IEnumerable<IFieldGenerator> generators)
         {
             var fields = new FieldCollection();
 
             foreach (var fieldGenerator in generators.FilterNonAggregateFieldGenerators())
             {
-                fieldGenerator.SetNewValue();
+                fieldGenerator.RefreshValue();
                 fields.Add(fieldGenerator.Name, new Field(fieldGenerator.Name, fieldGenerator.LastValue));
             }
 
             return fields;
         }
 
-        private FieldCollection GenerateAggregateFields(IEnumerable<AbstractFieldGenerator> generators, Group group)
+        private FieldCollection GenerateAggregateFields(IEnumerable<IFieldGenerator> generators, Group group)
         {
             var fields = new FieldCollection();
 
             foreach (var fieldGenerator in generators.FilterAggregateFieldGenerators())
             {
                 fieldGenerator.Group = group;
-                fieldGenerator.SetNewValue();
+                fieldGenerator.RefreshValue();
                 fields.Add(fieldGenerator.Name, new Field(fieldGenerator.Name, fieldGenerator.LastValue));
             }
 

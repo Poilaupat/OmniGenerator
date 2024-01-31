@@ -1,18 +1,23 @@
-﻿namespace SeedGenerator.Lib.Data.FieldGenerators
-{
-    internal abstract class AbstractFieldGenerator
-    {
-        private object? _lastValue;
+﻿using SeedGenerator.Lib.Interfaces;
 
-        public object LastValue 
+namespace SeedGenerator.Lib.Data.FieldGenerators
+{
+    internal abstract class AbstractFieldGenerator<T> : IFieldGenerator
+        where T : notnull
+    {
+        private T? _lastValue;
+
+        public T LastValue 
         { 
             get
             {
                 if (_lastValue is null)
-                    throw new InvalidOperationException($"No value was generated. Call SetNewValue first.");
+                    throw new InvalidOperationException($"No value was generated. Call {nameof(RefreshValue)} first.");
                 return _lastValue;
             }
         }
+
+        object IFieldGenerator.LastValue => LastValue;
 
         public string Name { get; }
 
@@ -21,15 +26,14 @@
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException($"The property {nameof(name)} must be specified");
 
-
             Name = name;
         }
 
-        public virtual void SetNewValue()
+        public virtual void RefreshValue()
         {
-            _lastValue = NextValue();
+            _lastValue = GenerateValue();
         }
 
-        protected abstract object NextValue();
+        protected abstract T GenerateValue();
     }
 }

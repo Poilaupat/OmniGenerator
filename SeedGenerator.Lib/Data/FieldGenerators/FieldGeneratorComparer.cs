@@ -1,41 +1,40 @@
 ﻿using Microsoft.ProgramSynthesis.Transformation.Formula.Build.RuleNodeTypes;
+using SeedGenerator.Lib.Interfaces;
 
 namespace SeedGenerator.Lib.Data.FieldGenerators
 {
-    internal class FieldGeneratorComparer : IComparer<AbstractFieldGenerator>
+    internal class FieldGeneratorComparer : IComparer<IFieldGenerator>
     {
         /// <summary>
         /// Rules for comparison :
-        ///     1. AbstractFieldGenerator < AbstractFieldGeneratorDependant
-        ///     2. AbstractFieldGeneratorDependant A < AbstractFieldGeneratorDependant B if B is dependant on A
+        ///     1. IFieldGenerator < IFieldGeneratorDependant
+        ///     2. IFieldGeneratorDependant A < IFieldGeneratorDependant B if B is dependant on A
         ///     3. if "equal", order alphabetically against Name property  
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public int Compare(AbstractFieldGenerator? x, AbstractFieldGenerator? y)
+        public int Compare(IFieldGenerator? x, IFieldGenerator? y)
         {
             if (x is null || y is null)
-                throw new ArgumentNullException($"Cannot compare null {nameof(AbstractFieldGenerator)}");
+                throw new ArgumentNullException($"Cannot compare null {nameof(IFieldGenerator)}");
 
-            var xIsFieldDependant = IsFieldDependantGenerator(x);
-            var yIsFieldDependant = IsFieldDependantGenerator(y);
 
             //Rule 1
-            if (!xIsFieldDependant && yIsFieldDependant)
+            if (x is not IFieldGeneratorDependent && y is IFieldGeneratorDependent)
             {
                 return -1;
             }
 
             //Rule 1
-            if(xIsFieldDependant && !yIsFieldDependant)
+            if(x is IFieldGeneratorDependent && y is not IFieldGeneratorDependent)
             {
                 return 1;
             }
 
             //Rule 2 (note : there is no circular dependance detection for now)
-            if (x is AbstractFieldGeneratorDependant xd && y is AbstractFieldGeneratorDependant yd)
+            if (x is IFieldGeneratorDependent xd && y is IFieldGeneratorDependent yd)
             {
                 if (yd.IsDependentUpon(xd)) 
                 {
@@ -50,13 +49,6 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
 
             //Rule 3
             return x.Name.CompareTo(y.Name);
-        }
-
-        private bool IsFieldDependantGenerator(object x)
-        {
-            return x
-                .GetType()
-                .IsSubclassOf(typeof(AbstractFieldGeneratorDependant));
         }
     }
 }

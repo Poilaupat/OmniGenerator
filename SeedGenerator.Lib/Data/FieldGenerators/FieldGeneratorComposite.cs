@@ -2,7 +2,7 @@
 
 namespace SeedGenerator.Lib.Data.FieldGenerators
 {
-    internal class FieldGeneratorComposite : AbstractFieldGeneratorDependant
+    internal class FieldGeneratorComposite : AbstractFieldGeneratorDependant<string>
     {
         public string Format { get; set; }
 
@@ -12,7 +12,7 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
             Format = format;
         }
 
-        protected override object NextValue()
+        protected override string GenerateValue()
         {
             var data = Dependences.ToDictionary(x => x.Name, y => y.LastValue);
             FormatCompiler compiler = new FormatCompiler();

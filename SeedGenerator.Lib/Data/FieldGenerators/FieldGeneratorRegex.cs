@@ -2,7 +2,7 @@
 
 namespace SeedGenerator.Lib.Data.FieldGenerators
 {
-    internal class FieldGeneratorRegex : AbstractFieldGenerator
+    internal class FieldGeneratorRegex : AbstractFieldGenerator<string>
     {
         public string Pattern { get; set; }
 
@@ -12,7 +12,7 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
             Pattern = pattern;
         }
 
-        protected override object NextValue()
+        protected override string GenerateValue()
         {
             var xeger = new Xeger(Pattern, new Random());
             return xeger.Generate();
