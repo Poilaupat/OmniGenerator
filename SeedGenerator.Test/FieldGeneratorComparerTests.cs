@@ -1,4 +1,5 @@
 using SeedGenerator.Lib.Data.FieldGenerators;
+using System.CodeDom;
 
 namespace SeedGenerator.Test
 {
@@ -7,58 +8,91 @@ namespace SeedGenerator.Test
     public class FieldGeneratorComparerTests
     {
         [Test]
+        public void DependenceRelationProperties()
+        {
+            var a = new FieldGeneratorRegex("AField", ".*");
+            var b = new FieldGeneratorRegex("BField", ".*");
+            var c = new FieldGeneratorComposite("CField", "AField,BField", "{{AField}}{{BField}}");
+            var d = new FieldGeneratorKeyCalculator("DField", "CField", EKeyType.Rib);
+
+            var fields =
+                new AbstractFieldGenerator[] { a, b, c, d }
+                .SetCollateralDependencies();
+
+            Assert.That(c.IsDependentUpon(a), Is.True); // Direct relation
+            Assert.That(c.IsDependentUpon(b), Is.True); // Direct relation
+            Assert.That(d.IsDependentUpon(c), Is.True); // Direct relation
+
+            Assert.That(d.IsDependentUpon(b), Is.True); // Transitivity
+            Assert.That(d.IsDependentUpon(a), Is.True); // Transitivity
+
+            Assert.That(c.IsDependentUpon(d), Is.False); // Anti-reflexivity
+        }
+
+        [Test]
         public void OnlyBaseFieldGenerators()
         {
-            var fields = new[]
-            {
-                new FieldGeneratorRegex("CField", ".*"),
-                new FieldGeneratorRegex("BField", ".*"),
-                new FieldGeneratorRegex("AField", ".*"),
-            };
+            var c = new FieldGeneratorRegex("CField", ".*");
+            var b = new FieldGeneratorRegex("BField", ".*");
+            var a = new FieldGeneratorRegex("AField", ".*");
 
-            var ordered = fields.OrderBy(x => x, new FieldGeneratorComparer());
+            var fields =
+                new[] { c, b, a }
+                .SetCollateralDependencies()
+                .OrderBy(x => x, new FieldGeneratorComparer());
 
-            Assert.That(ordered.ElementAt(0).Name, Is.EqualTo("AField"));
-            Assert.That(ordered.ElementAt(1).Name, Is.EqualTo("BField"));
-            Assert.That(ordered.ElementAt(2).Name, Is.EqualTo("CField"));
+            Assert.That(fields.ElementAt(0).Name, Is.EqualTo(a.Name));
+            Assert.That(fields.ElementAt(1).Name, Is.EqualTo(b.Name));
+            Assert.That(fields.ElementAt(2).Name, Is.EqualTo(c.Name));
         }
 
         [Test]
-        public void DependantFieldGeneratorsWithoutMutualDependance()
+        public void GeneratorOrderingWithoutCascadingDependance()
         {
-            var fields = new AbstractFieldGenerator[]
-            {
-                new FieldGeneratorComposite("BField", "AField", "{{AField}}"),
-                new FieldGeneratorComposite("AField", "AField", "{{AField}}"),
-                new FieldGeneratorRegex("CField", ".*"),
-            };
+            var a = new FieldGeneratorComposite("AField", "CField", "{{CField}}");
+            var b = new FieldGeneratorComposite("BField", "CField", "{{CField}}");
+            var c = new FieldGeneratorRegex("CField", ".*");
 
-            var ordered = fields.OrderBy(x => x, new FieldGeneratorComparer());
+            var fields = 
+                new AbstractFieldGenerator[] { b, a, c }
+                .SetCollateralDependencies()
+                .OrderBy(x => x, new FieldGeneratorComparer());
 
-            Assert.That(ordered.ElementAt(0).Name, Is.EqualTo("CField"));
-            Assert.That(ordered.ElementAt(1).Name, Is.EqualTo("AField"));
-            Assert.That(ordered.ElementAt(2).Name, Is.EqualTo("BField"));
+            Assert.That(fields.ElementAt(0).Name, Is.EqualTo(c.Name));
+            Assert.That(fields.ElementAt(1).Name, Is.EqualTo(a.Name));
+            Assert.That(fields.ElementAt(2).Name, Is.EqualTo(b.Name));
         }
 
         [Test]
-        public void DependantFieldGeneratorsWithMutualDependance()
+        public void GeneratorOrderingWithCascadingDependances()
         {
-            var fields = new AbstractFieldGenerator[]
-            {
-                new FieldGeneratorComposite("AField", "BField", "{{BField}}"),
-                new FieldGeneratorComposite("BField", "CField", "{{CField}}"),
-                new FieldGeneratorComposite("CField", "DField", "{{DField}}"),
-                new FieldGeneratorRegex("DField", ".*"),
-                new FieldGeneratorKeyCalculator("AKField", "AField", EKeyType.Rlmc),
-            };
+            var a = new FieldGeneratorComposite("AField", "BField", string.Empty);
+            var b = new FieldGeneratorComposite("BField", "CField", string.Empty);
+            var c = new FieldGeneratorComposite("CField", "DField", string.Empty);
+            var d = new FieldGeneratorRegex("DField", ".*");
+            var ak = new FieldGeneratorKeyCalculator("AKField", "AField", EKeyType.Rlmc);
 
-            var ordered = fields.OrderBy(x => x, new FieldGeneratorComparer()).ToArray();
+            var fields = 
+                new AbstractFieldGenerator[] { ak, a, b, c, d }
+                .SetCollateralDependencies()
+                .OrderBy(x => x, new FieldGeneratorComparer()).ToArray();
 
-            Assert.That(ordered.ElementAt(0).Name, Is.EqualTo("DField"));
-            Assert.That(ordered.ElementAt(1).Name, Is.EqualTo("CField"));
-            Assert.That(ordered.ElementAt(2).Name, Is.EqualTo("BField"));
-            Assert.That(ordered.ElementAt(3).Name, Is.EqualTo("AField"));
-            Assert.That(ordered.ElementAt(4).Name, Is.EqualTo("AKField"));
+            Assert.That(fields.ElementAt(0).Name, Is.EqualTo(d.Name));
+            Assert.That(fields.ElementAt(1).Name, Is.EqualTo(c.Name));
+            Assert.That(fields.ElementAt(2).Name, Is.EqualTo(b.Name));
+            Assert.That(fields.ElementAt(3).Name, Is.EqualTo(a.Name));
+            Assert.That(fields.ElementAt(4).Name, Is.EqualTo(ak.Name));
+
+            fields =
+                new AbstractFieldGenerator[] { d, c, b, a, ak }
+                .SetCollateralDependencies()
+                .OrderBy(x => x, new FieldGeneratorComparer()).ToArray();
+
+            Assert.That(fields.ElementAt(0).Name, Is.EqualTo(d.Name));
+            Assert.That(fields.ElementAt(1).Name, Is.EqualTo(c.Name));
+            Assert.That(fields.ElementAt(2).Name, Is.EqualTo(b.Name));
+            Assert.That(fields.ElementAt(3).Name, Is.EqualTo(a.Name));
+            Assert.That(fields.ElementAt(4).Name, Is.EqualTo(ak.Name));
         }
     }
 }

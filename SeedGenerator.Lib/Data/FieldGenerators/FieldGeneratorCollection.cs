@@ -38,8 +38,9 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
                .ToList()
                .ForEach(kvp => Generators.Add(kvp.Key, kvp.Value));
 
-            SetCollateralDependencies();
+            Generators.SetCollateralDependencies();
         }
+
         public bool RootHasFields()
         {
             return Generators.ContainsKey(RootParam.Name);
@@ -48,21 +49,6 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
         public bool ElementHasFields(string name)
         {
             return Generators.ContainsKey(name);
-        }
-
-        private void SetCollateralDependencies()
-        {
-            foreach (var elementGenerators in Generators.Values)
-            {
-                foreach (var generator in elementGenerators.FilterDependantFieldGenerators())
-                {
-                    foreach (var dependencyName in generator.DependenceNames)
-                    {
-                        var dependency = elementGenerators.Single(x => x.Name == dependencyName);
-                        generator.Dependences.Add(dependency);
-                    }
-                }
-            }
         }
 
         private FieldCollection GenerateFields(IEnumerable<AbstractFieldGenerator> generators)

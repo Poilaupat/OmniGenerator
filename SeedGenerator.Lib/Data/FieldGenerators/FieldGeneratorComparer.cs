@@ -8,7 +8,7 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
         /// Rules for comparison :
         ///     1. AbstractFieldGenerator < AbstractFieldGeneratorDependant
         ///     2. AbstractFieldGeneratorDependant A < AbstractFieldGeneratorDependant B if B is dependant on A
-        ///     3. if "equal" order alphabetically against Name property  
+        ///     3. if "equal", order alphabetically against Name property  
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -37,20 +37,19 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
             //Rule 2 (note : there is no circular dependance detection for now)
             if (x is AbstractFieldGeneratorDependant xd && y is AbstractFieldGeneratorDependant yd)
             {
-                if (yd.Dependences.Any(x => x.Name ==xd.Name)) 
+                if (yd.IsDependentUpon(xd)) 
                 {
                     return -1;
                 }
                 
-                if(xd.Dependences.Any(x => x.Name == yd.Name))
+                if(xd.IsDependentUpon(yd))
                 {
                     return 1;
                 }
             }
 
             //Rule 3
-            //return x.Name.CompareTo(y.Name);
-            return 0;
+            return x.Name.CompareTo(y.Name);
         }
 
         private bool IsFieldDependantGenerator(object x)

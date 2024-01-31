@@ -19,5 +19,21 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
                 DependenceNames.Add(dependenceName);
             }
         }
+
+        public bool IsDependentUpon(AbstractFieldGenerator generator)
+        {
+            foreach(var dependence in Dependences)
+            {
+                if(generator.Name == dependence.Name)
+                    return true;
+
+                if(dependence is AbstractFieldGeneratorDependant afgd)
+                {
+                    return afgd.IsDependentUpon(generator);
+                }
+            }
+
+            return false;
+        }
     }
 }
