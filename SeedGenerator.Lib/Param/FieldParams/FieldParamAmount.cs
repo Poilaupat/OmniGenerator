@@ -10,9 +10,5 @@ namespace SeedGenerator.Lib.Param.FieldParams
         
         [JsonPropertyName("max")]
         public float Max { get; set; } = 10000000f;
-
-        [JsonPropertyName("format")]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
-        public EAmountFormat Format { get; set; } = EAmountFormat.Euro;
     }
 }

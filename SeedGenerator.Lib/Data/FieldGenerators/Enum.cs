@@ -18,12 +18,6 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
         DirectChildren,
     }
 
-    public enum EAmountFormat
-    {
-        Euro,
-        Cent,
-    }
-
     public enum EKeyType
     {
         Rlmc,

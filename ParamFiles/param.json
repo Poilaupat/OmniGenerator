@@ -123,9 +123,8 @@
               {
                 "$type": "amount",
                 "name": "amount",
-                "min": 10,
-                "max": 9999,
-                "format": "Cent"
+                "min": 100,
+                "max": 99999
               },
               {
                 "$type": "fixed",
@@ -219,9 +218,8 @@
               {
                 "$type": "amount",
                 "name": "amount",
-                "min": 10,
-                "max": 9999,
-                "format": "Euro"
+                "min": 100,
+                "max": 999999
               },
               {
                 "$type": "regex",
