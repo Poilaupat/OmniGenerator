@@ -31,7 +31,7 @@ namespace SeedGenerator.Lib.Param.Serialization
                 DerivedTypes =
                 {
                     new JsonDerivedType(typeof(FieldParamRegex), "regex"),
-                    new JsonDerivedType(typeof(FieldParamConstant), "fixed"),
+                    new JsonDerivedType(typeof(FieldParamConstant), "constant"),
                     new JsonDerivedType(typeof(FieldParamList), "list"),
                     new JsonDerivedType(typeof(FieldParamKeyCalculator), "key"),
                     new JsonDerivedType(typeof(FieldParamComposite), "composite"),

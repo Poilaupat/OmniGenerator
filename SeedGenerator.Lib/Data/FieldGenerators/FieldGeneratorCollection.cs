@@ -22,7 +22,7 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
                 .RootGroupParam
                 .GetDocumentParams(true)
                 .ToDictionary(x => x.Name, y => mapper
-                    .Map<List<IFieldGenerator>>(y.FieldParams)
+                    .Map<List<IFieldGenerator>>(y.Fields)
                     .OrderBy(x => x, new FieldGeneratorComparer())
                     .ToList())
                 .ToList()
@@ -33,7 +33,7 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
                .RootGroupParam
                .GetGroupParamsAndSelf(true)
                .ToDictionary(x => x.Name, y => mapper
-                    .Map<List<IFieldGenerator>>(y.FieldParams)
+                    .Map<List<IFieldGenerator>>(y.Fields)
                     .OrderBy(x => x, new FieldGeneratorComparer())
                     .ToList())
                .ToList()

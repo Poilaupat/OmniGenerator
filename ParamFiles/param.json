@@ -35,251 +35,32 @@
         "name": "slip",
         "min-occurs": 1,
         "max-occurs": 1,
-        "fields": [
-          {
-            "$type": "fixed",
-            "name": "encline",
-            "value": "01"
-          },
-          {
-            "$type": "regex",
-            "name": "numremise",
-            "pattern": "\\d{7}"
-          }
-        ]
+        "field-configuration-file": "fields-slip.json",
+        "fields": []
       },
       {
         "$type": "group",
         "name": "payment",
         "min-occurs": 1,
         "max-occurs": 3,
-        "fields": [
-          {
-            "$type": "list",
-            "name": "payor-firstname",
-            "list-path": ".\\Resources\\Lists\\first_names.txt"
-          },
-          {
-            "$type": "list",
-            "name": "payor-lastname",
-            "list-path": ".\\Resources\\Lists\\last_names.txt"
-          },
-          {
-            "$type": "composite",
-            "name": "payor-name",
-            "dependent-upon": "payor-firstname, payor-lastname",
-            "format": "{{payor-firstname}} {{payor-lastname}}"
-          },
-          {
-            "$type": "list",
-            "name": "payor-zip-city",
-            "list-path": ".\\Resources\\Lists\\zipcodes_cities.txt"
-          },
-          {
-            "$type": "list",
-            "name": "payor-lane",
-            "list-path": ".\\Resources\\Lists\\addresses.txt"
-          },
-          {
-            "$type": "regex",
-            "name": "payor-lane-number",
-            "pattern": "\\d{1,3}"
-          },
-          {
-            "$type": "composite",
-            "name": "payor-address",
-            "dependent-upon": "payor-lane,payor-lane-number",
-            "format": " {{payor-lane-number}} {{payor-lane}}"
-          },
-          {
-            "$type": "aggregate",
-            "name": "total",
-            "aggregate-type": "Sum",
-            "scope": "DirectChildren",
-            "target-element": "cheque",
-            "dependent-upon": "amount"
-          },
-          {
-            "$type": "aggregate",
-            "name": "count",
-            "aggregate-type": "Count",
-            "scope": "DirectChildren",
-            "target-element": "cheque",
-            "dependent-upon": ""
-          }
-        ],
+        "field-configuration-file": "fields-payment.json",
+        "fields": [],
         "elements": [
           {
             "$type": "document",
-            "name": "coupon",
+            "name": "talon-optique",
             "min-occurs": 1,
             "max-occurs": 1,
-            "fields": [
-              {
-                "$type": "fixed",
-                "name": "encline",
-                "value": "12"
-              },
-              {
-                "$type": "amount",
-                "name": "amount",
-                "min": 100,
-                "max": 99999
-              },
-              {
-                "$type": "fixed",
-                "name": "codecentre",
-                "value": "06"
-              },
-              {
-                "$type": "fixed",
-                "name": "codenature",
-                "value": "7"
-              },
-              {
-                "$type": "composite",
-                "name": "group1",
-                "dependent-upon": "codenature, codecentre, amount",
-                "format": "{{codenature}}{{codecentre}} {{amount:00000000}}"
-              },
-              {
-                "$type": "key",
-                "name": "key-group-1",
-                "dependent-upon": "group1",
-                "key-type": "tip"
-              },
-              {
-                "$type":"fixed",
-                "name": "doctype",
-                "value": "9"
-              },
-              {
-                "$type": "regex",
-                "name": "codeapp",
-                "pattern": "(2|3|4|5|6)"
-              },
-              {
-                "$type": "regex",
-                "name": "codique",
-                "pattern": "\\d{6}"
-              },
-              {
-                "$type": "regex",
-                "name": "refop",
-                "pattern": "\\d{17}"
-              },
-              {
-                "$type": "composite",
-                "name": "group2",
-                "dependent-upon": "doctype, codeapp, codique, refop",
-                "format": "{{refop}}{{codique}}{{codeapp}}{{doctype}}"
-              },
-              {
-                "$type": "key",
-                "name": "key-group-2",
-                "dependent-upon": "group2",
-                "key-type": "tip"
-              },
-              {
-                "$type": "fixed",
-                "name": "codeetablissement",
-                "value": "0001"
-              },
-              {
-                "$type": "regex",
-                "name": "codeemetteur",
-                "pattern": "(920033|930033|930044|940033|940044|950033|960033)"
-              },
-              {
-                "$type":"composite",
-                "name": "group3",
-                "dependent-upon": "codeetablissement, codeemetteur",
-                "format": "{{codeemetteur}}{{codeetablissement}}"
-              },
-              {
-                "$type": "key",
-                "name": "key-group-3",
-                "dependent-upon": "group3",
-                "key-type": "tip"
-              }
-            ]
+            "field-configuration-file": "fields-talon-optique.json",
+            "fields": []
           },
           {
             "$type": "document",
             "name": "cheque",
             "min-occurs": 1,
             "max-occurs": 4,
-            "fields": [
-              {
-                "$type": "fixed",
-                "name": "encline",
-                "value": "03"
-              },
-              {
-                "$type": "amount",
-                "name": "amount",
-                "min": 100,
-                "max": 999999
-              },
-              {
-                "$type": "regex",
-                "name": "cmc7",
-                "pattern": "\\d{7} \\d{9}908 \\d{12}"
-              },
-              {
-                "$type": "key",
-                "name": "rlmc",
-                "dependent-upon": "cmc7",
-                "key-type": "rlmc"
-              },
-              {
-                "$type": "fixed",
-                "name": "bank-name",
-                "value": "Banque Specimen"
-              },
-              {
-                "$type": "list",
-                "name": "bank-zip-city",
-                "list-path": ".\\Resources\\Lists\\zipcodes_cities.txt"
-              },
-              {
-                "$type": "list",
-                "name": "bank-lane",
-                "list-path": ".\\Resources\\Lists\\addresses.txt"
-              },
-              {
-                "$type": "regex",
-                "name": "bank-lane-number",
-                "pattern": "\\d{1,3}"
-              },
-              {
-                "$type": "composite",
-                "name": "bank-address",
-                "dependent-upon": "bank-lane,bank-lane-number",
-                "format": " {{bank-lane-number}} {{bank-lane}}"
-              },
-              {
-                "$type": "regex",
-                "name": "bank-phone",
-                "pattern": "0(2|3|4|5) \\d{2} \\d{2} \\d{2} \\d{2}"
-              },
-              {
-                "$type": "fixed",
-                "name": "payee-name",
-                "value": "Sith Delapille"
-              },
-              {
-                "$type": "list",
-                "name": "place",
-                "list-path": ".\\Resources\\Lists\\zipcodes_cities.txt"
-              },
-              {
-                "$type": "date",
-                "name": "date",
-                "day-diff-min": 3,
-                "day-diff-max": 400
-              }
-            ]
+            "field-configuration-file": "fields-cheque.json",
+            "fields": []
           }
         ]
       }

@@ -8,55 +8,49 @@ namespace SeedGenerator.Lib.Param
         [JsonPropertyName("elements")]
         public List<ElementParam> Elements { get; set; } = new List<ElementParam>();
 
-        [JsonPropertyName("fields")]
-        public List<FieldParamBase> FieldParams { get; set; } = new List<FieldParamBase> { };
-
-        public IEnumerable<DocumentParam> GetDocumentParams(bool recursive)
+        private IEnumerable<T> GetElementParams<T>(bool recursive) 
+            where T : ElementParam 
         {
-            foreach (var doc in Elements.Where(x => x is DocumentParam))
+            foreach (var element in Elements.Where(x => x is T))
             {
-                yield return (DocumentParam)doc;
+                yield return (T)element;
             }
 
             if (recursive)
             {
-                foreach (var doc in Elements
+                foreach (var element in Elements
                     .Where(x => x is GroupParam)
                     .Cast<GroupParam>()
-                    .SelectMany(x => x.GetDocumentParams(recursive)))
+                    .SelectMany(x => x.GetElementParams<T>(recursive)))
                 {
-                    yield return doc;
+                    yield return element;
                 }
             }
         }
 
+        public IEnumerable<DocumentParam> GetDocumentParams(bool recursive)
+        {
+            return GetElementParams<DocumentParam>(recursive);
+        }
+
         public IEnumerable<GroupParam> GetGroupParams(bool recursive)
         {
-            foreach (var grp in Elements.Where(x => x is GroupParam))
-            {
-                yield return (GroupParam)grp;
-            }
-
-            if (recursive)
-            {
-                foreach (var grp in Elements
-                    .Where(x => x is GroupParam)
-                    .Cast<GroupParam>()
-                    .SelectMany(x => x.GetGroupParams(true)))
-                {
-                    yield return grp;
-                }
-            }
+            return GetElementParams<GroupParam>(recursive);
         }
 
         public IEnumerable<GroupParam> GetGroupParamsAndSelf(bool recursive)
         {
             yield return this;
 
-            foreach(var subgroup in GetGroupParams(recursive))
+            foreach(var subgroup in GetElementParams<GroupParam>(recursive))
             {
                 yield return subgroup;
             }
+        }
+
+        public IEnumerable<ElementParam> GetElementParams(bool recursive)
+        {
+            return GetElementParams<ElementParam>(recursive); 
         }
     }
 }

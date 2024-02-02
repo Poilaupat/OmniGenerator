@@ -15,5 +15,8 @@ namespace SeedGenerator.Lib.Param
 
         [JsonPropertyName("root")]
         public GroupParam RootGroupParam { get; set; } = new GroupParam();
+
+        [JsonPropertyName("field-configuration-file")]
+        public string FieldConfigurationFile { get; set; } = string.Empty;
     }
 }

@@ -2,6 +2,7 @@
 using SeedGenerator.Lib.Exceptions;
 using SeedGenerator.Lib.Interfaces;
 using SeedGenerator.Lib.Param;
+using SeedGenerator.Lib.Param.FieldParams;
 
 namespace SeedGenerator.Lib
 {
@@ -22,21 +23,9 @@ namespace SeedGenerator.Lib
 
         public async Task Run(string paramFilePath, string outputPath)
         {
-            RootParam param;
-            try
-            {
-                param = await ParamTools.GetParamFromFileAsync(paramFilePath);               
-            }
-            catch (ParamException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return;
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return;
-            }
+            //Param reading
+            RootParam param = await ReadParamAsync(paramFilePath);
+            ParamTools.CheckParam(param);
 
             //Data generation
             var root = _rootBuilder.Build(param);
@@ -47,5 +36,32 @@ namespace SeedGenerator.Lib
             //Seed files generation
             await _packager.ProcessAsync(root, outputPath);
         }
+
+        private async Task<RootParam> ReadParamAsync(string paramFilePath)
+        {
+            try
+            {
+                var param = await ParamTools.ReadParamFromFileAsync<RootParam>(paramFilePath);
+
+                foreach (var elementParam in param.RootGroupParam.GetElementParams(true))
+                {
+                    if (!string.IsNullOrWhiteSpace(elementParam.FieldConfigurationFile))
+                    {
+                        var directory = Path.GetDirectoryName(paramFilePath);
+                        var filefields = await ParamTools.ReadParamFromFileAsync<List<FieldParamBase>>(directory, elementParam.FieldConfigurationFile);
+                        elementParam.MergeFields(filefields);
+                    }
+                }
+
+                return param;
+            }
+            catch (ParamException ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
+        
     }
 }
