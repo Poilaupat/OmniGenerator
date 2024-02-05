@@ -16,7 +16,7 @@ namespace SeedGenerator.Lib.AutoMapper
                 .Include<FieldParamRegex, FieldGeneratorRegex>()
                 .Include<FieldParamList, FieldGeneratorList>()
                 .Include<FieldParamConstant, FieldGeneratorConstant>()
-                .Include<FieldParamAmount, FieldGeneratorAmount>()
+                .Include<FieldParamNumeric, FieldGeneratorNumeric>()
                 .Include<FieldParamDate, FieldGeneratorDate>();
 
             CreateMap(typeof(FieldParamDependantBase), typeof(AbstractFieldGeneratorDependant<>));
@@ -31,7 +31,7 @@ namespace SeedGenerator.Lib.AutoMapper
             CreateMap<FieldParamRegex, FieldGeneratorRegex>();
             CreateMap<FieldParamList, FieldGeneratorList>();
             CreateMap<FieldParamConstant, FieldGeneratorConstant>();
-            CreateMap<FieldParamAmount, FieldGeneratorAmount>();
+            CreateMap<FieldParamNumeric, FieldGeneratorNumeric>();
             CreateMap<FieldParamDate, FieldGeneratorDate>();
 
             ////Derived types based upon FieldParamDependantBase
