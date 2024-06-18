@@ -5,6 +5,9 @@ using SeedGenerator.Lib.Param;
 
 namespace SeedGenerator.Lib.Data
 {
+    /// <summary>
+    /// Builds a new <see cref="Root"/> using provided configuration
+    /// </summary>
     public class RootBuilder : IRootBuilder
     {
         private long _docId = 1;
@@ -12,17 +15,28 @@ namespace SeedGenerator.Lib.Data
 
         private IMapper _mapper;
 
+        /// <summary>
+        /// Creates a new <see cref="RootBuilder"/>
+        /// </summary>
+        /// <param name="mapper">A mapper configured to map field configuration classes to field generator classes</param>
         public RootBuilder(IMapper mapper)
         {
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Builds a new <see cref="Root"/> using provided configuration
+        /// </summary>
+        /// <param name="rootParam"></param>
+        /// <returns></returns>
         public Root Build(RootParam rootParam)
         {
+            var fgc = new FieldGeneratorCollection(rootParam, _mapper);
+
+
             var rootContent = GenerateGroups(rootParam.RootGroupParam);
             var root = new Root(rootContent);
 
-            var fgc = new FieldGeneratorCollection(rootParam, _mapper);
 
             GenerateFields(root, fgc);
             GenerateAggregateFields(root, fgc);

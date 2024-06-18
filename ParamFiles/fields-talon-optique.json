@@ -18,19 +18,25 @@
   {
     "$type": "constant",
     "name": "codenature",
-    "value": "7"
+    "value": "8"
   },
   {
     "$type": "composite",
-    "name": "group1",
+    "name": "group1-payload",
     "dependent-upon": "codenature, codecentre, amount",
     "format": "{{codenature}}{{codecentre}} {{amount:00000000}}"
   },
   {
     "$type": "key",
-    "name": "key-group-1",
-    "dependent-upon": "group1",
+    "name": "group1-key",
+    "dependent-upon": "group1-payload",
     "key-type": "tip"
+  },
+  {
+    "$type": "composite",
+    "name": "group1",
+    "dependent-upon": "group1-payload, group1-key",
+    "format": "{{group1-key}}{{group1-payload}}"
   },
   {
     "$type": "constant",
@@ -54,15 +60,21 @@
   },
   {
     "$type": "composite",
-    "name": "group2",
+    "name": "group2-payload",
     "dependent-upon": "doctype, codeapp, codique, refop",
     "format": "{{refop}}{{codique}}{{codeapp}}{{doctype}}"
   },
   {
     "$type": "key",
-    "name": "key-group-2",
-    "dependent-upon": "group2",
+    "name": "group2-key",
+    "dependent-upon": "group2-payload",
     "key-type": "tip"
+  },
+  {
+    "$type": "composite",
+    "name": "group2",
+    "dependent-upon": "group2-payload, group2-key",
+    "format": "{{group2-key}}{{group2-payload}}"
   },
   {
     "$type": "constant",
@@ -76,14 +88,20 @@
   },
   {
     "$type": "composite",
-    "name": "group3",
+    "name": "group3-payload",
     "dependent-upon": "codeetablissement, codeemetteur",
     "format": "{{codeemetteur}}{{codeetablissement}}"
   },
   {
     "$type": "key",
-    "name": "key-group-3",
-    "dependent-upon": "group3",
+    "name": "group3-key",
+    "dependent-upon": "group3-payload",
     "key-type": "tip"
+  },
+  {
+    "$type": "composite",
+    "name": "group3",
+    "dependent-upon": "group3-payload, group3-key",
+    "format": "{{group3-payload}}{{group3-key}} "
   }
 ]

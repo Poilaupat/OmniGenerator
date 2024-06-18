@@ -11,9 +11,34 @@ using System.Threading.Tasks;
 
 namespace SeedGenerator.Lib.Param
 {
-    public class ParamTools
+    public class ParamReader
     {
-        public static async Task<T> ReadParamFromFileAsync<T>(string filepath)
+        public static async Task<RootParam> ReadParamAsync(string paramFilePath)
+        {
+            try
+            {
+                var param = await ParamReader.DeserializeParamAsync<RootParam>(paramFilePath);
+
+                foreach (var elementParam in param.RootGroupParam.GetElementParams(true))
+                {
+                    if (!string.IsNullOrWhiteSpace(elementParam.FieldConfigurationFile))
+                    {
+                        var directory = Path.GetDirectoryName(paramFilePath);
+                        var filefields = await ParamReader.DeserializeParamFileAsync<List<FieldParamBase>>(directory, elementParam.FieldConfigurationFile);
+                        elementParam.MergeFields(filefields);
+                    }
+                }
+
+                return param;
+            }
+            catch (ParamException ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
+        private static async Task<T> DeserializeParamAsync<T>(string filepath)
         {
             var options = new JsonSerializerOptions
             {
@@ -32,15 +57,15 @@ namespace SeedGenerator.Lib.Param
 
                 return (T)param;
             }
-            catch(ParamException)
+            catch (ParamException)
             {
                 throw;
             }
-            catch(FileNotFoundException)
+            catch (FileNotFoundException)
             {
                 throw new ParamException($"Param file {filepath} was not found");
             }
-            catch(JsonException ex)
+            catch (JsonException ex)
             {
                 throw new ParamException($"Json deserialization failed for file {filepath}", ex);
             }
@@ -50,12 +75,12 @@ namespace SeedGenerator.Lib.Param
             }
         }
 
-        public static async Task<T> ReadParamFromFileAsync<T>(string? directory, string filename)
+        private static async Task<T> DeserializeParamFileAsync<T>(string? directory, string filename)
         {
-            if(Directory.Exists(directory))
+            if (Directory.Exists(directory))
             {
                 string filepath = Path.Combine(directory, filename);
-                return await ReadParamFromFileAsync<T>(filepath);
+                return await DeserializeParamAsync<T>(filepath);
             }
 
             throw new ParamException($"The directory {directory} was not found.");
@@ -77,11 +102,11 @@ namespace SeedGenerator.Lib.Param
                 {
                     exception.Errors.Add($"Document : {document.Name} / Field : {field.Name} / Error : Documents cannot have aggreate fields");
                 }
+            }
 
-                if (exception.Errors.Count > 0)
-                {
-                    throw exception;
-                }
+            if (exception.Errors.Count > 0)
+            {
+                throw exception;
             }
         }
     }

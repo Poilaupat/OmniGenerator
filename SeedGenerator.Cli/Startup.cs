@@ -24,12 +24,12 @@ namespace SeedGenerator.Cli
             builder.RegisterInstance(mapper).As<IMapper>();
             builder.RegisterType<PlainPackager>().As<IPackager>();
             
-            builder.RegisterType<ImageComposerProcessor>().As<IImageComposerProcessor>();
+            builder.RegisterType<DefaultImageComposerProcessor>().As<IImageComposerProcessor>();
             builder.RegisterType<ChequeComposer>()
                 .As<IImageComposer>()
                 .WithMetadata<IImageComposerMetadata>(m => m.For(icm => icm.DocumentName, "cheque"));
-            builder.RegisterType<CouponSepaComposer>().As<IImageComposer>()
-                .WithMetadata<IImageComposerMetadata>(m => m.For(icm => icm.DocumentName, "coupon"));
+            builder.RegisterType<TalonSepaComposer>().As<IImageComposer>()
+                .WithMetadata<IImageComposerMetadata>(m => m.For(icm => icm.DocumentName, "talon-optique"));
 
 
             return builder.Build();

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SeedGenerator.Lib.Exceptions
 {
+    /// <summary>
+    /// The exception thrown when error occurs when reading or validating configuration
+    /// </summary>
     internal class ParamException : Exception
     {
         public List<string> Errors { get; set; } = new List<string>();

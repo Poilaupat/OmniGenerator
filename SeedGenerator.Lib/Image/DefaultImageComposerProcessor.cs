@@ -4,15 +4,29 @@ using SeedGenerator.Lib.Interfaces;
 
 namespace SeedGenerator.Lib.Image
 {
-    public class ImageComposerProcessor : IImageComposerProcessor
+    /// <summary>
+    /// The default image composer processor.
+    /// This processor takes meta data of documents, selects an <see cref="IImageComposer"/> from the DI container and generates SVG images
+    /// </summary>
+    public class DefaultImageComposerProcessor : IImageComposerProcessor
     {
         IEnumerable<Meta<IImageComposer>> _composers;
 
-        public ImageComposerProcessor(IEnumerable<Meta<IImageComposer>> composers)
+        /// <summary>
+        /// Creates a new <see cref="DefaultImageComposerProcessor"/>
+        /// </summary>
+        /// <param name="composers">The available <see cref="IImageComposer"/> with appropriate meta data to pick one</param>
+        public DefaultImageComposerProcessor(IEnumerable<Meta<IImageComposer>> composers)
         {
             _composers = composers;
         }
 
+        /// <summary>
+        /// Generates images for all documents in the given root
+        /// If a document has no <see cref="IImageComposer"/> it will be ignored
+        /// </summary>
+        /// <param name="root">The root containing the documents</param>
+        /// <returns></returns>
         public async Task ProcessAsync(Root root)
         {
             var docByNamesGrp = root.GetDocuments(true)
@@ -29,8 +43,9 @@ namespace SeedGenerator.Lib.Image
                     foreach (var doc in docByName)
                     {
                         var recto = composer.Value.ComposeImageRecto(doc);
-                        var verso = composer.Value.ComposeImageVerso(doc);
                         doc.RectoImage = recto;
+
+                        var verso = composer.Value.ComposeImageVerso(doc);
                         doc.VersoImage = verso;
                     }
                 }

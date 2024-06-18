@@ -2,8 +2,16 @@
 
 namespace SeedGenerator.Lib.Tools
 {
+    /// <summary>
+    /// Some tools to compute different type of checksum
+    /// </summary>
     internal static class KeyTools
     {
+        /// <summary>
+        /// Computes a RIB checksum
+        /// </summary>
+        /// <param name="rib">The RIB. Can contain letters.</param>
+        /// <returns>The checksum</returns>
         public static string ComputeRibKey(string rib)
         {
             string numericstring = string.Concat(rib, "00");
@@ -11,12 +19,24 @@ namespace SeedGenerator.Lib.Tools
             return key.ToString("00");
         }
 
+        /// <summary>
+        /// Computes a RLMC checksum
+        /// </summary>
+        /// <param name="z4">The Z4 of the CMC7</param>
+        /// <param name="z3">The Z3 of the CMC7</param>
+        /// <param name="z2">The Z2 of the CMC7</param>
+        /// <returns>The RLMC key</returns>
         public static string ComputeRlmcKey(string z4, string z3, string z2)
         {
             string numericstring = string.Concat(z4, z3, z2);
             return ComputeRlmcKey(numericstring);
         }
 
+        /// <summary>
+        /// Computes a RLMC checksum
+        /// </summary>
+        /// <param name="cmc7">The CMC7 of the check. It can be a space separated strings or in one go.</param>
+        /// <returns>The RLMC key</returns>
         public static string ComputeRlmcKey(string cmc7)
         {
             string numericstring = string.Concat(string.Join("", cmc7.Split(' ', StringSplitOptions.RemoveEmptyEntries)), "00");
@@ -24,6 +44,12 @@ namespace SeedGenerator.Lib.Tools
             return key.ToString("00");
         }
 
+        /// <summary>
+        /// Computes a TIP checksum
+        /// </summary>
+        /// <param name="numericstring">A numeric string. Spaces are allowed.</param>
+        /// <returns>The checksum</returns>
+        /// <exception cref="ArgumentException">Thrown if the string contains non-numeric chars</exception>
         public static string ComputeTipKey(string numericstring)
         {
             numericstring = Regex.Replace(numericstring, @"\s", "");
@@ -43,6 +69,11 @@ namespace SeedGenerator.Lib.Tools
             return key.ToString("00");
         }
 
+        /// <summary>
+        /// Compute the specific checksum used for the 6th group in a SEPA slip
+        /// </summary>
+        /// <param name="numericstring">A numeric string</param>
+        /// <returns>The checksum</returns>
         public static string ComputeTipGroup6Key(string numericstring)
         {
             int twoDigitsKey = 11 - ComputeModulo(numericstring, 11, false);
@@ -50,6 +81,15 @@ namespace SeedGenerator.Lib.Tools
             return oneDigitKey.ToString();
         }
 
+        /// <summary>
+        /// Computes a modulo on a numeric string
+        /// Optionnaly can replace letters by digits according to the RIB specification
+        /// </summary>
+        /// <param name="numericstring">The string</param>
+        /// <param name="modulo">The value of the modulo</param>
+        /// <param name="replaceLetters">If set to true, replaces alpha chars by digits</param>
+        /// <returns>The modulo</returns>
+        /// <exception cref="ArgumentException">Thrown if replace letters is false and numericstring contains letters</exception>
         private static int ComputeModulo(string numericstring, int modulo, bool replaceLetters)
         {
             numericstring = Regex.Replace(numericstring, @"\s", "");
@@ -74,6 +114,11 @@ namespace SeedGenerator.Lib.Tools
             return result;
         }
 
+        /// <summary>
+        /// Replaces alpha chars by digit according to RIB specifications
+        /// </summary>
+        /// <param name="str">The input string</param>
+        /// <returns>A numeric string</returns>
         private static string ReplaceLetters(string str)
         {
             return str

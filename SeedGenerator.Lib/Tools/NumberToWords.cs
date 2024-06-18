@@ -1,5 +1,10 @@
 ﻿namespace SeedGenerator.Lib.Tools
 {
+    /// <summary>
+    /// Provides a string representation of numbers in french
+    /// This code is based on Eric Moreau's algorithm
+    /// https://www.emoreau.com/Entries/Articles/2017/02/Net-code-to-convert-numbers-to-words.aspx
+    /// </summary>
     public class NumberToWords
     {
 

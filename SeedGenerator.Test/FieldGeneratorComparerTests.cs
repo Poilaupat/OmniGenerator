@@ -27,7 +27,7 @@ namespace SeedGenerator.Test
             Assert.That(d.IsDependentUpon(b), Is.True); // Transitivity
             Assert.That(d.IsDependentUpon(a), Is.True); // Transitivity
 
-            Assert.That(c.IsDependentUpon(d), Is.False); // Anti-reflexivity
+            Assert.That(c.IsDependentUpon(d), Is.False); // Anti-symetry
         }
 
         [Test]

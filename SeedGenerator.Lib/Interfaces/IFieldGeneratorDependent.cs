@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SeedGenerator.Lib.Exceptions;
 
 namespace SeedGenerator.Lib.Interfaces
 {
@@ -26,7 +27,8 @@ namespace SeedGenerator.Lib.Interfaces
         ///     - Then A.IsDependentUpon(C) must return true
         /// </summary>
         /// <param name="generator">The generator to check dependency upon</param>
-        /// <returns></returns>
+        /// <returns>True if instance is dependent on generator, false if not</returns>
+        /// <exception cref="ParamException">Happens if a circular dependency is detected in field generators</exception>
         bool IsDependentUpon(IFieldGenerator generator);
     }
 }

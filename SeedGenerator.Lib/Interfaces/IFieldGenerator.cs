@@ -22,6 +22,9 @@ namespace SeedGenerator.Lib.Interfaces
         /// <returns>The value</returns>
         object LastValue { get; }
 
+        /// <summary>
+        /// Refreshes the LastValue property
+        /// </summary>
         void RefreshValue();
     }
 }

@@ -9,8 +9,16 @@ using System.Threading.Tasks;
 
 namespace SeedGenerator.Lib.Data.FieldGenerators
 {
+    /// <summary>
+    /// Provides usefull extensions to <see cref="IFieldGenerator"/> collections
+    /// </summary>
     internal static class FieldGeneratorExtensions
     {
+        /// <summary>
+        /// Filters the provided <see cref="IFieldGenerator"/> list an returns all fields but <see cref="FieldGeneratorAggregate"/>
+        /// </summary>
+        /// <param name="fields">The list of <see cref="IFieldGenerator"/> to filter</param>
+        /// <returns>The filtered list</returns>
         public static IEnumerable<IFieldGenerator> FilterNonAggregateFieldGenerators(this IEnumerable<IFieldGenerator> fields)
         {
             return fields
@@ -19,6 +27,11 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
                .ToList();
         }
 
+        /// <summary>
+        /// Filters the provided <see cref="IFieldGenerator"/> list an returns only <see cref="IFieldGeneratorDependent"/>
+        /// </summary>
+        /// <param name="fields">The list of <see cref="IFieldGenerator"/> to filter</param>
+        /// <returns>The filtered list</returns>
         public static IEnumerable<IFieldGeneratorDependent> FilterDependantFieldGenerators(this IEnumerable<IFieldGenerator> fields)
         {
             return fields
@@ -28,6 +41,11 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
                 .ToList();
         }
 
+        /// <summary>
+        /// Filters the provided <see cref="IFieldGenerator"/> list an returns only <see cref="FieldGeneratorAggregate"/>
+        /// </summary>
+        /// <param name="fields">The list of <see cref="IFieldGenerator"/> to filter</param>
+        /// <returns>The filtered list</returns>
         public static IEnumerable<FieldGeneratorAggregate> FilterAggregateFieldGenerators(this IEnumerable<IFieldGenerator> fields)
         {
             return fields
@@ -36,16 +54,11 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
                 .ToList();
         }
 
-        public static Dictionary<string, List<IFieldGenerator>> SetCollateralDependencies(this Dictionary<string, List<IFieldGenerator>> generatorsByElements)
-        {
-            foreach(var generators in generatorsByElements.Values)
-            {
-                SetCollateralDependencies(generators);
-            }
-
-            return generatorsByElements;
-        }
-
+        /// <summary>
+        /// Sets the Dependencies (from dependency names) of <see cref="AbstractFieldGeneratorDependant{T}"/> generators in the provided list of field generators
+        /// </summary>
+        /// <param name="generatorsByElements">The list of field generators</param>
+        /// <returns>The enriched list</returns>
         public static IEnumerable<IFieldGenerator> SetCollateralDependencies(this IEnumerable<IFieldGenerator> generators)
         {
             foreach (var generator in generators.FilterDependantFieldGenerators())

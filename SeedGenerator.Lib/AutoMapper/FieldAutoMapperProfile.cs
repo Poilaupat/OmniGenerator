@@ -7,6 +7,9 @@ namespace SeedGenerator.Lib.AutoMapper
 {
     internal class FieldAutoMapperProfile : Profile
     {
+        /// <summary>
+        /// The mapings between field configuration objects and field generators
+        /// </summary>
         public FieldAutoMapperProfile()
         {
             // Base Types

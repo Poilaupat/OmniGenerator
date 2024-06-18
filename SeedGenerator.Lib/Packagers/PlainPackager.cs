@@ -4,6 +4,10 @@ using SeedGenerator.Lib.Tools;
 
 namespace SeedGenerator.Lib.Packagers
 {
+    /// <summary>
+    /// A <see cref="IPackager"/> that writes data and image file in a directory
+    /// The directory name is the concatenation of the current date+time with the root numlot
+    /// </summary>
     public class PlainPackager : DebugPackagerBase, IPackager
     {
         public async Task ProcessAsync(Root root, string path)
@@ -15,14 +19,12 @@ namespace SeedGenerator.Lib.Packagers
                 Directory.CreateDirectory(seedpath);
 
             var txtfile = Path.Combine(seedpath, $"{seedname}.txt");
-            File.WriteAllLines(txtfile, GetTxtFileContent(root));
+            await File.WriteAllLinesAsync(txtfile, GetTxtFileContent(root));
 
             foreach (var document in root.GetDocuments(true))
             {
                 WriteDocumentImages(document, seedpath);
             }
-
-            await Task.CompletedTask;
         }
 
         private void WriteDocumentImages(Document document, string seedpath)

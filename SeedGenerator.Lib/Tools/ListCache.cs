@@ -1,11 +1,21 @@
 ﻿using System.Text;
+using SeedGenerator.Lib.Data.FieldGenerators;
 
 namespace SeedGenerator.Lib.Tools
 {
+    /// <summary>
+    /// Provides tools for loading and caching text list used by <see cref="FieldGeneratorList"/>
+    /// </summary>
     public static class ListCache
     {
         private static Dictionary<string, string[]> _cache = new Dictionary<string, string[]>();
 
+        /// <summary>
+        /// Gets the list specified by the name.
+        /// If the list is already loaded, its will be returned from the cache. If not it is loaded in the cache
+        /// </summary>
+        /// <param name="filepath"></param>
+        /// <returns></returns>
         public static string[] GetList(string filepath)
         {
             if (!_cache.ContainsKey(filepath))
@@ -15,6 +25,12 @@ namespace SeedGenerator.Lib.Tools
             return _cache[filepath];
         }
 
+        /// <summary>
+        /// Loads a list into the cache.
+        /// There is an attempt to automatically detect the file encoding.
+        /// </summary>
+        /// <param name="filepath"></param>
+        /// <returns></returns>
         private static string[] LoadList(string filepath)
         {
             var list = new List<string>();

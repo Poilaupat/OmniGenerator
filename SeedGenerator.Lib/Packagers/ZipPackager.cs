@@ -5,6 +5,10 @@ using System.IO.Compression;
 
 namespace SeedGenerator.Lib.Packagers
 {
+    /// <summary>
+    /// A <see cref="IPackager"/> that writes data and image file in a zip file
+    /// The zip name is the concatenation of the current date+time with the root numlot
+    /// </summary>
     public class ZipPackager : DebugPackagerBase, IPackager
     {
         public async Task ProcessAsync(Root root, string path)

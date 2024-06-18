@@ -1,21 +1,24 @@
 ﻿using SeedGenerator.Lib.Data;
 using SeedGenerator.Lib.Tools;
+using SeedGenerator.Lib.Interfaces;
 using Svg;
 using System.Drawing;
 
 namespace SeedGenerator.Lib.Image.Composer
 {
+    /// <summary>
+    /// A <see cref="IImageComposer"/> for cheque image generation
+    /// </summary>
     public class ChequeComposer : ImageComposerBase
     {
+        /// <summary>
+        /// Creates a new <see cref="ChequeComposer"/>
+        /// </summary>
         public ChequeComposer()
         {
             Width = 175;
             Height = 80;
-
-            SvgFontManager.PrivateFontDataList.Add(ImageTools.GetFontBytes("Cmc7.ttf"));
-            SvgFontManager.PrivateFontDataList.Add(ImageTools.GetFontBytes("OcrbRegular.ttf"));
         }
-
 
         public override SvgDocument ComposeImageRecto(Document document)
         {

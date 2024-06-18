@@ -3,8 +3,16 @@ using System.Text;
 
 namespace SeedGenerator.Lib.Tools
 {
+    /// <summary>
+    /// Tools to use with files read as streams
+    /// </summary>
     public static class StreamTools
     {
+        /// <summary>
+        /// Tries to detect file encoding by inspecting stream content
+        /// </summary>
+        /// <param name="stream">The stream</param>
+        /// <returns>The encoding or null if identification has failed.</returns>
         public static Encoding? DetectEncoding(Stream stream)
         {
             try

@@ -1,9 +1,19 @@
 ﻿using SeedGenerator.Lib.Data;
+using SeedGenerator.Lib.Interfaces;
 
 namespace SeedGenerator.Lib.Packagers
 {
+    /// <summary>
+    /// A base class for <see cref="IPackager"/> to be used in debug context.
+    /// </summary>
     public class DebugPackagerBase
     {
+        /// <summary>
+        /// Procuces a human readable file containing data of the documents
+        /// </summary>
+        /// <param name="root">The root containing the documents</param>
+        /// <returns>The lines of the file</returns>
+        /// <exception cref="NotSupportedException">Thrown if an unknown document is found</exception>
         protected virtual IEnumerable<string> GetTxtFileContent(Root root)
         {
             yield return $"00 {DateTime.Now:yyyyMMddHHmmss} {root.Fields["numlot"].Value}";
@@ -15,9 +25,9 @@ namespace SeedGenerator.Lib.Packagers
                     yield return document.Name switch
                     {
                         "slip" => $"{document.Fields["encline"].Value} {document.Id}",
-                        "coupon" => $"{document.Fields["encline"].Value} {document.Id}",
+                        "talon-optique" => $"{document.Fields["encline"].Value} {document.Id}",
                         "cheque" => $"{document.Fields["encline"].Value} {document.Id}",
-                        _ => throw new Exception("Unexpected document type"),
+                        _ => throw new NotSupportedException("{document.Name} was an unexpected document type"),
                     };
                 }
             }
