@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeedGenerator.Cli", "SeedGenerator.Cli\SeedGenerator.Cli.csproj", "{1DFA7A9C-2B0C-4007-B06F-CCB8A512B269}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniGenerator.Cli", "OmniGenerator.Cli\OmniGenerator.Cli.csproj", "{1DFA7A9C-2B0C-4007-B06F-CCB8A512B269}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeedGenerator.Lib", "SeedGenerator.Lib\SeedGenerator.Lib.csproj", "{2C34E6E8-DAC2-43B8-B8AC-F3A72CC1891A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniGenerator.Lib", "OmniGenerator.Lib\OmniGenerator.Lib.csproj", "{2C34E6E8-DAC2-43B8-B8AC-F3A72CC1891A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeedGenerator.Test", "SeedGenerator.Test\SeedGenerator.Test.csproj", "{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniGenerator.Test", "OmniGenerator.Test\OmniGenerator.Test.csproj", "{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ParamFiles", "ParamFiles", "{D1F10929-6948-4062-906D-D4E9F7C4F731}"
 	ProjectSection(SolutionItems) = preProject
