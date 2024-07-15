@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SeedGenerator.Lib.Param.FieldParams
+namespace OmniGenerator.Lib.Param.FieldParams
 {
     public abstract class FieldParamDependantBase : FieldParamBase
     {

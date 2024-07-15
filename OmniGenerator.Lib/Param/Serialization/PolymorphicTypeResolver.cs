@@ -1,9 +1,9 @@
 ﻿using System.Text.Json.Serialization.Metadata;
 using System.Text.Json.Serialization;
 using System.Text.Json;
-using SeedGenerator.Lib.Param.FieldParams;
+using OmniGenerator.Lib.Param.FieldParams;
 
-namespace SeedGenerator.Lib.Param.Serialization
+namespace OmniGenerator.Lib.Param.Serialization
 {
     internal class PolymorphicTypeResolver : DefaultJsonTypeInfoResolver
     {

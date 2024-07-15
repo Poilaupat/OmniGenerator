@@ -1,7 +1,7 @@
 ﻿using Microsoft.ProgramSynthesis.Detection.Encoding;
 using System.Text;
 
-namespace SeedGenerator.Lib.Tools
+namespace OmniGenerator.Lib.Tools
 {
     /// <summary>
     /// Tools to use with files read as streams

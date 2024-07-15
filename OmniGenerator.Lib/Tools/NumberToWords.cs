@@ -1,4 +1,4 @@
-﻿namespace SeedGenerator.Lib.Tools
+﻿namespace OmniGenerator.Lib.Tools
 {
     /// <summary>
     /// Provides a string representation of numbers in french

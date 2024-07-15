@@ -1,10 +1,10 @@
-﻿using SeedGenerator.Lib.Param.FieldParams;
-using SeedGenerator.Lib.Param.Serialization;
+﻿using OmniGenerator.Lib.Param.FieldParams;
+using OmniGenerator.Lib.Param.Serialization;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace SeedGenerator.Lib.Param
+namespace OmniGenerator.Lib.Param
 {
     public class RootParam
     {

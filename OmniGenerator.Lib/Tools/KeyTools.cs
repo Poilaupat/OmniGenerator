@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace SeedGenerator.Lib.Tools
+namespace OmniGenerator.Lib.Tools
 {
     /// <summary>
     /// Some tools to compute different type of checksum

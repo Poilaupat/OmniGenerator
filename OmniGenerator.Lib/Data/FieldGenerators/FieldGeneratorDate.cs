@@ -1,4 +1,4 @@
-﻿namespace SeedGenerator.Lib.Data.FieldGenerators
+﻿namespace OmniGenerator.Lib.Data.FieldGenerators
 {
     /// <summary>
     /// The <see cref="FieldGeneratorDate"/> produces random dates around current date within specified range of days

@@ -1,7 +1,7 @@
-﻿using SeedGenerator.Lib.Data;
+﻿using OmniGenerator.Lib.Data;
 using Svg;
 
-namespace SeedGenerator.Lib.Interfaces
+namespace OmniGenerator.Lib.Interfaces
 {
     /// <summary>
     /// Defines the interface for generating recto and verso images for a given <see cref="Document"/>

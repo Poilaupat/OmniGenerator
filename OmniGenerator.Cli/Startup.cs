@@ -1,15 +1,15 @@
 ﻿using Autofac;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
-using SeedGenerator.Lib;
-using SeedGenerator.Lib.Data;
-using SeedGenerator.Lib.Image;
-using SeedGenerator.Lib.Image.Composer;
-using SeedGenerator.Lib.Interfaces;
-using SeedGenerator.Lib.Packagers.Compliance;
-using SeedGenerator.Lib.Packagers.Default;
+using OmniGenerator.Lib;
+using OmniGenerator.Lib.Data;
+using OmniGenerator.Lib.Image;
+using OmniGenerator.Lib.Image.Composer;
+using OmniGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Packagers.Compliance;
+using OmniGenerator.Lib.Packagers.Default;
 
-namespace SeedGenerator.Cli
+namespace OmniGenerator.Cli
 {
     internal class Startup
     {
@@ -51,7 +51,7 @@ namespace SeedGenerator.Cli
         {
             return new MapperConfiguration(cfg =>
             {
-                cfg.AddMaps(new[] { "SeedGenerator.Lib" });
+                cfg.AddMaps(new[] { "OmniGenerator.Lib" });
             }).CreateMapper();
         }
     }

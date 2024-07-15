@@ -1,6 +1,6 @@
-﻿using SeedGenerator.Lib.Interfaces;
+﻿using OmniGenerator.Lib.Interfaces;
 
-namespace SeedGenerator.Lib.Data.FieldGenerators
+namespace OmniGenerator.Lib.Data.FieldGenerators
 {
     /// <summary>
     /// Base type for all field generators

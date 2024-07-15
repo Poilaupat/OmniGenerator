@@ -1,8 +1,8 @@
 ﻿using Autofac.Features.Metadata;
-using SeedGenerator.Lib.Data;
-using SeedGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Data;
+using OmniGenerator.Lib.Interfaces;
 
-namespace SeedGenerator.Lib.Image
+namespace OmniGenerator.Lib.Image
 {
     /// <summary>
     /// The default image composer processor.

@@ -1,13 +1,13 @@
-﻿using SeedGenerator.Lib.Data.FieldGenerators;
+﻿using OmniGenerator.Lib.Data.FieldGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using static SeedGenerator.Lib.Data.FieldGenerators.FieldGeneratorAggregate;
+using static OmniGenerator.Lib.Data.FieldGenerators.FieldGeneratorAggregate;
 
-namespace SeedGenerator.Lib.Param.FieldParams
+namespace OmniGenerator.Lib.Param.FieldParams
 {
     public class FieldParamAggregate : FieldParamDependantBase
     {

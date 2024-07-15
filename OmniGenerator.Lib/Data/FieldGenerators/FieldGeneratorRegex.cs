@@ -1,6 +1,6 @@
 ﻿using Fare;
 
-namespace SeedGenerator.Lib.Data.FieldGenerators
+namespace OmniGenerator.Lib.Data.FieldGenerators
 {
     /// <summary>
     /// The <see cref="FieldGeneratorRegex"/> produces values that match provided regular expression

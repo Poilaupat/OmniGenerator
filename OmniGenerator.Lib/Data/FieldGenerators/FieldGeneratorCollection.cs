@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.ProgramSynthesis.Utils.Interactive;
-using SeedGenerator.Lib.Exceptions;
-using SeedGenerator.Lib.Interfaces;
-using SeedGenerator.Lib.Param;
+using OmniGenerator.Lib.Exceptions;
+using OmniGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Param;
 using System.Data;
 
-namespace SeedGenerator.Lib.Data.FieldGenerators
+namespace OmniGenerator.Lib.Data.FieldGenerators
 {
     /// <summary>
     /// Manages <see cref="AbstractFieldGenerator{T}"/> by <see cref="Document"/> or <see cref="Group"/>

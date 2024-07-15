@@ -1,4 +1,4 @@
-﻿namespace SeedGenerator.Lib.Data.FieldGenerators
+﻿namespace OmniGenerator.Lib.Data.FieldGenerators
 {
     /// <summary>
     /// The <see cref="FieldGeneratorNumeric"/> is kind of generator that returns numeric values between a range

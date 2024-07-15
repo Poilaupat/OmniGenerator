@@ -1,14 +1,14 @@
-﻿namespace SeedGenerator.Lib.Data
+﻿namespace OmniGenerator.Lib.Data
 {
     /// <summary>
     /// The root of the <see cref="Element"/> generating hierarchy.
-    /// The root contains all the data needed to create the seed files
+    /// The root contains all the data needed to create the files
     /// </summary>
     public class Root
     {
         /// <summary>
         /// The top level fields. 
-        /// Those fields should only contain information on the very seed such as batch number or capture date.
+        /// Those fields should only contain top level information in the hierarchy such as batch number or capture date.
         /// </summary>
         public FieldCollection Fields { get; set; } = new FieldCollection();
 

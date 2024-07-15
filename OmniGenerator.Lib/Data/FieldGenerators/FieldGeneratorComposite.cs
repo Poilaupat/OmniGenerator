@@ -1,6 +1,6 @@
 ﻿using Mustache;
 
-namespace SeedGenerator.Lib.Data.FieldGenerators
+namespace OmniGenerator.Lib.Data.FieldGenerators
 {
     /// <summary>
     /// The <see cref="FieldGeneratorComposite"/> is a kind of generator that can put together a format other field values of the same <see cref="Element"/>

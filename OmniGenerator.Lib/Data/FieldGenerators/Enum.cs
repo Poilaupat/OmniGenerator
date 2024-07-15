@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeedGenerator.Lib.Data.FieldGenerators
+namespace OmniGenerator.Lib.Data.FieldGenerators
 {
     /// <summary>
     /// The aggregate type of the <see cref="FieldGeneratorAggregate" generators

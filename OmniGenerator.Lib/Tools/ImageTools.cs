@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Reflection;
 
-namespace SeedGenerator.Lib.Tools
+namespace OmniGenerator.Lib.Tools
 {
     /// <summary>
     /// A set of tools for SVG images
@@ -91,7 +91,7 @@ namespace SeedGenerator.Lib.Tools
         /// <returns></returns>
         public static byte[] GetFontBytes(string fontName)
         {
-            string fontPath = $"SeedGenerator.Lib.Resources.Fonts.{fontName}";
+            string fontPath = $"OmniGenerator.Lib.Resources.Fonts.{fontName}";
 
             using (var fontStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(fontPath))
             using (var ms = new MemoryStream())

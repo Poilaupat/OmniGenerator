@@ -1,4 +1,4 @@
-﻿namespace SeedGenerator.Lib.Data.FieldGenerators
+﻿namespace OmniGenerator.Lib.Data.FieldGenerators
 {
     /// <summary>
     /// The <see cref="FieldGeneratorAggregate"/> is a kind of generator that computes aggregates on <see cref="Group"/> content

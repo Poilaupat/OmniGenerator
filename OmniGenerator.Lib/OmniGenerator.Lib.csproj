@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<InternalsVisibleTo Include="SeedGenerator.Test" />
+		<InternalsVisibleTo Include="OmniGenerator.Test" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,9 +1,9 @@
-﻿using SeedGenerator.Lib.Data;
+﻿using OmniGenerator.Lib.Data;
 
-namespace SeedGenerator.Lib.Interfaces
+namespace OmniGenerator.Lib.Interfaces
 {
     /// <summary>
-    /// The interface that defines objects responsible of seed image generation
+    /// The interface that defines objects responsible of image generation
     /// </summary>
     public interface IImageComposerProcessor
     {

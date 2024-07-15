@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using SeedGenerator.Lib.Data.FieldGenerators;
-using SeedGenerator.Lib.Interfaces;
-using SeedGenerator.Lib.Param.FieldParams;
+using OmniGenerator.Lib.Data.FieldGenerators;
+using OmniGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Param.FieldParams;
 
-namespace SeedGenerator.Lib.AutoMapper
+namespace OmniGenerator.Lib.AutoMapper
 {
     internal class FieldAutoMapperProfile : Profile
     {

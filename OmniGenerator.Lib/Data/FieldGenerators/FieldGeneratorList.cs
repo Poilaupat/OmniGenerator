@@ -1,6 +1,6 @@
-﻿using SeedGenerator.Lib.Tools;
+﻿using OmniGenerator.Lib.Tools;
 
-namespace SeedGenerator.Lib.Data.FieldGenerators
+namespace OmniGenerator.Lib.Data.FieldGenerators
 {
     /// <summary>
     /// The <see cref="FieldGeneratorList"/> picks a random value within a list

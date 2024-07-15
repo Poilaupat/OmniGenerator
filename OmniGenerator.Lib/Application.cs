@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
-using SeedGenerator.Lib.Exceptions;
-using SeedGenerator.Lib.Interfaces;
-using SeedGenerator.Lib.Param;
-using SeedGenerator.Lib.Param.FieldParams;
+using OmniGenerator.Lib.Exceptions;
+using OmniGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Param;
+using OmniGenerator.Lib.Param.FieldParams;
 
-namespace SeedGenerator.Lib
+namespace OmniGenerator.Lib
 {
     public class Application
     {
@@ -34,7 +34,7 @@ namespace SeedGenerator.Lib
             if(_imageComposerProcessor is not null)
                 await _imageComposerProcessor.ProcessAsync(root);
 
-            //Seed files generation
+            //Files generation
             if(_packager is not null)
                 await _packager.ProcessAsync(root, outputPath);
         }

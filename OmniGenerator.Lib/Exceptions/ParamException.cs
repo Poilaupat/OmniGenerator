@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeedGenerator.Lib.Exceptions
+namespace OmniGenerator.Lib.Exceptions
 {
     /// <summary>
     /// The exception thrown when error occurs when reading or validating configuration

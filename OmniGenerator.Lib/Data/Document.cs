@@ -1,6 +1,6 @@
 ﻿using Svg;
 
-namespace SeedGenerator.Lib.Data
+namespace OmniGenerator.Lib.Data
 {
     /// <summary>
     /// Modelize a document with its name, fields and images

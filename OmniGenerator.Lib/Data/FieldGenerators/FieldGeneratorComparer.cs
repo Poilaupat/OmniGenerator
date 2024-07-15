@@ -1,7 +1,7 @@
 ﻿using Microsoft.ProgramSynthesis.Transformation.Formula.Build.RuleNodeTypes;
-using SeedGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Interfaces;
 
-namespace SeedGenerator.Lib.Data.FieldGenerators
+namespace OmniGenerator.Lib.Data.FieldGenerators
 {
     /// <summary>
     /// Orders the <see cref="IFieldGenerator"/>.

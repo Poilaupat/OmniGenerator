@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SeedGenerator.Lib.Exceptions;
+using OmniGenerator.Lib.Exceptions;
 
-namespace SeedGenerator.Lib.Interfaces
+namespace OmniGenerator.Lib.Interfaces
 {
     internal interface IFieldGeneratorDependent : IFieldGenerator
     {

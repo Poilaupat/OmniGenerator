@@ -1,7 +1,7 @@
-﻿using SeedGenerator.Lib.Data.FieldGenerators;
+﻿using OmniGenerator.Lib.Data.FieldGenerators;
 using System.Text.Json.Serialization;
 
-namespace SeedGenerator.Lib.Param.FieldParams
+namespace OmniGenerator.Lib.Param.FieldParams
 {
     public class FieldParamKeyCalculator : FieldParamDependantBase
     {

@@ -1,10 +1,10 @@
-﻿using SeedGenerator.Lib.Data;
-using SeedGenerator.Lib.Interfaces;
-using SeedGenerator.Lib.Tools;
+﻿using OmniGenerator.Lib.Data;
+using OmniGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Tools;
 using Svg;
 using System.Drawing;
 
-namespace SeedGenerator.Lib.Image.Composer
+namespace OmniGenerator.Lib.Image.Composer
 {
     /// <summary>
     /// The base class for all <see cref="IImageComposer"/>

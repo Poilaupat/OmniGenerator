@@ -1,7 +1,7 @@
-﻿using SeedGenerator.Lib.Data;
-using SeedGenerator.Lib.Interfaces;
+﻿using OmniGenerator.Lib.Data;
+using OmniGenerator.Lib.Interfaces;
 
-namespace SeedGenerator.Lib.Packagers.Default
+namespace OmniGenerator.Lib.Packagers.Default
 {
     /// <summary>
     /// A base class for <see cref="IPackager"/> to be used in debug context.

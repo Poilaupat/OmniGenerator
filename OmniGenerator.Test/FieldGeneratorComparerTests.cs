@@ -1,8 +1,8 @@
-using SeedGenerator.Lib.Data.FieldGenerators;
-using SeedGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Data.FieldGenerators;
+using OmniGenerator.Lib.Interfaces;
 using System.CodeDom;
 
-namespace SeedGenerator.Test
+namespace OmniGenerator.Test
 {
     [Parallelizable(ParallelScope.Self)]
     [TestFixture]

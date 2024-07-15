@@ -1,7 +1,7 @@
-﻿using SeedGenerator.Lib.Param.FieldParams;
+﻿using OmniGenerator.Lib.Param.FieldParams;
 using System.Text.Json.Serialization;
 
-namespace SeedGenerator.Lib.Param
+namespace OmniGenerator.Lib.Param
 {
     public class GroupParam : ElementParam
     {

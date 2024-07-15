@@ -1,4 +1,4 @@
-﻿namespace SeedGenerator.Lib.Data.FieldGenerators
+﻿namespace OmniGenerator.Lib.Data.FieldGenerators
 {
     /// <summary>
     /// The <see cref="FieldGeneratorConstant"/> is a king of generator that return constant values

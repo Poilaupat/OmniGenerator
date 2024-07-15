@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Autofac;
-using SeedGenerator.Cli;
-using SeedGenerator.Lib;
+using OmniGenerator.Cli;
+using OmniGenerator.Lib;
 
 string paramFilePath = @"..\..\..\..\ParamFiles\param-compliance-eligibility.json";
 string outputFolderPath = @"..\..\..\..\Output";

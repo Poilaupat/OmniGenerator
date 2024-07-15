@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using SeedGenerator.Lib.Data.FieldGenerators;
-using SeedGenerator.Lib.Interfaces;
-using SeedGenerator.Lib.Param;
+using OmniGenerator.Lib.Data.FieldGenerators;
+using OmniGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Param;
 
-namespace SeedGenerator.Lib.Data
+namespace OmniGenerator.Lib.Data
 {
     /// <summary>
     /// Builds a new <see cref="Root"/> using provided configuration

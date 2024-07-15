@@ -1,9 +1,9 @@
-﻿using SeedGenerator.Lib.Data;
-using SeedGenerator.Lib.Interfaces;
-using SeedGenerator.Lib.Tools;
+﻿using OmniGenerator.Lib.Data;
+using OmniGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Tools;
 using System.IO.Compression;
 
-namespace SeedGenerator.Lib.Packagers.Default
+namespace OmniGenerator.Lib.Packagers.Default
 {
     /// <summary>
     /// A <see cref="IPackager"/> that writes data and image file in a zip file
@@ -13,12 +13,12 @@ namespace SeedGenerator.Lib.Packagers.Default
     {
         public async Task ProcessAsync(Root root, string path)
         {
-            string seedname = $"{DateTime.Now:yyyyMMddHHmmss}_{root.Fields["numlot"].Value}";
+            string packagename = $"{DateTime.Now:yyyyMMddHHmmss}_{root.Fields["numlot"].Value}";
 
-            using (var fs = new FileStream($"{Path.Combine(path, string.Concat(seedname, ".zip"))}", FileMode.CreateNew))
+            using (var fs = new FileStream($"{Path.Combine(path, string.Concat(packagename, ".zip"))}", FileMode.CreateNew))
             using (var archive = new ZipArchive(fs, ZipArchiveMode.Create))
             {
-                var txtfile = archive.CreateEntry($"{seedname}.txt");
+                var txtfile = archive.CreateEntry($"{packagename}.txt");
 
                 using (var es = txtfile.Open())
                 using (var sw = new StreamWriter(es))

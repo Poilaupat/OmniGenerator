@@ -1,7 +1,7 @@
-﻿using SeedGenerator.Lib.Data;
-using SeedGenerator.Lib.Param;
+﻿using OmniGenerator.Lib.Data;
+using OmniGenerator.Lib.Param;
 
-namespace SeedGenerator.Lib.Interfaces
+namespace OmniGenerator.Lib.Interfaces
 {
 
     /// <summary>

@@ -1,8 +1,8 @@
-﻿using SeedGenerator.Lib.Exceptions;
-using SeedGenerator.Lib.Interfaces;
+﻿using OmniGenerator.Lib.Exceptions;
+using OmniGenerator.Lib.Interfaces;
 using System.Text.RegularExpressions;
 
-namespace SeedGenerator.Lib.Data.FieldGenerators
+namespace OmniGenerator.Lib.Data.FieldGenerators
 {
     /// <summary>
     /// The base type for all dependent generators

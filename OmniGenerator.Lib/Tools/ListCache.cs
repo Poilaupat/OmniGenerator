@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using SeedGenerator.Lib.Data.FieldGenerators;
+using OmniGenerator.Lib.Data.FieldGenerators;
 
-namespace SeedGenerator.Lib.Tools
+namespace OmniGenerator.Lib.Tools
 {
     /// <summary>
     /// Provides tools for loading and caching text list used by <see cref="FieldGeneratorList"/>

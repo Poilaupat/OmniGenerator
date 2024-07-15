@@ -1,4 +1,4 @@
-﻿namespace SeedGenerator.Lib.Data
+﻿namespace OmniGenerator.Lib.Data
 {
     /// <summary>
     /// An indexed collection of fields

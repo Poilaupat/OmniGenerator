@@ -1,5 +1,5 @@
 ﻿using Mustache;
-using SeedGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeedGenerator.Lib.Data.FieldGenerators
+namespace OmniGenerator.Lib.Data.FieldGenerators
 {
     /// <summary>
     /// Provides usefull extensions to <see cref="IFieldGenerator"/> collections

@@ -1,9 +1,9 @@
-﻿using SeedGenerator.Lib.Data;
+﻿using OmniGenerator.Lib.Data;
 
-namespace SeedGenerator.Lib.Interfaces
+namespace OmniGenerator.Lib.Interfaces
 {
     /// <summary>
-    /// An interface that defines the packaging of a seed.
+    /// An interface that defines the packaging of a the files.
     /// Packaging is the way files (images, metadata, etc) are persisted  
     /// </summary>
     public interface IPackager

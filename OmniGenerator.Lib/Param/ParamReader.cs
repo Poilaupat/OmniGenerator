@@ -1,6 +1,6 @@
-﻿using SeedGenerator.Lib.Exceptions;
-using SeedGenerator.Lib.Param.FieldParams;
-using SeedGenerator.Lib.Param.Serialization;
+﻿using OmniGenerator.Lib.Exceptions;
+using OmniGenerator.Lib.Param.FieldParams;
+using OmniGenerator.Lib.Param.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace SeedGenerator.Lib.Param
+namespace OmniGenerator.Lib.Param
 {
     public class ParamReader
     {

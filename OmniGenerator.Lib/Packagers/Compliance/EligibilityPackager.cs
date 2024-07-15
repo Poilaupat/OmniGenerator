@@ -1,5 +1,5 @@
-﻿using SeedGenerator.Lib.Data;
-using SeedGenerator.Lib.Interfaces;
+﻿using OmniGenerator.Lib.Data;
+using OmniGenerator.Lib.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace SeedGenerator.Lib.Packagers.Compliance
+namespace OmniGenerator.Lib.Packagers.Compliance
 {
     public class EligibilityPackager : IPackager
     {
@@ -65,14 +65,14 @@ namespace SeedGenerator.Lib.Packagers.Compliance
                 jsonRoot.Transactions.Add(transaction);
             }
 
-            var seedname = $"BosComplianceEligibility.{root.Fields["bankCode"].StringValue}.{root.Fields["bankUnitCode"].StringValue}.{root.Fields["providerCode"].StringValue}.{root.Fields["numlot"].Value}.{DateTime.Now:yyyyMMddHHmmss}";
-            var seedpath = Path.Combine(path, seedname);
+            var packagename = $"BosComplianceEligibility.{root.Fields["bankCode"].StringValue}.{root.Fields["bankUnitCode"].StringValue}.{root.Fields["providerCode"].StringValue}.{root.Fields["numlot"].Value}.{DateTime.Now:yyyyMMddHHmmss}";
+            var packagepath = Path.Combine(path, packagename);
 
-            if (!Directory.Exists(seedpath))
-                Directory.CreateDirectory(seedpath);
+            if (!Directory.Exists(packagepath))
+                Directory.CreateDirectory(packagepath);
 
-            var jsonfilename = Path.Combine(seedpath, $"{seedname}.json");
-            var topfilename = Path.Combine(seedpath, $"{seedname}.top");
+            var jsonfilename = Path.Combine(packagepath, $"{packagename}.json");
+            var topfilename = Path.Combine(packagepath, $"{packagename}.top");
             var jsonContent = JsonSerializer.Serialize(jsonRoot, new JsonSerializerOptions
             {
                 Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping

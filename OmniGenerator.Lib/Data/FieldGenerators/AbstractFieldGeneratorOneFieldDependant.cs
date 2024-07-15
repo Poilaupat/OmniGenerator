@@ -1,4 +1,4 @@
-﻿namespace SeedGenerator.Lib.Data.FieldGenerators
+﻿namespace OmniGenerator.Lib.Data.FieldGenerators
 {
     /// <summary>
     /// The base type for all generators that takes one and only one generator as dependence

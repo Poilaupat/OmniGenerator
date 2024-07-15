@@ -1,4 +1,4 @@
-﻿namespace SeedGenerator.Lib.Data
+﻿namespace OmniGenerator.Lib.Data
 {
     /// <summary>
     /// Modelize the base class for <see cref="Document" and <see cref="Group"/>/>

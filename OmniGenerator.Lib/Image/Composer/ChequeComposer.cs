@@ -1,10 +1,10 @@
-﻿using SeedGenerator.Lib.Data;
-using SeedGenerator.Lib.Tools;
-using SeedGenerator.Lib.Interfaces;
+﻿using OmniGenerator.Lib.Data;
+using OmniGenerator.Lib.Tools;
+using OmniGenerator.Lib.Interfaces;
 using Svg;
 using System.Drawing;
 
-namespace SeedGenerator.Lib.Image.Composer
+namespace OmniGenerator.Lib.Image.Composer
 {
     /// <summary>
     /// A <see cref="IImageComposer"/> for cheque image generation
