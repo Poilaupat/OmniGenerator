@@ -3,7 +3,7 @@ using SeedGenerator.Lib.Interfaces;
 using SeedGenerator.Lib.Tools;
 using System.IO.Compression;
 
-namespace SeedGenerator.Lib.Packagers
+namespace SeedGenerator.Lib.Packagers.Default
 {
     /// <summary>
     /// A <see cref="IPackager"/> that writes data and image file in a zip file

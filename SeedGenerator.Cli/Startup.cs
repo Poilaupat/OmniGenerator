@@ -6,7 +6,8 @@ using SeedGenerator.Lib.Data;
 using SeedGenerator.Lib.Image;
 using SeedGenerator.Lib.Image.Composer;
 using SeedGenerator.Lib.Interfaces;
-using SeedGenerator.Lib.Packagers;
+using SeedGenerator.Lib.Packagers.Compliance;
+using SeedGenerator.Lib.Packagers.Default;
 
 namespace SeedGenerator.Cli
 {
@@ -22,8 +23,9 @@ namespace SeedGenerator.Cli
             builder.RegisterType<RootBuilder>().As<IRootBuilder>();
             builder.RegisterInstance(config).As<IConfiguration>();
             builder.RegisterInstance(mapper).As<IMapper>();
-            builder.RegisterType<PlainPackager>().As<IPackager>();
-            
+            //builder.RegisterType<PlainPackager>().As<IPackager>();
+            builder.RegisterType<EligibilityPackager>().As<IPackager>();
+
             builder.RegisterType<DefaultImageComposerProcessor>().As<IImageComposerProcessor>();
             builder.RegisterType<ChequeComposer>()
                 .As<IImageComposer>()

@@ -2,7 +2,7 @@
 using SeedGenerator.Lib.Interfaces;
 using SeedGenerator.Lib.Tools;
 
-namespace SeedGenerator.Lib.Packagers
+namespace SeedGenerator.Lib.Packagers.Default
 {
     /// <summary>
     /// A <see cref="IPackager"/> that writes data and image file in a directory

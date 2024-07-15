@@ -31,10 +31,12 @@ namespace SeedGenerator.Lib
             var root = _rootBuilder.Build(param);
 
             //Images generation
-            await _imageComposerProcessor.ProcessAsync(root);
+            if(_imageComposerProcessor is not null)
+                await _imageComposerProcessor.ProcessAsync(root);
 
             //Seed files generation
-            await _packager.ProcessAsync(root, outputPath);
+            if(_packager is not null)
+                await _packager.ProcessAsync(root, outputPath);
         }
 
         

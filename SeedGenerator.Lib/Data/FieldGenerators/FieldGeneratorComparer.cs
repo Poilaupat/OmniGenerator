@@ -41,7 +41,7 @@ namespace SeedGenerator.Lib.Data.FieldGenerators
                 return 1;
             }
 
-            //Rule 2 (note : there is no circular dependance detection for now)
+            //Rule 2
             if (x is IFieldGeneratorDependent xd && y is IFieldGeneratorDependent yd)
             {
                 if (yd.IsDependentUpon(xd))

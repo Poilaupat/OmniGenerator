@@ -7,7 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeedGenerator.Cli", "SeedGe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeedGenerator.Lib", "SeedGenerator.Lib\SeedGenerator.Lib.csproj", "{2C34E6E8-DAC2-43B8-B8AC-F3A72CC1891A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeedGenerator.Test", "SeedGenerator.Test\SeedGenerator.Test.csproj", "{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeedGenerator.Test", "SeedGenerator.Test\SeedGenerator.Test.csproj", "{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ParamFiles", "ParamFiles", "{D1F10929-6948-4062-906D-D4E9F7C4F731}"
+	ProjectSection(SolutionItems) = preProject
+		ParamFiles\fields-cheque.json = ParamFiles\fields-cheque.json
+		ParamFiles\fields-payment.json = ParamFiles\fields-payment.json
+		ParamFiles\fields-slip.json = ParamFiles\fields-slip.json
+		ParamFiles\fields-talon-optique.json = ParamFiles\fields-talon-optique.json
+		ParamFiles\param-compliance-eligibility.json = ParamFiles\param-compliance-eligibility.json
+		ParamFiles\param.json = ParamFiles\param.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

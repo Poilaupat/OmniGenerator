@@ -3,7 +3,7 @@ using Autofac;
 using SeedGenerator.Cli;
 using SeedGenerator.Lib;
 
-string paramFilePath = @"..\..\..\..\ParamFiles\param.json";
+string paramFilePath = @"..\..\..\..\ParamFiles\param-compliance-eligibility.json";
 string outputFolderPath = @"..\..\..\..\Output";
 
 var container = Startup.CreateContainer();
