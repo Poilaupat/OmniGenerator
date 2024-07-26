@@ -2,7 +2,7 @@
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using OmniGenerator.Lib;
-using OmniGenerator.Lib.Data;
+using OmniGenerator.Lib.Generators;
 using OmniGenerator.Lib.Image;
 using OmniGenerator.Lib.Image.Composer;
 using OmniGenerator.Lib.Interfaces;
@@ -20,7 +20,7 @@ namespace OmniGenerator.Cli
 
             var builder = new ContainerBuilder();
             builder.RegisterType<Application>();
-            builder.RegisterType<RootBuilder>().As<IRootBuilder>();
+            builder.RegisterType<HierarchyBuilder>().As<IHierarchyBuilder>();
             builder.RegisterInstance(config).As<IConfiguration>();
             builder.RegisterInstance(mapper).As<IMapper>();
             //builder.RegisterType<PlainPackager>().As<IPackager>();

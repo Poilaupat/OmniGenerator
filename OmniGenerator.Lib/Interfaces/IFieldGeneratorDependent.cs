@@ -28,7 +28,7 @@ namespace OmniGenerator.Lib.Interfaces
         /// </summary>
         /// <param name="generator">The generator to check dependency upon</param>
         /// <returns>True if instance is dependent on generator, false if not</returns>
-        /// <exception cref="ParamException">Happens if a circular dependency is detected in field generators</exception>
+        /// <exception cref="ConfigurationException">Happens if a circular dependency is detected in field generators</exception>
         bool IsDependentUpon(IFieldGenerator generator);
     }
 }

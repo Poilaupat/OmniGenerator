@@ -1,4 +1,4 @@
-﻿using OmniGenerator.Lib.Data;
+﻿using OmniGenerator.Lib.Generators;
 using Svg;
 
 namespace OmniGenerator.Lib.Interfaces

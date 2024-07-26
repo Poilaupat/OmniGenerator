@@ -3,8 +3,8 @@ using Autofac;
 using OmniGenerator.Cli;
 using OmniGenerator.Lib;
 
-string paramFilePath = @"..\..\..\..\ParamFiles\param-compliance-eligibility.json";
+string configFilePath = @"..\..\..\..\ParamFiles\param-compliance-eligibility.json";
 string outputFolderPath = @"..\..\..\..\Output";
 
 var container = Startup.CreateContainer();
-await container.Resolve<Application>().Run(paramFilePath, outputFolderPath);
+await container.Resolve<Application>().Run(configFilePath, outputFolderPath);

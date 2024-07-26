@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using OmniGenerator.Lib.Data.FieldGenerators;
+using OmniGenerator.Lib.Generators.Fields;
 
 namespace OmniGenerator.Lib.Tools
 {

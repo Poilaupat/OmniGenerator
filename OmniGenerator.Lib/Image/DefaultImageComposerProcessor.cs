@@ -1,5 +1,5 @@
 ﻿using Autofac.Features.Metadata;
-using OmniGenerator.Lib.Data;
+using OmniGenerator.Lib.Generators;
 using OmniGenerator.Lib.Interfaces;
 
 namespace OmniGenerator.Lib.Image

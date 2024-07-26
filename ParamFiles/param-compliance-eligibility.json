@@ -1,128 +1,130 @@
 {
+  "root": {
     "fields": [
-        {
-            "$type": "regex",
-            "name": "numlot",
-            "pattern": "\\d{12}"
-        },
-        {
-            "$type": "constant",
-            "name": "culture",
-            "value": "fr-FR"
-        },
-        {
-            "$type": "constant",
-            "name": "bankCode",
-            "value": "99999"
-        },
-        {
-            "$type": "constant",
-            "name": "bankUnitCode",
-            "value": "00001"
-        },
-        {
-            "$type": "constant",
-            "name": "providerCode",
-            "value": "00001"
-        },
-        {
-            "$type": "constant",
-            "name": "purpose",
-            "value": "SENDING_LOGICAL_DATA"
-        },
-        {
-            "$type": "constant",
-            "name": "bankFlow",
-            "value": "CREDIT_CHECK"
-        },
-        {
-            "$type": "constant",
-            "name": "schema",
-            "value": "https:resources.wecheck.io/json-schema/BOSComplianceImportSchema.v9.json"
-        },
-        {
-            "$type": "constant",
-            "name": "version",
-            "value": "V1.0.9"
-        }
+      {
+        "$type": "regex",
+        "name": "numlot",
+        "pattern": "\\d{12}"
+      },
+      {
+        "$type": "constant",
+        "name": "culture",
+        "value": "fr-FR"
+      },
+      {
+        "$type": "constant",
+        "name": "bankCode",
+        "value": "99999"
+      },
+      {
+        "$type": "constant",
+        "name": "bankUnitCode",
+        "value": "00001"
+      },
+      {
+        "$type": "constant",
+        "name": "providerCode",
+        "value": "00001"
+      },
+      {
+        "$type": "constant",
+        "name": "purpose",
+        "value": "SENDING_LOGICAL_DATA"
+      },
+      {
+        "$type": "constant",
+        "name": "bankFlow",
+        "value": "CREDIT_CHECK"
+      },
+      {
+        "$type": "constant",
+        "name": "schema",
+        "value": "https:resources.wecheck.io/json-schema/BOSComplianceImportSchema.v9.json"
+      },
+      {
+        "$type": "constant",
+        "name": "version",
+        "value": "V1.0.9"
+      }
     ],
-    "root": {
-        "$type": "group",
-        "name": "transaction",
-        "min-occurs": 500,
-        "max-occurs": 500,
-        "elements": [
+    "group": {
+      "$type": "group",
+      "name": "transaction",
+      "min-occurs": 500,
+      "max-occurs": 500,
+      "elements": [
+        {
+          "$type": "document",
+          "name": "cheque-eligibility",
+          "min-occurs": 1,
+          "max-occurs": 1,
+          "fields": [
             {
-                "$type": "document",
-                "name": "cheque-eligibility",
-                "min-occurs": 1,
-                "max-occurs": 1,
-                "fields": [
-                    {
-                        "$type": "numeric",
-                        "name": "amount",
-                        "min": 1,
-                        "max": 10
-                    },
-                    {
-                        "$type": "regex",
-                        "name": "z4",
-                        "pattern": "\\d{7}"
-                    },
-                    {
-                        "$type": "regex",
-                        "name": "z3",
-                        "pattern": "\\d{9}908"
-                    },
-                    {
-                        "$type": "regex",
-                        "name": "z2",
-                        "pattern": "\\d{12}"
-                    },
-                    {
-                        "$type": "regex",
-                        "name": "providerId",
-                        "pattern": "\\d{7}"
-                    },
-                    {
-                        "$type": "regex",
-                        "name": "accountNumber",
-                        "pattern": "000\\d{8}"
-                    },
-                    {
-                        "$type": "regex",
-                        "name": "remittingBranchCode",
-                        "pattern": "\\d{5}"
-                    },
-                    {
-                        "$type": "composite",
-                        "name": "scanBranchCode",
-                        "dependent-upon": "remittingBranchCode",
-                        "format": "{{remittingBranchCode}}"
-                    },
-                    {
-                        "$type": "composite",
-                        "name": "deskCode",
-                        "dependent-upon": "remittingBranchCode",
-                        "format": "{{remittingBranchCode}}"
-                    },
-                    {
-                        "$type": "constant",
-                        "name": "scanner",
-                        "value": "001"
-                    },
-                    {
-                        "$type": "constant",
-                        "name": "scanType",
-                        "value": "CentralScanner"
-                    },
-                    {
-                        "$type": "constant",
-                        "name": "chain",
-                        "value": "Tests de charge"
-                    }
-                ]
+              "$type": "numeric",
+              "name": "amount",
+              "min": 1,
+              "max": 10
+            },
+            {
+              "$type": "regex",
+              "name": "z4",
+              "pattern": "\\d{7}"
+            },
+            {
+              "$type": "regex",
+              "name": "z3",
+              "pattern": "\\d{9}908"
+            },
+            {
+              "$type": "regex",
+              "name": "z2",
+              "pattern": "\\d{12}"
+            },
+            {
+              "$type": "regex",
+              "name": "providerId",
+              "pattern": "\\d{7}"
+            },
+            {
+              "$type": "regex",
+              "name": "accountNumber",
+              "pattern": "000\\d{8}"
+            },
+            {
+              "$type": "regex",
+              "name": "remittingBranchCode",
+              "pattern": "\\d{5}"
+            },
+            {
+              "$type": "composite",
+              "name": "scanBranchCode",
+              "dependent-upon": "remittingBranchCode",
+              "format": "{{remittingBranchCode}}"
+            },
+            {
+              "$type": "composite",
+              "name": "deskCode",
+              "dependent-upon": "remittingBranchCode",
+              "format": "{{remittingBranchCode}}"
+            },
+            {
+              "$type": "constant",
+              "name": "scanner",
+              "value": "001"
+            },
+            {
+              "$type": "constant",
+              "name": "scanType",
+              "value": "CentralScanner"
+            },
+            {
+              "$type": "constant",
+              "name": "chain",
+              "value": "Tests de charge"
             }
-        ]
+          ]
+        }
+      ]
     }
+  }
 }

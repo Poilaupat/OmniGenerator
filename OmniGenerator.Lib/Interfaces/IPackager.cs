@@ -1,4 +1,4 @@
-﻿using OmniGenerator.Lib.Data;
+﻿using OmniGenerator.Lib.Generators;
 
 namespace OmniGenerator.Lib.Interfaces
 {

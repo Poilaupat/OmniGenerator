@@ -1,4 +1,4 @@
-using OmniGenerator.Lib.Data.FieldGenerators;
+using OmniGenerator.Lib.Generators.Fields;
 using OmniGenerator.Lib.Interfaces;
 using System.CodeDom;
 
