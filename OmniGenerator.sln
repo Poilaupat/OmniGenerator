@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniGenerator.Cli", "OmniGenerator.Cli\OmniGenerator.Cli.csproj", "{1DFA7A9C-2B0C-4007-B06F-CCB8A512B269}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniGenerator.Lib", "OmniGenerator.Lib\OmniGenerator.Lib.csproj", "{2C34E6E8-DAC2-43B8-B8AC-F3A72CC1891A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniGenerator.Test", "OmniGenerator.Test\OmniGenerator.Test.csproj", "{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ParamFiles", "ParamFiles", "{D1F10929-6948-4062-906D-D4E9F7C4F731}"
+	ProjectSection(SolutionItems) = preProject
+		ParamFiles\fields-cheque.json = ParamFiles\fields-cheque.json
+		ParamFiles\fields-payment.json = ParamFiles\fields-payment.json
+		ParamFiles\fields-slip.json = ParamFiles\fields-slip.json
+		ParamFiles\fields-talon-optique.json = ParamFiles\fields-talon-optique.json
+		ParamFiles\param-compliance-eligibility.json = ParamFiles\param-compliance-eligibility.json
+		ParamFiles\param.json = ParamFiles\param.json
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1DFA7A9C-2B0C-4007-B06F-CCB8A512B269}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DFA7A9C-2B0C-4007-B06F-CCB8A512B269}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DFA7A9C-2B0C-4007-B06F-CCB8A512B269}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DFA7A9C-2B0C-4007-B06F-CCB8A512B269}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C34E6E8-DAC2-43B8-B8AC-F3A72CC1891A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C34E6E8-DAC2-43B8-B8AC-F3A72CC1891A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C34E6E8-DAC2-43B8-B8AC-F3A72CC1891A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C34E6E8-DAC2-43B8-B8AC-F3A72CC1891A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B380405C-EC37-4774-9865-2308ECD6113F}
+	EndGlobalSection
+EndGlobal

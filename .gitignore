@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/Output/20231106105201_653368123.zip
+/Output/20231106105308_964385439.zip
+/Output

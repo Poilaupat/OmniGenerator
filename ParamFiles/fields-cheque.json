@@ -1,0 +1,71 @@
+[
+  {
+    "$type": "constant",
+    "name": "encline",
+    "value": "03"
+  },
+  {
+    "$type": "numeric",
+    "name": "amount",
+    "min": 100,
+    "max": 999999
+  },
+  {
+    "$type": "regex",
+    "name": "cmc7",
+    "pattern": "\\d{7} \\d{9}908 \\d{12}"
+  },
+  {
+    "$type": "key",
+    "name": "rlmc",
+    "dependent-upon": "cmc7",
+    "key-type": "rlmc"
+  },
+  {
+    "$type": "constant",
+    "name": "bank-name",
+    "value": "Banque Specimen"
+  },
+  {
+    "$type": "list",
+    "name": "bank-zip-city",
+    "list-path": ".\\Resources\\Lists\\zipcodes_cities.txt"
+  },
+  {
+    "$type": "list",
+    "name": "bank-lane",
+    "list-path": ".\\Resources\\Lists\\addresses.txt"
+  },
+  {
+    "$type": "regex",
+    "name": "bank-lane-number",
+    "pattern": "\\d{1,3}"
+  },
+  {
+    "$type": "composite",
+    "name": "bank-address",
+    "dependent-upon": "bank-lane,bank-lane-number",
+    "format": " {{bank-lane-number}} {{bank-lane}}"
+  },
+  {
+    "$type": "regex",
+    "name": "bank-phone",
+    "pattern": "0(2|3|4|5) \\d{2} \\d{2} \\d{2} \\d{2}"
+  },
+  {
+    "$type": "constant",
+    "name": "payee-name",
+    "value": "Simon Delapille"
+  },
+  {
+    "$type": "list",
+    "name": "place",
+    "list-path": ".\\Resources\\Lists\\zipcodes_cities.txt"
+  },
+  {
+    "$type": "date",
+    "name": "date",
+    "day-diff-min": 3,
+    "day-diff-max": 400
+  }
+]

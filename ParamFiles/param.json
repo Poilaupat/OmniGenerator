@@ -1,0 +1,69 @@
+{
+  "fields": [
+    {
+      "$type": "regex",
+      "name": "numlot",
+      "pattern": "\\d{9}"
+    }
+  ],
+  "root": {
+    "$type": "group",
+    "name": "remittance",
+    "min-occurs": 1,
+    "max-occurs": 5,
+    "fields": [
+      {
+        "$type": "aggregate",
+        "name": "total",
+        "aggregate-type": "Sum",
+        "scope": "Overall",
+        "target-element": "cheque",
+        "dependent-upon": "amount"
+      },
+      {
+        "$type": "aggregate",
+        "name": "count",
+        "aggregate-type": "Count",
+        "scope": "Overall",
+        "target-element": "cheque",
+        "dependent-upon": ""
+      }
+    ],
+    "elements": [
+      {
+        "$type": "document",
+        "name": "slip",
+        "min-occurs": 1,
+        "max-occurs": 1,
+        "field-configuration-file": "fields-slip.json",
+        "fields": []
+      },
+      {
+        "$type": "group",
+        "name": "payment",
+        "min-occurs": 1,
+        "max-occurs": 3,
+        "field-configuration-file": "fields-payment.json",
+        "fields": [],
+        "elements": [
+          {
+            "$type": "document",
+            "name": "talon-optique",
+            "min-occurs": 1,
+            "max-occurs": 1,
+            "field-configuration-file": "fields-talon-optique.json",
+            "fields": []
+          },
+          {
+            "$type": "document",
+            "name": "cheque",
+            "min-occurs": 1,
+            "max-occurs": 4,
+            "field-configuration-file": "fields-cheque.json",
+            "fields": []
+          }
+        ]
+      }
+    ]
+  }
+}
