@@ -17,8 +17,8 @@
         {
             if (_fields.ContainsKey(key))
                 _fields[key] = field;
-
-            _fields.Add(key, field);
+            else
+                _fields.Add(key, field);
         }
 
         /// <summary>
