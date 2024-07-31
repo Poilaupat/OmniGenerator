@@ -4,9 +4,10 @@ using Microsoft.Extensions.Configuration;
 using OmniGenerator.Lib;
 using OmniGenerator.Lib.Generators;
 using OmniGenerator.Lib.Image;
-using OmniGenerator.Lib.Image.Composer;
+using OmniGenerator.Lib.Image.Drawers;
+using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
-using OmniGenerator.Lib.Packagers.Compliance;
+using OmniGenerator.Lib.Interfaces.Infrastructure;
 using OmniGenerator.Lib.Packagers.Default;
 
 namespace OmniGenerator.Cli
@@ -19,20 +20,12 @@ namespace OmniGenerator.Cli
             var mapper = GetMapper();
 
             var builder = new ContainerBuilder();
+            builder.RegisterInstance(mapper).As<IMapper>();
+            builder.RegisterInstance(config).As<IConfiguration>();
             builder.RegisterType<Application>();
             builder.RegisterType<HierarchyBuilder>().As<IHierarchyBuilder>();
-            builder.RegisterInstance(config).As<IConfiguration>();
-            builder.RegisterInstance(mapper).As<IMapper>();
-            //builder.RegisterType<PlainPackager>().As<IPackager>();
-            builder.RegisterType<EligibilityPackager>().As<IPackager>();
-
-            builder.RegisterType<DefaultImageComposerProcessor>().As<IImageComposerProcessor>();
-            builder.RegisterType<ChequeComposer>()
-                .As<IImageComposer>()
-                .WithMetadata<IImageComposerMetadata>(m => m.For(icm => icm.DocumentName, "cheque"));
-            builder.RegisterType<TalonSepaComposer>().As<IImageComposer>()
-                .WithMetadata<IImageComposerMetadata>(m => m.For(icm => icm.DocumentName, "talon-optique"));
-
+            builder.RegisterType<DocumentDrawerManager>().As<IDocumentDrawerManager>();
+            builder.RegisterType<PluginService>().As<IPluginService>();
 
             return builder.Build();
         }

@@ -1,6 +1,8 @@
 ﻿using OmniGenerator.Lib.Generators;
+using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Tools;
+using System.ComponentModel.Composition;
 using System.IO.Compression;
 
 namespace OmniGenerator.Lib.Packagers.Default
@@ -9,6 +11,8 @@ namespace OmniGenerator.Lib.Packagers.Default
     /// A <see cref="IPackager"/> that writes data and image file in a zip file
     /// The zip name is the concatenation of the current date+time with the root numlot
     /// </summary>
+    [Export(typeof(IPackager))]
+    [PluginMetadata("zip-packager")]
     public class ZipPackager : DebugPackagerBase, IPackager
     {
         public async Task ProcessAsync(Root root, string path)

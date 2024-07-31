@@ -2,21 +2,22 @@
 using OmniGenerator.Lib.Exceptions;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Configuration;
+using OmniGenerator.Lib.Interfaces.Infrastructure;
 
-namespace OmniGenerator.Lib
+namespace OmniGenerator.Cli
 {
     public class Application
     {
         private readonly IConfiguration _configuration;
         private readonly IHierarchyBuilder _hierarchyBuilder;
-        private readonly IPackager _packager;
-        private readonly IImageComposerProcessor _imageComposerProcessor;
+        private readonly IDocumentDrawerManager _imageComposerProcessor;
+        private readonly IPluginService _pluginService;
 
-        public Application(IConfiguration configuration, IHierarchyBuilder hierarchyBuilder, IPackager packager, IImageComposerProcessor imageComposerProcessor)
+        public Application(IConfiguration configuration, IPluginService pluginService, IHierarchyBuilder hierarchyBuilder, IDocumentDrawerManager imageComposerProcessor)
         {
             _configuration = configuration;
+            _pluginService = pluginService;
             _hierarchyBuilder = hierarchyBuilder;
-            _packager = packager;
             _imageComposerProcessor = imageComposerProcessor;
         }
 
@@ -31,15 +32,12 @@ namespace OmniGenerator.Lib
 
             //Images generation
             if(_imageComposerProcessor is not null)
-                await _imageComposerProcessor.ProcessAsync(root);
+                await _imageComposerProcessor.DrawImagesAsync(root);
 
             //Files generation
-            if(_packager is not null)
-                await _packager.ProcessAsync(root, outputPath);
+            var packager = _pluginService.GetPackager("plain-packager");
+            if(packager is not null)
+                await packager.ProcessAsync(root, outputPath);
         }
-
-        
-
-        
     }
 }

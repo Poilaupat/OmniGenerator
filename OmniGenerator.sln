@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ParamFiles", "ParamFiles", 
 		ParamFiles\param.json = ParamFiles\param.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmniGenerator.Plugin.Tessi", "OmniGenerator.Plugin.Tessi\OmniGenerator.Plugin.Tessi.csproj", "{EC36842D-000A-4273-B98E-CC3BFA2A9B97}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC36842D-000A-4273-B98E-CC3BFA2A9B97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC36842D-000A-4273-B98E-CC3BFA2A9B97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC36842D-000A-4273-B98E-CC3BFA2A9B97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC36842D-000A-4273-B98E-CC3BFA2A9B97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

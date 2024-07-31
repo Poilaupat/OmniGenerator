@@ -4,12 +4,12 @@ using OmniGenerator.Lib.Tools;
 using Svg;
 using System.Drawing;
 
-namespace OmniGenerator.Lib.Image.Composer
+namespace OmniGenerator.Lib.Image
 {
     /// <summary>
-    /// The base class for all <see cref="IImageComposer"/>
+    /// The base class for all <see cref="IDocumentDrawer"/>
     /// </summary>
-    public abstract class ImageComposerBase : IImageComposer
+    public abstract class DocumentDrawerBase : IDocumentDrawer
     {
         /// <summary>
         /// The recto and verso image Width in millimeter
@@ -29,7 +29,7 @@ namespace OmniGenerator.Lib.Image.Composer
         ///  
         /// Other system fonts can be used without having to load them
         /// </summary>
-        static ImageComposerBase()
+        static DocumentDrawerBase()
         {
             LoadFonts();
         }
@@ -39,7 +39,7 @@ namespace OmniGenerator.Lib.Image.Composer
         /// </summary>
         /// <param name="document">The data of the document</param>
         /// <returns>A SVG representation of the recto</returns>
-        public virtual SvgDocument ComposeImageRecto(Document document)
+        public virtual SvgDocument DrawRecto(Document document)
         {
             return ImageTools.NewBlankSvg(Width, Height);
         }
@@ -49,7 +49,7 @@ namespace OmniGenerator.Lib.Image.Composer
         /// </summary>
         /// <param name="document">The data of the document</param>
         /// <returns>A SVG representation of the verso</returns>
-        public virtual SvgDocument ComposeImageVerso(Document document)
+        public virtual SvgDocument DrawVerso(Document document)
         {
             return ImageTools.NewBlankSvg(Width, Height);
         }

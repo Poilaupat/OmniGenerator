@@ -3,24 +3,28 @@ using OmniGenerator.Lib.Tools;
 using OmniGenerator.Lib.Interfaces;
 using Svg;
 using System.Drawing;
+using OmniGenerator.Lib.Infrastructure;
+using System.ComponentModel.Composition;
 
-namespace OmniGenerator.Lib.Image.Composer
+namespace OmniGenerator.Lib.Image.Drawers
 {
     /// <summary>
-    /// A <see cref="IImageComposer"/> for cheque image generation
+    /// A <see cref="IDocumentDrawer"/> for cheque image generation
     /// </summary>
-    public class ChequeComposer : ImageComposerBase
+    [Export(typeof(IDocumentDrawer))]
+    [PluginMetadata("omni.cheque")]
+    public class ChequeDrawer : DocumentDrawerBase
     {
         /// <summary>
-        /// Creates a new <see cref="ChequeComposer"/>
+        /// Creates a new <see cref="ChequeDrawer"/>
         /// </summary>
-        public ChequeComposer()
+        public ChequeDrawer()
         {
             Width = 175;
             Height = 80;
         }
 
-        public override SvgDocument ComposeImageRecto(Document document)
+        public override SvgDocument DrawRecto(Document document)
         {
             var svg = ImageTools.NewBlankSvg(Width, Height);
 

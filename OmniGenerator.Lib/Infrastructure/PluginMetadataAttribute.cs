@@ -1,0 +1,22 @@
+﻿using OmniGenerator.Lib.Interfaces.Infrastructure;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace OmniGenerator.Lib.Infrastructure
+{
+    [MetadataAttribute]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    internal class PluginMetadataAttribute : ExportAttribute, IPluginMetadata
+    {
+        public string Name { get; }
+
+        public PluginMetadataAttribute(string name)
+        {
+            Name = name;
+        }
+    }
+}

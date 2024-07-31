@@ -30,6 +30,7 @@
 		<PackageReference Include="Microsoft.ProgramSynthesis.Detection" Version="8.27.0" />
 		<PackageReference Include="mustache-sharp" Version="1.0.0" />
 		<PackageReference Include="Svg" Version="3.4.5" />
+		<PackageReference Include="System.ComponentModel.Composition" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
