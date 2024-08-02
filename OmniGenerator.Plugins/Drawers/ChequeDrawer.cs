@@ -5,8 +5,9 @@ using Svg;
 using System.Drawing;
 using OmniGenerator.Lib.Infrastructure;
 using System.ComponentModel.Composition;
+using OmniGenerator.Lib.Image;
 
-namespace OmniGenerator.Lib.Image.Drawers
+namespace OmniGenerator.Plugins.Drawers
 {
     /// <summary>
     /// A <see cref="IDocumentDrawer"/> for cheque image generation

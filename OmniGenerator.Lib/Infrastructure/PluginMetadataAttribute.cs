@@ -10,7 +10,7 @@ namespace OmniGenerator.Lib.Infrastructure
 {
     [MetadataAttribute]
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    internal class PluginMetadataAttribute : ExportAttribute, IPluginMetadata
+    public sealed class PluginMetadataAttribute : ExportAttribute, IPluginMetadata
     {
         public string Name { get; }
 

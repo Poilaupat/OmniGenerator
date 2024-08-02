@@ -8,8 +8,8 @@ namespace OmniGenerator.Lib.Interfaces.Infrastructure
 {
     public interface IPluginService
     {
-        IPackager? GetPackager(string pluginname);
+        IPackager? GetPackager(string? pluginname);
 
-        IDocumentDrawer? GetImageComposer(string pluginname);
+        IDocumentDrawer? GetImageComposer(string? pluginname);
     }
 }

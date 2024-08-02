@@ -1,4 +1,5 @@
 ﻿using OmniGenerator.Lib.Generators;
+using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,8 @@ using System.Threading.Tasks;
 namespace OmniGenerator.Plugin.Tessi.Packagers.Compliance
 {
     [Export(typeof(IPackager))]
+    [PluginMetadata("tessi.eligibility-packager")]
+
     public class EligibilityPackager : IPackager
     {
         public async Task ProcessAsync(Root root, string path)

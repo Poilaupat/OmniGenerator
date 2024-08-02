@@ -1,4 +1,5 @@
 {
+  "packager":  "tessi.eligibility-packager",
   "root": {
     "fields": [
       {
@@ -55,7 +56,7 @@
       "elements": [
         {
           "$type": "document",
-          "name": "cheque-eligibility",
+          "name": "cheque",
           "min-occurs": 1,
           "max-occurs": 1,
           "fields": [

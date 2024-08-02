@@ -4,11 +4,9 @@ using Microsoft.Extensions.Configuration;
 using OmniGenerator.Lib;
 using OmniGenerator.Lib.Generators;
 using OmniGenerator.Lib.Image;
-using OmniGenerator.Lib.Image.Drawers;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
-using OmniGenerator.Lib.Packagers.Default;
 
 namespace OmniGenerator.Cli
 {

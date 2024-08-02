@@ -35,7 +35,7 @@ namespace OmniGenerator.Cli
                 await _imageComposerProcessor.DrawImagesAsync(root);
 
             //Files generation
-            var packager = _pluginService.GetPackager("plain-packager");
+            var packager = _pluginService.GetPackager(config.PackagerName);
             if(packager is not null)
                 await packager.ProcessAsync(root, outputPath);
         }

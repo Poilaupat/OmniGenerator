@@ -17,19 +17,34 @@ namespace OmniGenerator.Lib.Infrastructure
 
         public PluginService()
         {
-            var catalog = new AssemblyCatalog(typeof(PluginService).Assembly);
+            //var catalog = new AssemblyCatalog(typeof(PluginService).Assembly);
+            var pluginpath = Path.Combine(
+                Path.GetDirectoryName(typeof(PluginService).Assembly.Location),
+                "Plugins");
+
+            var catalog = new DirectoryCatalog(pluginpath);
             _container = new CompositionContainer(catalog);
             _container.ComposeParts(this);
         }
 
-        public IPackager? GetPackager(string pluginname) 
+        public IPackager? GetPackager(string? pluginname) 
         {
-            return GetPlugin<IPackager>(pluginname);
+            if (pluginname is not null)
+            {
+                return GetPlugin<IPackager>(pluginname);
+            }
+
+            return null;
         }
 
-        public IDocumentDrawer? GetImageComposer(string pluginname)
+        public IDocumentDrawer? GetImageComposer(string? pluginname)
         {
-            return GetPlugin<IDocumentDrawer>(pluginname);
+            if (pluginname is not null)
+            {
+                return GetPlugin<IDocumentDrawer>(pluginname);
+            }
+
+            return null;
         }
 
         private TPlugin? GetPlugin<TPlugin>(string pluginname)
