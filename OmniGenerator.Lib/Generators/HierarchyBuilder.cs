@@ -31,12 +31,10 @@ namespace OmniGenerator.Lib.Generators
         /// <returns></returns>
         public Root Build(OmniGeneratorConfiguration config)
         {
-            var fgc = new FieldGeneratorCollection(config.Root, _mapper);
-
-
             var rootContent = GenerateGroups(config.Root.Group);
             var root = new Root(rootContent);
 
+            var fgc = new FieldGeneratorCollection(config.Root, _mapper);
 
             GenerateFields(root, fgc);
             GenerateAggregateFields(root, fgc);
@@ -46,7 +44,8 @@ namespace OmniGenerator.Lib.Generators
 
         private int GetRandomOccurence(int minOccurs, int maxOccurs)
         {
-            return Math.Max(new Random().Next(minOccurs, maxOccurs), 0);
+            // If occurence is negative (due to negative min-occurs or max-occurs), occurence is set to 0 
+            return Math.Max(new Random().Next(minOccurs, maxOccurs + 1), 0);
         }
 
         private IEnumerable<Group> GenerateGroups(GroupConfiguration groupConfiguration)
@@ -81,7 +80,7 @@ namespace OmniGenerator.Lib.Generators
             int occurences = GetRandomOccurence(documentConfiguration.MinOccurs, documentConfiguration.MaxOccurs);
             for (int i = 0; i < occurences; i++)
             {
-                var document = new Document(_docId++, documentConfiguration.Name);
+                var document = new Document(_docId++, documentConfiguration.Name, documentConfiguration.ImageComposer);
                 documents.Add(document);
             }
             return documents;

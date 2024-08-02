@@ -9,6 +9,9 @@ namespace OmniGenerator.Lib.Configuration
 {
     public class OmniGeneratorConfiguration
     {
+        [JsonPropertyName("packager")]
+        public string? PackagerName { get; set; }
+ 
         [JsonPropertyName("root")]
         public RootConfiguration Root { get; set; } = new RootConfiguration();
     }

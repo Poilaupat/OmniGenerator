@@ -5,13 +5,13 @@ namespace OmniGenerator.Lib.Interfaces
     /// <summary>
     /// The interface that defines objects responsible of image generation
     /// </summary>
-    public interface IImageComposerProcessor
+    public interface IDocumentDrawerManager
     {
         /// <summary>
         /// Generates all the images of the documents of a root
         /// </summary>
         /// <param name="root">The root</param>
         /// <returns></returns>
-        Task ProcessAsync(Root root);
+        Task DrawImagesAsync(Root root);
     }
 }

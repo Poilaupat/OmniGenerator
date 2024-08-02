@@ -12,15 +12,15 @@ namespace OmniGenerator.Lib.Configuration
         /// <summary>
         /// Merges a collection of <see cref="FieldConfigurationBase"/> into another collection. If the field already exists it is ignored.
         /// </summary>
-        /// <param name="fields">The base list of fields</param>
-        /// <param name="fieldsToMerge">The collection of fields to merge</param>
-        public static void Merge(this IList<FieldConfigurationBase> fields, IEnumerable<FieldConfigurationBase> fieldsToMerge)
+        /// <param name="collection1">The base list of fields</param>
+        /// <param name="collection2">The collection of fields to merge</param>
+        public static void Merge(this IList<FieldConfigurationBase> collection1, IEnumerable<FieldConfigurationBase> collection2)
         {
-            foreach (var field in fieldsToMerge)
+            foreach (var field in collection2)
             {
-                if (!fields.Any(x => x.Name == field.Name))
+                if (!collection1.Any(x => x.Name == field.Name))
                 {
-                    fields.Add(field);
+                    collection1.Add(field);
                 }
             }
         }

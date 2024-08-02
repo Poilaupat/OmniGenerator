@@ -1,9 +1,9 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Autofac;
 using OmniGenerator.Cli;
-using OmniGenerator.Lib;
 
-string configFilePath = @"..\..\..\..\ParamFiles\param-compliance-eligibility.json";
+string configFilePath = @"..\..\..\..\ParamFiles\param.json";
+//string configFilePath = @"..\..\..\..\ParamFiles\param-compliance-eligibility.json";
 string outputFolderPath = @"..\..\..\..\Output";
 
 var container = Startup.CreateContainer();

@@ -5,6 +5,7 @@ namespace OmniGenerator.Lib.Configuration
 {
     public class DocumentConfiguration : ElementConfiguration
     {
-
+        [JsonPropertyName("drawer")]
+        public string? ImageComposer { get; set; }
     }
 }

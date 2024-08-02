@@ -1,7 +1,7 @@
 ﻿using OmniGenerator.Lib.Generators;
 using OmniGenerator.Lib.Interfaces;
 
-namespace OmniGenerator.Lib.Packagers.Default
+namespace OmniGenerator.Plugins.Packagers
 {
     /// <summary>
     /// A base class for <see cref="IPackager"/> to be used in debug context.

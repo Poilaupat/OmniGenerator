@@ -3,24 +3,28 @@ using OmniGenerator.Lib.Tools;
 using OmniGenerator.Lib.Interfaces;
 using Svg;
 using System.Drawing;
+using System.ComponentModel.Composition;
+using OmniGenerator.Lib.Infrastructure;
 
-namespace OmniGenerator.Lib.Image.Composer
+namespace OmniGenerator.Lib.Image.Drawers
 {
     /// <summary>
-    /// A <see cref="IImageComposer"/> for talon optique image generation
+    /// A <see cref="IDocumentDrawer"/> for talon optique image generation
     /// </summary>
-    public class TalonSepaComposer : ImageComposerBase
+    [Export(typeof(IDocumentDrawer))]
+    [PluginMetadata("omni.talon")]
+    public class TalonSepaDrawer : DocumentDrawerBase
     {
         /// <summary>
-        /// Creates a new <see cref="TalonSepaComposer"/>
+        /// Creates a new <see cref="TalonSepaDrawer"/>
         /// </summary>
-        public TalonSepaComposer()
+        public TalonSepaDrawer()
         {
             Width = 175;
             Height = 80;
         }
 
-        public override SvgDocument ComposeImageRecto(Document document)
+        public override SvgDocument DrawRecto(Document document)
         {
             var svg = ImageTools.NewBlankSvg(Width, Height);
 
