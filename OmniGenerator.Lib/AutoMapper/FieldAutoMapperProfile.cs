@@ -1,38 +1,45 @@
 ﻿using AutoMapper;
 using OmniGenerator.Lib.Generators.Fields;
-using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Configuration.Fields;
+using OmniGenerator.Lib.Interfaces.FieldGenerators;
 
 namespace OmniGenerator.Lib.AutoMapper
 {
-    internal class FieldAutoMapperProfile : Profile
+    internal sealed class FieldAutoMapperProfile : Profile
     {
         /// <summary>
-        /// The mapings between field configuration objects and field generators
+        /// The mapings between field configuration and field generators
         /// </summary>
         public FieldAutoMapperProfile()
         {
             // Base Types
-            CreateMap(typeof(FieldConfigurationBase), typeof(AbstractFieldGenerator<>));
+            CreateMap(typeof(AbstractFieldConfigurationBase), typeof(AbstractFieldGenerator<>));
 
-            CreateMap<FieldConfigurationBase, IFieldGenerator>()
+            CreateMap<AbstractFieldConfigurationBase, IFieldGenerator>()
                 .Include<FieldConfigurationRegex, FieldGeneratorRegex>()
-                .Include<FieldConfigurationList, FieldGeneratorList>()
                 .Include<FieldConfigurationConstant, FieldGeneratorConstant>()
                 .Include<FieldConfigurationNumeric, FieldGeneratorNumeric>()
                 .Include<FieldConfigurationDate, FieldGeneratorDate>();
 
-            CreateMap(typeof(FieldConfigurationDependantBase), typeof(AbstractFieldGeneratorDependant<>));
+            CreateMap(typeof(AbstractFieldConfigurationDependantBase), typeof(AbstractFieldGeneratorDependant<>));
 
-            CreateMap<FieldConfigurationDependantBase, IFieldGeneratorDependent>()
-                .IncludeBase<FieldConfigurationBase, IFieldGenerator>()
+            CreateMap<AbstractFieldConfigurationDependantBase, IFieldGeneratorDependent>()
+                .IncludeBase<AbstractFieldConfigurationBase, IFieldGenerator>()
                 .Include<FieldConfigurationKeyCalculator, FieldGeneratorKeyCalculator>()
                 .Include<FieldConfigurationComposite, FieldGeneratorComposite>()
                 .Include<FieldConfigurationAggregate, FieldGeneratorAggregate>();
 
+            CreateMap(typeof(AbstractFieldConfigurationCollectionBase), typeof(AbstractFieldGeneratorCollectionBase<,>));
+
+            CreateMap(typeof(AbstractFieldConfigurationCollectionBase), typeof(IFieldGeneratorCollection<>))
+                .IncludeBase(typeof(AbstractFieldConfigurationBase), typeof(IFieldGenerator))
+                .Include(typeof(FieldConfigurationEquiprobableList), typeof(FieldGeneratorEquiprobableList))
+                .Include(typeof(FieldConfigurationProbabilityDensityList), typeof(FieldGeneratorProbabilityDensityList));
+
+
             ////Derived types based upon FieldConfigurationBase
             CreateMap<FieldConfigurationRegex, FieldGeneratorRegex>();
-            CreateMap<FieldConfigurationList, FieldGeneratorList>();
+            CreateMap<FieldConfigurationEquiprobableList, FieldGeneratorEquiprobableList>();
             CreateMap<FieldConfigurationConstant, FieldGeneratorConstant>();
             CreateMap<FieldConfigurationNumeric, FieldGeneratorNumeric>();
             CreateMap<FieldConfigurationDate, FieldGeneratorDate>();
@@ -41,6 +48,10 @@ namespace OmniGenerator.Lib.AutoMapper
             CreateMap<FieldConfigurationKeyCalculator, FieldGeneratorKeyCalculator>();
             CreateMap<FieldConfigurationComposite, FieldGeneratorComposite>();
             CreateMap<FieldConfigurationAggregate, FieldGeneratorAggregate>();
+
+            ////Derived types based upon FieldConfigurationCollectionBase
+            CreateMap<FieldConfigurationEquiprobableList, FieldGeneratorEquiprobableList>();
+            CreateMap<FieldConfigurationProbabilityDensityList, FieldGeneratorProbabilityDensityList>();
         }
     }
 }

@@ -11,12 +11,12 @@ namespace OmniGenerator.Lib.Configuration
         public static string Name { get; } = "root";
 
         [JsonPropertyName("fields")]
-        public List<FieldConfigurationBase> Fields { get; set; } = new List<FieldConfigurationBase> { };
+        public List<AbstractFieldConfigurationBase> Fields { get; set; } = new List<AbstractFieldConfigurationBase> { };
 
         [JsonPropertyName("group")]
-        public GroupConfiguration Group { get; set; } = new GroupConfiguration();
+        public required GroupConfiguration Group { get; set; }
 
         [JsonPropertyName("field-configuration-file")]
-        public string FieldConfigurationFile { get; set; } = string.Empty;
+        public string? FieldConfigurationFile { get; set; }
     }
 }

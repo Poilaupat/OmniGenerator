@@ -9,7 +9,7 @@ namespace OmniGenerator.Lib.Image
     /// The image composer processor.
     /// This processor takes meta data of documents, selects an <see cref="IDocumentDrawer"/> from the PluginService and generates SVG images
     /// </summary>
-    public sealed class DocumentDrawerManager : IDocumentDrawerManager
+    internal sealed class DocumentDrawerManager : IDocumentDrawerManager
     {
         IPluginService _pluginService;
 

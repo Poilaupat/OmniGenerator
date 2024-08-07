@@ -7,6 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<InternalsVisibleTo Include="OmniGenerator.Cli" />
 		<InternalsVisibleTo Include="OmniGenerator.Test" />
 	</ItemGroup>
 
@@ -23,13 +24,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Autofac" Version="7.1.0" />
-		<PackageReference Include="AutoMapper" Version="12.0.1" />
+		<PackageReference Include="Autofac" Version="8.0.0" />
+		<PackageReference Include="AutoMapper" Version="13.0.1" />
 		<PackageReference Include="Fare" Version="2.2.1" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
-		<PackageReference Include="Microsoft.ProgramSynthesis.Detection" Version="8.27.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.ProgramSynthesis.Detection" Version="10.0.0" />
 		<PackageReference Include="mustache-sharp" Version="1.0.0" />
-		<PackageReference Include="Svg" Version="3.4.5" />
+		<PackageReference Include="Svg" Version="3.4.7" />
 		<PackageReference Include="System.ComponentModel.Composition" Version="8.0.0" />
 	</ItemGroup>
 
@@ -57,6 +58,12 @@
 		</None>
 		<None Update="Resources\Lists\last_names.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\Lists\dice.txt">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\Lists\dice_pdf.txt">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Resources\Lists\zipcodes_cities.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -1,5 +1,5 @@
 using OmniGenerator.Lib.Generators.Fields;
-using OmniGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Interfaces.FieldGenerators;
 using System.CodeDom;
 
 namespace OmniGenerator.Test

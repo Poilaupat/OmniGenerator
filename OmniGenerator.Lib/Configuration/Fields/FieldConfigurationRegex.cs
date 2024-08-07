@@ -2,9 +2,9 @@
 
 namespace OmniGenerator.Lib.Configuration.Fields
 {
-    public class FieldConfigurationRegex : FieldConfigurationBase
+    public class FieldConfigurationRegex : AbstractFieldConfigurationBase
     {
         [JsonPropertyName("pattern")]
-        public string? Pattern { get; set; }
+        public required string Pattern { get; set; }
     }
 }

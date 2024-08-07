@@ -2,15 +2,15 @@
 
 namespace OmniGenerator.Lib.Configuration.Fields
 {
-    public class FieldConfigurationComposite : FieldConfigurationDependantBase
+    public class FieldConfigurationComposite : AbstractFieldConfigurationDependantBase
     {
-        private string? _format;
+        private string _format = default!;
 
         [JsonPropertyName("format")]
-        public string? Format 
+        public required string Format 
         { 
             get { return _format; }
-            set { _format = value?.Replace("-", "_"); }
+            set { _format = value.Replace("-", "_"); }
         }
     }
 }

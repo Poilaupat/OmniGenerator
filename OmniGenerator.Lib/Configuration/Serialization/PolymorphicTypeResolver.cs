@@ -13,7 +13,7 @@ namespace OmniGenerator.Lib.Configuration.Serialization
 
             jsonTypeInfo.PolymorphismOptions = jsonTypeInfo.Type switch
             {
-                Type t when t == typeof(FieldConfigurationBase) => ResolveFieldConfigurationDerivedTypes(),
+                Type t when t == typeof(AbstractFieldConfigurationBase) => ResolveFieldConfigurationDerivedTypes(),
                 Type t when t == typeof(ElementConfiguration) => ResolveElementConfigurationDerivedTypes(),
                 _ => null,
             };
@@ -32,7 +32,8 @@ namespace OmniGenerator.Lib.Configuration.Serialization
                 {
                     new JsonDerivedType(typeof(FieldConfigurationRegex), "regex"),
                     new JsonDerivedType(typeof(FieldConfigurationConstant), "constant"),
-                    new JsonDerivedType(typeof(FieldConfigurationList), "list"),
+                    new JsonDerivedType(typeof(FieldConfigurationEquiprobableList), "list-e"),
+                    new JsonDerivedType(typeof(FieldConfigurationProbabilityDensityList), "list-dp"),
                     new JsonDerivedType(typeof(FieldConfigurationKeyCalculator), "key"),
                     new JsonDerivedType(typeof(FieldConfigurationComposite), "composite"),
                     new JsonDerivedType(typeof(FieldConfigurationNumeric), "numeric"),
