@@ -1,5 +1,4 @@
-﻿using Microsoft.ProgramSynthesis.Transformation.Formula.Build.RuleNodeTypes;
-using OmniGenerator.Lib.Interfaces.FieldGenerators;
+﻿using OmniGenerator.Lib.Interfaces.FieldGenerators;
 
 namespace OmniGenerator.Lib.Generators.Fields
 {

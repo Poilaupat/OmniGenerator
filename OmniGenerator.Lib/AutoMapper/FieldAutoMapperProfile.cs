@@ -8,7 +8,7 @@ namespace OmniGenerator.Lib.AutoMapper
     internal sealed class FieldAutoMapperProfile : Profile
     {
         /// <summary>
-        /// The mapings between field configuration objects and field generators
+        /// The mapings between field configuration and field generators
         /// </summary>
         public FieldAutoMapperProfile()
         {
