@@ -1,5 +1,5 @@
 ﻿using OmniGenerator.Lib.Exceptions;
-using OmniGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Interfaces.FieldGenerators;
 using System.Text.RegularExpressions;
 
 namespace OmniGenerator.Lib.Generators.Fields

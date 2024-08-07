@@ -3,10 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace OmniGenerator.Lib.Configuration.Fields
 {
-    public class FieldConfigurationKeyCalculator : FieldConfigurationDependantBase
+    public class FieldConfigurationKeyCalculator : AbstractFieldConfigurationDependantBase
     {
         [JsonPropertyName("key-type")]
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public EKeyType KeyType { get; set; } = EKeyType.Rlmc;
+        public required EKeyType KeyType { get; set; }
     }
 }

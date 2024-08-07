@@ -2,9 +2,9 @@
 
 namespace OmniGenerator.Lib.Configuration.Fields
 {
-    public class FieldConfigurationConstant : FieldConfigurationBase
+    public class FieldConfigurationConstant : AbstractFieldConfigurationBase
     {
         [JsonPropertyName("value")]
-        public string? Constant { get; set; }
+        public required string Constant { get; set; }
     } 
 }

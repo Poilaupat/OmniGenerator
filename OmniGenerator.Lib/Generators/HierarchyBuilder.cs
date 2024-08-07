@@ -8,7 +8,7 @@ namespace OmniGenerator.Lib.Generators
     /// <summary>
     /// Builds a new <see cref="Root"/> using provided configuration
     /// </summary>
-    public class HierarchyBuilder : IHierarchyBuilder
+    internal sealed class HierarchyBuilder : IHierarchyBuilder
     {
         private long _docId = 1;
         private long _grpId = 1;

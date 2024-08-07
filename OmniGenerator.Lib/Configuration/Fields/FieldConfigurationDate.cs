@@ -2,12 +2,12 @@
 
 namespace OmniGenerator.Lib.Configuration.Fields
 {
-    public class FieldConfigurationDate : FieldConfigurationBase
+    public class FieldConfigurationDate : AbstractFieldConfigurationBase
     {
         [JsonPropertyName("day-diff-min")]
-        public int DayDiffMin { get; set; }
+        public required int DayDiffMin { get; set; }
 
         [JsonPropertyName("day-diff-max")]
-        public int DayDiffMax { get; set; }
+        public required int DayDiffMax { get; set; }
     }
 }

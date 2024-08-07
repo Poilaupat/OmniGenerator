@@ -7,6 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<InternalsVisibleTo Include="OmniGenerator.Cli" />
 		<InternalsVisibleTo Include="OmniGenerator.Test" />
 	</ItemGroup>
 
@@ -57,6 +58,12 @@
 		</None>
 		<None Update="Resources\Lists\last_names.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\Lists\dice.txt">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\Lists\dice_pdf.txt">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Resources\Lists\zipcodes_cities.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -5,7 +5,7 @@ namespace OmniGenerator.Lib.Tools
     /// <summary>
     /// Some tools to compute different type of checksum
     /// </summary>
-    internal static class KeyTools
+    public static class KeyTools
     {
         /// <summary>
         /// Computes a RIB checksum

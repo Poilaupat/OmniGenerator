@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.ProgramSynthesis.Utils.Interactive;
 using OmniGenerator.Lib.Exceptions;
-using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Configuration;
 using System.Data;
+using OmniGenerator.Lib.Interfaces.FieldGenerators;
 
 namespace OmniGenerator.Lib.Generators.Fields
 {

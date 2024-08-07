@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OmniGenerator.Lib.Exceptions;
 
-namespace OmniGenerator.Lib.Interfaces
+namespace OmniGenerator.Lib.Interfaces.FieldGenerators
 {
     internal interface IFieldGeneratorDependent : IFieldGenerator
     {

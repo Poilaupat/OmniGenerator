@@ -1,5 +1,5 @@
 ﻿using Mustache;
-using OmniGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Interfaces.FieldGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;

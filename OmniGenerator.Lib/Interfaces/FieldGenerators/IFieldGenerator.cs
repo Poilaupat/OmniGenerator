@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OmniGenerator.Lib.Interfaces
+namespace OmniGenerator.Lib.Interfaces.FieldGenerators
 {
     /// <summary>
     /// Defines the interface of all field generators

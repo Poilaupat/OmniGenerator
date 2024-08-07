@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
+using OmniGenerator.Lib.Tools;
 
 namespace OmniGenerator.Lib.Configuration
 {
@@ -22,7 +23,7 @@ namespace OmniGenerator.Lib.Configuration
 
                 if(!string.IsNullOrWhiteSpace(config.Root.FieldConfigurationFile))
                 {
-                    var rootfields = await ConfigurationReader.DeserializeAsync<List<FieldConfigurationBase>>(directory, config.Root.FieldConfigurationFile);
+                    var rootfields = await ConfigurationReader.DeserializeAsync<List<AbstractFieldConfigurationBase>>(directory, config.Root.FieldConfigurationFile);
                     config.Root.Fields.Merge(rootfields);
                 }
 
@@ -30,7 +31,7 @@ namespace OmniGenerator.Lib.Configuration
                 {
                     if (!string.IsNullOrWhiteSpace(configElement.FieldConfigurationFile))
                     {
-                        var filefields = await ConfigurationReader.DeserializeAsync<List<FieldConfigurationBase>>(directory, configElement.FieldConfigurationFile);
+                        var filefields = await ConfigurationReader.DeserializeAsync<List<AbstractFieldConfigurationBase>>(directory, configElement.FieldConfigurationFile);
                         configElement.Fields.Merge(filefields);
                     }
                 }

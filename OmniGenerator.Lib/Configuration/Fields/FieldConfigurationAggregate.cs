@@ -9,17 +9,17 @@ using static OmniGenerator.Lib.Generators.Fields.FieldGeneratorAggregate;
 
 namespace OmniGenerator.Lib.Configuration.Fields
 {
-    public class FieldConfigurationAggregate : FieldConfigurationDependantBase
+    public class FieldConfigurationAggregate : AbstractFieldConfigurationDependantBase
     {
         [JsonPropertyName("aggregate-type")]
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public EFFieldAggregateType AggregateType { get; set; }
+        public required EFFieldAggregateType AggregateType { get; set; }
 
         [JsonPropertyName("scope")]
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public EScope Scope { get; set; }
+        public required EScope Scope { get; set; }
 
         [JsonPropertyName("target-element")]
-        public string? TargetElement { get; set; }
+        public required string TargetElement { get; set; }
     }
 }

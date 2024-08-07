@@ -6,18 +6,18 @@ namespace OmniGenerator.Lib.Configuration
     public abstract class ElementConfiguration
     {
         [JsonPropertyName("name")]
-        public string Name { get; set; } = string.Empty;
+        public required string Name { get; set; }
 
         [JsonPropertyName("min-occurs")]
-        public int MinOccurs { get; set; } = 1;
+        public required int MinOccurs { get; set; }
 
         [JsonPropertyName("max-occurs")]
-        public int MaxOccurs { get; set; } = 100;
+        public required int MaxOccurs { get; set; }
 
         [JsonPropertyName("fields")]
-        public List<FieldConfigurationBase> Fields { get; set; } = new List<FieldConfigurationBase>();
+        public List<AbstractFieldConfigurationBase> Fields { get; set; } = new List<AbstractFieldConfigurationBase>();
 
         [JsonPropertyName("field-configuration-file")]
-        public string FieldConfigurationFile { get; set; } = string.Empty;
+        public string? FieldConfigurationFile { get; set; }
     }
 }

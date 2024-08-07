@@ -11,16 +11,20 @@ using OmniGenerator.Lib.Interfaces;
 
 namespace OmniGenerator.Lib.Infrastructure
 {
-    public class PluginService : IPluginService
+    internal sealed class PluginService : IPluginService
     {
         private CompositionContainer _container;
 
         public PluginService()
         {
             //var catalog = new AssemblyCatalog(typeof(PluginService).Assembly);
+
             var pluginpath = Path.Combine(
-                Path.GetDirectoryName(typeof(PluginService).Assembly.Location),
+                Path.GetDirectoryName(typeof(PluginService).Assembly.Location)!,
                 "Plugins");
+
+            if(!Directory.Exists(pluginpath))
+                throw new DirectoryNotFoundException(pluginpath);
 
             var catalog = new DirectoryCatalog(pluginpath);
             _container = new CompositionContainer(catalog);
@@ -29,7 +33,7 @@ namespace OmniGenerator.Lib.Infrastructure
 
         public IPackager? GetPackager(string? pluginname) 
         {
-            if (pluginname is not null)
+            if (!string.IsNullOrWhiteSpace(pluginname))
             {
                 return GetPlugin<IPackager>(pluginname);
             }

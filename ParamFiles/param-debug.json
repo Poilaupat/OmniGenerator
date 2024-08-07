@@ -1,0 +1,27 @@
+{
+  "packager": "omni.plain-packager",
+  "root": {
+    "fields": [],
+    "group": {
+      "$type": "group",
+      "name": "remittance",
+      "min-occurs": 100,
+      "max-occurs": 100,
+      "fields": [
+        {
+          "$type": "list-e",
+          "name": "test1",
+          "list": [],
+          "list-file": ".\\Resources\\Lists\\dice.txt"
+        },
+        {
+          "$type": "list-dp",
+          "name": "test2",
+          "list": {},
+          "list-file": ".\\Resources\\Lists\\dice_pdf.txt"
+        }
+      ],
+      "elements": []
+    }
+  }
+}

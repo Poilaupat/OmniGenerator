@@ -9,7 +9,7 @@ namespace OmniGenerator.Lib.Exceptions
     /// <summary>
     /// The exception thrown when error occurs when reading or validating configuration
     /// </summary>
-    internal class ConfigurationException : Exception
+    public class ConfigurationException : Exception
     {
         public List<string> Errors { get; set; } = new List<string>();
 

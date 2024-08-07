@@ -1,4 +1,6 @@
-﻿namespace OmniGenerator.Lib.Generators.Fields
+﻿using OmniGenerator.Lib.Interfaces;
+
+namespace OmniGenerator.Lib.Generators.Fields
 {
     /// <summary>
     /// The base type for all generators that takes one and only one generator as dependence
