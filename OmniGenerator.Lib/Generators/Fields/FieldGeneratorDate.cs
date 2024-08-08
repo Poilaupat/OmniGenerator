@@ -7,6 +7,8 @@
     /// </summary>
     internal class FieldGeneratorDate : AbstractFieldGenerator<DateTime>
     {
+        private readonly Random _random;
+
         /// <summary>
         /// The range min bound. Can be negative
         /// </summary>
@@ -27,11 +29,12 @@
         {
             DayDiffMin = dayDiffMin;
             DayDiffMax = dayDiffMax;
+            _random = new Random();
         }
 
         protected override DateTime GenerateValue()
         {
-            int diff = new Random().Next(DayDiffMin, DayDiffMax);
+            int diff = _random.Next(DayDiffMin, DayDiffMax);
             return DateTime.Today.AddDays(-diff);
         }
     }

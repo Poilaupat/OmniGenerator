@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace OmniGenerator.Lib.Tools
 {
-    internal class DiscreteDistributionRandomGenerator<T> where T : notnull
+    internal class DiscreteDistributionRandomGenerator<T>
+        where T : notnull
     {
         private readonly Dictionary<T, int> _probabilityDensityFunction;
         private readonly Dictionary<T, int> _cumulativeDensityFunctionInverse = new Dictionary<T, int>();

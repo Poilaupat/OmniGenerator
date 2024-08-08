@@ -1,13 +1,13 @@
 [
   {
-    "$type": "list",
+    "$type": "list-e",
     "name": "payor-firstname",
-    "list-path": ".\\Resources\\Lists\\first_names.txt"
+    "list-file": ".\\Resources\\Lists\\first_names.txt"
   },
   {
-    "$type": "list",
+    "$type": "list-e",
     "name": "payor-lastname",
-    "list-path": ".\\Resources\\Lists\\last_names.txt"
+    "list-file": ".\\Resources\\Lists\\last_names.txt"
   },
   {
     "$type": "composite",
@@ -16,14 +16,14 @@
     "format": "{{payor-firstname}} {{payor-lastname}}"
   },
   {
-    "$type": "list",
+    "$type": "list-e",
     "name": "payor-zip-city",
-    "list-path": ".\\Resources\\Lists\\zipcodes_cities.txt"
+    "list-file": ".\\Resources\\Lists\\zipcodes_cities.txt"
   },
   {
-    "$type": "list",
+    "$type": "list-e",
     "name": "payor-lane",
-    "list-path": ".\\Resources\\Lists\\addresses.txt"
+    "list-file": ".\\Resources\\Lists\\addresses.txt"
   },
   {
     "$type": "regex",
