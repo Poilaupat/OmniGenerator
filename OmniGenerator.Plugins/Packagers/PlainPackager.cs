@@ -11,7 +11,7 @@ namespace OmniGenerator.Plugins.Packagers
     /// The directory name is the concatenation of the current date+time with the root numlot
     /// </summary>
     [Export(typeof(IPackager))]
-    [PluginMetadata("omni.plain-packager")]
+    [PluginMetadata("packager.omni.plain")]
     public class PlainPackager : DebugPackagerBase, IPackager
     {
         public async Task ProcessAsync(Root root, string path)

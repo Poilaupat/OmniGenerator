@@ -1,5 +1,5 @@
 {
-  "packager":  "omni.plain-packager",
+  "packager":  "packager.omni.plain",
   "root": {
     "fields": [
       {
@@ -50,7 +50,7 @@
           "elements": [
             {
               "$type": "document",
-              "drawer": "omni.talon",
+              "drawer": "drawer.omni.talon",
               "name": "talon-optique",
               "min-occurs": 1,
               "max-occurs": 1,
@@ -59,7 +59,7 @@
             },
             {
               "$type": "document",
-              "drawer": "omni.cheque",
+              "drawer": "drawer.omni.cheque",
               "name": "cheque",
               "min-occurs": 1,
               "max-occurs": 4,

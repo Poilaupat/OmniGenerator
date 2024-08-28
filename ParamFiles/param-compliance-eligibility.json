@@ -1,5 +1,5 @@
 {
-  "packager":  "tessi.eligibility-packager",
+  "packager":  "packager.tessi.eligibility",
   "root": {
     "fields": [
       {

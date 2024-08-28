@@ -12,7 +12,7 @@ namespace OmniGenerator.Plugins.Packagers
     /// The zip name is the concatenation of the current date+time with the root numlot
     /// </summary>
     [Export(typeof(IPackager))]
-    [PluginMetadata("omni.zip-packager")]
+    [PluginMetadata("packager.omni.zip")]
     public class ZipPackager : DebugPackagerBase, IPackager
     {
         public async Task ProcessAsync(Root root, string path)
