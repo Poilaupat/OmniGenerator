@@ -7,6 +7,8 @@ namespace OmniGenerator.Lib.Generators.Fields
     /// </summary>
     internal class FieldGeneratorEquiprobableList : AbstractFieldGeneratorCollectionBase<string, string>
     {
+        private readonly Random _random;
+
         /// <summary>
         /// Creates a new <see cref="FieldGeneratorEquiprobableList"
         /// </summary>
@@ -15,13 +17,14 @@ namespace OmniGenerator.Lib.Generators.Fields
         public FieldGeneratorEquiprobableList(string name, IEnumerable<string>? list, string listFilePath)
             : base(name, list, listFilePath)
         {
+            _random = new Random();
         }
 
         protected override string GenerateValue()
         {
             if (List.Any())
             {
-                return List.ElementAt(new Random().Next(0, List.Count()));
+                return List.ElementAt(_random.Next(0, List.Count()));
             }
             else
             {

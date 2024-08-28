@@ -12,7 +12,7 @@ namespace OmniGenerator.Lib.Image.Drawers
     /// A <see cref="IDocumentDrawer"/> for talon optique image generation
     /// </summary>
     [Export(typeof(IDocumentDrawer))]
-    [PluginMetadata("omni.talon")]
+    [PluginMetadata("drawer.omni.talon")]
     public class TalonSepaDrawer : DocumentDrawerBase
     {
         /// <summary>

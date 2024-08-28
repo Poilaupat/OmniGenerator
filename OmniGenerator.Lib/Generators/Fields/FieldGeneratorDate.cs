@@ -7,6 +7,8 @@
     /// </summary>
     internal class FieldGeneratorDate : AbstractFieldGenerator<DateTime>
     {
+        private readonly Random _random;
+
         /// <summary>
         /// The range min bound. Can be negative
         /// </summary>
@@ -19,20 +21,24 @@
 
         /// <summary>
         /// Creates a new <see cref="FieldGeneratorDate"/>
+        /// Dates are generated relatively to the current date. 
+        /// The bounds define a range that is used to randomly generate an offset (in days) which is added to the current date
+        /// The bounds can be negative.
         /// </summary>
         /// <param name="name">The name of the generator</param>
-        /// <param name="dayDiffMin">The range min bound</param>
-        /// <param name="dayDiffMax">The range max bound</param>
+        /// <param name="dayDiffMin">The range min bound (included)</param>
+        /// <param name="dayDiffMax">The range max bound (included)</param>
         public FieldGeneratorDate(string name, int dayDiffMin, int dayDiffMax) : base(name)
         {
-            DayDiffMin = dayDiffMin;
-            DayDiffMax = dayDiffMax;
+            DayDiffMin = Math.Min(DayDiffMin, DayDiffMax);
+            DayDiffMax = Math.Max(DayDiffMin, DayDiffMax) + 1;
+            _random = new Random();
         }
 
         protected override DateTime GenerateValue()
         {
-            int diff = new Random().Next(DayDiffMin, DayDiffMax);
-            return DateTime.Today.AddDays(-diff);
+            int diff = _random.Next(DayDiffMin, DayDiffMax);
+            return DateTime.Today.AddDays(diff);
         }
     }
 }

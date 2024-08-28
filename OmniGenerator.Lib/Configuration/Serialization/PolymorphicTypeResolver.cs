@@ -32,8 +32,8 @@ namespace OmniGenerator.Lib.Configuration.Serialization
                 {
                     new JsonDerivedType(typeof(FieldConfigurationRegex), "regex"),
                     new JsonDerivedType(typeof(FieldConfigurationConstant), "constant"),
-                    new JsonDerivedType(typeof(FieldConfigurationEquiprobableList), "list-e"),
-                    new JsonDerivedType(typeof(FieldConfigurationProbabilityDensityList), "list-dp"),
+                    new JsonDerivedType(typeof(FieldConfigurationEquiprobableList), "equiprobable-list"),
+                    new JsonDerivedType(typeof(FieldConfigurationProbabilityDensityList), "probadensity-list"),
                     new JsonDerivedType(typeof(FieldConfigurationKeyCalculator), "key"),
                     new JsonDerivedType(typeof(FieldConfigurationComposite), "composite"),
                     new JsonDerivedType(typeof(FieldConfigurationNumeric), "numeric"),

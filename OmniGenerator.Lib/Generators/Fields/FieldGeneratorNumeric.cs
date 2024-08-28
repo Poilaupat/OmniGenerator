@@ -5,6 +5,8 @@
     /// </summary>
     internal class FieldGeneratorNumeric : AbstractFieldGenerator<int>
     {
+        private readonly Random _random;
+
         /// <summary>
         /// The lower bound of the range
         /// </summary>
@@ -26,6 +28,7 @@
         {
             Min = min;
             Max = max;
+            _random = new Random();
         }
 
         /// <summary>
@@ -34,7 +37,7 @@
         /// <returns></returns>
         protected override int GenerateValue()
         {
-            return new Random().Next(Min, Max);
+            return _random.Next(Min, Max);
         }
     }
 }

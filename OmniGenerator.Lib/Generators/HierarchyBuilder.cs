@@ -10,6 +10,7 @@ namespace OmniGenerator.Lib.Generators
     /// </summary>
     internal sealed class HierarchyBuilder : IHierarchyBuilder
     {
+        private readonly Random _random;
         private long _docId = 1;
         private long _grpId = 1;
 
@@ -22,6 +23,7 @@ namespace OmniGenerator.Lib.Generators
         public HierarchyBuilder(IMapper mapper)
         {
             _mapper = mapper;
+            _random = new Random();
         }
 
         /// <summary>
@@ -45,7 +47,7 @@ namespace OmniGenerator.Lib.Generators
         private int GetRandomOccurence(int minOccurs, int maxOccurs)
         {
             // If occurence is negative (due to negative min-occurs or max-occurs), occurence is set to 0 
-            return Math.Max(new Random().Next(minOccurs, maxOccurs + 1), 0);
+            return Math.Max(_random.Next(minOccurs, maxOccurs + 1), 0);
         }
 
         private IEnumerable<Group> GenerateGroups(GroupConfiguration groupConfiguration)

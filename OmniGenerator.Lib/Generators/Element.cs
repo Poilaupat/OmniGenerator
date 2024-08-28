@@ -5,6 +5,8 @@
     /// </summary>
     public class Element
     {
+        private Group? _parent;
+
         /// <summary>
         /// The element type. Can be document or group
         /// </summary>
@@ -21,9 +23,23 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// The parent element. Can be null if the element is the top element in the tree
+        /// The parent element.
         /// </summary>
-        public Group? Parent { get; set; }
+        public Group Parent 
+        {
+            get
+            {
+                if(_parent is null)
+                    throw new NullReferenceException(nameof(Parent));
+
+                return _parent;
+            }
+
+            set
+            {
+                _parent = value;
+            } 
+        }
 
         /// <summary>
         /// The fields of the element
