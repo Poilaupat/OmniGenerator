@@ -2,6 +2,7 @@
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Tools;
+using OmniGenerator.Plugins.Packagers.Tools;
 using System.ComponentModel.Composition;
 
 namespace OmniGenerator.Plugins.Packagers
@@ -12,7 +13,7 @@ namespace OmniGenerator.Plugins.Packagers
     /// </summary>
     [Export(typeof(IPackager))]
     [PluginMetadata("packager.omni.plain")]
-    public class PlainPackager : DebugPackagerBase, IPackager
+    public class PlainPackager : IPackager
     {
         public async Task ProcessAsync(Root root, string path)
         {
@@ -23,7 +24,7 @@ namespace OmniGenerator.Plugins.Packagers
                 Directory.CreateDirectory(packagepath);
 
             var txtfile = Path.Combine(packagepath, $"{packagename}.txt");
-            await File.WriteAllLinesAsync(txtfile, GetTxtFileContent(root));
+            await File.WriteAllLinesAsync(txtfile, TextExportFileTools.GetDefaultTextFileContent(root));
 
             foreach (var document in root.GetDocuments(true))
             {

@@ -6,6 +6,11 @@
     public class FieldCollection
     {
         private Dictionary<string, Field> _fields { get; } = new Dictionary<string, Field>();
+        
+        /// <summary>
+        /// Returns all the field names of this collection
+        /// </summary>
+        public IEnumerable<string> FieldNames => _fields.Keys;
 
         /// <summary>
         /// Adds a field to the collection.
@@ -59,5 +64,6 @@
         {
             return $"Field count = {_fields.Count}";
         }
+
     }
 }

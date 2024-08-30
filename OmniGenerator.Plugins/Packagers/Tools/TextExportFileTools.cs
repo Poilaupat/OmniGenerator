@@ -1,12 +1,13 @@
 ﻿using OmniGenerator.Lib.Generators;
-using OmniGenerator.Lib.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace OmniGenerator.Plugins.Packagers
+namespace OmniGenerator.Plugins.Packagers.Tools
 {
-    /// <summary>
-    /// A base class for <see cref="IPackager"/> to be used in debug context.
-    /// </summary>
-    public class DebugPackagerBase
+    public static class TextExportFileTools
     {
         /// <summary>
         /// Procuces a human readable file containing data of the documents
@@ -14,7 +15,7 @@ namespace OmniGenerator.Plugins.Packagers
         /// <param name="root">The root containing the documents</param>
         /// <returns>The lines of the file</returns>
         /// <exception cref="NotSupportedException">Thrown if an unknown document is found</exception>
-        protected virtual IEnumerable<string> GetTxtFileContent(Root root)
+        public static IEnumerable<string> GetDefaultTextFileContent(Root root)
         {
             yield return $"00 {DateTime.Now:yyyyMMddHHmmss} {root.Fields["numlot"].Value}";
 

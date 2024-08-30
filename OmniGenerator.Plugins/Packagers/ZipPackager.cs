@@ -2,6 +2,7 @@
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Tools;
+using OmniGenerator.Plugins.Packagers.Tools;
 using System.ComponentModel.Composition;
 using System.IO.Compression;
 
@@ -13,7 +14,7 @@ namespace OmniGenerator.Plugins.Packagers
     /// </summary>
     [Export(typeof(IPackager))]
     [PluginMetadata("packager.omni.zip")]
-    public class ZipPackager : DebugPackagerBase, IPackager
+    public class ZipPackager : IPackager
     {
         public async Task ProcessAsync(Root root, string path)
         {
@@ -27,7 +28,7 @@ namespace OmniGenerator.Plugins.Packagers
                 using (var es = txtfile.Open())
                 using (var sw = new StreamWriter(es))
                 {
-                    foreach (var line in GetTxtFileContent(root))
+                    foreach (var line in TextExportFileTools.GetDefaultTextFileContent(root))
                     {
                         await sw.WriteLineAsync(line);
                     }

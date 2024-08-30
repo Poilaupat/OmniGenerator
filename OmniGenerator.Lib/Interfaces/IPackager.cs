@@ -12,8 +12,8 @@ namespace OmniGenerator.Lib.Interfaces
         /// Generates the files for the given root
         /// </summary>
         /// <param name="root">The rrot</param>
-        /// <param name="path">The directory where the files must be written</param>
+        /// <param name="basepath">The directory where the files must be written</param>
         /// <returns></returns>
-        Task ProcessAsync(Root root, string path);
+        Task ProcessAsync(Root root, string basepath);
     }
 }
