@@ -27,7 +27,7 @@ namespace OmniGenerator.Plugins.Drawers
 
         public override SvgDocument DrawRecto(Document document)
         {
-            var svg = ImageTools.NewBlankSvg(Width, Height);
+            var svg = SvgTools.NewBlankSvg(Width, Height);
 
             DrawRectoBackground(svg);
 

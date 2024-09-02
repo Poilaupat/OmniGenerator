@@ -1,4 +1,5 @@
-﻿using Microsoft.ProgramSynthesis.Utils;
+﻿using Microsoft.ProgramSynthesis.Extraction.Text.Build.NodeTypes;
+using Microsoft.ProgramSynthesis.Utils;
 using Microsoft.ProgramSynthesis.Utils.Interactive;
 using OmniGenerator.Lib.Generators;
 using OmniGenerator.Lib.Infrastructure;
@@ -23,20 +24,19 @@ namespace OmniGenerator.Plugins.Packagers
             if (!Directory.Exists(basepath))
                 Directory.CreateDirectory(basepath);
 
-            
             var filefullpath = Path.Combine(basepath, packagename);
 
             using (var fs = new FileStream(filefullpath, FileMode.Create, FileAccess.ReadWrite))
             using (var sw = new StreamWriter(fs))
             {
                 var deletes = GetDeletes(root);
-                foreach(var delete in deletes)
+                foreach (var delete in deletes)
                     await sw.WriteLineAsync(delete);
 
                 foreach (var group in root.Groups)
                 {
                     var inserts = GetInserts(group);
-                    foreach(var insert in inserts)
+                    foreach (var insert in inserts)
                         await sw.WriteLineAsync(insert);
                 }
             }
@@ -48,11 +48,10 @@ namespace OmniGenerator.Plugins.Packagers
             {
                 var firstRow = table.First();
                 yield return $"INSERT {table.Key} ({string.Join(",", firstRow.Fields.FieldNames)})";
+                yield return $"SELECT {GetValues(firstRow.Fields)}";
 
-                yield return "VALUES";
-
-                foreach (var row in table)                    
-                    yield return $"({string.Join(",", row.Fields.FieldNames.Select(fn => firstRow.Fields[fn].StringValue))}),";
+                foreach (var row in table.Skip(1))
+                    yield return $"UNION SELECT {GetValues(row.Fields)}";
 
                 yield return string.Empty;
             }
@@ -69,10 +68,24 @@ namespace OmniGenerator.Plugins.Packagers
                     .DistinctBy(d => d.Name);
 
                 foreach (var table in tables)
-                    yield return $"DELETE FROM {table};";
+                    yield return $"DELETE FROM {table.Name};";
 
                 yield return string.Empty;
             }
+        }
+
+        private string GetValues(FieldCollection fields)
+        {
+            return string.Join(",", fields
+                .FieldNames
+                .Select(fn => fields[fn].Value switch
+                {
+                    DateTime => $"'{((DateTime)fields[fn].Value).ToString("yyyyMMdd HH:mm:ss")}'",
+                    string => $"'{fields[fn].StringValue}'",
+                    _ => fields[fn].Value
+                }
+                )
+            );
         }
     }
 }

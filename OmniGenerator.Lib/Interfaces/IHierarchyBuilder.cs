@@ -1,5 +1,6 @@
 ﻿using OmniGenerator.Lib.Generators;
 using OmniGenerator.Lib.Configuration;
+using OmniGenerator.Lib.Tools;
 
 namespace OmniGenerator.Lib.Interfaces
 {
@@ -14,6 +15,6 @@ namespace OmniGenerator.Lib.Interfaces
         /// </summary>
         /// <param name="param">The configuration</param>
         /// <returns></returns>
-        Root Build(OmniGeneratorConfiguration config);
+        Root Build(OmniGeneratorConfiguration config, IProgress<ProgressReport>progress);
     }
 }

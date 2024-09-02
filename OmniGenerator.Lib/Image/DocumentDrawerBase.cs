@@ -41,7 +41,7 @@ namespace OmniGenerator.Lib.Image
         /// <returns>A SVG representation of the recto</returns>
         public virtual SvgDocument DrawRecto(Document document)
         {
-            return ImageTools.NewBlankSvg(Width, Height);
+            return SvgTools.NewBlankSvg(Width, Height);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace OmniGenerator.Lib.Image
         /// <returns>A SVG representation of the verso</returns>
         public virtual SvgDocument DrawVerso(Document document)
         {
-            return ImageTools.NewBlankSvg(Width, Height);
+            return SvgTools.NewBlankSvg(Width, Height);
         }
 
         /// <summary>
@@ -59,8 +59,8 @@ namespace OmniGenerator.Lib.Image
         /// </summary>
         private static void LoadFonts()
         {
-            SvgFontManager.PrivateFontDataList.Add(ImageTools.GetFontBytes("Cmc7.ttf"));
-            SvgFontManager.PrivateFontDataList.Add(ImageTools.GetFontBytes("OcrbRegular.ttf"));
+            SvgFontManager.PrivateFontDataList.Add(SvgTools.GetFontBytes("Cmc7.ttf"));
+            SvgFontManager.PrivateFontDataList.Add(SvgTools.GetFontBytes("OcrbRegular.ttf"));
         }
     }
 }

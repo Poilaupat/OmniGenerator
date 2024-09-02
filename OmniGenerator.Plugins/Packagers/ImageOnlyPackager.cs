@@ -1,20 +1,25 @@
 ﻿using OmniGenerator.Lib.Generators;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
-using OmniGenerator.Lib.Tools;
 using OmniGenerator.Plugins.Packagers.Tools;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace OmniGenerator.Plugins.Packagers
 {
     /// <summary>
-    /// A <see cref="IPackager"/> that writes data and image file in a directory
+    /// A <see cref="IPackager"/> that writes only image files in a directory
     /// The directory name is the concatenation of the current date+time with the root numlot
     /// </summary>
     [Export(typeof(IPackager))]
-    [PluginMetadata("packager.omni.plain")]
-    public class PlainPackager : IPackager
+    [PluginMetadata("packager.omni.imageonly")]
+    public class ImageOnlyPackager : IPackager
     {
         public async Task ProcessAsync(Root root, string basepath)
         {
@@ -24,13 +29,12 @@ namespace OmniGenerator.Plugins.Packagers
             if (!Directory.Exists(packagepath))
                 Directory.CreateDirectory(packagepath);
 
-            var txtfile = Path.Combine(packagepath, $"{packagename}.txt");
-            await File.WriteAllLinesAsync(txtfile, PackagerTools.GetDefaultTextFileContent(root));
-
             foreach (var document in root.GetDocuments(true))
             {
                 WriteDocumentImages(document, packagepath);
             }
+
+            await Task.CompletedTask;
         }
 
         private void WriteDocumentImages(Document document, string path)
@@ -51,4 +55,3 @@ namespace OmniGenerator.Plugins.Packagers
         }
     }
 }
-

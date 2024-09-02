@@ -3,6 +3,7 @@ using OmniGenerator.Lib.Exceptions;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Configuration;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
+using OmniGenerator.Lib.Tools;
 
 namespace OmniGenerator.Cli
 {
@@ -23,20 +24,26 @@ namespace OmniGenerator.Cli
 
         public async Task Run(string configurationFilePath, string outputPath)
         {
+            var progress = new Progress<ProgressReport>(pr => 
+            {
+                Console.SetCursorPosition(0, 0);
+                Console.WriteLine(pr); 
+            });
+
             //Configuration reading
             var config = await ConfigurationReader.ReadConfigurationAsync(configurationFilePath);
             ConfigurationReader.CheckConfiguration(config);
 
             //Data generation
-            var root = _hierarchyBuilder.Build(config);
+            var root = _hierarchyBuilder.Build(config, progress);
 
             //Images generation
-            if(_imageComposerProcessor is not null)
+            if (_imageComposerProcessor is not null)
                 await _imageComposerProcessor.DrawImagesAsync(root);
 
             //Files generation
             var packager = _pluginService.GetPackager(config.PackagerName);
-            if(packager is not null)
+            if (packager is not null)
                 await packager.ProcessAsync(root, outputPath);
         }
     }

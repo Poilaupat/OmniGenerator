@@ -2,6 +2,8 @@
 using OmniGenerator.Lib.Generators.Fields;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Configuration;
+using OmniGenerator.Lib.Tools;
+using System.Diagnostics;
 
 namespace OmniGenerator.Lib.Generators
 {
@@ -11,10 +13,11 @@ namespace OmniGenerator.Lib.Generators
     internal sealed class HierarchyBuilder : IHierarchyBuilder
     {
         private readonly Random _random;
-        private long _docId = 1;
-        private long _grpId = 1;
-
         private IMapper _mapper;
+
+        public long CountDoc { get; private set; } = 0;
+        public long CountGroup { get; private set; } = 0;
+
 
         /// <summary>
         /// Creates a new <see cref="HierarchyBuilder"/>
@@ -31,14 +34,14 @@ namespace OmniGenerator.Lib.Generators
         /// </summary>
         /// <param name="config"></param>
         /// <returns></returns>
-        public Root Build(OmniGeneratorConfiguration config)
+        public Root Build(OmniGeneratorConfiguration config, IProgress<ProgressReport> progress)
         {
             var rootContent = GenerateGroups(config.Root.Group);
             var root = new Root(rootContent);
 
             var fgc = new FieldGeneratorCollection(config.Root, _mapper);
 
-            GenerateFields(root, fgc);
+            GenerateFields(root, fgc, progress);
             GenerateAggregateFields(root, fgc);
 
             return root;
@@ -57,7 +60,7 @@ namespace OmniGenerator.Lib.Generators
             int occurences = GetRandomOccurence(groupConfiguration.MinOccurs, groupConfiguration.MaxOccurs);
             for (int i = 0; i < occurences; i++)
             {
-                Group group = new Group(_grpId++, groupConfiguration.Name);
+                Group group = new Group(++CountGroup, groupConfiguration.Name);
                 groups.Add(group);
 
                 foreach (var docParam in groupConfiguration.GetDocumentsConfiguration(false))
@@ -69,7 +72,6 @@ namespace OmniGenerator.Lib.Generators
                 {
                     group.AddRange(GenerateGroups(subGroupConfiguration));
                 }
-
             }
 
             return groups;
@@ -82,15 +84,17 @@ namespace OmniGenerator.Lib.Generators
             int occurences = GetRandomOccurence(documentConfiguration.MinOccurs, documentConfiguration.MaxOccurs);
             for (int i = 0; i < occurences; i++)
             {
-                var document = new Document(_docId++, documentConfiguration.Name, documentConfiguration.ImageComposer);
+                var document = new Document(++CountDoc, documentConfiguration.Name, documentConfiguration.ImageComposer);
                 documents.Add(document);
             }
             return documents;
         }
 
 
-        private void GenerateFields(Root root, FieldGeneratorCollection fgc)
+        private void GenerateFields(Root root, FieldGeneratorCollection fgc, IProgress<ProgressReport> progress)
         {
+            Stopwatch watch = Stopwatch.StartNew();
+
             // Generating root fields
             if (fgc.RootHasFields())
             {
@@ -98,26 +102,54 @@ namespace OmniGenerator.Lib.Generators
                 root.Fields.AddRange(fields);
             }
 
+
+            long processedGroups = 0, processedDocs = 0;
+
             // Generating group fields
-            var groups = root.Groups.Union(root.Groups.SelectMany(x => x.GetGroups(true)));
-            foreach (var group in groups)
+            var groups = root
+                .Groups
+                .Union(root.Groups.SelectMany(x => x.GetGroups(true)));
+
+            Parallel.ForEach(groups, group =>
             {
                 if (fgc.ElementHasFields(group.Name))
                 {
                     var groupFields = fgc.GenerateFields(group.Name);
                     group.Fields.AddRange(groupFields);
                 }
-
-                // Generating document fields
-                foreach (var document in group.GetDocuments(false))
+                processedGroups++;
+                progress.Report(new ProgressReport
                 {
-                    if (fgc.ElementHasFields(document.Name))
-                    {
-                        var fields = fgc.GenerateFields(document.Name);
-                        document.Fields.AddRange(fields);
-                    }
+                    Topic = "Field Generation",
+                    TotalGroups = CountGroup,
+                    TotalDocuments = CountDoc,
+                    ProcessedGroups = processedGroups,
+                    ProcessedDocuments = processedDocs,
+                });
+            });
+
+            // Generating document fields
+            var documents = root.GetDocuments(true);
+            Parallel.ForEach(documents, document =>
+            {
+                if (fgc.ElementHasFields(document.Name))
+                {
+                    var fields = fgc.GenerateFields(document.Name);
+                    document.Fields.AddRange(fields);
                 }
-            }
+                processedDocs++;
+                progress.Report(new ProgressReport
+                {
+                    Topic = "Field Generation",
+                    TotalGroups = CountGroup,
+                    TotalDocuments = CountDoc,
+                    ProcessedGroups = processedGroups,
+                    ProcessedDocuments = processedDocs,
+                });
+            });
+
+            watch.Stop();
+            Console.WriteLine($"Elapsed time {watch.Elapsed.TotalSeconds}s");
         }
 
         private void GenerateAggregateFields(Root root, FieldGeneratorCollection fgc)
