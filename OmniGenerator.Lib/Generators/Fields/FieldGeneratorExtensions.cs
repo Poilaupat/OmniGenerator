@@ -2,6 +2,7 @@
 using OmniGenerator.Lib.Interfaces.FieldGenerators;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -19,7 +20,7 @@ namespace OmniGenerator.Lib.Generators.Fields
         /// </summary>
         /// <param name="fields">The list of <see cref="IFieldGenerator"/> to filter</param>
         /// <returns>The filtered list</returns>
-        public static IEnumerable<IFieldGenerator> FilterNonAggregateFieldGenerators(this IEnumerable<IFieldGenerator> fields)
+        public static IEnumerable<IFieldGenerator> FilterRegularFieldGenerators(this IEnumerable<IFieldGenerator> fields)
         {
             return fields
                .Where(x => x is not FieldGeneratorAggregate)

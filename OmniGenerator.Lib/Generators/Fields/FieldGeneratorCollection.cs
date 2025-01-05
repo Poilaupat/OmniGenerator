@@ -1,153 +1,73 @@
 ﻿using AutoMapper;
-using Microsoft.ProgramSynthesis.Utils.Interactive;
-using OmniGenerator.Lib.Exceptions;
-using OmniGenerator.Lib.Configuration;
-using System.Data;
 using OmniGenerator.Lib.Interfaces.FieldGenerators;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace OmniGenerator.Lib.Generators.Fields
 {
-    /// <summary>
-    /// Manages <see cref="AbstractFieldGenerator{T}"/> by <see cref="Document"/> or <see cref="Group"/>
-    /// </summary>
     internal class FieldGeneratorCollection
     {
-        /// <summary>
-        /// The generators by <see cref="Document"/> or <see cref="Group"/>
-        /// </summary>
-        private Dictionary<string, List<IFieldGenerator>> _generators = new Dictionary<string, List<IFieldGenerator>>();
+        private IEnumerable<IFieldGenerator> _generators;
 
-        /// <summary>
-        /// Creates a new <see cref="FieldGeneratorCollection"/> from configuration classes
-        /// </summary>
-        /// <param name="rootConfiguration">The root configuration</param>
-        /// <param name="mapper">The mapper that projects configuration to fields</param>
-        public FieldGeneratorCollection(RootConfiguration rootConfiguration, IMapper mapper)
+        public string Name { get; }
+
+        public bool HasRegularGenerators { get; } = false;
+
+        public bool HasAggregateGenerators { get; } = false;
+
+        public bool HasDependentGenerators { get; } = false;
+
+        public FieldGeneratorCollection(string name, IEnumerable<IFieldGenerator> generators)
         {
-            //Root field generators (this is why the name 'root' is reserved in param)
-            _generators.Add(RootConfiguration.Name, mapper.Map<List<IFieldGenerator>>(rootConfiguration.Fields));
-
-            //Document field generators
-            rootConfiguration
-                .Group
-                .GetDocumentsConfiguration(true)
-                .ToDictionary(x => x.Name, y => mapper
-                    .Map<List<IFieldGenerator>>(y.Fields)
-                    .ToList())
-                .ToList()
-                .ForEach(kvp => _generators.Add(kvp.Key, kvp.Value));
-            
-            //Group field generators
-            rootConfiguration
-               .Group
-               .GetGroupsAndSelfConfiguration(true)
-               .ToDictionary(x => x.Name, y => mapper
-                    .Map<List<IFieldGenerator>>(y.Fields)
-                    .ToList())
-               .ToList()
-               .ForEach(kvp => _generators.Add(kvp.Key, kvp.Value));
-
-            SetCollateralDependencies();
+            _generators = generators;
+            Name = name;
+            HasRegularGenerators = _generators.FilterRegularFieldGenerators().Any();
+            HasAggregateGenerators = _generators.FilterAggregateFieldGenerators().Any();
+            HasDependentGenerators = _generators.FilterDependantFieldGenerators().Any();
+            _generators.SetCollateralDependencies();
         }
 
         /// <summary>
-        /// Indicates if the root element has fields generators
-        /// </summary>
-        /// <returns>True if root has at least one field. False if not.</returns>
-        public bool RootHasFields()
-        {
-            return _generators.ContainsKey(RootConfiguration.Name);
-        }
-
-        /// <summary>
-        /// Indicates if the element specified by its name has fields generators
-        /// </summary>
-        /// <returns>True if the element has at least one field. False if not.</returns>
-        public bool ElementHasFields(string name)
-        {
-            return _generators.ContainsKey(name);
-        }
-
-        /// <summary>
-        /// Refresh the value of the regular generators in the specified list, uses those values to build a <see cref="FieldCollection"/>
+        /// Refresh the value of the regular generators, uses those values to build a <see cref="FieldCollection"/>
         /// By "regular" generators, we mean all generators but aggregates. The aggregate must be generated separately and after all other generators
         /// </summary>
-        /// <param name="generators">The generators to refresh</param>
         /// <returns>A field collection</returns>
-        private FieldCollection GenerateFields(IEnumerable<IFieldGenerator> generators)
+        public FieldCollection GenerateRegularFields()
         {
             var fields = new FieldCollection();
-
-            foreach (var fieldGenerator in generators.FilterNonAggregateFieldGenerators())
+            if (HasRegularGenerators)
             {
-                fieldGenerator.RefreshValue();
-                fields.Add(fieldGenerator.Name, fieldGenerator.LastValue);
+                foreach (var fieldGenerator in _generators.FilterRegularFieldGenerators())
+                {
+                    fieldGenerator.RefreshValue();
+                    fields.Add(fieldGenerator.Name, fieldGenerator.LastValue);
+                }
             }
-
             return fields;
         }
 
         /// <summary>
-        /// Refresh the value of the aggregates generators is the specified list, uses those values to build a <see cref="FieldCollection"/>
+        /// Refresh the value of the aggregates generators, uses those values to build a <see cref="FieldCollection"/>
         /// </summary>
-        /// <param name="generators">The generators to refresh</param>
         /// <returns>A <see cref="FieldCollection"/></returns>
-        private FieldCollection GenerateAggregateFields(IEnumerable<IFieldGenerator> generators, Group group)
+        public FieldCollection GenerateAggregateFields(Group group)
         {
             var fields = new FieldCollection();
 
-            foreach (var fieldGenerator in generators.FilterAggregateFieldGenerators())
+            if (HasAggregateGenerators)
             {
-                fieldGenerator.Group = group;
-                fieldGenerator.RefreshValue();
-                fields.Add(fieldGenerator.Name, fieldGenerator.LastValue);
+                foreach (var fieldGenerator in _generators.FilterAggregateFieldGenerators())
+                {
+                    fieldGenerator.Group = group;
+                    fieldGenerator.RefreshValue();
+                    fields.Add(fieldGenerator.Name, fieldGenerator.LastValue);
+                }
             }
 
             return fields;
-        }
-
-
-        /// <summary>
-        /// Refreshes the regular fields of the element specified by its name, uses those values to build a <see cref="FieldCollection"/>
-        /// </summary>
-        /// <param name="name">The name of the element to refresh</param>
-        /// <returns>A <see cref="FieldCollection"/></returns>
-        public FieldCollection GenerateFields(string name)
-        {
-            var generators = _generators[name];
-            return GenerateFields(generators);
-        }
-
-        /// <summary>
-        /// Refreshes the aggregate fields of the element specified by its name, uses those values to build a <see cref="FieldCollection"/>
-        /// </summary>
-        /// <param name="name">The name of the element to refresh</param>
-        /// <returns>A <see cref="FieldCollection"/></returns>
-        public FieldCollection GenerateAggregateFields(string name, Group group)
-        {
-            var generators = _generators[name];
-            return GenerateAggregateFields(generators, group);
-        }
-
-        /// <summary>
-        /// Refreshes the regular fields of the root element, uses those values to build a <see cref="FieldCollection"/>
-        /// Note that root element cannot contain aggregate fields
-        /// </summary>
-        /// <returns>A <see cref="FieldCollection"/></returns>
-        public FieldCollection GenerateRootFields()
-        {
-            return GenerateFields(RootConfiguration.Name);
-        }
-
-        /// <summary>
-        /// Sets the Dependencies (from dependency names) of all <see cref="AbstractFieldGeneratorDependant{T}"/> generators 
-        /// </summary>
-        public void SetCollateralDependencies()
-        {
-            foreach (var generators in _generators.Values)
-            {
-                generators.SetCollateralDependencies();
-            }
         }
     }
 }

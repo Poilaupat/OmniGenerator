@@ -25,11 +25,10 @@ namespace OmniGenerator.Lib.Generators
         /// <summary>
         /// Creates a new Document
         /// </summary>
-        /// <param name="id">The id of the document</param>
         /// <param name="name">The name of the document. It can be seen as a document type</param>
         /// <param name="imageComposer">The key of image composer to use when generating image. If null no image will be generated.</param>
-        public Document(long id, string name, string? imageComposer)
-            :base("document", name, id)
+        public Document(string name, string? imageComposer)
+            : base("document", name)
         {
             ImageComposer = imageComposer;
         }

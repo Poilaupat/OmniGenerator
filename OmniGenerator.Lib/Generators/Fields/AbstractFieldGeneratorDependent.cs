@@ -6,7 +6,7 @@ namespace OmniGenerator.Lib.Generators.Fields
 {
     /// <summary>
     /// The base type for all dependent generators
-    /// Those generator depends on the value of other generators to generates its own values
+    /// Those generators depends on the value of other generators to generates their own values
     /// </summary>
     /// <typeparam name="T">The type of the values produced by the <see cref="AbstractFieldGeneratorDependant"/></typeparam>
     internal abstract class AbstractFieldGeneratorDependant<T> : AbstractFieldGenerator<T>, IFieldGeneratorDependent

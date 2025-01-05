@@ -29,27 +29,31 @@ namespace OmniGenerator.Plugins.Packagers
             if (!Directory.Exists(packagepath))
                 Directory.CreateDirectory(packagepath);
 
-            foreach (var document in root.GetDocuments(true))
+            var documents = root
+                .GetDocuments(true)
+                .ToArray();
+
+            for (var i = 0; i < documents.Count(); i++)
             {
-                WriteDocumentImages(document, packagepath);
+                WriteDocumentImages(i, documents[i], packagepath);
             }
 
             await Task.CompletedTask;
         }
 
-        private void WriteDocumentImages(Document document, string path)
+        private void WriteDocumentImages(int i, Document document, string path)
         {
             if (document.RectoImage is not null)
                 PackagerTools.WriteImage(
                     document.RectoImage,
-                    Path.Combine(path, $"{document.Id:000000}R.jpg"),
+                    Path.Combine(path, $"{i:000000}R.jpg"),
                     200,
                     ImageFormat.Jpeg);
 
             if (document.VersoImage is not null)
                 PackagerTools.WriteImage(
                     document.VersoImage,
-                    Path.Combine(path, $"{document.Id:000000}V.jpg"),
+                    Path.Combine(path, $"{i:000000}V.jpg"),
                     200,
                     ImageFormat.Jpeg);
         }

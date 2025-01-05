@@ -4,6 +4,7 @@ using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Configuration;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
 using OmniGenerator.Lib.Tools;
+using System;
 
 namespace OmniGenerator.Cli
 {
@@ -24,27 +25,27 @@ namespace OmniGenerator.Cli
 
         public async Task Run(string configurationFilePath, string outputPath)
         {
-            var progress = new Progress<ProgressReport>(pr => 
-            {
-                Console.SetCursorPosition(0, 0);
-                Console.WriteLine(pr); 
-            });
-
             //Configuration reading
-            var config = await ConfigurationReader.ReadConfigurationAsync(configurationFilePath);
-            ConfigurationReader.CheckConfiguration(config);
+            var generationConfig = await ConfigurationReader.ReadConfigurationAsync(configurationFilePath);
+            ConfigurationReader.CheckConfiguration(generationConfig);
 
             //Data generation
-            var root = _hierarchyBuilder.Build(config, progress);
+            _hierarchyBuilder.Progress = new Progress<BuilderProgressReport>(pr => ConsoleWriter.WriteLine(pr));
+            _hierarchyBuilder.ProgressResolution = 3;
+            var root = _hierarchyBuilder.Build(generationConfig);
 
             //Images generation
+            ConsoleWriter.WriteLine("Starting image generation");
             if (_imageComposerProcessor is not null)
                 await _imageComposerProcessor.DrawImagesAsync(root);
+            ConsoleWriter.WriteLine("Image generation finished");
 
             //Files generation
-            var packager = _pluginService.GetPackager(config.PackagerName);
+            ConsoleWriter.WriteLine("Starting packet generation");
+            var packager = _pluginService.GetPackager(generationConfig.PackagerName);
             if (packager is not null)
                 await packager.ProcessAsync(root, outputPath);
+            ConsoleWriter.WriteLine("Packet generation finished");
         }
     }
 }

@@ -51,8 +51,8 @@
     "group": {
       "$type": "group",
       "name": "transaction",
-      "min-occurs": 500,
-      "max-occurs": 500,
+      "min-occurs": 30000,
+      "max-occurs": 30000,
       "elements": [
         {
           "$type": "document",
@@ -63,8 +63,8 @@
             {
               "$type": "numeric",
               "name": "amount",
-              "min": 1,
-              "max": 10
+              "min": 50000,
+              "max": 500000
             },
             {
               "$type": "regex",

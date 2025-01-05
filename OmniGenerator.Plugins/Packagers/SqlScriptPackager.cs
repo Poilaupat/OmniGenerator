@@ -44,7 +44,7 @@ namespace OmniGenerator.Plugins.Packagers
 
         private IEnumerable<string> GetInserts(Group group)
         {
-            foreach (var table in group.GetDocuments().GroupBy(d => d.Name))
+            foreach (var table in group.GetDocuments(null).GroupBy(d => d.Name))
             {
                 var firstRow = table.First();
                 yield return $"INSERT {table.Key} ({string.Join(",", firstRow.Fields.FieldNames)})";

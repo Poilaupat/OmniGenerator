@@ -18,13 +18,13 @@
         {
           "$type": "document",
           "name": "T_CONF_ELIGIBILITY_CONSECUTIVE_CHECKS",
-          "min-occurs": 10000,
-          "max-occurs": 10000,
+          "min-occurs": 10000000,
+          "max-occurs": 10000000,
           "fields": [
             {
-              "$type": "equiprobable-list",
+              "$type": "constant",
               "name": "bankCode",
-              "list-file": ".\\Resources\\Lists\\codes_banques.txt"
+              "value": "99999"
             },
             {
               "$type": "equiprobable-list",
@@ -61,81 +61,6 @@
               "$type": "constant",
               "name": "isTechnicalAccount",
               "value": "0"
-            }
-          ]
-        },
-        {
-          "$type": "document",
-          "name": "T_CONF_ELIGIBILITY_MANY_CHECKS_DEBIT",
-          "min-occurs": 10000,
-          "max-occurs": 10000,
-          "fields": [
-            {
-              "$type": "equiprobable-list",
-              "name": "bankCode",
-              "list-file": ".\\Resources\\Lists\\codes_banques.txt"
-            },
-            {
-              "$type": "equiprobable-list",
-              "name": "providerSourceId",
-              "list-file": ".\\Resources\\Lists\\codes_banques.txt"
-            },
-            {
-              "$type": "date",
-              "name": "created_date",
-              "day-diff-min": -1,
-              "day-diff-max": -365
-            },
-            {
-              "$type": "regex",
-              "name": "account",
-              "pattern": "\\d{11}"
-            },
-            {
-              "$type": "numeric",
-              "name": "amount",
-              "min": 10,
-              "max": 9999
-            }
-          ]
-        },
-        {
-          "$type": "document",
-          "name": "T_CONF_ELIGIBILITY_MANY_DEPOSITS",
-          "min-occurs": 10000,
-          "max-occurs": 10000,
-          "fields": [
-            {
-              "$type": "equiprobable-list",
-              "name": "bankCode",
-              "list-file": ".\\Resources\\Lists\\codes_banques.txt"
-            },
-            {
-              "$type": "equiprobable-list",
-              "name": "providerSourceId",
-              "list-file": ".\\Resources\\Lists\\codes_banques.txt"
-            },
-            {
-              "$type": "equiprobable-list",
-              "name": "remitting_branch_code",
-              "list-file": ".\\Resources\\Lists\\codes_banques.txt"
-            },
-            {
-              "$type": "date",
-              "name": "created_date",
-              "day-diff-min": -1,
-              "day-diff-max": -365
-            },
-            {
-              "$type": "regex",
-              "name": "account",
-              "pattern": "\\d{11}"
-            },
-            {
-              "$type": "numeric",
-              "name": "amount",
-              "min": 10,
-              "max": 9999
             }
           ]
         }

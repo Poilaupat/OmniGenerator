@@ -33,36 +33,40 @@ namespace OmniGenerator.Plugin.Tessi.Packagers.Compliance
                 header
                 );
 
-            foreach (var document in root.GetDocuments(true))
+            var documents = root
+                .GetDocuments(true)
+                .ToArray();
+
+            for (var i = 0; i < documents.Count(); i++)
             {
                 var deposit = new Deposit(
                     root.Fields["culture"].StringValue,
-                    document.Fields["remittingBranchCode"].StringValue,
-                    document.Fields["scanBranchCode"].StringValue,
-                    document.Fields["scanner"].StringValue,
-                    document.Fields["scanType"].StringValue,
-                    document.Fields["chain"].StringValue
+                    root.Fields["bankUnitCode"].StringValue,
+                    root.Fields["providerCode"].StringValue,
+                    documents[i].Fields["scanner"].StringValue,
+                    documents[i].Fields["scanType"].StringValue,
+                    documents[i].Fields["chain"].StringValue
                 );
 
                 var micr = new Micr(
-                    document.Fields["z4"].StringValue,
-                    document.Fields["z3"].StringValue,
-                    document.Fields["z2"].StringValue
+                    documents[i].Fields["z4"].StringValue,
+                    documents[i].Fields["z3"].StringValue,
+                    documents[i].Fields["z2"].StringValue
                     );
 
                 var check = new Check(
                     root.Fields["culture"].StringValue,
-                    (int)document.Fields["amount"].Value,
-                    document.Fields["providerId"].StringValue,
-                    (int)document.Id,
+                    (int)documents[i].Fields["amount"].Value,
+                    documents[i].Fields["providerId"].StringValue,
+                    i,
                     micr
                 );
 
                 var transaction = new Transaction(
-                    (int)document.Fields["amount"].Value,
-                    document.Fields["remittingBranchCode"].StringValue,
-                    document.Fields["deskCode"].StringValue,
-                    document.Fields["accountNumber"].StringValue,
+                    (int)documents[i].Fields["amount"].Value,
+                    documents[i].Fields["remittingBranchCode"].StringValue,
+                    documents[i].Fields["deskCode"].StringValue,
+                    documents[i].Fields["accountNumber"].StringValue,
                     deposit,
                     check
                 );

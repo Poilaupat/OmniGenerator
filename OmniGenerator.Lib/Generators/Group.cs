@@ -1,68 +1,65 @@
-﻿namespace OmniGenerator.Lib.Generators
+﻿using OmniGenerator.Lib.Exceptions;
+using OmniGenerator.Lib.Generators.Fields;
+using System.Reflection.Metadata;
+using System.Xml.Linq;
+
+namespace OmniGenerator.Lib.Generators
 {
     /// <summary>
     /// Modelize a <see cref="Group"/> with its inner <see cref="Document"/> or <see cref="Group"/> as <see cref="Element"/>.
     /// </summary>
     public class Group : Element
     {
-        private IList<Element> _elements = new List<Element>();
+        //private IList<Element> _elements = new List<Element>();
+        private Group[] _groups;
+        private Document[] _documents;
+
 
         /// <summary>
         /// Creates a new <see cref="Group"/>.
         /// </summary>
-        /// <param name="id">^The id of the group.</param>
         /// <param name="name">The name of the group. Can be seen as a group type.</param>
-        public Group(long id, string name)
-            : base("group", name, id)
+        /// 
+        public Group(string name, Group[] groups, Document[] documents)
+            : base("group", name)
         {
+            _groups = groups ?? new Group[0];
+            _documents = documents ?? new Document[0];
 
-        }
-
-        /// <summary>
-        /// Adds the provided element to the children of the group.
-        /// </summary>
-        /// <param name="element">The child element.</param>
-        public void Add(Element element)
-        {
-            element.Parent = this;
-            _elements.Add(element);
-        }
-
-        /// <summary>
-        /// Adds the provided elements to the children of the group.
-        /// </summary>
-        /// <param name="element">The list of child element.</param>
-        public void AddRange(IEnumerable<Element> elements)
-        {
-            foreach (var element in elements)
+            foreach (var group in _groups)
             {
-                Add(element);
+                group.Parent = this;
             }
+
+            foreach (var document in _documents)
+            {
+                document.Parent = this;
+            }
+
         }
 
-        /// <summary>
-        /// Gets the child elements of this group.
-        /// The search can be optionally filtered by the name of the element
-        /// If the recursive flag is set to true, the result will be a flattened list of all the matching elements in the hierarchy
-        /// </summary>
-        /// <param name="name">Optionnal. If set, the search will return child elements by name</param>
-        /// <param name="recursive">Indicates if the search is limited to the direct child or must scope to the sub-groups</param>
-        /// <returns></returns>
-        public IEnumerable<Element> GetElements(string? name, bool recursive = false)
-        {
-            foreach(var element in _elements)
-            {
-                if(name is null || element.Name.Equals(name))
-                {
-                    yield return element;
-                }
 
-                if(recursive && element is Group group)
+
+
+        /// <summary>
+        /// Gets all the child documents
+        /// </summary>
+        /// <param name="recursive">Indicates if the search is limited to the direct child or must scope to the sub-groups</param>
+        /// <returns>The list of document</returns>
+        public IEnumerable<Document> GetDocuments(string? name, bool recursive = false)
+        {
+            foreach (var document in _documents)
+            {
+                if (name is null || document.Name.Equals(name))
+                    yield return document;
+            }
+
+            if (recursive)
+            {
+                foreach (var group in _groups)
                 {
-                    foreach(var subElement in group.GetElements(name, recursive))
-                    {
-                        yield return subElement;
-                    }
+                    foreach (var document in group.GetDocuments(name, recursive))
+                        yield return document;
                 }
             }
         }
@@ -71,48 +68,62 @@
         /// Gets all the child groups
         /// </summary>
         /// <param name="recursive">Indicates if the search is limited to the direct child or must scope to the sub-groups</param>
-        /// <returns>The list of groups</returns>
-        public IEnumerable<Group> GetGroups(bool recursive = false)
+        /// <returns>The list of group</returns>
+        public IEnumerable<Group> GetGroups(string? name, bool recursive = false)
         {
-            return GetElements(null, recursive)
-                .Where(x => x is Group)
-                .Cast<Group>();
+            foreach (var group in _groups)
+            {
+                if (name is null || group.Name.Equals(name))
+                {
+                    yield return group;
+                }
+
+                if (recursive)
+                {
+                    foreach (var subgroup in group.GetGroups(name, recursive))
+                        yield return subgroup;
+                }
+            }
+        }
+
+        public IEnumerable<Element> GetElements(string name, bool recursive = false)
+        {
+            return GetType(name).Name switch
+            {
+                nameof(Document) => GetDocuments(name, recursive),
+                nameof(Group) => GetGroups(name, recursive),
+                _ => Array.Empty<Element>()
+            };
         }
 
         /// <summary>
-        /// Gets all the child groups whose name match the provided name
+        /// Generate the fields of this group. 
+        /// The regular fields and aggregate fields of scope DirectChildren are generated : It means that this method should be called AFTER all the subDocuments and subGroups have been generated and attached.
         /// </summary>
-        /// <param name="recursive">Indicates if the search is limited to the direct child or must scope to the sub-groups</param>
-        /// <returns>The list of groups</returns>
-        public IEnumerable<Group> GetGroups(string name, bool recursive = false)
+        /// <param name="generators">A field generator collection</param>
+        public override void GenerateFields(FieldGeneratorContainer generators)
         {
-            return GetElements(name, recursive)
-                .Where(x => x is Group)
-                .Cast<Group>();
+            if (generators is null)
+                throw new ArgumentNullException(nameof(generators));
+
+            if (generators.ElementHasFields(this.Name))
+            {
+                //Regular fields
+                Fields.AddRange(generators.GenerateRegularFields(this.Name));
+                //Aggregates fields of scope DirectChildren
+                Fields.AddRange(generators.GenerateAggregateFields(this.Name, this));
+            }
         }
 
-        /// <summary>
-        /// Gets all the child documents
-        /// </summary>
-        /// <param name="recursive">Indicates if the search is limited to the direct child or must scope to the sub-groups</param>
-        /// <returns>The list of groups</returns>
-        public IEnumerable<Document> GetDocuments(bool recursive = false)
+        private Type GetType(string name)
         {
-            return GetElements(null, recursive)
-                .Where(x => x is Document)
-                .Cast<Document>();
-        }
+            if (GetDocuments(name, true).Any(e => e.Name.Equals(name)))
+                return typeof(Document);
 
-        /// <summary>
-        /// Gets all the child documents whose name match the provided name
-        /// </summary>
-        /// <param name="recursive">Indicates if the search is limited to the direct child or must scope to the sub-groups</param>
-        /// <returns>The list of groups</returns>
-        public IEnumerable<Document> GetDocuments(string name, bool recursive = false)
-        {
-            return GetElements(name, recursive)
-                .Where(x => x is Document)
-                .Cast<Document>();
+            if (GetGroups(name, true).Any(e => e.Name.Equals(name)))
+                return typeof(Group);
+
+            throw new ConfigurationException($"{name} is not a group nor a document");
         }
     }
 }

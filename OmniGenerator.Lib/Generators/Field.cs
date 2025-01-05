@@ -3,22 +3,22 @@
     /// <summary>
     /// Modelize an element's field
     /// </summary>
-    public class Field
+    public readonly struct Field
     {
         /// <summary>
         /// The field name
         /// </summary>
-        public string Name { get; set; }
+        public readonly string Name { get; }
 
         /// <summary>
         /// The field value
         /// </summary>
-        public object Value { get; set; }
+        public readonly object Value { get; }
 
         /// <summary>
         /// The field value as a string representation
         /// </summary>
-        public string StringValue => Value?.ToString() ?? string.Empty;
+        public readonly string StringValue => Value?.ToString() ?? string.Empty;
 
         /// <summary>
         /// Creates a new <see cref="Field"/>
@@ -31,7 +31,7 @@
             Value = value;
         }
 
-        public override string ToString()
+        public readonly override string ToString()
         {
             return $"Name={Name} Value={Value}";
         }

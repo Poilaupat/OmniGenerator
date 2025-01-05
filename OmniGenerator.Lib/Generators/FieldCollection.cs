@@ -13,6 +13,11 @@
         public IEnumerable<string> FieldNames => _fields.Keys;
 
         /// <summary>
+        /// Returns the number of fields of this collection
+        /// </summary>
+        public long FieldCount => _fields.Count;
+
+        /// <summary>
         /// Adds a field to the collection.
         /// If the entry with the same key already exists, the field is updated
         /// </summary>

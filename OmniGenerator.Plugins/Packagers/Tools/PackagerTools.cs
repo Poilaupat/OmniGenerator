@@ -26,15 +26,19 @@ namespace OmniGenerator.Plugins.Packagers.Tools
         {
             yield return $"00 {DateTime.Now:yyyyMMddHHmmss} {root.Fields["numlot"].Value}";
 
-            foreach (var document in root.GetDocuments(true))
+            var documents = root
+                .GetDocuments(true)
+                .ToArray();
+
+            for (var i = 0; i < documents.Count(); i++)
             {
-                if (document.Fields is not null)
+                if (documents[i].Fields is not null)
                 {
-                    yield return document.Name switch
+                    yield return documents[i].Name switch
                     {
-                        "slip" => $"{document.Fields["encline"].Value} {document.Id}",
-                        "talon-optique" => $"{document.Fields["encline"].Value} {document.Id}",
-                        "cheque" => $"{document.Fields["encline"].Value} {document.Id}",
+                        "slip" => $"{documents[i].Fields["encline"].Value} {i}",
+                        "talon-optique" => $"{documents[i].Fields["encline"].Value} {i}",
+                        "cheque" => $"{documents[i].Fields["encline"].Value} {i}",
                         _ => throw new NotSupportedException("{document.Name} was an unexpected document type"),
                     };
                 }

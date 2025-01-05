@@ -33,7 +33,7 @@
         /// <returns>The list of <see cref="Document"/></returns>
         public IEnumerable<Document> GetDocuments(bool recursive = false)
         {
-            foreach (var document in Groups.SelectMany(x => x.GetDocuments(true)))
+            foreach (var document in Groups.SelectMany(x => x.GetDocuments(null, true)))
             {
                 yield return document;
             }

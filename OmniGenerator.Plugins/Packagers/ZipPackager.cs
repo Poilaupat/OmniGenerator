@@ -34,19 +34,24 @@ namespace OmniGenerator.Plugins.Packagers
                         await sw.WriteLineAsync(line);
                     }
                 }
-                foreach (var document in root.GetDocuments(true))
+
+                var documents = root
+                .GetDocuments(true)
+                .ToArray();
+
+                for (var i = 0; i < documents.Count(); i++)
                 {
-                    WriteDocumentImages(document, archive);
+                    WriteDocumentImages(i, documents[i], archive);
                 }
             }
         }
-        private void WriteDocumentImages(Document document, ZipArchive archive)
+        private void WriteDocumentImages(int i, Document document, ZipArchive archive)
         {
             if (document.RectoImage is not null)
                 PackagerTools.WriteImage(
                     document.RectoImage,
                     archive,
-                    $"{document.Id:000000}R.jpg",
+                    $"{i:000000}R.jpg",
                     200,
                     ImageFormat.Jpeg);
 
@@ -54,7 +59,7 @@ namespace OmniGenerator.Plugins.Packagers
                 PackagerTools.WriteImage(
                     document.VersoImage,
                     archive,
-                    $"{document.Id:000000}V.jpg",
+                    $"{i:000000}V.jpg",
                     200,
                     ImageFormat.Jpeg);
         }

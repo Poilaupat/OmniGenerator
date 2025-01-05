@@ -30,8 +30,8 @@
         /// <param name="dayDiffMax">The range max bound (included)</param>
         public FieldGeneratorDate(string name, int dayDiffMin, int dayDiffMax) : base(name)
         {
-            DayDiffMin = Math.Min(DayDiffMin, DayDiffMax);
-            DayDiffMax = Math.Max(DayDiffMin, DayDiffMax) + 1;
+            DayDiffMin = Math.Min(dayDiffMin, dayDiffMax);
+            DayDiffMax = Math.Max(dayDiffMin, dayDiffMax) + 1;
             _random = new Random();
         }
 

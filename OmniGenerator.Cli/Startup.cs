@@ -7,6 +7,7 @@ using OmniGenerator.Lib.Image;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
+using OmniGenerator.Lib.Tools;
 
 namespace OmniGenerator.Cli
 {
@@ -19,11 +20,17 @@ namespace OmniGenerator.Cli
 
             var builder = new ContainerBuilder();
             builder.RegisterInstance(mapper).As<IMapper>();
-            builder.RegisterInstance(config).As<IConfiguration>();
             builder.RegisterType<Application>();
             builder.RegisterType<HierarchyBuilder>().As<IHierarchyBuilder>();
             builder.RegisterType<DocumentDrawerManager>().As<IDocumentDrawerManager>();
             builder.RegisterType<PluginService>().As<IPluginService>();
+
+            builder.RegisterGeneric(typeof(Progress<>)).As(typeof(IProgress<>)).InstancePerLifetimeScope();
+            builder.RegisterType<BuilderProgressReport>();
+
+            //Configuration
+            builder.RegisterInstance(config).As<IConfiguration>();
+            
 
             return builder.Build();
         }

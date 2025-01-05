@@ -15,6 +15,9 @@ namespace OmniGenerator.Lib.Interfaces
         /// </summary>
         /// <param name="param">The configuration</param>
         /// <returns></returns>
-        Root Build(OmniGeneratorConfiguration config, IProgress<ProgressReport>progress);
+        Root Build(OmniGeneratorConfiguration config);
+
+        IProgress<BuilderProgressReport>? Progress { get; set; }
+        int ProgressResolution { get; set; }
     }
 }

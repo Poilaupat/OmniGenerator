@@ -1,4 +1,6 @@
-﻿namespace OmniGenerator.Lib.Generators
+﻿using OmniGenerator.Lib.Generators.Fields;
+
+namespace OmniGenerator.Lib.Generators
 {
     /// <summary>
     /// Modelize the base class for <see cref="Document" and <see cref="Group"/>/>
@@ -12,10 +14,6 @@
         /// </summary>
         public string Type { get; }
 
-        /// <summary>
-        /// The element id. 
-        /// </summary>
-        public long Id { get; set; }
 
         /// <summary>
         /// The element name. Can be seen as a "subtype"
@@ -51,17 +49,33 @@
         /// </summary>
         /// <param name="type">The type (document or group)</param>
         /// <param name="name">The name (subtype)</param>
-        /// <param name="id">The id of the element</param>
-        public Element(string type, string name, long id) 
+        /// 
+        public Element(string type, string name)
         {
             Type = type;
             Name = name;
-            Id = id;
         }
+
+        /// <summary>
+        /// Generates the fields of this element
+        /// </summary>
+        /// <param name="generators">A field generator collection</param>
+        /// <exception cref="ArgumentNullException">The field generator collection must not be null</exception>
+        public virtual void GenerateFields(FieldGeneratorContainer generators)
+        {
+            if(generators is null)
+                throw new ArgumentNullException(nameof(generators));
+
+            if(generators.ElementHasFields(this.Name))
+            {
+                Fields.AddRange(generators.GenerateRegularFields(this.Name));
+            }
+        }
+
 
         public override string ToString()
         {
-            return $"{this.GetType().Name} ({Name}, {Id})";
+            return $"{this.GetType().Name} ({Name})";
         }
     }
 }
