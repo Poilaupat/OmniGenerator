@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OmniGenerator.Lib.Interfaces.FieldGenerators
 {
-    internal interface IFieldGeneratorCollection<TCollection> : IFieldGenerator
+    internal interface IFieldGeneratorFromList<TCollection> : IFieldGenerator
         where TCollection : notnull
     {
         /// <summary>

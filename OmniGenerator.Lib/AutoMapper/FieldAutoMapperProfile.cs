@@ -29,9 +29,9 @@ namespace OmniGenerator.Lib.AutoMapper
                 .Include<FieldConfigurationComposite, FieldGeneratorComposite>()
                 .Include<FieldConfigurationAggregate, FieldGeneratorAggregate>();
 
-            CreateMap(typeof(AbstractFieldConfigurationCollectionBase), typeof(AbstractFieldGeneratorCollectionBase<,>));
+            CreateMap(typeof(AbstractFieldConfigurationCollectionBase), typeof(AbstractFieldGeneratorFromListBase<,>));
 
-            CreateMap(typeof(AbstractFieldConfigurationCollectionBase), typeof(IFieldGeneratorCollection<>))
+            CreateMap(typeof(AbstractFieldConfigurationCollectionBase), typeof(IFieldGeneratorFromList<>))
                 .IncludeBase(typeof(AbstractFieldConfigurationBase), typeof(IFieldGenerator))
                 .Include(typeof(FieldConfigurationEquiprobableList), typeof(FieldGeneratorEquiprobableList))
                 .Include(typeof(FieldConfigurationProbabilityDensityList), typeof(FieldGeneratorProbabilityDensityList));

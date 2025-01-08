@@ -19,18 +19,19 @@ namespace OmniGenerator.Cli
             var mapper = GetMapper();
 
             var builder = new ContainerBuilder();
+            
+            //Configuration & mapping instances
+            builder.RegisterInstance(config).As<IConfiguration>();
             builder.RegisterInstance(mapper).As<IMapper>();
+            
             builder.RegisterType<Application>();
             builder.RegisterType<HierarchyBuilder>().As<IHierarchyBuilder>();
             builder.RegisterType<DocumentDrawerManager>().As<IDocumentDrawerManager>();
             builder.RegisterType<PluginService>().As<IPluginService>();
 
+            //Open generic type for IProgress & concrete types
             builder.RegisterGeneric(typeof(Progress<>)).As(typeof(IProgress<>)).InstancePerLifetimeScope();
             builder.RegisterType<BuilderProgressReport>();
-
-            //Configuration
-            builder.RegisterInstance(config).As<IConfiguration>();
-            
 
             return builder.Build();
         }

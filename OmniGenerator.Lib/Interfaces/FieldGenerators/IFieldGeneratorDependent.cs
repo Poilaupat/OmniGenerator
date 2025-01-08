@@ -20,11 +20,11 @@ namespace OmniGenerator.Lib.Interfaces.FieldGenerators
         List<IFieldGenerator> Dependences { get; }
 
         /// <summary>
-        /// Indicates if the <see cref="IFieldGeneratorDependent"/> is dependant on the generator specified in the paramters
+        /// Indicates if the <see cref="IFieldGeneratorDependent"/> is dependant on the generator specified in parameter
         /// This method must check dependencies transitively. This means that :
         ///     - If A is dependant on B
         ///     - If B is dependant on C
-        ///     - Then A.IsDependentUpon(C) must return true
+        ///     - Then A.IsDependentUpon(C) returns true
         /// </summary>
         /// <param name="generator">The generator to check dependency upon</param>
         /// <returns>True if instance is dependent on generator, false if not</returns>

@@ -10,7 +10,7 @@ namespace OmniGenerator.Lib.Generators.Fields
     /// <summary>
     /// <see cref="FieldGeneratorProbabilityDensityList"/> picks up items in a collection according to a discrete probability density function
     /// </summary>
-    internal class FieldGeneratorProbabilityDensityList : AbstractFieldGeneratorCollectionBase<string, KeyValuePair<string, int>>
+    internal class FieldGeneratorProbabilityDensityList : AbstractFieldGeneratorFromListBase<string, KeyValuePair<string, int>>
     {
         private readonly DiscreteDistributionRandomGenerator<string> _random;
 

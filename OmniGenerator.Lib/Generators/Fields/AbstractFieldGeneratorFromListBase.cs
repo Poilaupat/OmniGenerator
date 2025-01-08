@@ -16,20 +16,20 @@ namespace OmniGenerator.Lib.Generators.Fields
     /// </summary>
     /// <typeparam name="TGenerator">The generator type</typeparam>
     /// <typeparam name="TCollection">The type of collection</typeparam>
-    internal abstract class AbstractFieldGeneratorCollectionBase<TGenerator, TCollection>
-        : AbstractFieldGenerator<TGenerator>, IFieldGeneratorCollection<TCollection>
+    internal abstract class AbstractFieldGeneratorFromListBase<TGenerator, TCollection>
+        : AbstractFieldGenerator<TGenerator>, IFieldGeneratorFromList<TCollection>
         where TGenerator : notnull
         where TCollection : notnull
     {
         public virtual IEnumerable<TCollection> List { get; }
 
         /// <summary>
-        /// Creates a new <see cref="AbstractFieldGeneratorListBase"/>
+        /// Creates a new <see cref="AbstractFieldGeneratorFromListBase{TGenerator, TCollection}"/>
         /// </summary>
         /// <param name="name">The name of the generator</param>
         /// <param name="list">The configured list</param>
         /// <param name="listFilePath">The path of the configured file</param>
-        public AbstractFieldGeneratorCollectionBase(string name, IEnumerable<TCollection>? list, string? listFilePath)
+        public AbstractFieldGeneratorFromListBase(string name, IEnumerable<TCollection>? list, string? listFilePath)
             : base(name)
         {
             //Priority to the items from the file if specified

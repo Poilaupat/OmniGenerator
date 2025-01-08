@@ -5,9 +5,10 @@ namespace OmniGenerator.Lib.Generators.Fields
     /// <summary>
     /// The <see cref="FieldGeneratorEquiprobableList"/> picks a random values within a collection. Each item of the collection has an equiprobable chance to be picked up. 
     /// </summary>
-    internal class FieldGeneratorEquiprobableList : AbstractFieldGeneratorCollectionBase<string, string>
+    internal class FieldGeneratorEquiprobableList : AbstractFieldGeneratorFromListBase<string, string>
     {
         private readonly Random _random;
+        private readonly int _listcount;
 
         /// <summary>
         /// Creates a new <see cref="FieldGeneratorEquiprobableList"
@@ -18,13 +19,14 @@ namespace OmniGenerator.Lib.Generators.Fields
             : base(name, list, listFilePath)
         {
             _random = new Random();
+            _listcount = List.Count();
         }
 
         protected override string GenerateValue()
         {
             if (List.Any())
             {
-                return List.ElementAt(_random.Next(0, List.Count()));
+                return List.ElementAt(_random.Next(0, _listcount));
             }
             else
             {

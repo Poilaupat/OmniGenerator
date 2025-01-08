@@ -36,7 +36,7 @@ namespace OmniGenerator.Lib.Image
             foreach (var docByComposer in docsByComposer.Where(g => !string.IsNullOrWhiteSpace(g.Key)))
             {
                 //Getting the appropriate IImageComposer implementation from DI container for the current document type
-                var composer = _pluginService.GetImageComposer(docByComposer.Key!);
+                var composer = _pluginService.GetDocumentDrawer(docByComposer.Key!);
 
                 if (composer is not null)
                 {

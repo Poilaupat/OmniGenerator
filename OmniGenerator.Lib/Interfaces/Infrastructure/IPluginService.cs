@@ -10,6 +10,6 @@ namespace OmniGenerator.Lib.Interfaces.Infrastructure
     {
         IPackager? GetPackager(string? pluginname);
 
-        IDocumentDrawer? GetImageComposer(string? pluginname);
+        IDocumentDrawer? GetDocumentDrawer(string? pluginname);
     }
 }

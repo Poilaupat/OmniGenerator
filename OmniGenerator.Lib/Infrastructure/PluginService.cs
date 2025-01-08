@@ -41,9 +41,9 @@ namespace OmniGenerator.Lib.Infrastructure
             return null;
         }
 
-        public IDocumentDrawer? GetImageComposer(string? pluginname)
+        public IDocumentDrawer? GetDocumentDrawer(string? pluginname)
         {
-            if (pluginname is not null)
+            if (!string.IsNullOrWhiteSpace(pluginname))
             {
                 return GetPlugin<IDocumentDrawer>(pluginname);
             }
