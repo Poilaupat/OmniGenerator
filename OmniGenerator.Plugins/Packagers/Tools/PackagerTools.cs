@@ -27,7 +27,7 @@ namespace OmniGenerator.Plugins.Packagers.Tools
             yield return $"00 {DateTime.Now:yyyyMMddHHmmss} {root.Fields["numlot"].Value}";
 
             var documents = root
-                .GetDocuments(true)
+                .GetDocuments()
                 .ToArray();
 
             for (var i = 0; i < documents.Count(); i++)

@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
-using OmniGenerator.Lib.Exceptions;
 using OmniGenerator.Lib.Interfaces;
-using OmniGenerator.Lib.Configuration;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
+using OmniGenerator.Lib.Configuration;
 using OmniGenerator.Lib.Tools;
-using System;
 
 namespace OmniGenerator.Cli
 {
@@ -30,9 +28,12 @@ namespace OmniGenerator.Cli
             ConfigurationReader.CheckConfiguration(generationConfig);
 
             //Data generation
-            _hierarchyBuilder.Progress = new Progress<BuilderProgressReport>(pr => ConsoleWriter.WriteLine(pr));
-            _hierarchyBuilder.ProgressResolution = 3;
-            var root = _hierarchyBuilder.Build(generationConfig);
+            var root = await _hierarchyBuilder.BuildAsync(
+                generationConfig, 
+                new Progress<HierarchyBuilderProgressReport>(pr =>
+                {
+                    ConsoleWriter.WriteLine(pr);
+                }));
 
             //Images generation
             ConsoleWriter.WriteLine("Starting image generation");

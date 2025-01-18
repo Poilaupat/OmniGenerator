@@ -1,5 +1,6 @@
 ﻿using OmniGenerator.Lib.Exceptions;
 using OmniGenerator.Lib.Generators.Fields;
+using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Xml.Linq;
 
@@ -8,18 +9,18 @@ namespace OmniGenerator.Lib.Generators
     /// <summary>
     /// Modelize a <see cref="Group"/> with its inner <see cref="Document"/> or <see cref="Group"/> as <see cref="Element"/>.
     /// </summary>
+    [DebuggerDisplay("Group = {Name}")]
     public class Group : Element
     {
-        //private IList<Element> _elements = new List<Element>();
         private Group[] _groups;
         private Document[] _documents;
-
 
         /// <summary>
         /// Creates a new <see cref="Group"/>.
         /// </summary>
         /// <param name="name">The name of the group. Can be seen as a group type.</param>
-        /// 
+        /// <param name="groups">Inner groups of this grou</param>
+        /// <param name="documents">Inner documents of this grou</param>
         public Group(string name, Group[] groups, Document[] documents)
             : base("group", name)
         {
@@ -35,11 +36,7 @@ namespace OmniGenerator.Lib.Generators
             {
                 document.Parent = this;
             }
-
         }
-
-
-
 
         /// <summary>
         /// Gets all the child documents

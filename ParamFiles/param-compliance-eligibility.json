@@ -1,6 +1,6 @@
 {
   "packager":  "packager.tessi.eligibility",
-  "root": {
+  "hierarchy": {
     "fields": [
       {
         "$type": "regex",
@@ -48,7 +48,7 @@
         "value": "V1.0.9"
       }
     ],
-    "group": {
+    "root": {
       "$type": "group",
       "name": "transaction",
       "min-occurs": 30000,

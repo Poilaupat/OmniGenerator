@@ -28,7 +28,7 @@ namespace OmniGenerator.Plugins.Packagers
             await File.WriteAllLinesAsync(txtfile, PackagerTools.GetDefaultTextFileContent(root));
 
             var documents = root
-                .GetDocuments(true)
+                .GetDocuments()
                 .ToArray();
 
             for (var i = 0; i < documents.Count(); i++)

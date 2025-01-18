@@ -29,14 +29,23 @@
         /// <summary>
         /// Gets the <see cref="Document"/> of the root
         /// </summary>
-        /// <param name="recursive">Indicates if teh search is recursive</param>
         /// <returns>The list of <see cref="Document"/></returns>
-        public IEnumerable<Document> GetDocuments(bool recursive = false)
+        public IEnumerable<Document> GetDocuments()
         {
-            foreach (var document in Groups.SelectMany(x => x.GetDocuments(null, true)))
-            {
-                yield return document;
-            }
+            return Groups
+                .SelectMany(x => x.GetDocuments(null, true));
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Group"/> of the root
+        /// </summary>
+        /// <param name="recursive"></param>
+        /// <returns>The list of <see cref="Group"/></returns>
+        public IEnumerable<Group> GetGroups()
+        {
+            return Groups
+                .Union(Groups
+                    .SelectMany(g => g.GetGroups(null, true)));
         }
     }
 }

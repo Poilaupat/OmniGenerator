@@ -29,9 +29,9 @@ namespace OmniGenerator.Cli
             builder.RegisterType<DocumentDrawerManager>().As<IDocumentDrawerManager>();
             builder.RegisterType<PluginService>().As<IPluginService>();
 
-            //Open generic type for IProgress & concrete types
+            //Open generic type for IProgress followed by progress report concrete types
             builder.RegisterGeneric(typeof(Progress<>)).As(typeof(IProgress<>)).InstancePerLifetimeScope();
-            builder.RegisterType<BuilderProgressReport>();
+            builder.RegisterType<HierarchyBuilderProgressReport>();
 
             return builder.Build();
         }

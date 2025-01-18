@@ -1,8 +1,11 @@
-﻿namespace OmniGenerator.Lib.Generators
+﻿using System.Diagnostics;
+
+namespace OmniGenerator.Lib.Generators
 {
     /// <summary>
     /// Modelize an element's field
     /// </summary>
+    [DebuggerDisplay("Name={Name} Value={Value}")]
     public readonly struct Field
     {
         /// <summary>
@@ -29,11 +32,6 @@
         {
             Name = name;
             Value = value;
-        }
-
-        public readonly override string ToString()
-        {
-            return $"Name={Name} Value={Value}";
         }
     }
 }

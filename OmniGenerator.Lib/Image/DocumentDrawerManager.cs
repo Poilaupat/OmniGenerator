@@ -30,7 +30,7 @@ namespace OmniGenerator.Lib.Image
         /// <returns></returns>
         public async Task DrawImagesAsync(Root root)
         {
-            var docsByComposer = root.GetDocuments(true)
+            var docsByComposer = root.GetDocuments()
                 .GroupBy(x => x.ImageComposer);
 
             foreach (var docByComposer in docsByComposer.Where(g => !string.IsNullOrWhiteSpace(g.Key)))

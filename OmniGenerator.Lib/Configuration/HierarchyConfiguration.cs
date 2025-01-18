@@ -6,15 +6,15 @@ using System.Text.Json.Serialization;
 
 namespace OmniGenerator.Lib.Configuration
 {
-    public class RootConfiguration
+    public class HierarchyConfiguration
     {
-        public static string Name { get; } = "root";
+        public static string Name { get; } = "omni.generator.hierarchy";
 
         [JsonPropertyName("fields")]
         public List<AbstractFieldConfigurationBase> Fields { get; set; } = new List<AbstractFieldConfigurationBase> { };
 
-        [JsonPropertyName("group")]
-        public required GroupConfiguration Group { get; set; }
+        [JsonPropertyName("root")]
+        public required GroupConfiguration Root { get; set; }
 
         [JsonPropertyName("field-configuration-file")]
         public string? FieldConfigurationFile { get; set; }

@@ -1,6 +1,6 @@
 {
   "packager": "packager.omni.sql",
-  "root": {
+  "hierarchy": {
     "fields": [
       {
         "$type": "constant",
@@ -8,7 +8,7 @@
         "value":  "true"
       }
     ],
-    "group": {
+    "root": {
       "$type": "group",
       "name": "script",
       "min-occurs": 1,

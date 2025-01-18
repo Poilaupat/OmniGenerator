@@ -22,23 +22,23 @@ namespace OmniGenerator.Lib.Generators.Fields
         /// </summary>
         /// <param name="rootConfiguration">The root configuration</param>
         /// <param name="mapper">The mapper that projects configuration to fields</param>
-        public FieldGeneratorContainer(RootConfiguration rootConfiguration, IMapper mapper)
+        public FieldGeneratorContainer(HierarchyConfiguration rootConfiguration, IMapper mapper)
         {
             //Root field generators (this is why the name 'root' is reserved in param)
             _generators.Add(
-                RootConfiguration.Name,
-                new FieldGeneratorCollection(RootConfiguration.Name, mapper.Map<List<IFieldGenerator>>(rootConfiguration.Fields)));
+                HierarchyConfiguration.Name,
+                new FieldGeneratorCollection(HierarchyConfiguration.Name, mapper.Map<List<IFieldGenerator>>(rootConfiguration.Fields)));
 
             //Document field generators
             rootConfiguration
-                .Group
+                .Root
                 .GetDocumentsConfiguration(true)
                 .Select(x => new { x.Name, Fields = mapper.Map<List<IFieldGenerator>>(x.Fields) })
                 .ForEach(x => _generators.Add(x.Name, new FieldGeneratorCollection(x.Name, x.Fields)));
 
             //Group field generators
             rootConfiguration
-               .Group
+               .Root
                .GetGroupsAndSelfConfiguration(true)
                .Select(x => new { x.Name, Fields = mapper.Map<List<IFieldGenerator>>(x.Fields) })
                .ForEach(x => _generators.Add(x.Name, new FieldGeneratorCollection(x.Name, x.Fields)));
@@ -50,7 +50,7 @@ namespace OmniGenerator.Lib.Generators.Fields
         /// <returns>True if root has at least one field. False if not.</returns>
         public bool RootHasFields()
         {
-            return _generators.ContainsKey(RootConfiguration.Name);
+            return _generators.ContainsKey(HierarchyConfiguration.Name);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace OmniGenerator.Lib.Generators.Fields
         /// <returns>A <see cref="FieldCollection"/></returns>
         public FieldCollection GenerateRootFields()
         {
-            return GenerateRegularFields(RootConfiguration.Name);
+            return GenerateRegularFields(HierarchyConfiguration.Name);
         }
     }
 }

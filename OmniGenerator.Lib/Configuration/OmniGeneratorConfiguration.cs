@@ -12,7 +12,7 @@ namespace OmniGenerator.Lib.Configuration
         [JsonPropertyName("packager")]
         public required string PackagerName { get; set; }
  
-        [JsonPropertyName("root")]
-        public required RootConfiguration Root { get; set; }
+        [JsonPropertyName("hierarchy")]
+        public required HierarchyConfiguration Hierarchy { get; set; }
     }
 }

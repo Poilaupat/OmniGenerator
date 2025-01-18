@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OmniGenerator.Cli
 {
-    internal class GeneralSettings
+    internal class ApplicationSettings
     {
         public int ProgressResolution { get; set; }
     }

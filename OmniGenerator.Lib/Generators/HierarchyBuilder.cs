@@ -18,30 +18,25 @@ namespace OmniGenerator.Lib.Generators
     {
         private readonly Random _random;
         private IMapper _mapper;
-        private IConfiguration _config;
+        private IConfiguration _appconfig;
 
         private DateTime _lastNotification = DateTime.Now;
 
-        private long _docCount = 0;
+        private long _countDoc = 0;
         private long _countProcessedDoc = 0;
         private long _countGroup = 0;
         private long _countProcessedGroup = 0;
         private long _countField = 0;
-        private DateTime? _startHierarchyBuild;
-        private DateTime? _endHierarchyBuild;
-
-        public IProgress<BuilderProgressReport>? Progress { get; set; }
-        public int ProgressResolution { get; set; } = 5;
 
 
         /// <summary>
         /// Creates a new <see cref="HierarchyBuilder"/>
         /// </summary>
         /// <param name="mapper">A mapper configured to map field configuration classes to field generator classes</param>
-        public HierarchyBuilder(IMapper mapper, IConfiguration config)
+        public HierarchyBuilder(IMapper mapper, IConfiguration appconfig)
         {
             _mapper = mapper;
-            _config = config;
+            _appconfig = appconfig;
             _random = new Random();
         }
 
@@ -50,13 +45,10 @@ namespace OmniGenerator.Lib.Generators
         /// </summary>
         /// <param name="config"></param>
         /// <returns></returns>
-        public Root Build(OmniGeneratorConfiguration config)
+        public async Task<Root> BuildAsync(OmniGeneratorConfiguration config, IProgress<HierarchyBuilderProgressReport>? progress)
         {
-            _startHierarchyBuild = DateTime.Now;
-
-            var fgc = new FieldGeneratorContainer(config.Root, _mapper);
-
-            var groups = GenerateGroups(config.Root.Group, fgc);
+            var fgc = new FieldGeneratorContainer(config.Hierarchy, _mapper);
+            var groups = GenerateGroups(config.Hierarchy.Root, fgc, progress);
             var root = new Root(groups);
 
             if (fgc.RootHasFields())
@@ -65,10 +57,8 @@ namespace OmniGenerator.Lib.Generators
                 root.Fields.AddRange(fields);
             }
 
-            _endHierarchyBuild = DateTime.Now;
-
-            Notify(true);
-            return root;
+            NotifyProgress(progress, true);
+            return await Task.FromResult(root);
         }
 
         private int GetRandomOccurence(int minOccurs, int maxOccurs)
@@ -77,85 +67,73 @@ namespace OmniGenerator.Lib.Generators
             return Math.Max(_random.Next(minOccurs, maxOccurs + 1), 0);
         }
 
-        private Group[] GenerateGroups(GroupConfiguration groupConfiguration, FieldGeneratorContainer fgc)
+        private Group[] GenerateGroups(GroupConfiguration groupConfiguration, FieldGeneratorContainer fgc, IProgress<HierarchyBuilderProgressReport>? progress)
         {
             int groupCount = GetRandomOccurence(groupConfiguration.MinOccurs, groupConfiguration.MaxOccurs);
             Interlocked.Add(ref _countGroup, groupCount);
 
-            //ConcurrentQueue<Group> groups = new();
-            Group[] groups = new Group[groupCount];
+            ConcurrentQueue<Group> groups = new();
 
-            var partitioner = Partitioner.Create(0, groupCount, 5000);
-            Parallel.ForEach(partitioner, range =>
+            Parallel.For(0, groupCount, i =>
             {
-                for (int i = range.Item1; i < range.Item2; i++)
+                Document[] subdocuments = Array.Empty<Document>();
+                Group[] subGroups = Array.Empty<Group>();
+
+                foreach (var subGroupConfiguration in groupConfiguration.GetGroupsConfiguration(false))
                 {
-                    Document[] subdocuments = Array.Empty<Document>();
-                    Group[] subGroups = Array.Empty<Group>();
-
-                    foreach (var subGroupConfiguration in groupConfiguration.GetGroupsConfiguration(false))
-                    {
-                        subGroups = GenerateGroups(subGroupConfiguration, fgc);
-                    }
-
-                    foreach (var docConfiguration in groupConfiguration.GetDocumentsConfiguration(false))
-                    {
-                        subdocuments = GenerateDocuments(docConfiguration, fgc);
-                    }
-
-                    Group group = new Group(groupConfiguration.Name, subGroups, subdocuments);
-                    group.GenerateFields(fgc);
-                    Interlocked.Increment(ref _countProcessedGroup);
-                    Interlocked.Add(ref _countField, group.Fields.FieldCount);
-                    groups[i] = group;
-
-                    Notify();
+                    subGroups = GenerateGroups(subGroupConfiguration, fgc, progress);
                 }
+
+                foreach (var docConfiguration in groupConfiguration.GetDocumentsConfiguration(false))
+                {
+                    subdocuments = GenerateDocuments(docConfiguration, fgc, progress);
+                }
+
+                Group group = new Group(groupConfiguration.Name, subGroups, subdocuments);
+                group.GenerateFields(fgc);
+                Interlocked.Increment(ref _countProcessedGroup);
+                Interlocked.Add(ref _countField, group.Fields.FieldCount);
+                groups.Enqueue(group);
+
+                NotifyProgress(progress);
             });
 
-            return groups;
+            return groups.ToArray();
         }
 
-        private Document[] GenerateDocuments(DocumentConfiguration documentConfiguration, FieldGeneratorContainer fgc)
+        private Document[] GenerateDocuments(DocumentConfiguration documentConfiguration, FieldGeneratorContainer fgc, IProgress<HierarchyBuilderProgressReport>? progress)
         {
             var docCount = GetRandomOccurence(documentConfiguration.MinOccurs, documentConfiguration.MaxOccurs);
-            Interlocked.Add(ref _docCount, docCount);
+            Interlocked.Add(ref _countDoc, docCount);
 
-            //ConcurrentQueue<Document> documents = new();
-            Document[] documents = new Document[docCount];
+            ConcurrentQueue<Document> documents = new();
 
-            var partitioner = Partitioner.Create(0, docCount, 5000);
-            Parallel.ForEach(partitioner, range =>
+            Parallel.For(0, docCount, i =>
             {
-                for (int i = range.Item1; i < range.Item2; i++)
-                {
-                    var document = new Document(documentConfiguration.Name, documentConfiguration.ImageComposer);
-                    document.GenerateFields(fgc);
-                    Interlocked.Increment(ref _countProcessedDoc);
-                    Interlocked.Add(ref _countField, document.Fields.FieldCount);
-                    documents[i] = document;
+                var document = new Document(documentConfiguration.Name, documentConfiguration.ImageComposer);
+                document.GenerateFields(fgc);
+                Interlocked.Increment(ref _countProcessedDoc);
+                Interlocked.Add(ref _countField, document.Fields.FieldCount);
+                documents.Enqueue(document);
 
-                    Notify();
-                }
+                NotifyProgress(progress);
             });
 
-            return documents;
+            return documents.ToArray();
         }
 
-        private void Notify(bool force = false)
+        private void NotifyProgress(IProgress<HierarchyBuilderProgressReport>? progress, bool force = false)
         {
             var now = DateTime.Now;
-            if (Progress is not null && ((now - _lastNotification).Seconds > ProgressResolution || force))
+            if (progress is not null && ((now - _lastNotification).Seconds > 1 || force))
             {
-                Progress.Report(new BuilderProgressReport
+                progress.Report(new HierarchyBuilderProgressReport
                 {
-                    CountField = _countField,
-                    CountGroup = _countGroup,
-                    CountDocument = _docCount,
-                    CountProcessedGroup = _countProcessedGroup,
-                    CountProcessedDocument = _countProcessedDoc,
-                    StartHierarchyBuild = _startHierarchyBuild,
-                    EndHierarchyBuild = _endHierarchyBuild,
+                    CountField = Interlocked.Read(ref _countField),
+                    CountGroup = Interlocked.Read(ref _countGroup),
+                    CountDocument = Interlocked.Read(ref _countDoc),
+                    CountProcessedGroup = Interlocked.Read(ref _countProcessedGroup),
+                    CountProcessedDocument = Interlocked.Read(ref _countProcessedDoc),
                 });
 
                 _lastNotification = now;

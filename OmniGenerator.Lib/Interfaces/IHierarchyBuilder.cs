@@ -13,11 +13,9 @@ namespace OmniGenerator.Lib.Interfaces
         /// <summary>
         /// Builds a <see cref="Root"/> using the provided configuration
         /// </summary>
-        /// <param name="param">The configuration</param>
+        /// <param name="config">The generator configuration</param>
+        /// <param name="progress">An optionnal <see cref="IProgress{T}"/> object to be notified of the build process progress</param>
         /// <returns></returns>
-        Root Build(OmniGeneratorConfiguration config);
-
-        IProgress<BuilderProgressReport>? Progress { get; set; }
-        int ProgressResolution { get; set; }
+        Task<Root> BuildAsync(OmniGeneratorConfiguration config, IProgress<HierarchyBuilderProgressReport>? progress);
     }
 }

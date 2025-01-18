@@ -21,13 +21,13 @@ namespace OmniGenerator.Lib.Configuration
                 var directory = Path.GetDirectoryName(filePath);
                 var config = await ConfigurationReader.DeserializeAsync<OmniGeneratorConfiguration>(filePath);
 
-                if(!string.IsNullOrWhiteSpace(config.Root.FieldConfigurationFile))
+                if(!string.IsNullOrWhiteSpace(config.Hierarchy.FieldConfigurationFile))
                 {
-                    var rootfields = await ConfigurationReader.DeserializeAsync<List<AbstractFieldConfigurationBase>>(directory, config.Root.FieldConfigurationFile);
-                    config.Root.Fields.Merge(rootfields);
+                    var rootfields = await ConfigurationReader.DeserializeAsync<List<AbstractFieldConfigurationBase>>(directory, config.Hierarchy.FieldConfigurationFile);
+                    config.Hierarchy.Fields.Merge(rootfields);
                 }
 
-                foreach (var configElement in config.Root.Group.GetElementsConfiguration(true))
+                foreach (var configElement in config.Hierarchy.Root.GetElementsConfiguration(true))
                 {
                     if (!string.IsNullOrWhiteSpace(configElement.FieldConfigurationFile))
                     {
@@ -95,11 +95,16 @@ namespace OmniGenerator.Lib.Configuration
 
         public static void CheckConfiguration(OmniGeneratorConfiguration config)
         {
+            if(config is null)
+            {
+                throw new ArgumentNullException(nameof(config));   
+            }
+
             ConfigurationException exception = new ConfigurationException("The provided parameter file in not valid");
 
             var documents = config
+                .Hierarchy
                 .Root
-                .Group
                 .GetDocumentsConfiguration(true);
 
             foreach (var document in documents)

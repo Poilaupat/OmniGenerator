@@ -1,8 +1,8 @@
 {
   "packager": "",
-  "root": {
+  "hierarchy": {
     "fields": [],
-    "group": {
+    "root": {
       "$type": "group",
       "name": "remittance",
       "min-occurs": 100,

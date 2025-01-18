@@ -64,7 +64,7 @@ namespace OmniGenerator.Plugins.Packagers
             if (truncateTableBefore)
             {
                 var tables = root
-                    .GetDocuments(true)
+                    .GetDocuments()
                     .DistinctBy(d => d.Name);
 
                 foreach (var table in tables)
