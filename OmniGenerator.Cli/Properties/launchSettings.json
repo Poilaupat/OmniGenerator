@@ -1,0 +1,20 @@
+{
+  "profiles": {
+    "OmniGenerator.Cli.Eligibility": {
+      "commandName": "Project",
+      "commandLineArgs": "--param \"..\\..\\..\\..\\ParamFiles\\param-compliance-eligibility.json\" --output \"..\\..\\..\\..\\Output\""
+    },
+    "OmniGenerator.Cli.Default": {
+      "commandName": "Project",
+      "commandLineArgs": "--param \"..\\..\\..\\..\\ParamFiles\\param.json\" --output \"..\\..\\..\\..\\Output\""
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    },
+    "PmniGenerator.Cli.Help": {
+      "commandName": "Project",
+      "commandLineArgs": "--help"
+    }
+  }
+}

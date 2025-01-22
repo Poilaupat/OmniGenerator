@@ -102,6 +102,7 @@ namespace OmniGenerator.Lib.Configuration
 
             ConfigurationException exception = new ConfigurationException("The provided parameter file in not valid");
 
+            // Check : Document should not have aggregate fields
             var documents = config
                 .Hierarchy
                 .Root
@@ -116,6 +117,10 @@ namespace OmniGenerator.Lib.Configuration
                     exception.Errors.Add($"Document : {document.Name} / Field : {field.Name} / Error : Documents cannot have aggreate fields");
                 }
             }
+
+            //Check : omni.generator.hierarchy is a reserved name
+            if (config.Hierarchy.Root.GetElementsConfiguration(true).Any(e => e.Name.Equals("omni.generator.hierarchy")))
+                exception.Errors.Add("omni.generator.hierarchy is a reserved name");
 
             if (exception.Errors.Count > 0)
             {

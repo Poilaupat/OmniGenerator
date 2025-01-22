@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Configuration;
 
 namespace OmniGenerator.Cli
 {
-    internal class ApplicationSettings
+    public class ApplicationSettings
     {
+        [ConfigurationKeyName("progress-resolution")]
         public int ProgressResolution { get; set; }
     }
 }

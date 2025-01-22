@@ -1,15 +1,87 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using Autofac.Extensions.DependencyInjection;
 using Autofac;
 using BenchmarkDotNet.Running;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using OmniGenerator.Cli;
-using OmniGenerator.Lib.Generators;
+using CommandLine;
+using OmniGenerator.Cli.Options;
+using CommandLine.Text;
+using Microsoft.Extensions.Configuration;
+using System.Timers;
 
-string configFilePath = @"..\..\..\..\ParamFiles\param.json";
-//string configFilePath = @"..\..\..\..\ParamFiles\param-sql.json";
-//string configFilePath = @"..\..\..\..\ParamFiles\param-compliance-eligibility.json";
-string outputFolderPath = @"..\..\..\..\Output";
+await Parser
+    .Default
+    .ParseArguments<DefaultOptions>(args)
+    .WithParsedAsync(async options =>
+    {
+        // Creating an application host. Note that the host will never be started. 
+        // We use it bc it's a convenient way to use DI and other usefull features in a console application
+        var host = Host
+            .CreateDefaultBuilder(args)
+            .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+            .ConfigureServices((context, services) =>
+            {
+                // Services configured in Microsoft DI container (easier to register configuration with a service collection)
+                // Thoses types will be passed to Autofac container automatically
+                var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
 
-var container = Startup.CreateContainer();
-await container.Resolve<Application>().Run(configFilePath, outputFolderPath);
+                services.Configure<ApplicationSettings>(configuration.GetSection("general-settings"));
 
-//BenchmarkRunner.Run<BenchmarkHelper>();
+            })
+            .ConfigureContainer<ContainerBuilder>(builder =>
+            {
+                // Services configured directly in Autofac container
+                builder.AddOmniGeneratorCliDependencies(options);
+            })
+            .Build();
+
+        // Emulating the behavior of a real running host concerning application closing
+        CancellationTokenSource cts = new CancellationTokenSource();
+        bool properlyClose = true;
+        Console.CancelKeyPress += new ConsoleCancelEventHandler((_, cancelEventHandler) =>
+        {
+            if (properlyClose) // First Ctrl+C
+            {
+                Console.WriteLine("Cancellelation signal received. Starting OmniGenerator shutdown.");
+                cts.Cancel();
+                cancelEventHandler.Cancel = true;
+                properlyClose = false;
+
+                // Letting a chance to the application to shutdown properly during 5 seconds
+                var timer = new System.Timers.Timer(5000); 
+                timer.Elapsed += (_, ElapsedEventArgs) =>
+                {
+                    Console.WriteLine("OmniGenerator is not responding. Forcing shutdown.");
+                    Environment.Exit(0);
+                };
+                timer.Start();
+            }
+            else // Second Ctrl+C
+            {
+                Console.WriteLine("Force closing signal received. Forcing shutdown.");
+                Environment.Exit(0);
+            }
+        });
+
+        // Application start
+        try
+        {
+            using (IServiceScope scope = host.Services.CreateScope())
+            {
+                var cliApp = scope.ServiceProvider.GetRequiredService<OmniGeneratorCliApplication>();
+                await cliApp.RunAsync();
+            }
+        }
+        finally
+        {
+            //Ilogger flush
+        }
+    });
+
+
+
+

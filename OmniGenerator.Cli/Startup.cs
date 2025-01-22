@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using AutoMapper;
+using BenchmarkDotNet.Columns;
+using Microsoft.Diagnostics.Tracing;
 using Microsoft.Extensions.Configuration;
 using OmniGenerator.Lib;
 using OmniGenerator.Lib.Generators;
@@ -8,23 +10,27 @@ using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
 using OmniGenerator.Lib.Tools;
+using CommandLine;
+using OmniGenerator.Cli.Options;
 
 namespace OmniGenerator.Cli
 {
-    internal class Startup
+    internal static class Startup
     {
-        public static IContainer CreateContainer()
+        public static void AddOmniGeneratorCliDependencies(this ContainerBuilder builder, ICommandLineOptions options)
         {
-            var config = GetConfiguration();
-            var mapper = GetMapper();
+            //Command line options registering
+            builder.RegisterInstance(options).As<ICommandLineOptions>();
 
-            var builder = new ContainerBuilder();
-            
-            //Configuration & mapping instances
-            builder.RegisterInstance(config).As<IConfiguration>();
+            //Configuration registering
+            //builder.RegisterInstance(configuration).As<IConfiguration>();
+
+            //AutoMapper instance registering
+            var mapper = GetMapper();
             builder.RegisterInstance(mapper).As<IMapper>();
-            
-            builder.RegisterType<Application>();
+
+            //OmniGenerator types
+            builder.RegisterType<OmniGeneratorCliApplication>();
             builder.RegisterType<HierarchyBuilder>().As<IHierarchyBuilder>();
             builder.RegisterType<DocumentDrawerManager>().As<IDocumentDrawerManager>();
             builder.RegisterType<PluginService>().As<IPluginService>();
@@ -32,18 +38,6 @@ namespace OmniGenerator.Cli
             //Open generic type for IProgress followed by progress report concrete types
             builder.RegisterGeneric(typeof(Progress<>)).As(typeof(IProgress<>)).InstancePerLifetimeScope();
             builder.RegisterType<HierarchyBuilderProgressReport>();
-
-            return builder.Build();
-        }
-
-        private static IConfiguration GetConfiguration()
-        {
-            IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            return configuration;
         }
 
         private static IMapper GetMapper()

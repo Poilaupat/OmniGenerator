@@ -3,28 +3,37 @@ using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
 using OmniGenerator.Lib.Configuration;
 using OmniGenerator.Lib.Tools;
+using OmniGenerator.Cli.Options;
+using Microsoft.Extensions.Options;
 
 namespace OmniGenerator.Cli
 {
-    public class Application
+    public class OmniGeneratorCliApplication
     {
-        private readonly IConfiguration _configuration;
+        private readonly ApplicationSettings _configuration;
         private readonly IHierarchyBuilder _hierarchyBuilder;
         private readonly IDocumentDrawerManager _imageComposerProcessor;
         private readonly IPluginService _pluginService;
+        private readonly ICommandLineOptions _options;
 
-        public Application(IConfiguration configuration, IPluginService pluginService, IHierarchyBuilder hierarchyBuilder, IDocumentDrawerManager imageComposerProcessor)
+        public OmniGeneratorCliApplication(
+            IOptions<ApplicationSettings> configuration, 
+            IPluginService pluginService, 
+            IHierarchyBuilder hierarchyBuilder, 
+            IDocumentDrawerManager imageComposerProcessor, 
+            ICommandLineOptions options)
         {
-            _configuration = configuration;
+            _configuration = configuration.Value;
             _pluginService = pluginService;
             _hierarchyBuilder = hierarchyBuilder;
             _imageComposerProcessor = imageComposerProcessor;
+            _options = options;
         }
 
-        public async Task Run(string configurationFilePath, string outputPath)
+        public async Task RunAsync()
         {
             //Configuration reading
-            var generationConfig = await ConfigurationReader.ReadConfigurationAsync(configurationFilePath);
+            var generationConfig = await ConfigurationReader.ReadConfigurationAsync(_options.ParamFilePath);
             ConfigurationReader.CheckConfiguration(generationConfig);
 
             //Data generation
@@ -45,7 +54,7 @@ namespace OmniGenerator.Cli
             ConsoleWriter.WriteLine("Starting packet generation");
             var packager = _pluginService.GetPackager(generationConfig.PackagerName);
             if (packager is not null)
-                await packager.ProcessAsync(root, outputPath);
+                await packager.ProcessAsync(root, _options.OutputFolderPath);
             ConsoleWriter.WriteLine("Packet generation finished");
         }
     }
