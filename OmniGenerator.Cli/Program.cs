@@ -1,15 +1,20 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Autofac.Extensions.DependencyInjection;
 using Autofac;
-using BenchmarkDotNet.Running;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OmniGenerator.Cli;
 using CommandLine;
 using OmniGenerator.Cli.Options;
-using CommandLine.Text;
 using Microsoft.Extensions.Configuration;
-using System.Timers;
+using BenchmarkDotNet.Loggers;
+using Microsoft.Extensions.Logging;
+using Serilog.Core;
+using Serilog;
+
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .Build();
 
 await Parser
     .Default
@@ -25,17 +30,13 @@ await Parser
             {
                 // Services configured in Microsoft DI container (easier to register configuration with a service collection)
                 // Thoses types will be passed to Autofac container automatically
-                var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .Build();
-
                 services.Configure<ApplicationSettings>(configuration.GetSection("general-settings"));
 
             })
             .ConfigureContainer<ContainerBuilder>(builder =>
             {
                 // Services configured directly in Autofac container
-                builder.AddOmniGeneratorCliDependencies(options);
+                builder.AddOmniGeneratorCliDependencies(options, configuration);
             })
             .Build();
 
@@ -52,7 +53,7 @@ await Parser
                 properlyClose = false;
 
                 // Letting a chance to the application to shutdown properly during 5 seconds
-                var timer = new System.Timers.Timer(5000); 
+                var timer = new System.Timers.Timer(5000);
                 timer.Elapsed += (_, ElapsedEventArgs) =>
                 {
                     Console.WriteLine("OmniGenerator is not responding. Forcing shutdown.");
@@ -78,7 +79,15 @@ await Parser
         }
         finally
         {
-            //Ilogger flush
+            Log.Logger.Debug("Fuck you bitch");
+
+            var logger = host.Services.GetRequiredService<ILogger<Program>>();
+            logger.LogError("Fuck you too bitch!");
+
+            var ex = new ArgumentException(nameof(logger));
+            logger.LogCritical(ex, "Couille dans le paté. Je répète. Couille dans le paté");
+        
+            await Log.CloseAndFlushAsync();
         }
     });
 

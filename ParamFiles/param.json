@@ -12,7 +12,7 @@
       "$type": "group",
       "name": "remittance",
       "min-occurs": 1,
-      "max-occurs": 5,
+      "max-occurs": 1,
       "fields": [
         {
           "$type": "aggregate",
@@ -44,7 +44,7 @@
           "$type": "group",
           "name": "payment",
           "min-occurs": 1,
-          "max-occurs": 3,
+          "max-occurs": 1,
           "field-configuration-file": "fields-payment.json",
           "fields": [],
           "elements": [
@@ -62,7 +62,7 @@
               "drawer": "drawer.omni.cheque",
               "name": "cheque",
               "min-occurs": 1,
-              "max-occurs": 4,
+              "max-occurs": 1,
               "field-configuration-file": "fields-cheque.json",
               "fields": []
             }

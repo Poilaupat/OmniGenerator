@@ -12,30 +12,35 @@ using OmniGenerator.Lib.Interfaces.Infrastructure;
 using OmniGenerator.Lib.Tools;
 using CommandLine;
 using OmniGenerator.Cli.Options;
+using Serilog;
+using Serilog.Extensions.Autofac.DependencyInjection;
 
 namespace OmniGenerator.Cli
 {
     internal static class Startup
     {
-        public static void AddOmniGeneratorCliDependencies(this ContainerBuilder builder, ICommandLineOptions options)
+        public static void AddOmniGeneratorCliDependencies(this ContainerBuilder builder, ICommandLineOptions options, IConfiguration configuration)
         {
-            //Command line options registering
+            //Command line options registration
             builder.RegisterInstance(options).As<ICommandLineOptions>();
 
-            //Configuration registering
-            //builder.RegisterInstance(configuration).As<IConfiguration>();
+            //Logger registration
+            var loggerConfiguration = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration);
 
-            //AutoMapper instance registering
+            builder.RegisterSerilog(loggerConfiguration);
+
+            //AutoMapper instance registration
             var mapper = GetMapper();
             builder.RegisterInstance(mapper).As<IMapper>();
 
-            //OmniGenerator types
+            //OmniGenerator types registration
             builder.RegisterType<OmniGeneratorCliApplication>();
             builder.RegisterType<HierarchyBuilder>().As<IHierarchyBuilder>();
             builder.RegisterType<DocumentDrawerManager>().As<IDocumentDrawerManager>();
             builder.RegisterType<PluginService>().As<IPluginService>();
 
-            //Open generic type for IProgress followed by progress report concrete types
+            //Open generic type for IProgress registration followed by progress report concrete types registration
             builder.RegisterGeneric(typeof(Progress<>)).As(typeof(IProgress<>)).InstancePerLifetimeScope();
             builder.RegisterType<HierarchyBuilderProgressReport>();
         }
