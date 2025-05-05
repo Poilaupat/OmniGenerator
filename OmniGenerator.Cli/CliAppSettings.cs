@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace OmniGenerator.Cli
 {
-    public class ApplicationSettings
+    public class CliAppSettings
     {
         [ConfigurationKeyName("progress-resolution")]
         public int ProgressResolution { get; set; }

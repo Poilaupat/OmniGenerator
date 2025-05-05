@@ -3,7 +3,7 @@
 namespace OmniGenerator.Lib.Tools
 {
     /// <summary>
-    /// Some tools to compute different type of checksum
+    /// Some tools to compute different types of checksum
     /// </summary>
     public static class KeyTools
     {

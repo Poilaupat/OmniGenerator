@@ -1,44 +1,64 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using OmniGenerator.Lib.Interfaces.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
-using OmniGenerator.Lib.Interfaces.Infrastructure;
+using Spectre.Console.Cli;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using OmniGenerator.Lib.Configuration;
 using OmniGenerator.Lib.Tools;
-using OmniGenerator.Cli.Options;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
-namespace OmniGenerator.Cli
+namespace OmniGenerator.Cli.Commands
 {
-    public class OmniGeneratorCliApplication
+    internal class GenerateCommand : CancellableAsyncCommand<GenerateCommandSettings>
     {
-        private readonly ApplicationSettings _configuration;
+        private readonly CliAppSettings _configuration;
         private readonly IHierarchyBuilder _hierarchyBuilder;
         private readonly IDocumentDrawerManager _imageComposerProcessor;
         private readonly IPluginService _pluginService;
-        private readonly ICommandLineOptions _options;
+        private readonly ILogger _logger;
 
-        public OmniGeneratorCliApplication(
-            IOptions<ApplicationSettings> configuration, 
-            IPluginService pluginService, 
-            IHierarchyBuilder hierarchyBuilder, 
-            IDocumentDrawerManager imageComposerProcessor, 
-            ICommandLineOptions options)
+        public GenerateCommand(
+            IOptions<CliAppSettings> configuration,
+            IPluginService pluginService,
+            IHierarchyBuilder hierarchyBuilder,
+            IDocumentDrawerManager imageComposerProcessor,
+            ILogger logger)
         {
             _configuration = configuration.Value;
             _pluginService = pluginService;
             _hierarchyBuilder = hierarchyBuilder;
             _imageComposerProcessor = imageComposerProcessor;
-            _options = options;
+            _logger = logger;
         }
 
-        public async Task RunAsync()
+        public override async Task<int> ExecuteAsync(CommandContext context, GenerateCommandSettings settings, CancellationToken ct)
+        {
+            try
+            {
+                await GenerateOne(settings);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"beurk");
+                return -1;
+            }
+
+            return 0;
+        }
+
+        private async Task GenerateOne(GenerateCommandSettings settings)
         {
             //Configuration reading
-            var generationConfig = await ConfigurationReader.ReadConfigurationAsync(_options.ParamFilePath);
+            var generationConfig = await ConfigurationReader.ReadConfigurationAsync(settings.SettingsFilePath);
             ConfigurationReader.CheckConfiguration(generationConfig);
 
             //Data generation
             var root = await _hierarchyBuilder.BuildAsync(
-                generationConfig, 
+                generationConfig,
                 new Progress<HierarchyBuilderProgressReport>(pr =>
                 {
                     ConsoleWriter.WriteLine(pr);
@@ -54,7 +74,7 @@ namespace OmniGenerator.Cli
             ConsoleWriter.WriteLine("Starting packet generation");
             var packager = _pluginService.GetPackager(generationConfig.PackagerName);
             if (packager is not null)
-                await packager.ProcessAsync(root, _options.OutputFolderPath);
+                await packager.ProcessAsync(root, settings.OutputFolderPath);
             ConsoleWriter.WriteLine("Packet generation finished");
         }
     }

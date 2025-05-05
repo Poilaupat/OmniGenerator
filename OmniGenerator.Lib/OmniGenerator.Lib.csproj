@@ -24,16 +24,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Autofac" Version="8.2.0" />
-		<PackageReference Include="AutoMapper" Version="13.0.1" />
+		<PackageReference Include="Autofac" Version="8.2.1" />
+		<PackageReference Include="Autofac.Configuration" Version="7.0.0" />
+		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
+		<PackageReference Include="AutoMapper" Version="14.0.0" />
 		<PackageReference Include="BenchmarkDotNet.Annotations" Version="0.14.0" />
 		<PackageReference Include="Fare" Version="2.2.1" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.1" />
-		<PackageReference Include="Microsoft.ProgramSynthesis.Detection" Version="10.4.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.4" />
+		<PackageReference Include="Microsoft.ProgramSynthesis.Detection" Version="10.10.3" />
 		<PackageReference Include="mustache-sharp" Version="1.0.0" />
 		<PackageReference Include="Serilog.Extensions.Autofac.DependencyInjection" Version="5.0.0" />
+		<PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
 		<PackageReference Include="Svg" Version="3.4.7" />
-		<PackageReference Include="System.ComponentModel.Composition" Version="9.0.1" />
+		<PackageReference Include="System.ComponentModel.Composition" Version="9.0.4" />
 	</ItemGroup>
 
 	<ItemGroup>

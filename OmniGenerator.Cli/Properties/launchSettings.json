@@ -15,6 +15,10 @@
     "PmniGenerator.Cli.Help": {
       "commandName": "Project",
       "commandLineArgs": "--help"
+    },
+    "OmniGenerator.Cli.Version": {
+      "commandName": "Project",
+      "commandLineArgs": "version"
     }
   }
 }
