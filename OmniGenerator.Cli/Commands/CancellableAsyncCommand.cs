@@ -1,4 +1,6 @@
-﻿using Spectre.Console.Cli;
+﻿using BenchmarkDotNet.Loggers;
+using Microsoft.Extensions.Logging;
+using Spectre.Console.Cli;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,7 +13,15 @@ namespace OmniGenerator.Cli.Commands
     /// </summary>
     internal abstract class CancellableAsyncCommand : AsyncCommand
     {
-        private readonly ConsoleAppCancellationTokenSource _cancellationTokenSource = new();
+        private readonly ConsoleAppCancellationTokenSource _cancellationTokenSource;
+
+        /// <summary>
+        /// Initialize a new instance of the <see cref="CancellableAsyncCommand"/> class
+        /// </summary>
+        public CancellableAsyncCommand(ILogger<CancellableAsyncCommand> logger)
+        {
+            _cancellationTokenSource = new ConsoleAppCancellationTokenSource(logger);
+        }
 
         /// <summary>
         /// Executes the command asynchronously with cancellation support.
@@ -31,10 +41,18 @@ namespace OmniGenerator.Cli.Commands
     /// that supports cancellation via a shared <see cref="ConsoleAppCancellationTokenSource"/>.
     /// </summary>
     /// <typeparam name="TSettings">The type of settings used by the command.</typeparam>
-    public abstract class CancellableAsyncCommand<TSettings> : AsyncCommand<TSettings>
+    internal abstract class CancellableAsyncCommand<TSettings> : AsyncCommand<TSettings>
         where TSettings : CommandSettings
     {
-        private readonly ConsoleAppCancellationTokenSource _cancellationTokenSource = new();
+        private readonly ConsoleAppCancellationTokenSource _cancellationTokenSource;
+
+        /// <summary>
+        /// Initialize a new instance of the <see cref="CancellableAsyncCommand"/> class
+        /// </summary>
+        public CancellableAsyncCommand(ILogger<CancellableAsyncCommand> logger)
+        {
+            _cancellationTokenSource = new ConsoleAppCancellationTokenSource(logger);
+        }
 
         /// <summary>
         /// Executes the typed command asynchronously with cancellation support.

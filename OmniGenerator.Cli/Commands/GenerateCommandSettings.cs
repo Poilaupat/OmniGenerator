@@ -19,11 +19,11 @@ namespace OmniGenerator.Cli.Commands
         }
 
         [Description("The path of the generation setting file")]
-        [CommandArgument(0, "<settings-file>")]
+        [CommandArgument(0, "<SettingsFilePath>")]
         public string SettingsFilePath { get; set; }
 
         [Description("The path of the output folder")]
-        [CommandArgument(1, "<output-folder>")]
+        [CommandArgument(1, "<OutputFolder>")]
         public string OutputFolderPath { get; set; }
 
         public override ValidationResult Validate()

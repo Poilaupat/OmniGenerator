@@ -1,60 +1,66 @@
 ﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using OmniGenerator.Lib.Generators;
 using OmniGenerator.Lib.Image;
 using OmniGenerator.Lib.Infrastructure;
-using OmniGenerator.Lib.Interfaces.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Interfaces.Infrastructure;
 using OmniGenerator.Lib.Tools;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using Serilog.Extensions.Autofac.DependencyInjection;
-using Serilog;
-using Autofac.Configuration;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace OmniGenerator.Lib.Autofac
 {
+    /// <summary>
+    /// Autofac module responsible for registering application-level services,
+    /// infrastructure components, and utilities required by the OmniGenerator library.
+    /// </summary>
     internal class OmniGeneratorModule : Module
     {
-        private IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OmniGeneratorModule"/> class.
+        /// </summary>
+        /// <param name="configuration">Application configuration, used for Serilog setup and potentially other components.</param>
         public OmniGeneratorModule(IConfiguration configuration)
         {
-            _configuration = configuration;
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
+        /// <summary>
+        /// Loads the module and registers types into the Autofac container.
+        /// </summary>
+        /// <param name="builder">The Autofac container builder.</param>
         protected override void Load(ContainerBuilder builder)
         {
-            //Configuration registration
-            builder.Register(context => _configuration).As<IConfiguration>();
-
-            //Logger registration
+            // Register Serilog logger into the Autofac container using extension method
             builder.AddSerilog(_configuration);
 
-            //AutoMapper registration
-            builder.RegisterInstance(GetMapper()).As<IMapper>();
+            // Register AutoMapper instance with scanned profiles from the executing assembly
+            builder.RegisterInstance(GetMapper()).As<IMapper>().SingleInstance();
 
-            //OmniGenerator types registration
-            builder.RegisterType<HierarchyBuilder>().As<IHierarchyBuilder>();
-            builder.RegisterType<DocumentDrawerManager>().As<IDocumentDrawerManager>();
-            builder.RegisterType<PluginService>().As<IPluginService>();
+            // Register core OmniGenerator services and interfaces
+            builder.RegisterType<HierarchyBuilder>().As<IHierarchyBuilder>().InstancePerLifetimeScope();
+            builder.RegisterType<DocumentDrawerManager>().As<IDocumentDrawerManager>().InstancePerLifetimeScope();
+            builder.RegisterType<PluginService>().As<IPluginService>().InstancePerLifetimeScope();
 
-            //Open generic type for IProgress registration followed by progress report concrete types registration
+            // Register open generic type for progress reporting
             builder.RegisterGeneric(typeof(Progress<>)).As(typeof(IProgress<>)).InstancePerLifetimeScope();
-            builder.RegisterType<HierarchyBuilderProgressReport>();
+
+            // Register concrete progress report type
+            builder.RegisterType<HierarchyBuilderProgressReport>().InstancePerDependency();
         }
 
+        /// <summary>
+        /// Creates and configures the AutoMapper instance used throughout the application.
+        /// Automatically scans the current assembly for profile definitions.
+        /// </summary>
+        /// <returns>An initialized <see cref="IMapper"/> instance.</returns>
         private static IMapper GetMapper()
         {
             return new MapperConfiguration(cfg =>
             {
+                // Automatically scan current assembly for AutoMapper profiles
                 cfg.AddMaps(System.Reflection.Assembly.GetExecutingAssembly());
             }).CreateMapper();
         }

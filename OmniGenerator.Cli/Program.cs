@@ -15,6 +15,7 @@ var configuration = new ConfigurationBuilder()
 
 //Dependency injection registar (Spectre needs a registrar not a container)
 var builder = new ContainerBuilder();
+builder.RegisterModule(new ConfigurationModule(configuration));
 builder.RegisterModule(new OmniGeneratorModule(configuration));
 var registrar = new AutofacTypeRegistrar(builder);
 
@@ -25,15 +26,25 @@ try
     var app = new CommandApp(registrar);
     app.Configure(commands =>
     {
-        commands.AddCommand<VersionCommand>("version");
+        commands.AddCommand<AboutCommand>("about")
+            .WithDescription("Provides info about OmniGenerator")
+            .WithExample("about");
+
         commands.AddCommand<GenerateCommand>("generate");
+
+#if DEBUG
+        commands.AddCommand<InfiniteCommand>("infinite")
+            .WithDescription("An command that takes an infinite amount of time to execute. Usefull to test CancellableAsyncCommand.")
+            .WithExample("infinite")
+            .WithExample("infinite", "--cancellable");
+#endif
     });
     //Spectre.Cli app run
     await app.RunAsync(args); 
 }
 catch (Exception e)
 {
-    Log.Error(e, "Error");
+    Log.Error(e, "Error"); //TODO : Do not seems to log ??
 }
 finally
 {

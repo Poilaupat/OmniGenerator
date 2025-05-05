@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BenchmarkDotNet.Loggers;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 
 namespace OmniGenerator.Cli.Commands
@@ -11,6 +13,7 @@ namespace OmniGenerator.Cli.Commands
     /// </summary>
     internal sealed class ConsoleAppCancellationTokenSource
     {
+        private ILogger<CancellableAsyncCommand> _logger;
         private readonly CancellationTokenSource _cts = new();
 
         /// <summary>
@@ -23,8 +26,10 @@ namespace OmniGenerator.Cli.Commands
         /// Initializes a new instance of the <see cref="ConsoleAppCancellationTokenSource"/> class,
         /// and subscribes to <c>Console.CancelKeyPress</c> and <c>AppDomain.ProcessExit</c> events.
         /// </summary>
-        public ConsoleAppCancellationTokenSource()
+        public ConsoleAppCancellationTokenSource(ILogger<CancellableAsyncCommand> logger)
         {
+            _logger = logger;
+
             System.Console.CancelKeyPress += OnCancelKeyPress;
             AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
 
@@ -41,9 +46,9 @@ namespace OmniGenerator.Cli.Commands
         /// </summary>
         private void OnCancelKeyPress(object? sender, ConsoleCancelEventArgs e)
         {
-            Console.WriteLine("ConsoleAppCancellationTokenSource : OnCancelKeyPress");
+            _logger.LogDebug("OnCancelKeyPress event received");
 
-            // Prevent the process from terminating immediately
+            // Prevent the process from terminating immediately (so we can let a chance to running processes to terminate gracefully)
             e.Cancel = true;
             _cts.Cancel();
         }
@@ -53,7 +58,7 @@ namespace OmniGenerator.Cli.Commands
         /// </summary>
         private void OnProcessExit(object? sender, EventArgs e)
         {
-            Console.WriteLine("ConsoleAppCancellationTokenSource : OnProcessExit");
+            _logger.LogDebug("OnProcessExit event received");
 
             if (_cts.IsCancellationRequested)
             {

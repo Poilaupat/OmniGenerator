@@ -2,11 +2,11 @@
   "profiles": {
     "OmniGenerator.Cli.Eligibility": {
       "commandName": "Project",
-      "commandLineArgs": "--param \"..\\..\\..\\..\\ParamFiles\\param-compliance-eligibility.json\" --output \"..\\..\\..\\..\\Output\""
+      "commandLineArgs": "generate \"..\\..\\..\\..\\ParamFiles\\param-compliance-eligibility.json\" \"..\\..\\..\\..\\Output\""
     },
     "OmniGenerator.Cli.Default": {
       "commandName": "Project",
-      "commandLineArgs": "--param \"..\\..\\..\\..\\ParamFiles\\param.json\" --output \"..\\..\\..\\..\\Output\""
+      "commandLineArgs": "generate \"..\\..\\..\\..\\ParamFiles\\param.json\" \"..\\..\\..\\..\\Output\""
     },
     "WSL": {
       "commandName": "WSL2",
@@ -16,9 +16,17 @@
       "commandName": "Project",
       "commandLineArgs": "--help"
     },
-    "OmniGenerator.Cli.Version": {
+    "Omnigenerator.Cli.Infinite": {
       "commandName": "Project",
-      "commandLineArgs": "version"
+      "commandLineArgs": "infinite --cancellable"
+    },
+    "OmniGenerator.Cli.About": {
+      "commandName": "Project",
+      "commandLineArgs": "about"
+    },
+    "OmniGenerator.Cli.Help": {
+      "commandName": "Project",
+      "commandLineArgs": "-h"
     }
   }
 }
