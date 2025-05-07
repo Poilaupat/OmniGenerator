@@ -32,8 +32,19 @@ try
 
         commands.AddCommand<GenerateCommand>("generate");
 
+        commands.AddBranch<PluginCommandSettings>("plugin", plugin =>
+        {
+            plugin.AddCommand<PluginListCommand>("list")
+                .WithDescription("List plugins installed")
+                .WithExample("plugin", "list", "--packagers");
+
+            plugin.AddCommand<PluginDetailCommand>("details")
+                .WithDescription("Displays details on a specifi plugin")
+                .WithExample("plugin", "details", "\"PLUGIN_NAME\"");
+        });
+
 #if DEBUG
-        commands.AddCommand<InfiniteCommand>("infinite")
+            commands.AddCommand<InfiniteCommand>("infinite")
             .WithDescription("An command that takes an infinite amount of time to execute. Usefull to test CancellableAsyncCommand.")
             .WithExample("infinite")
             .WithExample("infinite", "--cancellable");

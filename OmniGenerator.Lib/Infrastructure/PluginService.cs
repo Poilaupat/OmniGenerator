@@ -8,6 +8,7 @@ using System.ComponentModel.Composition.Hosting;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
 using System.Reflection;
 using OmniGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Tools;
 
 namespace OmniGenerator.Lib.Infrastructure
 {
@@ -17,13 +18,11 @@ namespace OmniGenerator.Lib.Infrastructure
 
         public PluginService()
         {
-            //var catalog = new AssemblyCatalog(typeof(PluginService).Assembly);
-
             var pluginpath = Path.Combine(
                 Path.GetDirectoryName(typeof(PluginService).Assembly.Location)!,
                 "Plugins");
 
-            if(!Directory.Exists(pluginpath))
+            if (!Directory.Exists(pluginpath))
                 throw new DirectoryNotFoundException(pluginpath);
 
             var catalog = new DirectoryCatalog(pluginpath);
@@ -31,7 +30,7 @@ namespace OmniGenerator.Lib.Infrastructure
             _container.ComposeParts(this);
         }
 
-        public IPackager? GetPackager(string? pluginname) 
+        public IPackager? GetPackager(string? pluginname)
         {
             if (!string.IsNullOrWhiteSpace(pluginname))
             {
@@ -49,6 +48,25 @@ namespace OmniGenerator.Lib.Infrastructure
             }
 
             return null;
+        }
+
+        public IEnumerable<PluginInfo> GetPlugins<TPlugin>()
+            where TPlugin : class
+        {
+            var exports = _container.GetExports<TPlugin, IPluginMetadata>();
+
+            return exports.Select(e =>
+            {
+                var assembly = e.Value.GetType().Assembly;
+                return new PluginInfo
+                {
+                    PluginType = typeof(TPlugin).Name,
+                    Name = e.Metadata.Name,
+                    Description = e.Metadata.Description,
+                    Location = assembly.Location,
+                    AssemblyVersion = assembly.GetName().Version?.ToString() ?? "Unknown"
+                };
+            });
         }
 
         private TPlugin? GetPlugin<TPlugin>(string pluginname)

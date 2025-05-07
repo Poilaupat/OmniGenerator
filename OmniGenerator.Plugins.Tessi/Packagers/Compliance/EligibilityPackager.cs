@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace OmniGenerator.Plugin.Tessi.Packagers.Compliance
 {
     [Export(typeof(IPackager))]
-    [PluginMetadata("packager.tessi.eligibility")]
+    [PluginMetadata("packager.tessi.eligibility", "A packager that produces eligibility resquest from Wecheck Compliance")]
 
     public class EligibilityPackager : IPackager
     {

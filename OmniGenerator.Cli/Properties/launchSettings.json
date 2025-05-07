@@ -27,6 +27,14 @@
     "OmniGenerator.Cli.Help": {
       "commandName": "Project",
       "commandLineArgs": "-h"
+    },
+    "OmniGenerator.Cli.PluginDetails": {
+      "commandName": "Project",
+      "commandLineArgs": "plugin details \"drawer.omni.chequ\""
+    },
+    "OmniGenerator.Cli.PluginList": {
+      "commandName": "Project",
+      "commandLineArgs": "plugin list -d -p"
     }
   }
 }

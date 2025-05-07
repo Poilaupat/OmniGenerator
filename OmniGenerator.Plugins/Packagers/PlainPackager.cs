@@ -13,7 +13,7 @@ namespace OmniGenerator.Plugins.Packagers
     /// The directory name is the concatenation of the current date+time with the root numlot
     /// </summary>
     [Export(typeof(IPackager))]
-    [PluginMetadata("packager.omni.plain")]
+    [PluginMetadata("packager.omni.plain", "A packager that exports images along with a text file containing document fields")]
     public class PlainPackager : IPackager
     {
         public async Task ProcessAsync(Root root, string basepath)

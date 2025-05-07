@@ -13,7 +13,7 @@ namespace OmniGenerator.Plugins.Drawers
     /// A <see cref="IDocumentDrawer"/> for cheque image generation
     /// </summary>
     [Export(typeof(IDocumentDrawer))]
-    [PluginMetadata("drawer.omni.cheque")]
+    [PluginMetadata("drawer.omni.cheque", "Draws french cheque images")]
     public class ChequeDrawer : DocumentDrawerBase
     {
         /// <summary>

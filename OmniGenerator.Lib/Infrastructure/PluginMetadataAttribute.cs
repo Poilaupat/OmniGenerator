@@ -14,9 +14,12 @@ namespace OmniGenerator.Lib.Infrastructure
     {
         public string Name { get; }
 
-        public PluginMetadataAttribute(string name)
+        public string Description { get; }
+
+        public PluginMetadataAttribute(string name, string description)
         {
             Name = name;
+            Description = description;
         }
     }
 }

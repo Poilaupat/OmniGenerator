@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace OmniGenerator.Plugins.Packagers
 {
     [Export(typeof(IPackager))]
-    [PluginMetadata("packager.omni.sql")]
+    [PluginMetadata("packager.omni.sql","A packager a builds SQL scripts from groups acting as tables and documents acting as table rows")]
     public class SqlScriptPackager : IPackager
     {
         public async Task ProcessAsync(Root root, string basepath)
