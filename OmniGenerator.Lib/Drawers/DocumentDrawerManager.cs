@@ -11,6 +11,13 @@ namespace OmniGenerator.Lib.Drawers
     /// </summary>
     internal sealed class DocumentDrawerManager : IDocumentDrawerManager
     {
+        #region Interface properties
+
+        public IProgress<DocumentDrawerManagerProgress>? Progress { get; set; }
+        public int ProgressResolution { get; set; }
+
+        #endregion
+
         IPluginService _pluginService;
 
         /// <summary>

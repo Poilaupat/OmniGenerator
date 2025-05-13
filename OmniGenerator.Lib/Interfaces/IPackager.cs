@@ -3,17 +3,27 @@
 namespace OmniGenerator.Lib.Interfaces
 {
     /// <summary>
-    /// An interface that defines the packaging of a the files.
-    /// Packaging is the way files (images, metadata, etc) are persisted  
+    /// Defines a contract for packaging and persisting generated files, such as images and metadata,
+    /// from a document hierarchy. Implementations of this interface are responsible for determining
+    /// how and where the files are stored (e.g., file system, archive, cloud storage).
     /// </summary>
     public interface IPackager
     {
         /// <summary>
-        /// Generates the files for the given root
+        /// Processes the specified <see cref="Root"/> hierarchy and generates all associated files,
+        /// persisting them to the given base directory.
         /// </summary>
-        /// <param name="root">The rrot</param>
-        /// <param name="basepath">The directory where the files must be written</param>
-        /// <returns></returns>
+        /// <param name="root">
+        /// The <see cref="Root"/> object representing the top-level document hierarchy to be packaged.
+        /// This includes all groups, documents, fields, and associated images or metadata.
+        /// </param>
+        /// <param name="basepath">
+        /// The absolute or relative path to the directory where the generated files should be written.
+        /// Implementations should ensure this directory exists or create it as needed.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous packaging operation.
+        /// </returns>
         Task ProcessAsync(Root root, string basepath);
     }
 }

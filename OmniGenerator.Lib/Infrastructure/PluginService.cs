@@ -11,10 +11,21 @@ using OmniGenerator.Lib.Interfaces;
 
 namespace OmniGenerator.Lib.Infrastructure
 {
+    /// <summary>
+    /// Provides plugin discovery and access for the application using the Managed Extensibility Framework (MEF).
+    /// This service locates, loads, and exposes plugins such as packagers and document drawers from the Plugins directory.
+    /// </summary>
     internal sealed class PluginService : IPluginService
     {
         private CompositionContainer _container;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PluginService"/> class.
+        /// Scans the Plugins directory for available plugins and composes them using MEF.
+        /// </summary>
+        /// <exception cref="DirectoryNotFoundException">
+        /// Thrown if the Plugins directory does not exist.
+        /// </exception>
         public PluginService()
         {
             var pluginpath = Path.Combine(
@@ -29,6 +40,13 @@ namespace OmniGenerator.Lib.Infrastructure
             _container.ComposeParts(this);
         }
 
+        /// <summary>
+        /// Retrieves an <see cref="IPackager"/> plugin by its name.
+        /// </summary>
+        /// <param name="pluginname">The name of the packager plugin to retrieve.</param>
+        /// <returns>
+        /// An instance of <see cref="IPackager"/> if a matching plugin is found; otherwise, <c>null</c>.
+        /// </returns>
         public IPackager? GetPackager(string? pluginname)
         {
             if (!string.IsNullOrWhiteSpace(pluginname))
@@ -39,6 +57,13 @@ namespace OmniGenerator.Lib.Infrastructure
             return null;
         }
 
+        /// <summary>
+        /// Retrieves an <see cref="IDocumentDrawer"/> plugin by its name.
+        /// </summary>
+        /// <param name="pluginname">The name of the document drawer plugin to retrieve.</param>
+        /// <returns>
+        /// An instance of <see cref="IDocumentDrawer"/> if a matching plugin is found; otherwise, <c>null</c>.
+        /// </returns>
         public IDocumentDrawer? GetDocumentDrawer(string? pluginname)
         {
             if (!string.IsNullOrWhiteSpace(pluginname))
@@ -49,6 +74,13 @@ namespace OmniGenerator.Lib.Infrastructure
             return null;
         }
 
+        /// <summary>
+        /// Gets metadata information about all available plugins of the specified type.
+        /// </summary>
+        /// <typeparam name="TPlugin">The type of plugin to search for (e.g., <see cref="IPackager"/>, <see cref="IDocumentDrawer"/>).</typeparam>
+        /// <returns>
+        /// An enumerable collection of <see cref="PluginInfo"/> objects describing each discovered plugin.
+        /// </returns>
         public IEnumerable<PluginInfo> GetPlugins<TPlugin>()
             where TPlugin : class
         {
@@ -68,6 +100,14 @@ namespace OmniGenerator.Lib.Infrastructure
             });
         }
 
+        /// <summary>
+        /// Retrieves a plugin of the specified type by its name.
+        /// </summary>
+        /// <typeparam name="TPlugin">The type of plugin to retrieve.</typeparam>
+        /// <param name="pluginname">The name of the plugin to retrieve.</param>
+        /// <returns>
+        /// An instance of <typeparamref name="TPlugin"/> if a matching plugin is found; otherwise, <c>null</c>.
+        /// </returns>
         private TPlugin? GetPlugin<TPlugin>(string pluginname)
             where TPlugin : class
         {

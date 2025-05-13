@@ -8,6 +8,6 @@ namespace OmniGenerator.Lib.Drawers
 {
     public sealed class DocumentDrawerManagerProgress
     {
-        int Percentage { get; set; } = 0;
+        public int Percentage { get; set; } = 0;
     }
 }

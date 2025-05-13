@@ -1,4 +1,5 @@
 ﻿using Microsoft.ProgramSynthesis.Utils.JetBrains.Annotations;
+using OmniGenerator.Lib.Drawers;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
 using Spectre.Console;
@@ -27,6 +28,18 @@ namespace OmniGenerator.Cli.Widgets
             var panel = new Panel(grid)
             .RoundedBorder()
             .Header(new PanelHeader("Data generation", Justify.Left))
+            .Expand();
+
+            return panel;
+        }
+
+        public static IRenderable ToWidget(this DocumentDrawerManagerProgress progress)
+        {
+            var text = new Markup($"[blue]Achieved :[/] {progress.Percentage}%");
+
+            var panel = new Panel(text)
+            .RoundedBorder()
+            .Header(new PanelHeader("Vector image generation", Justify.Left))
             .Expand();
 
             return panel;

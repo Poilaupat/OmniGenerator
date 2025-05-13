@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using OmniGenerator.Cli.Tools;
 using OmniGenerator.Cli.Widgets;
 using OmniGenerator.Lib.Configuration;
+using OmniGenerator.Lib.Drawers;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
@@ -9,15 +11,19 @@ using Spectre.Console;
 using Spectre.Console.Cli;
 using Spectre.Console.Rendering;
 using System.Diagnostics;
+using static Microsoft.ProgramSynthesis.DslLibrary.Dates.DateFormatCache;
 
 namespace OmniGenerator.Cli.Commands
 {
+
     /// <summary>
     /// CLI command responsible for executing a document/image generation process
     /// based on a provided configuration file and command-line settings.
     /// </summary>
     internal class GenerateCommand : CancellableAsyncCommand<GenerateCommandSettings>
     {
+        private readonly int DEFAULT_PROGRESS_RESOLUTION = 1000; // 1 second
+
         private Table _layout = new Table()
                 .Border(TableBorder.None)
                 .AddColumns("column")
@@ -109,37 +115,20 @@ namespace OmniGenerator.Cli.Commands
                 .Live(_layout)
                 .AutoClear(false)
                 .Overflow(VerticalOverflow.Crop)
-                .StartAsync(async liveDisplay =>
+                .StartAsync(async ldc =>
                 {
                     // Step 1: Data hierarchy generation
-                    _tasks["hierarchy"].SetProcessing();
-                    _hierarchyBuilder.ProgressResolution = _appsettings.ProgressResolution ?? 1000;
-                    _hierarchyBuilder.Progress = new Progress<HierarchyBuilderProgress>(progress =>
-                    {
-                        UpdateUI(settings, progress);
-                        liveDisplay.Refresh();
-                    });
-                    var root = await _hierarchyBuilder.BuildAsync(configuration);
-                    _tasks["hierarchy"].SetSucceeded();
-
+                    var root = await DoBuildHierarchyAsync(ldc, settings, configuration);
 
                     // Step 2: Vector images generation
-                    _tasks["images"].SetProcessing();
-                    if (_imageComposerProcessor is not null)
-                        await _imageComposerProcessor.DrawImagesAsync(root);
-                    _tasks["images"].SetSucceeded();
-
+                    await DoDrawImagesAsync(ldc, settings, root);
 
                     // Step 3: Output packaging
-                    _tasks["package"].SetProcessing();
-                    var packager = _pluginService.GetPackager(configuration.PackagerName);
-                    if (packager is not null)
-                        await packager.ProcessAsync(root, settings.OutputFolderPath);
-                    _tasks["package"].SetSucceeded();
+                    await DoPackageAsync(ldc, settings, root, configuration);
                 });
         }
 
-        private void UpdateUI(GenerateCommandSettings settings, HierarchyBuilderProgress progress)
+        private void UpdateUI(GenerateCommandSettings settings, IRenderable progress)
         {
             _layout.UpdateCell(0, 0,
                 new Panel(new TextPath(Path.GetFullPath(settings.SettingsFilePath)).LeafColor(Color.Red))
@@ -152,13 +141,77 @@ namespace OmniGenerator.Cli.Commands
             );
 
             _layout.UpdateCell(2, 0,
-                progress.ToWidget()
+                progress
             );
 
             _layout.UpdateCell(3, 0,
-                new Panel(new Markup($"[blue]Elapsed time[/] : {_watch.ElapsedMilliseconds}ms"))
+                new Panel(new Markup($"[blue]Elapsed time[/] : {_watch.Elapsed.ToFluidUnitString()}"))
                     .ConfigurePanel("Execution")
             );
+        }
+
+        private async Task<Root> DoBuildHierarchyAsync(LiveDisplayContext ldc, GenerateCommandSettings settings, OmniGeneratorConfiguration configuration)
+        {
+            _tasks["hierarchy"].SetProcessing();
+            _hierarchyBuilder.ProgressResolution = _appsettings.ProgressResolution ?? DEFAULT_PROGRESS_RESOLUTION;
+            _hierarchyBuilder.Progress = new Progress<HierarchyBuilderProgress>(progress =>
+            {
+                UpdateUI(settings, progress.ToWidget());
+                ldc.Refresh();
+            });
+
+            try
+            {
+                var root = await _hierarchyBuilder.BuildAsync(configuration);
+                _tasks["hierarchy"].SetSucceeded();
+                return root;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while building the hierarchy.");
+                _tasks["hierarchy"].SetFailed();
+                throw;
+            }
+        }
+
+        private async Task DoDrawImagesAsync(LiveDisplayContext ldc, GenerateCommandSettings settings, Root root)
+        {
+            if (_imageComposerProcessor is not null && root.GetDocuments().Any(d => !string.IsNullOrWhiteSpace(d.ImageComposer)))
+            {
+                _tasks["images"].SetProcessing();
+                
+                _imageComposerProcessor.ProgressResolution = _appsettings.ProgressResolution ?? DEFAULT_PROGRESS_RESOLUTION;
+                _imageComposerProcessor.Progress = new Progress<DocumentDrawerManagerProgress>(progress =>
+                {
+                    UpdateUI(settings, progress.ToWidget());
+                    ldc.Refresh();
+                });
+
+                try
+                {
+                    await _imageComposerProcessor.DrawImagesAsync(root);
+                    _tasks["images"].SetSucceeded();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "An error occurred while drawing images.");
+                    _tasks["images"].SetFailed();
+                    throw;
+                }
+            }
+            else
+            {
+                _tasks["images"].SetSkipped();
+            }
+        }
+
+        private async Task DoPackageAsync(LiveDisplayContext ldc, GenerateCommandSettings settings, Root root, OmniGeneratorConfiguration configuration)
+        {
+            _tasks["package"].SetProcessing();
+            var packager = _pluginService.GetPackager(configuration.PackagerName);
+            if (packager is not null)
+                await packager.ProcessAsync(root, settings.OutputFolderPath);
+            _tasks["package"].SetSucceeded();
         }
     }
 }

@@ -14,6 +14,7 @@ namespace OmniGenerator.Cli.Widgets
     internal enum ETaskItemState
     {
         Pending,
+        Skipped,
         Processing,
         Failure,
         Success,
@@ -27,6 +28,7 @@ namespace OmniGenerator.Cli.Widgets
         {
             { ETaskItemState.Pending, new Markup("Pending...") },
             { ETaskItemState.Processing, new Markup("[yellow]Processing...[/]") },
+            { ETaskItemState.Skipped, new Markup("[yellow]Skipped[/]") },
             { ETaskItemState.Failure, new Markup("[red]Failure[/]") },
             { ETaskItemState.Success, new Markup("[green]Success[/]") }
         };
@@ -64,6 +66,11 @@ namespace OmniGenerator.Cli.Widgets
         {
             _state = ETaskItemState.Success;
             _watch.Stop();
+        }
+
+        public void SetSkipped()
+        {
+            _state = ETaskItemState.Skipped;
         }
     }
 }

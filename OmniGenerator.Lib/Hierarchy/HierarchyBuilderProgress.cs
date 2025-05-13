@@ -1,6 +1,6 @@
 ﻿namespace OmniGenerator.Lib.Hierarchy
 {
-    public class HierarchyBuilderProgress
+    public sealed class HierarchyBuilderProgress
     {
         public long CountGroup { get; set; }
         public long CountProcessedGroup { get; set; }

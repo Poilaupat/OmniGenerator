@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OmniGenerator.Lib.Tools
+namespace OmniGenerator.Cli.Tools
 {
     internal static class TimeSpanExtensions
     {

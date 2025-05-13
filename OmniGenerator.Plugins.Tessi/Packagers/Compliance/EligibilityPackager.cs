@@ -87,10 +87,8 @@ namespace OmniGenerator.Plugin.Tessi.Packagers.Compliance
                 Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             });
 
-            File.WriteAllText(jsonfilename, jsonContent);
-            File.WriteAllText(topfilename, string.Empty);
-
-            await Task.CompletedTask;
+            await File.WriteAllTextAsync(jsonfilename, jsonContent);
+            await File.WriteAllTextAsync(topfilename, string.Empty);
         }
     }
 
