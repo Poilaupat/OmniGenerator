@@ -2,12 +2,12 @@
 using System.Drawing;
 using System.Reflection;
 
-namespace OmniGenerator.Lib.Tools
+namespace OmniGenerator.Lib.Drawers
 {
     /// <summary>
     /// A set of tools for SVG images
     /// </summary>
-    public static class SvgTools
+    public static class SvgExtensions
     {
         /// <summary>
         /// Draws a text in the given SVG document

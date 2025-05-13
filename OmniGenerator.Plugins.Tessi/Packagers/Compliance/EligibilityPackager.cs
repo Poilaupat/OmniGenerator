@@ -1,4 +1,4 @@
-﻿using OmniGenerator.Lib.Generators;
+﻿using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using System;

@@ -1,4 +1,5 @@
 ﻿using Mustache;
+using OmniGenerator.Lib.Generators.Fields;
 using OmniGenerator.Lib.Interfaces.FieldGenerators;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OmniGenerator.Lib.Generators.Fields
+namespace OmniGenerator.Lib.Generators
 {
     /// <summary>
     /// Provides usefull extensions to <see cref="IFieldGenerator"/> collections
@@ -24,8 +25,7 @@ namespace OmniGenerator.Lib.Generators.Fields
         {
             return fields
                .Where(x => x is not FieldGeneratorAggregate)
-               .OrderBy(x => x, new FieldGeneratorComparer())
-               .ToList();
+               .OrderBy(x => x, new FieldGeneratorComparer());
         }
 
         /// <summary>
@@ -38,8 +38,7 @@ namespace OmniGenerator.Lib.Generators.Fields
             return fields
                 .Where(x => x is not FieldGeneratorAggregate && x is IFieldGeneratorDependent)
                 .Cast<IFieldGeneratorDependent>()
-                .OrderBy(x => x, new FieldGeneratorComparer())
-                .ToList();
+                .OrderBy(x => x, new FieldGeneratorComparer());
         }
 
         /// <summary>
@@ -51,8 +50,7 @@ namespace OmniGenerator.Lib.Generators.Fields
         {
             return fields
                 .Where(x => x.GetType() == typeof(FieldGeneratorAggregate))
-                .Cast<FieldGeneratorAggregate>()
-                .ToList();
+                .Cast<FieldGeneratorAggregate>();
         }
 
         /// <summary>

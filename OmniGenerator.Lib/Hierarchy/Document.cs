@@ -1,7 +1,7 @@
 ﻿using Svg;
 using System.Diagnostics;
 
-namespace OmniGenerator.Lib.Generators
+namespace OmniGenerator.Lib.Hierarchy
 {
     /// <summary>
     /// Modelize a document with its name, fields and images

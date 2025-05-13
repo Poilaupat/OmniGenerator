@@ -1,6 +1,6 @@
 ﻿using OmniGenerator.Lib.Interfaces.FieldGenerators;
 
-namespace OmniGenerator.Lib.Generators.Fields
+namespace OmniGenerator.Lib.Generators
 {
     /// <summary>
     /// Orders the <see cref="IFieldGenerator"/>.

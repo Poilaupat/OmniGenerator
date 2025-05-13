@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Options;
 using OmniGenerator.Cli.Widgets;
 using OmniGenerator.Lib.Configuration;
+using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
-using OmniGenerator.Lib.Tools;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using Spectre.Console.Rendering;

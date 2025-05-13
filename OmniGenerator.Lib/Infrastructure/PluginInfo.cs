@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OmniGenerator.Lib.Tools
+namespace OmniGenerator.Lib.Infrastructure
 {
     public sealed class PluginInfo
     {

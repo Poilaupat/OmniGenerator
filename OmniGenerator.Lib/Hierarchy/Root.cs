@@ -1,4 +1,4 @@
-﻿namespace OmniGenerator.Lib.Generators
+﻿namespace OmniGenerator.Lib.Hierarchy
 {
     /// <summary>
     /// The root of the <see cref="Element"/> generating hierarchy.

@@ -4,8 +4,10 @@ using OmniGenerator.Lib.Exceptions;
 using OmniGenerator.Lib.Configuration;
 using System.Data;
 using OmniGenerator.Lib.Interfaces.FieldGenerators;
+using OmniGenerator.Lib.Hierarchy;
+using OmniGenerator.Lib.Generators.Fields;
 
-namespace OmniGenerator.Lib.Generators.Fields
+namespace OmniGenerator.Lib.Generators
 {
     /// <summary>
     /// Manages <see cref="AbstractFieldGenerator{T}"/> by <see cref="Document"/> or <see cref="Group"/>

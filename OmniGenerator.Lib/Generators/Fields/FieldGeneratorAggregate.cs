@@ -1,9 +1,11 @@
-﻿namespace OmniGenerator.Lib.Generators.Fields
+﻿using OmniGenerator.Lib.Hierarchy;
+
+namespace OmniGenerator.Lib.Generators.Fields
 {
     /// <summary>
     /// The <see cref="FieldGeneratorAggregate"/> is a kind of generator that computes aggregates on <see cref="Group"/> content
     /// </summary>
-    internal class FieldGeneratorAggregate : AbstractFieldGeneratorOneFieldDependant<int>
+    internal class FieldGeneratorAggregate : AbstractFieldGeneratorSingleFieldDependant<int>
     {
         /// <summary>
         /// The aggregate type. Its configures how the aggregate is computed (count, sum, ...)

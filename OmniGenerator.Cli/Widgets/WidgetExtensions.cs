@@ -1,6 +1,6 @@
 ﻿using Microsoft.ProgramSynthesis.Utils.JetBrains.Annotations;
+using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
-using OmniGenerator.Lib.Tools;
 using Spectre.Console;
 using Spectre.Console.Rendering;
 using System;

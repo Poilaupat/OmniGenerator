@@ -1,11 +1,10 @@
-﻿using OmniGenerator.Lib.Generators;
-using OmniGenerator.Lib.Tools;
-using OmniGenerator.Lib.Interfaces;
+﻿using OmniGenerator.Lib.Interfaces;
 using Svg;
 using System.Drawing;
 using OmniGenerator.Lib.Infrastructure;
 using System.ComponentModel.Composition;
-using OmniGenerator.Lib.Image;
+using OmniGenerator.Lib.Drawers;
+using OmniGenerator.Lib.Hierarchy;
 
 namespace OmniGenerator.Plugins.Drawers
 {
@@ -27,7 +26,7 @@ namespace OmniGenerator.Plugins.Drawers
 
         public override SvgDocument DrawRecto(Document document)
         {
-            var svg = SvgTools.NewBlankSvg(Width, Height);
+            var svg = SvgExtensions.NewBlankSvg(Width, Height);
 
             DrawRectoBackground(svg);
 

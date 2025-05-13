@@ -1,9 +1,9 @@
 ﻿using Autofac.Features.Metadata;
-using OmniGenerator.Lib.Generators;
+using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
 
-namespace OmniGenerator.Lib.Image
+namespace OmniGenerator.Lib.Drawers
 {
     /// <summary>
     /// The image composer processor.

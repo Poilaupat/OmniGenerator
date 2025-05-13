@@ -1,4 +1,4 @@
-﻿namespace OmniGenerator.Lib.Generators
+﻿namespace OmniGenerator.Lib.Hierarchy
 {
     /// <summary>
     /// An indexed collection of fields

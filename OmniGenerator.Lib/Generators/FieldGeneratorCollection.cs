@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Interfaces.FieldGenerators;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OmniGenerator.Lib.Generators.Fields
+namespace OmniGenerator.Lib.Generators
 {
     internal class FieldGeneratorCollection
     {

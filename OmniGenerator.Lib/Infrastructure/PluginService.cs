@@ -8,7 +8,6 @@ using System.ComponentModel.Composition.Hosting;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
 using System.Reflection;
 using OmniGenerator.Lib.Interfaces;
-using OmniGenerator.Lib.Tools;
 
 namespace OmniGenerator.Lib.Infrastructure
 {

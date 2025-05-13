@@ -13,12 +13,12 @@ namespace OmniGenerator.Lib.Interfaces.Infrastructure
     public interface IProgressReporter<TReport> 
     {
         /// <summary>
-        /// Gets an optionnal progress reporter used to receive updates about the process.
+        /// Gets of sets an optionnal progress reporter used to receive updates about the process.
         /// </summary>
         IProgress<TReport>? Progress { get; set; }
 
         /// <summary>
-        /// Gets the minimum time interval, in milliseconds, between two progress updates.
+        /// Gets or sets the minimum time interval, in milliseconds, between two progress updates.
         /// This value controls how frequently progress notifications should be emitted. 
         /// </summary>
         int ProgressResolution { get; set; }

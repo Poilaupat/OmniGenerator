@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace OmniGenerator.Lib.Generators
+namespace OmniGenerator.Lib.Hierarchy
 {
     /// <summary>
     /// Modelize an element's field

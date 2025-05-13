@@ -1,4 +1,4 @@
-﻿namespace OmniGenerator.Lib.Tools
+﻿namespace OmniGenerator.Lib.Hierarchy
 {
     public class HierarchyBuilderProgress
     {

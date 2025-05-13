@@ -1,3 +1,4 @@
+using OmniGenerator.Lib.Generators;
 using OmniGenerator.Lib.Generators.Fields;
 using OmniGenerator.Lib.Interfaces.FieldGenerators;
 using System.CodeDom;

@@ -1,11 +1,11 @@
 ﻿using Autofac;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
-using OmniGenerator.Lib.Image;
+using OmniGenerator.Lib.Drawers;
+using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
-using OmniGenerator.Lib.Tools;
 
 namespace OmniGenerator.Lib.Autofac
 {

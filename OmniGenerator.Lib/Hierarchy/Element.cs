@@ -1,7 +1,7 @@
-﻿using OmniGenerator.Lib.Generators.Fields;
+﻿using OmniGenerator.Lib.Generators;
 using System.Diagnostics;
 
-namespace OmniGenerator.Lib.Generators
+namespace OmniGenerator.Lib.Hierarchy
 {
     /// <summary>
     /// Modelize the base class for <see cref="Document" and <see cref="Group"/>/>
@@ -69,9 +69,9 @@ namespace OmniGenerator.Lib.Generators
             if(generators is null)
                 throw new ArgumentNullException(nameof(generators));
 
-            if(generators.ElementHasFields(this.Name))
+            if(generators.ElementHasFields(Name))
             {
-                Fields.AddRange(generators.GenerateRegularFields(this.Name));
+                Fields.AddRange(generators.GenerateRegularFields(Name));
             }
         }
     }

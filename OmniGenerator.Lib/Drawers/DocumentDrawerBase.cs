@@ -1,10 +1,9 @@
-﻿using OmniGenerator.Lib.Generators;
+﻿using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Interfaces;
-using OmniGenerator.Lib.Tools;
 using Svg;
 using System.Drawing;
 
-namespace OmniGenerator.Lib.Image
+namespace OmniGenerator.Lib.Drawers
 {
     /// <summary>
     /// The base class for all <see cref="IDocumentDrawer"/>
@@ -41,7 +40,7 @@ namespace OmniGenerator.Lib.Image
         /// <returns>A SVG representation of the recto</returns>
         public virtual SvgDocument DrawRecto(Document document)
         {
-            return SvgTools.NewBlankSvg(Width, Height);
+            return SvgExtensions.NewBlankSvg(Width, Height);
         }
 
         /// <summary>
@@ -51,7 +50,7 @@ namespace OmniGenerator.Lib.Image
         /// <returns>A SVG representation of the verso</returns>
         public virtual SvgDocument DrawVerso(Document document)
         {
-            return SvgTools.NewBlankSvg(Width, Height);
+            return SvgExtensions.NewBlankSvg(Width, Height);
         }
 
         /// <summary>
@@ -59,8 +58,8 @@ namespace OmniGenerator.Lib.Image
         /// </summary>
         private static void LoadFonts()
         {
-            SvgFontManager.PrivateFontDataList.Add(SvgTools.GetFontBytes("Cmc7.ttf"));
-            SvgFontManager.PrivateFontDataList.Add(SvgTools.GetFontBytes("OcrbRegular.ttf"));
+            SvgFontManager.PrivateFontDataList.Add(SvgExtensions.GetFontBytes("Cmc7.ttf"));
+            SvgFontManager.PrivateFontDataList.Add(SvgExtensions.GetFontBytes("OcrbRegular.ttf"));
         }
     }
 }

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using OmniGenerator.Lib.Generators.Fields;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OmniGenerator.Lib.Generators.Fields
+namespace OmniGenerator.Lib.Generators
 {
     /// <summary>
     /// The aggregate type of the <see cref="FieldGeneratorAggregate" generators

@@ -1,7 +1,7 @@
 ﻿using Microsoft.ProgramSynthesis.Extraction.Text.Build.NodeTypes;
 using Microsoft.ProgramSynthesis.Utils;
 using Microsoft.ProgramSynthesis.Utils.Interactive;
-using OmniGenerator.Lib.Generators;
+using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using System;

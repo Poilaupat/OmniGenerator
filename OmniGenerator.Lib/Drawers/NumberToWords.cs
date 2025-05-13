@@ -1,4 +1,4 @@
-﻿namespace OmniGenerator.Lib.Tools
+﻿namespace OmniGenerator.Lib.Drawers
 {
     /// <summary>
     /// Provides a string representation of numbers in french
@@ -80,7 +80,7 @@
         //assumes a number between 20 and 99
         private static string ConvertHighTensToWords(int value)
         {
-            int tensDigit = (int)(Math.Floor((double)value / 10.0));
+            int tensDigit = (int)Math.Floor(value / 10.0);
 
             var tensStr = tensDigit switch
             {
@@ -99,11 +99,11 @@
 
             //French sometime has a prefix in front of 1
             string strPrefix = string.Empty;
-            if ((tensDigit < 8) && (value - tensDigit * 10 == 1))
+            if (tensDigit < 8 && value - tensDigit * 10 == 1)
                 strPrefix = "-et";
 
             string onesStr;
-            if ((tensDigit == 7 || tensDigit == 9))
+            if (tensDigit == 7 || tensDigit == 9)
             {
                 tensStr = ConvertHighTensToWords(10 * (tensDigit - 1));
                 onesStr = ConvertTeensToWords(10 + value - tensDigit * 10);
@@ -122,7 +122,7 @@
             // Strategy: translate the first portion of the number, then recursively translate the remaining sections.
 
             // Step 1: strip off first portion, and convert it to string:
-            int bigPart = (int)(Math.Floor((double)value / baseNum));
+            int bigPart = (int)Math.Floor((double)value / baseNum);
             string bigPartStr;
 
             if (bigPart == 1 && value < 1000000)

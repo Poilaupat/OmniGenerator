@@ -1,12 +1,11 @@
-﻿using OmniGenerator.Lib.Generators;
-using OmniGenerator.Lib.Tools;
-using OmniGenerator.Lib.Interfaces;
+﻿using OmniGenerator.Lib.Interfaces;
 using Svg;
 using System.Drawing;
 using System.ComponentModel.Composition;
 using OmniGenerator.Lib.Infrastructure;
+using OmniGenerator.Lib.Hierarchy;
 
-namespace OmniGenerator.Lib.Image.Drawers
+namespace OmniGenerator.Lib.Drawers.Drawers
 {
     /// <summary>
     /// A <see cref="IDocumentDrawer"/> for talon optique image generation
@@ -26,7 +25,7 @@ namespace OmniGenerator.Lib.Image.Drawers
 
         public override SvgDocument DrawRecto(Document document)
         {
-            var svg = SvgTools.NewBlankSvg(Width, Height);
+            var svg = SvgExtensions.NewBlankSvg(Width, Height);
 
             DrawRectoBackground(svg);
 

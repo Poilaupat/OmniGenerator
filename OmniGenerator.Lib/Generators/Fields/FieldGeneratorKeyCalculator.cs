@@ -6,7 +6,7 @@ namespace OmniGenerator.Lib.Generators.Fields
     /// The <see cref="FieldGeneratorKeyCalculator"/> produces key calculation upon the dependant field value
     /// Note that this generator can throw <see cref="ArgumentException"/> if the dependant field has a value incompatible with the key algorithm
     /// </summary>
-    internal class FieldGeneratorKeyCalculator : AbstractFieldGeneratorOneFieldDependant<string>
+    internal class FieldGeneratorKeyCalculator : AbstractFieldGeneratorSingleFieldDependant<string>
     {
         /// <summary>
         /// Specifies the key to compute 

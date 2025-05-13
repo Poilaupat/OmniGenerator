@@ -1,10 +1,10 @@
 ﻿using OmniGenerator.Lib.Exceptions;
-using OmniGenerator.Lib.Generators.Fields;
+using OmniGenerator.Lib.Generators;
 using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Xml.Linq;
 
-namespace OmniGenerator.Lib.Generators
+namespace OmniGenerator.Lib.Hierarchy
 {
     /// <summary>
     /// Modelize a <see cref="Group"/> with its inner <see cref="Document"/> or <see cref="Group"/> as <see cref="Element"/>.
@@ -103,12 +103,12 @@ namespace OmniGenerator.Lib.Generators
             if (generators is null)
                 throw new ArgumentNullException(nameof(generators));
 
-            if (generators.ElementHasFields(this.Name))
+            if (generators.ElementHasFields(Name))
             {
                 //Regular fields
-                Fields.AddRange(generators.GenerateRegularFields(this.Name));
+                Fields.AddRange(generators.GenerateRegularFields(Name));
                 //Aggregates fields of scope DirectChildren
-                Fields.AddRange(generators.GenerateAggregateFields(this.Name, this));
+                Fields.AddRange(generators.GenerateAggregateFields(Name, this));
             }
         }
 

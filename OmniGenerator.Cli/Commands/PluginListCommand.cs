@@ -1,6 +1,6 @@
-﻿using OmniGenerator.Lib.Interfaces;
+﻿using OmniGenerator.Lib.Infrastructure;
+using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
-using OmniGenerator.Lib.Tools;
 using Spectre.Console;
 using Spectre.Console.Cli;
 

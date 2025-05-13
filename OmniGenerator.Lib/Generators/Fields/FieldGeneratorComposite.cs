@@ -1,4 +1,5 @@
 ﻿using Mustache;
+using OmniGenerator.Lib.Hierarchy;
 
 namespace OmniGenerator.Lib.Generators.Fields
 {
