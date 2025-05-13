@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
-using OmniGenerator.Lib.Generators;
 using OmniGenerator.Lib.Image;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
@@ -48,7 +47,7 @@ namespace OmniGenerator.Lib.Autofac
             builder.RegisterGeneric(typeof(Progress<>)).As(typeof(IProgress<>)).InstancePerLifetimeScope();
 
             // Register concrete progress report type
-            builder.RegisterType<HierarchyBuilderProgressReport>().InstancePerDependency();
+            builder.RegisterType<HierarchyBuilderProgress>().InstancePerDependency();
         }
 
         /// <summary>

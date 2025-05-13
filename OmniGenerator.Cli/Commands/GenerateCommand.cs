@@ -1,10 +1,14 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using OmniGenerator.Cli.Widgets;
 using OmniGenerator.Lib.Configuration;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
 using OmniGenerator.Lib.Tools;
+using Spectre.Console;
 using Spectre.Console.Cli;
+using Spectre.Console.Rendering;
+using System.Diagnostics;
 
 namespace OmniGenerator.Cli.Commands
 {
@@ -14,7 +18,23 @@ namespace OmniGenerator.Cli.Commands
     /// </summary>
     internal class GenerateCommand : CancellableAsyncCommand<GenerateCommandSettings>
     {
-        private readonly AppSettings _appeettings;
+        private Table _layout = new Table()
+                .Border(TableBorder.None)
+                .AddColumns("column")
+                .HideHeaders()
+                .AddEmptyRow()
+                .AddEmptyRow()
+                .AddEmptyRow()
+                .AddEmptyRow();
+
+        private TaskList _tasks = new TaskList()
+                .AddTask(new TaskItem("hierarchy", new Markup($"[blue]Data Generation[/]")))
+                .AddTask(new TaskItem("images", new Markup($"[blue]Vector images Generation[/]")))
+                .AddTask(new TaskItem("package", new Markup($"[blue]Package Generation[/]")));
+
+        private Stopwatch _watch = new Stopwatch();
+
+        private readonly AppSettings _appsettings;
         private readonly IHierarchyBuilder _hierarchyBuilder;
         private readonly IDocumentDrawerManager _imageComposerProcessor;
         private readonly IPluginService _pluginService;
@@ -38,7 +58,7 @@ namespace OmniGenerator.Cli.Commands
             ILogger<CancellableAsyncCommand> baselogger
         ) : base(baselogger)
         {
-            _appeettings = appsettings.Value;
+            _appsettings = appsettings.Value;
             _pluginService = pluginService;
             _hierarchyBuilder = hierarchyBuilder;
             _imageComposerProcessor = imageComposerProcessor;
@@ -57,7 +77,13 @@ namespace OmniGenerator.Cli.Commands
         {
             try
             {
-                await GenerateOne(settings);
+                _watch.Start();
+
+                var generatorConfig = await ConfigurationReader.ReadConfigurationAsync(settings.SettingsFilePath);
+                ConfigurationReader.CheckConfiguration(generatorConfig);
+                await GenerateOne(generatorConfig, settings);
+
+                _watch.Stop();
             }
             catch (Exception ex)
             {
@@ -76,33 +102,63 @@ namespace OmniGenerator.Cli.Commands
         /// - Packages the output using the configured packager
         /// </summary>
         /// <param name="settings">Parsed command-line settings provided by the user.</param>
-        private async Task GenerateOne(GenerateCommandSettings settings)
+        private async Task GenerateOne(OmniGeneratorConfiguration configuration, GenerateCommandSettings settings)
         {
-            // Step 1: Configuration reading and validation
-            var generationConfig = await ConfigurationReader.ReadConfigurationAsync(settings.SettingsFilePath);
-            ConfigurationReader.CheckConfiguration(generationConfig);
+            //Live component
+            await AnsiConsole
+                .Live(_layout)
+                .AutoClear(false)
+                .Overflow(VerticalOverflow.Crop)
+                .StartAsync(async liveDisplay =>
+                {
+                    // Step 1: Data hierarchy generation
+                    _tasks["hierarchy"].SetProcessing();
+                    _hierarchyBuilder.ProgressResolution = _appsettings.ProgressResolution ?? 1000;
+                    _hierarchyBuilder.Progress = new Progress<HierarchyBuilderProgress>(progress =>
+                    {
+                        UpdateUI(settings, progress);
+                        liveDisplay.Refresh();
+                    });
+                    var root = await _hierarchyBuilder.BuildAsync(configuration);
+                    _tasks["hierarchy"].SetSucceeded();
 
-            // Step 2: Data hierarchy generation
-            _hierarchyBuilder.ProgressResolution = _appeettings.ProgressResolution ?? 1000;
-            _hierarchyBuilder.Progress = new Progress<HierarchyBuilderProgressReport>(pr =>
-            {
-                ConsoleWriter.WriteLine(pr);
-            });
-            var root = await _hierarchyBuilder.BuildAsync(generationConfig);
-                
 
-            // Step 3: Image generation
-            ConsoleWriter.WriteLine("Starting image generation");
-            if (_imageComposerProcessor is not null)
-                await _imageComposerProcessor.DrawImagesAsync(root);
-            ConsoleWriter.WriteLine("Image generation finished");
+                    // Step 2: Vector images generation
+                    _tasks["images"].SetProcessing();
+                    if (_imageComposerProcessor is not null)
+                        await _imageComposerProcessor.DrawImagesAsync(root);
+                    _tasks["images"].SetSucceeded();
 
-            // Step 4: Output packaging
-            ConsoleWriter.WriteLine("Starting packet generation");
-            var packager = _pluginService.GetPackager(generationConfig.PackagerName);
-            if (packager is not null)
-                await packager.ProcessAsync(root, settings.OutputFolderPath);
-            ConsoleWriter.WriteLine("Packet generation finished");
+
+                    // Step 3: Output packaging
+                    _tasks["package"].SetProcessing();
+                    var packager = _pluginService.GetPackager(configuration.PackagerName);
+                    if (packager is not null)
+                        await packager.ProcessAsync(root, settings.OutputFolderPath);
+                    _tasks["package"].SetSucceeded();
+                });
+        }
+
+        private void UpdateUI(GenerateCommandSettings settings, HierarchyBuilderProgress progress)
+        {
+            _layout.UpdateCell(0, 0,
+                new Panel(new TextPath(Path.GetFullPath(settings.SettingsFilePath)).LeafColor(Color.Red))
+                    .ConfigurePanel("Configuration")
+            );
+
+            _layout.UpdateCell(1, 0,
+                new Panel(_tasks)
+                    .ConfigurePanel("Tasks")
+            );
+
+            _layout.UpdateCell(2, 0,
+                progress.ToWidget()
+            );
+
+            _layout.UpdateCell(3, 0,
+                new Panel(new Markup($"[blue]Elapsed time[/] : {_watch.ElapsedMilliseconds}ms"))
+                    .ConfigurePanel("Execution")
+            );
         }
     }
 }

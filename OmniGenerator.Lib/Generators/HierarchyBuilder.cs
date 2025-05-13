@@ -2,10 +2,10 @@
 using OmniGenerator.Lib.Configuration;
 using OmniGenerator.Lib.Generators.Fields;
 using OmniGenerator.Lib.Generators;
-using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Tools;
 
 using System.Collections.Concurrent;
+using OmniGenerator.Lib.Interfaces;
 
 /// <summary>
 /// Provides functionality to build a document generation hierarchy (a <see cref="Root"/>)
@@ -16,7 +16,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
     #region Interface properties
 
     /// <inheritdoc />
-    public IProgress<HierarchyBuilderProgressReport>? Progress { get; set; }
+    public IProgress<HierarchyBuilderProgress>? Progress { get; set; }
 
     /// <inheritdoc />
     public int ProgressResolution { get; set; }
@@ -153,7 +153,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
         if (Progress is not null &&
             (force || (now - _lastNotification).TotalMilliseconds >= ProgressResolution))
         {
-            Progress.Report(new HierarchyBuilderProgressReport
+            Progress.Report(new HierarchyBuilderProgress()
             {
                 CountField = Interlocked.Read(ref _countField),
                 CountGroup = Interlocked.Read(ref _countGroup),

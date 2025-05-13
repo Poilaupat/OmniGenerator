@@ -30,7 +30,7 @@
     },
     "OmniGenerator.Cli.PluginDetails": {
       "commandName": "Project",
-      "commandLineArgs": "plugin details \"drawer.omni.chequ\""
+      "commandLineArgs": "plugin details \"drawer.omni.cheque\""
     },
     "OmniGenerator.Cli.PluginList": {
       "commandName": "Project",

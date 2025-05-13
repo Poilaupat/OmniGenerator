@@ -17,6 +17,7 @@ var configuration = new ConfigurationBuilder()
 var builder = new ContainerBuilder();
 builder.RegisterModule(new ConfigurationModule(configuration));
 builder.RegisterModule(new OmniGeneratorModule(configuration));
+
 var registrar = new AutofacTypeRegistrar(builder);
 
 
