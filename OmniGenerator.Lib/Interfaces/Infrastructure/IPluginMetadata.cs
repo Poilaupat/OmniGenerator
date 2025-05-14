@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OmniGenerator.Lib.Interfaces.Infrastructure
+﻿namespace OmniGenerator.Lib.Interfaces.Infrastructure
 {
     public interface IPluginMetadata
     {

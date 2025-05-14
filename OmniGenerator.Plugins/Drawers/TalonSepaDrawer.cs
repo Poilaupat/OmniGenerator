@@ -1,7 +1,7 @@
 ﻿using OmniGenerator.Lib.Interfaces;
 using Svg;
 using System.Drawing;
-using System.ComponentModel.Composition;
+using System.Composition;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Hierarchy;
 
@@ -11,7 +11,7 @@ namespace OmniGenerator.Lib.Drawers.Drawers
     /// A <see cref="IDocumentDrawer"/> for talon optique image generation
     /// </summary>
     [Export(typeof(IDocumentDrawer))]
-    [PluginMetadata("drawer.omni.talon", "Draws TIP SEPA images")]
+    [DrawerPluginMetadata("drawer.omni.talon", "Draws TIP SEPA images")]
     public class TalonSepaDrawer : DocumentDrawerBase
     {
         /// <summary>

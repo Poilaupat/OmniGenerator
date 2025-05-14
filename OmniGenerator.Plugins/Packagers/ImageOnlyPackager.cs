@@ -2,14 +2,8 @@
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Plugins.Packagers.Tools;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
+using System.Composition;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OmniGenerator.Plugins.Packagers
 {
@@ -18,7 +12,7 @@ namespace OmniGenerator.Plugins.Packagers
     /// The directory name is the concatenation of the current date+time with the root numlot
     /// </summary>
     [Export(typeof(IPackager))]
-    [PluginMetadata("packager.omni.imageonly", "A packager that only exports images of documents")]
+    [PackagerPluginMetadata("packager.omni.imageonly", "A packager that only exports images of documents")]
     public class ImageOnlyPackager : IPackager
     {
         public async Task ProcessAsync(Root root, string basepath)

@@ -6,7 +6,7 @@ using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
+using System.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace OmniGenerator.Plugins.Packagers
 {
     [Export(typeof(IPackager))]
-    [PluginMetadata("packager.omni.sql","A packager a builds SQL scripts from groups acting as tables and documents acting as table rows")]
+    [PackagerPluginMetadata("packager.omni.sql","A packager a builds SQL scripts from groups acting as tables and documents acting as table rows")]
     public class SqlScriptPackager : IPackager
     {
         public async Task ProcessAsync(Root root, string basepath)

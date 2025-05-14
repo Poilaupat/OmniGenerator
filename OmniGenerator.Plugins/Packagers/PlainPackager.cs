@@ -1,10 +1,12 @@
-﻿using OmniGenerator.Lib.Hierarchy;
+﻿using CsvHelper;
+using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Tools;
 using OmniGenerator.Plugins.Packagers.Tools;
-using System.ComponentModel.Composition;
+using System.Composition;
 using System.Drawing.Imaging;
+using System.Globalization;
 
 namespace OmniGenerator.Plugins.Packagers
 {
@@ -13,19 +15,27 @@ namespace OmniGenerator.Plugins.Packagers
     /// The directory name is the concatenation of the current date+time with the root numlot
     /// </summary>
     [Export(typeof(IPackager))]
-    [PluginMetadata("packager.omni.plain", "A packager that exports images along with a text file containing document fields")]
+    [PackagerPluginMetadata("packager.omni.plain", "A packager that exports images along with csv files containing each document fields")]
     public class PlainPackager : IPackager
     {
         public async Task ProcessAsync(Root root, string basepath)
         {
-            var packagename = $"{DateTime.Now:yyyyMMddHHmmss}_{root.Fields["numlot"].Value}";
+            var packagename = $"PlainPackage_{DateTime.Now:yyyyMMddHHmmss}";
             var packagepath = Path.Combine(basepath, packagename);
 
             if (!Directory.Exists(packagepath))
                 Directory.CreateDirectory(packagepath);
 
-            var txtfile = Path.Combine(packagepath, $"{packagename}.txt");
-            await File.WriteAllLinesAsync(txtfile, PackagerTools.GetDefaultTextFileContent(root));
+            foreach(var docsByType in root.GetDocuments().GroupBy(x => x.Name))
+            {
+                var filefullpath = Path.Combine(packagepath, $"{docsByType.Key}.csv");
+                using (var writer = new StringWriter())
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                {
+                    csv.WriteRecords(docsByType);
+                    await File.WriteAllTextAsync(filefullpath, writer.ToString());
+                }
+            }
 
             var documents = root
                 .GetDocuments()

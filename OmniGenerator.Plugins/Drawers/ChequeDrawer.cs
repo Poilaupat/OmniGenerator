@@ -2,7 +2,7 @@
 using Svg;
 using System.Drawing;
 using OmniGenerator.Lib.Infrastructure;
-using System.ComponentModel.Composition;
+using System.Composition;
 using OmniGenerator.Lib.Drawers;
 using OmniGenerator.Lib.Hierarchy;
 
@@ -12,7 +12,7 @@ namespace OmniGenerator.Plugins.Drawers
     /// A <see cref="IDocumentDrawer"/> for cheque image generation
     /// </summary>
     [Export(typeof(IDocumentDrawer))]
-    [PluginMetadata("drawer.omni.cheque", "Draws french cheque images")]
+    [DrawerPluginMetadata("drawer.omni.cheque", "Draws french cheque images")]
     public class ChequeDrawer : DocumentDrawerBase
     {
         /// <summary>

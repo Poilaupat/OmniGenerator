@@ -3,7 +3,7 @@ using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Tools;
 using OmniGenerator.Plugins.Packagers.Tools;
-using System.ComponentModel.Composition;
+using System.Composition;
 using System.Drawing.Imaging;
 using System.IO.Compression;
 
@@ -14,7 +14,7 @@ namespace OmniGenerator.Plugins.Packagers
     /// The zip name is the concatenation of the current date+time with the root numlot
     /// </summary>
     [Export(typeof(IPackager))]
-    [PluginMetadata("packager.omni.zip", "Similar to PlainPackager but the output is zipped")]
+    [PackagerPluginMetadata("packager.omni.zip", "Similar to PlainPackager but the output is zipped")]
     public class ZipPackager : IPackager
     {
         public async Task ProcessAsync(Root root, string basepath)

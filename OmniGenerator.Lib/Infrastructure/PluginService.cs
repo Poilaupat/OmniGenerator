@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
+using System.Composition;
+using System.Composition.Hosting;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
 using System.Reflection;
 using OmniGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Configuration;
 
 namespace OmniGenerator.Lib.Infrastructure
 {
@@ -17,7 +18,14 @@ namespace OmniGenerator.Lib.Infrastructure
     /// </summary>
     internal sealed class PluginService : IPluginService
     {
-        private CompositionContainer _container;
+        private CompositionHost _host;
+
+        [ImportMany]
+        private IEnumerable<ExportFactory<IDocumentDrawer, PluginMetadataView>>? Drawers { get; set; }
+
+        [ImportMany]
+        private IEnumerable<ExportFactory<IPackager, PluginMetadataView>>? Packagers { get; set; }
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PluginService"/> class.
@@ -35,9 +43,9 @@ namespace OmniGenerator.Lib.Infrastructure
             if (!Directory.Exists(pluginpath))
                 throw new DirectoryNotFoundException(pluginpath);
 
-            var catalog = new DirectoryCatalog(pluginpath);
-            _container = new CompositionContainer(catalog);
-            _container.ComposeParts(this);
+            var loader = new PluginLoader();
+            _host = loader.LoadPlugins(pluginpath);
+            _host.SatisfyImports(this);
         }
 
         /// <summary>
@@ -51,7 +59,11 @@ namespace OmniGenerator.Lib.Infrastructure
         {
             if (!string.IsNullOrWhiteSpace(pluginname))
             {
-                return GetPlugin<IPackager>(pluginname);
+                //return GetPlugin<IPackager>(pluginname);
+                return Packagers
+                    ?.SingleOrDefault(e => e.Metadata.Name?.Equals(pluginname) ?? false)
+                    ?.CreateExport()
+                    .Value;
             }
 
             return null;
@@ -68,7 +80,11 @@ namespace OmniGenerator.Lib.Infrastructure
         {
             if (!string.IsNullOrWhiteSpace(pluginname))
             {
-                return GetPlugin<IDocumentDrawer>(pluginname);
+                //return GetPlugin<IDocumentDrawer>(pluginname);
+                return Drawers
+                    ?.SingleOrDefault(e => e.Metadata.Name?.Equals(pluginname) ?? false)
+                    ?.CreateExport()
+                    .Value;
             }
 
             return null;
@@ -84,37 +100,37 @@ namespace OmniGenerator.Lib.Infrastructure
         public IEnumerable<PluginInfo> GetPlugins<TPlugin>()
             where TPlugin : class
         {
-            var exports = _container.GetExports<TPlugin, IPluginMetadata>();
+            var exports = _host.GetExports<TPlugin>();
 
             return exports.Select(e =>
             {
-                var assembly = e.Value.GetType().Assembly;
+                var assembly = e.GetType().Assembly;
                 return new PluginInfo
                 {
                     PluginType = typeof(TPlugin).Name,
-                    Name = e.Metadata.Name,
-                    Description = e.Metadata.Description,
+                    //Name = e.Metadata.Name,
+                    //Description = e.Metadata.Description,
                     Location = assembly.Location,
                     AssemblyVersion = assembly.GetName().Version?.ToString() ?? "Unknown"
                 };
             });
         }
 
-        /// <summary>
-        /// Retrieves a plugin of the specified type by its name.
-        /// </summary>
-        /// <typeparam name="TPlugin">The type of plugin to retrieve.</typeparam>
-        /// <param name="pluginname">The name of the plugin to retrieve.</param>
-        /// <returns>
-        /// An instance of <typeparamref name="TPlugin"/> if a matching plugin is found; otherwise, <c>null</c>.
-        /// </returns>
-        private TPlugin? GetPlugin<TPlugin>(string pluginname)
-            where TPlugin : class
-        {
-            return _container
-                .GetExports<TPlugin, IPluginMetadata>()
-                .SingleOrDefault(e => e.Metadata.Name.Equals(pluginname))
-                ?.Value;
-        }
+        ///// <summary>
+        ///// Retrieves a plugin of the specified type by its name.
+        ///// </summary>
+        ///// <typeparam name="TPlugin">The type of plugin to retrieve.</typeparam>
+        ///// <param name="pluginname">The name of the plugin to retrieve.</param>
+        ///// <returns>
+        ///// An instance of <typeparamref name="TPlugin"/> if a matching plugin is found; otherwise, <c>null</c>.
+        ///// </returns>
+        //private TPlugin? GetPlugin<TPlugin>(string pluginname)
+        //    where TPlugin : class
+        //{
+        //    return _host
+        //        .GetExports<TPlugin, IPluginMetadata>()
+        //        .SingleOrDefault(e => e.Metadata.Name.Equals(pluginname))
+        //        ?.Value;
+        //}
     }
 }
