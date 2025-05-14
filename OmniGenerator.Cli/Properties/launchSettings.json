@@ -1,13 +1,5 @@
 {
   "profiles": {
-    "OmniGenerator.Cli.Eligibility": {
-      "commandName": "Project",
-      "commandLineArgs": "generate \"..\\..\\..\\..\\ParamFiles\\param-compliance-eligibility.json\" \"..\\..\\..\\..\\Output\""
-    },
-    "OmniGenerator.Cli.Default": {
-      "commandName": "Project",
-      "commandLineArgs": "generate \"..\\..\\..\\..\\ParamFiles\\param.json\" \"..\\..\\..\\..\\Output\""
-    },
     "WSL": {
       "commandName": "WSL2",
       "distributionName": ""
@@ -35,6 +27,18 @@
     "OmniGenerator.Cli.PluginList": {
       "commandName": "Project",
       "commandLineArgs": "plugin list -d -p"
+    },
+    "OmniGenerator.Cli.Generate.Eligibility": {
+      "commandName": "Project",
+      "commandLineArgs": "generate \"..\\..\\..\\..\\ParamFiles\\param-compliance-eligibility.json\" \"..\\..\\..\\..\\Output\""
+    },
+    "OmniGenerator.Cli.Generate.Default": {
+      "commandName": "Project",
+      "commandLineArgs": "generate \"..\\..\\..\\..\\ParamFiles\\param.json\" \"..\\..\\..\\..\\Output\""
+    },
+    "OmniGenerator.Cli.Generate.Debug": {
+      "commandName": "Project",
+      "commandLineArgs": "generate \"..\\..\\..\\..\\ParamFiles\\param-debug.json\" \"..\\..\\..\\..\\Output\""
     }
   }
 }

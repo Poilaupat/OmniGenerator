@@ -19,7 +19,8 @@ namespace OmniGenerator.Lib.AutoMapper
                 .Include<FieldConfigurationRegex, FieldGeneratorRegex>()
                 .Include<FieldConfigurationConstant, FieldGeneratorConstant>()
                 .Include<FieldConfigurationNumeric, FieldGeneratorNumeric>()
-                .Include<FieldConfigurationDate, FieldGeneratorDate>();
+                .Include<FieldConfigurationDate, FieldGeneratorDate>()
+                .Include<FieldConfigurationIncrement, FieldGeneratorIncrement>();
 
             CreateMap(typeof(AbstractFieldConfigurationDependantBase), typeof(AbstractFieldGeneratorDependant<>));
 
@@ -43,6 +44,7 @@ namespace OmniGenerator.Lib.AutoMapper
             CreateMap<FieldConfigurationConstant, FieldGeneratorConstant>();
             CreateMap<FieldConfigurationNumeric, FieldGeneratorNumeric>();
             CreateMap<FieldConfigurationDate, FieldGeneratorDate>();
+            CreateMap<FieldConfigurationIncrement, FieldGeneratorIncrement>();
 
             ////Derived types based upon FieldConfigurationDependantBase
             CreateMap<FieldConfigurationKeyCalculator, FieldGeneratorKeyCalculator>();

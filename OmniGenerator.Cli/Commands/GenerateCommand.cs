@@ -17,8 +17,10 @@ namespace OmniGenerator.Cli.Commands
 {
 
     /// <summary>
-    /// CLI command responsible for executing a document/image generation process
+    /// CLI command responsible for executing the document and image generation process
     /// based on a provided configuration file and command-line settings.
+    /// This command builds the data hierarchy, generates images, and packages the output,
+    /// providing real-time progress updates in the console.
     /// </summary>
     internal class GenerateCommand : CancellableAsyncCommand<GenerateCommandSettings>
     {
@@ -107,10 +109,11 @@ namespace OmniGenerator.Cli.Commands
         /// - Generates images (if applicable)
         /// - Packages the output using the configured packager
         /// </summary>
+        /// <param name="configuration">The loaded generator configuration.</param>
         /// <param name="settings">Parsed command-line settings provided by the user.</param>
         private async Task GenerateOne(OmniGeneratorConfiguration configuration, GenerateCommandSettings settings)
         {
-            //Live component
+            // Live component for real-time progress display
             await AnsiConsole
                 .Live(_layout)
                 .AutoClear(false)
@@ -118,16 +121,21 @@ namespace OmniGenerator.Cli.Commands
                 .StartAsync(async ldc =>
                 {
                     // Step 1: Data hierarchy generation
-                    var root = await DoBuildHierarchyAsync(ldc, settings, configuration);
+                    var root = await BuildHierarchyAsync(ldc, settings, configuration);
 
                     // Step 2: Vector images generation
-                    await DoDrawImagesAsync(ldc, settings, root);
+                    await DrawImagesAsync(ldc, settings, root);
 
                     // Step 3: Output packaging
-                    await DoPackageAsync(ldc, settings, root, configuration);
+                    await PackageAsync(ldc, settings, root, configuration);
                 });
         }
 
+        /// <summary>
+        /// Updates the console UI with the current progress and status of each generation step.
+        /// </summary>
+        /// <param name="settings">The current command settings.</param>
+        /// <param name="progress">A renderable progress widget.</param>
         private void UpdateUI(GenerateCommandSettings settings, IRenderable progress)
         {
             _layout.UpdateCell(0, 0,
@@ -150,7 +158,14 @@ namespace OmniGenerator.Cli.Commands
             );
         }
 
-        private async Task<Root> DoBuildHierarchyAsync(LiveDisplayContext ldc, GenerateCommandSettings settings, OmniGeneratorConfiguration configuration)
+        /// <summary>
+        /// Builds the document hierarchy asynchronously and updates the UI with progress.
+        /// </summary>
+        /// <param name="ldc">The live display context for UI updates.</param>
+        /// <param name="settings">The current command settings.</param>
+        /// <param name="configuration">The generator configuration.</param>
+        /// <returns>The generated <see cref="Root"/> hierarchy.</returns>
+        private async Task<Root> BuildHierarchyAsync(LiveDisplayContext ldc, GenerateCommandSettings settings, OmniGeneratorConfiguration configuration)
         {
             _tasks["hierarchy"].SetProcessing();
             _hierarchyBuilder.ProgressResolution = _appsettings.ProgressResolution ?? DEFAULT_PROGRESS_RESOLUTION;
@@ -174,44 +189,70 @@ namespace OmniGenerator.Cli.Commands
             }
         }
 
-        private async Task DoDrawImagesAsync(LiveDisplayContext ldc, GenerateCommandSettings settings, Root root)
+        /// <summary>
+        /// Generates images for the documents in the hierarchy, if applicable, and updates the UI with progress.
+        /// </summary>
+        /// <param name="ldc">The live display context for UI updates.</param>
+        /// <param name="settings">The current command settings.</param>
+        /// <param name="root">The generated document hierarchy.</param>
+        private async Task DrawImagesAsync(LiveDisplayContext ldc, GenerateCommandSettings settings, Root root)
         {
-            if (_imageComposerProcessor is not null && root.GetDocuments().Any(d => !string.IsNullOrWhiteSpace(d.ImageComposer)))
-            {
-                _tasks["images"].SetProcessing();
-                
-                _imageComposerProcessor.ProgressResolution = _appsettings.ProgressResolution ?? DEFAULT_PROGRESS_RESOLUTION;
-                _imageComposerProcessor.Progress = new Progress<DocumentDrawerManagerProgress>(progress =>
-                {
-                    UpdateUI(settings, progress.ToWidget());
-                    ldc.Refresh();
-                });
-
-                try
-                {
-                    await _imageComposerProcessor.DrawImagesAsync(root);
-                    _tasks["images"].SetSucceeded();
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "An error occurred while drawing images.");
-                    _tasks["images"].SetFailed();
-                    throw;
-                }
-            }
-            else
+            if (_imageComposerProcessor is null || !root.GetDocuments().Any(d => !string.IsNullOrWhiteSpace(d.ImageComposer)))
             {
                 _tasks["images"].SetSkipped();
+                return;
+            }
+
+            _tasks["images"].SetProcessing();
+
+            _imageComposerProcessor.ProgressResolution = _appsettings.ProgressResolution ?? DEFAULT_PROGRESS_RESOLUTION;
+            _imageComposerProcessor.Progress = new Progress<DocumentDrawerManagerProgress>(progress =>
+            {
+                UpdateUI(settings, progress.ToWidget());
+                ldc.Refresh();
+            });
+
+            try
+            {
+                await _imageComposerProcessor.DrawImagesAsync(root);
+                _tasks["images"].SetSucceeded();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while drawing images.");
+                _tasks["images"].SetFailed();
+                throw;
             }
         }
 
-        private async Task DoPackageAsync(LiveDisplayContext ldc, GenerateCommandSettings settings, Root root, OmniGeneratorConfiguration configuration)
+        /// <summary>
+        /// Packages the generated output using the configured packager plugin and updates the UI with progress.
+        /// </summary>
+        /// <param name="ldc">The live display context for UI updates.</param>
+        /// <param name="settings">The current command settings.</param>
+        /// <param name="root">The generated document hierarchy.</param>
+        /// <param name="configuration">The generator configuration.</param>
+        private async Task PackageAsync(LiveDisplayContext ldc, GenerateCommandSettings settings, Root root, OmniGeneratorConfiguration configuration)
         {
-            _tasks["package"].SetProcessing();
             var packager = _pluginService.GetPackager(configuration.PackagerName);
-            if (packager is not null)
+            if (packager is null)
+            {
+                _tasks["package"].SetSkipped();
+                return;
+            }
+
+            _tasks["package"].SetProcessing();
+            try
+            {
                 await packager.ProcessAsync(root, settings.OutputFolderPath);
-            _tasks["package"].SetSucceeded();
+                _tasks["package"].SetSucceeded();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while packaging the output.");
+                _tasks["package"].SetFailed();
+                throw;
+            }
         }
     }
 }

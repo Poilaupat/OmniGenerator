@@ -19,11 +19,10 @@ namespace OmniGenerator.Cli.Widgets
             var grid = new Grid();
             grid.AddColumn();
             grid.AddColumn();
-            grid.AddColumn();
 
-            grid.AddRow(new Markup("[blue]Groups builded[/]"), new Markup($"{progress.CountProcessedGroup}"), new Markup($"{progress.CountGroup}"));
-            grid.AddRow(new Markup("[blue]Documents builded[/]"), new Markup($"{progress.CountProcessedDocument}"), new Markup($"{progress.CountDocument}"));
-            grid.AddRow(new Markup("[blue]Groups builded[/]"), new Markup($"{progress.CountField}"));
+            grid.AddRow(new Markup("[blue]Groups builded[/]"), new Markup($"{progress.CountProcessedGroup} / {progress.CountGroup}"));
+            grid.AddRow(new Markup("[blue]Documents builded[/]"), new Markup($"{progress.CountProcessedDocument} / {progress.CountDocument}"));
+            grid.AddRow(new Markup("[blue]Fields generated[/]"), new Markup($"{progress.CountField}"));
 
             var panel = new Panel(grid)
             .RoundedBorder()
