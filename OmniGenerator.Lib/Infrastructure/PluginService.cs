@@ -115,22 +115,5 @@ namespace OmniGenerator.Lib.Infrastructure
                 };
             });
         }
-
-        ///// <summary>
-        ///// Retrieves a plugin of the specified type by its name.
-        ///// </summary>
-        ///// <typeparam name="TPlugin">The type of plugin to retrieve.</typeparam>
-        ///// <param name="pluginname">The name of the plugin to retrieve.</param>
-        ///// <returns>
-        ///// An instance of <typeparamref name="TPlugin"/> if a matching plugin is found; otherwise, <c>null</c>.
-        ///// </returns>
-        //private TPlugin? GetPlugin<TPlugin>(string pluginname)
-        //    where TPlugin : class
-        //{
-        //    return _host
-        //        .GetExports<TPlugin, IPluginMetadata>()
-        //        .SingleOrDefault(e => e.Metadata.Name.Equals(pluginname))
-        //        ?.Value;
-        //}
     }
 }
