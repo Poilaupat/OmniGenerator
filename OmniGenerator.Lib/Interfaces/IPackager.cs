@@ -1,4 +1,5 @@
 ﻿using OmniGenerator.Lib.Hierarchy;
+using OmniGenerator.Lib.Interfaces.Infrastructure;
 
 namespace OmniGenerator.Lib.Interfaces
 {
@@ -7,7 +8,7 @@ namespace OmniGenerator.Lib.Interfaces
     /// from a document hierarchy. Implementations of this interface are responsible for determining
     /// how and where the files are stored (e.g., file system, archive, cloud storage).
     /// </summary>
-    public interface IPackager
+    public interface IPackager : IOmniGeneratorPlugin
     {
         /// <summary>
         /// Processes the specified <see cref="Root"/> hierarchy and generates all associated files,

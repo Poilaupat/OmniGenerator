@@ -1,4 +1,5 @@
 ﻿using OmniGenerator.Lib.Hierarchy;
+using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using Svg;
 using System.Drawing;
@@ -8,7 +9,7 @@ namespace OmniGenerator.Lib.Drawers
     /// <summary>
     /// The base class for all <see cref="IDocumentDrawer"/>
     /// </summary>
-    public abstract class DocumentDrawerBase : IDocumentDrawer
+    public abstract class DocumentDrawerBase : OmniGeneratorPluginBase, IDocumentDrawer
     {
         /// <summary>
         /// The recto and verso image Width in millimeter

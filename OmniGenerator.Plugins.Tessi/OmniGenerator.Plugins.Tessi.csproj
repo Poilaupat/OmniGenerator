@@ -8,11 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Composition" Version="9.0.5" />
-  </ItemGroup>
-
-  <ItemGroup>
-	  <ProjectReference Include="..\OmniGenerator.Lib\OmniGenerator.Lib.csproj" >
+	  <ProjectReference Include="..\OmniGenerator.Lib\OmniGenerator.Lib.csproj">
 		  <ExcludeAssets>runtime</ExcludeAssets>
 	  </ProjectReference>
   </ItemGroup>

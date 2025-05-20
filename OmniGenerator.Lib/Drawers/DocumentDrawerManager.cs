@@ -42,18 +42,18 @@ namespace OmniGenerator.Lib.Drawers
 
             foreach (var docByComposer in docsByComposer.Where(g => !string.IsNullOrWhiteSpace(g.Key)))
             {
-                //Getting the appropriate IImageComposer implementation from DI container for the current document type
-                var composer = _pluginService.GetDocumentDrawer(docByComposer.Key!);
+                //Getting the appropriate IDocumentDrawer implementation for the current document type
+                var drawer = _pluginService.GetPlugin<IDocumentDrawer>(docByComposer.Key!);
 
-                if (composer is not null)
+                if (drawer is not null)
                 {
                     //Compositing image(s)
                     foreach (var doc in docByComposer)
                     {
-                        var recto = composer.DrawRecto(doc);
+                        var recto = drawer.DrawRecto(doc);
                         doc.RectoImage = recto;
 
-                        var verso = composer.DrawVerso(doc);
+                        var verso = drawer.DrawVerso(doc);
                         doc.VersoImage = verso;
                     }
                 }

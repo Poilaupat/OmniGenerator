@@ -24,7 +24,6 @@
     <PackageReference Include="Spectre.Console" Version="0.50.0" />
     <PackageReference Include="Spectre.Console.Cli" Version="0.50.0" />
     <PackageReference Include="Svg" Version="3.4.7" />
-    <PackageReference Include="System.Composition" Version="9.0.5" />
   </ItemGroup>
 
   <ItemGroup>

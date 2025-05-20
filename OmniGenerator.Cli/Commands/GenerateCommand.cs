@@ -234,7 +234,7 @@ namespace OmniGenerator.Cli.Commands
         /// <param name="configuration">The generator configuration.</param>
         private async Task PackageAsync(LiveDisplayContext ldc, GenerateCommandSettings settings, Root root, OmniGeneratorConfiguration configuration)
         {
-            var packager = _pluginService.GetPackager(configuration.PackagerName);
+            var packager = _pluginService.GetPlugin<IPackager>(configuration.PackagerName);
             if (packager is null)
             {
                 _tasks["package"].SetSkipped();

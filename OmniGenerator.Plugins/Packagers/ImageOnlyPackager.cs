@@ -2,7 +2,6 @@
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Plugins.Packagers.Tools;
-using System.Composition;
 using System.Drawing.Imaging;
 
 namespace OmniGenerator.Plugins.Packagers
@@ -11,9 +10,8 @@ namespace OmniGenerator.Plugins.Packagers
     /// A <see cref="IPackager"/> that writes only image files in a directory
     /// The directory name is the concatenation of the current date+time with the root numlot
     /// </summary>
-    [Export(typeof(IPackager))]
-    [PackagerPluginMetadata("packager.omni.imageonly", "A packager that only exports images of documents")]
-    public class ImageOnlyPackager : IPackager
+    [OmniGeneratorPluginMetadata("packager.omni.imageonly", "A packager that only exports images of documents")]
+    public class ImageOnlyPackager : OmniGeneratorPluginBase, IPackager
     {
         public async Task ProcessAsync(Root root, string basepath)
         {

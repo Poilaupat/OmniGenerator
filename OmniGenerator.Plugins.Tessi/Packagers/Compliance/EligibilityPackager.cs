@@ -1,21 +1,14 @@
 ﻿using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Composition;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace OmniGenerator.Plugin.Tessi.Packagers.Compliance
 {
-    [Export(typeof(IPackager))]
-    [PackagerPluginMetadata("packager.tessi.eligibility", "A packager that produces eligibility resquest from Wecheck Compliance")]
+    [OmniGeneratorPluginMetadata("packager.tessi.eligibility", "A packager that produces eligibility resquest from Wecheck Compliance")]
 
-    public class EligibilityPackager : IPackager
+    public class EligibilityPackager : OmniGeneratorPluginBase, IPackager
     {
         public async Task ProcessAsync(Root root, string path)
         {

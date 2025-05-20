@@ -1,4 +1,5 @@
 ﻿using OmniGenerator.Lib.Hierarchy;
+using OmniGenerator.Lib.Interfaces.Infrastructure;
 using Svg;
 
 namespace OmniGenerator.Lib.Interfaces
@@ -6,7 +7,7 @@ namespace OmniGenerator.Lib.Interfaces
     /// <summary>
     /// Defines the interface for generating recto and verso images for a given <see cref="Document"/>
     /// </summary>
-    public interface IDocumentDrawer
+    public interface IDocumentDrawer : IOmniGeneratorPlugin
     {
         /// <summary>
         /// Generates recto SVG image from the fields of the document

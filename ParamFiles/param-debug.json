@@ -5,8 +5,8 @@
     "root": {
       "$type": "group",
       "name": "remittance",
-      "min-occurs": 100,
-      "max-occurs": 100,
+      "min-occurs": 10,
+      "max-occurs": 10,
       "fields": [
         {
           "$type": "equiprobable-list",

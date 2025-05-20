@@ -34,10 +34,10 @@ namespace OmniGenerator.Cli.Commands
             var plugins = new List<PluginInfo>();
 
             if (settings.ShowDrawers)
-                plugins.AddRange(_pluginservice.GetPlugins<IDocumentDrawer>());
+                plugins.AddRange(_pluginservice.GetPluginsInfo<IDocumentDrawer>());
 
             if (settings.ShowPackagers)
-                plugins.AddRange(_pluginservice.GetPlugins<IPackager>());
+                plugins.AddRange(_pluginservice.GetPluginsInfo<IPackager>());
 
             var table = new Table();
             table.Border(TableBorder.Rounded);
@@ -50,9 +50,9 @@ namespace OmniGenerator.Cli.Commands
             foreach (var plugin in plugins)
             {
                 table.AddRow(
-                    new Text(plugin.PluginType, new Style(Color.White, Color.Black)),
-                    new Text(plugin.Name, new Style(Color.White, Color.Black)),
-                    new Text(plugin.Description, new Style(Color.White, Color.Black))
+                    new Text(plugin.ParentType.ToString(), new Style(Color.White, Color.Black)),
+                    new Text(plugin.PluginName, new Style(Color.White, Color.Black)),
+                    new Text(plugin.PluginDescription, new Style(Color.White, Color.Black))
                 );
             }
 
@@ -87,9 +87,9 @@ namespace OmniGenerator.Cli.Commands
         /// <returns>A task representing the asynchronous execution, returning 0 on success.</returns>
         public override Task<int> ExecuteAsync(CommandContext context, PluginDetailCommandSettings settings)
         {
-            var plugin = _pluginservice.GetPlugins<IDocumentDrawer>()
-                .Union(_pluginservice.GetPlugins<IPackager>())
-                .SingleOrDefault(p => p.Name.Equals(settings.PluginName, StringComparison.InvariantCultureIgnoreCase));
+            var plugin = _pluginservice.GetPluginsInfo<IDocumentDrawer>()
+                .Union(_pluginservice.GetPluginsInfo<IPackager>())
+                .SingleOrDefault(p => p.PluginName.Equals(settings.PluginName, StringComparison.InvariantCultureIgnoreCase));
 
             if (plugin is not null)
             {
@@ -101,9 +101,9 @@ namespace OmniGenerator.Cli.Commands
                 table.AddColumn(new TableColumn("Key"));
                 table.AddColumn(new TableColumn("Value"));
 
-                table.AddRow(new Markup("[blue]Name[/]"), new Text(plugin.Name));
-                table.AddRow(new Markup("[blue]Type[/]"), new Text(plugin.PluginType));
-                table.AddRow(new Markup("[blue]Description[/]"), new Text(plugin.Description));
+                table.AddRow(new Markup("[blue]Name[/]"), new Text(plugin.PluginName));
+                table.AddRow(new Markup("[blue]Type[/]"), new Text(plugin.ParentType.ToString()));
+                table.AddRow(new Markup("[blue]Description[/]"), new Text(plugin.PluginDescription));
                 table.AddRow(new Markup("[blue]Version[/]"), new Text(plugin.AssemblyVersion));
                 table.AddRow(new Markup("[blue]Path[/]"), new TextPath(plugin.Location));
 

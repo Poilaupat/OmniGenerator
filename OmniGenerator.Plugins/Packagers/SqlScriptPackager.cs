@@ -4,18 +4,11 @@ using Microsoft.ProgramSynthesis.Utils.Interactive;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OmniGenerator.Plugins.Packagers
 {
-    [Export(typeof(IPackager))]
-    [PackagerPluginMetadata("packager.omni.sql","A packager a builds SQL scripts from groups acting as tables and documents acting as table rows")]
-    public class SqlScriptPackager : IPackager
+    [OmniGeneratorPluginMetadata("packager.omni.sql","A packager a builds SQL scripts from groups acting as tables and documents acting as table rows")]
+    public class SqlScriptPackager : OmniGeneratorPluginBase, IPackager
     {
         public async Task ProcessAsync(Root root, string basepath)
         {
