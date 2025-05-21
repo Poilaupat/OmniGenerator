@@ -33,7 +33,8 @@ namespace OmniGenerator.Plugins.Packagers
                 {
                     foreach (var document in docsByType)
                     {
-                        csv.WriteRecord(document.Fields);
+                        csv.WriteRecord(document.Fields.ToExpando());
+                        csv.NextRecord();
                     }
                     await File.WriteAllTextAsync(filefullpath, writer.ToString());
                 }
@@ -46,11 +47,18 @@ namespace OmniGenerator.Plugins.Packagers
                 using (var writer = new StringWriter())
                 using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
                 {
-                    foreach(var group in grpByType)
+                    var data = grpByType
+                        //.SelectMany(x => x.GetGroups(grpByType.Key))
+                        .Select(x => x.Fields.ToExpando());
+
+                    if (data is not null && data.Any())
                     {
-                        csv.WriteRecord(group.Fields);
+                        csv.WriteDynamicHeader(data.First());
+                        csv.NextRecord();
+                        csv.WriteRecords(data);
+
+                        await File.WriteAllTextAsync(filefullpath, writer.ToString());
                     }
-                    await File.WriteAllTextAsync(filefullpath, writer.ToString());
                 }
             }
 

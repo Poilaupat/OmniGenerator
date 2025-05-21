@@ -1,14 +1,16 @@
 ﻿using OmniGenerator.Lib.Configuration.Fields;
 using OmniGenerator.Lib.Hierarchy;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace OmniGenerator.Lib.Tools
 {
-    public static class MergeExtensions
+    public static class CollectionExtensions
     {
         /// <summary>
         /// Merges collection2 into collection1
@@ -81,5 +83,25 @@ namespace OmniGenerator.Lib.Tools
                 }
             }
         }
+
+        /// <summary>
+        /// Converts a dictionary of string keys and object values into an <see cref="ExpandoObject"/>.
+        /// This method recursively converts nested dictionaries and collections into dynamic objects.
+        /// </summary>
+        /// <param name="fields">The dictionary to convert into an <see cref="ExpandoObject"/>.</param>
+        /// <returns>An <see cref="ExpandoObject"/> representation of the dictionary.</returns>
+        public static ExpandoObject ToExpando(this IDictionary<string, Field> fields)
+        {
+            var expando = new ExpandoObject();
+            var expandoAsDic = (IDictionary<string, object?>)expando;
+
+            foreach (var kvp in fields)
+            {
+                expandoAsDic.Add(kvp.Key, kvp.Value.StringValue);
+            }
+
+            return expando;
+        }
+
     }
 }
