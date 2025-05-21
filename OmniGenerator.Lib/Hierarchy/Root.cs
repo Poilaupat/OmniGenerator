@@ -10,7 +10,7 @@
         /// The top level fields. 
         /// Those fields should only contain top level information in the hierarchy such as batch number or capture date.
         /// </summary>
-        public FieldCollection Fields { get; set; } = new FieldCollection();
+        public IDictionary<string, Field> Fields { get; set; } = new Dictionary<string, Field>();
 
         /// <summary>
         /// The top level groups

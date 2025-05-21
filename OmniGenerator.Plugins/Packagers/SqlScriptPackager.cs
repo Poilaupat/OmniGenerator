@@ -40,7 +40,7 @@ namespace OmniGenerator.Plugins.Packagers
             foreach (var table in group.GetDocuments(null).GroupBy(d => d.Name))
             {
                 var firstRow = table.First();
-                yield return $"INSERT {table.Key} ({string.Join(",", firstRow.Fields.FieldNames)})";
+                yield return $"INSERT {table.Key} ({string.Join(",", firstRow.Fields.Keys)})";
                 yield return $"SELECT {GetValues(firstRow.Fields)}";
 
                 foreach (var row in table.Skip(1))
@@ -67,10 +67,10 @@ namespace OmniGenerator.Plugins.Packagers
             }
         }
 
-        private string GetValues(FieldCollection fields)
+        private string GetValues(IDictionary<string, Field> fields)
         {
             return string.Join(",", fields
-                .FieldNames
+                .Keys
                 .Select(fn => fields[fn].Value switch
                 {
                     DateTime => $"'{((DateTime)fields[fn].Value).ToString("yyyyMMdd HH:mm:ss")}'",

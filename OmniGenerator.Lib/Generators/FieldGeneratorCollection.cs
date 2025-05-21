@@ -36,15 +36,15 @@ namespace OmniGenerator.Lib.Generators
         /// By "regular" generators, we mean all generators but aggregates. The aggregate must be generated separately and after all other generators
         /// </summary>
         /// <returns>A field collection</returns>
-        public FieldCollection GenerateRegularFields()
+        public IDictionary<string, Field> GenerateRegularFields()
         {
-            var fields = new FieldCollection();
+            var fields = new Dictionary<string, Field>();
             if (HasRegularGenerators)
             {
                 foreach (var fieldGenerator in _generators.FilterRegularFieldGenerators())
                 {
                     fieldGenerator.RefreshValue();
-                    fields.Add(fieldGenerator.Name, fieldGenerator.LastValue);
+                    fields.Add(fieldGenerator.Name, new Field(fieldGenerator.Name, fieldGenerator.LastValue));
                 }
             }
             return fields;
@@ -54,9 +54,9 @@ namespace OmniGenerator.Lib.Generators
         /// Refresh the value of the aggregates generators, uses those values to build a <see cref="FieldCollection"/>
         /// </summary>
         /// <returns>A <see cref="FieldCollection"/></returns>
-        public FieldCollection GenerateAggregateFields(Group group)
+        public IDictionary<string, Field> GenerateAggregateFields(Group group)
         {
-            var fields = new FieldCollection();
+            var fields = new Dictionary<string, Field>();
 
             if (HasAggregateGenerators)
             {
@@ -64,7 +64,7 @@ namespace OmniGenerator.Lib.Generators
                 {
                     fieldGenerator.Group = group;
                     fieldGenerator.RefreshValue();
-                    fields.Add(fieldGenerator.Name, fieldGenerator.LastValue);
+                    fields.Add(fieldGenerator.Name, new Field(fieldGenerator.Name, fieldGenerator.LastValue));
                 }
             }
 

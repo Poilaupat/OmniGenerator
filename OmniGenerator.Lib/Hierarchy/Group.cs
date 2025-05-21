@@ -1,5 +1,6 @@
 ﻿using OmniGenerator.Lib.Exceptions;
 using OmniGenerator.Lib.Generators;
+using OmniGenerator.Lib.Tools;
 using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Xml.Linq;
@@ -106,9 +107,9 @@ namespace OmniGenerator.Lib.Hierarchy
             if (generators.ElementHasFields(Name))
             {
                 //Regular fields
-                Fields.AddRange(generators.GenerateRegularFields(Name));
+                Fields.Merge(generators.GenerateRegularFields(Name));
                 //Aggregates fields of scope DirectChildren
-                Fields.AddRange(generators.GenerateAggregateFields(Name, this));
+                Fields.Merge(generators.GenerateAggregateFields(Name, this));
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using OmniGenerator.Lib.Generators;
+using OmniGenerator.Lib.Tools;
 using System.Diagnostics;
 
 namespace OmniGenerator.Lib.Hierarchy
@@ -45,7 +46,7 @@ namespace OmniGenerator.Lib.Hierarchy
         /// <summary>
         /// The fields of the <see cref="Element"/>
         /// </summary>
-        public FieldCollection Fields { get; set; } = new FieldCollection();
+        public IDictionary<string, Field> Fields { get; set; } = new Dictionary<string, Field>();
 
         /// <summary>
         /// Creates a new <see cref="Element"/>
@@ -71,7 +72,7 @@ namespace OmniGenerator.Lib.Hierarchy
 
             if(generators.ElementHasFields(Name))
             {
-                Fields.AddRange(generators.GenerateRegularFields(Name));
+                Fields.Merge(generators.GenerateRegularFields(Name));
             }
         }
     }

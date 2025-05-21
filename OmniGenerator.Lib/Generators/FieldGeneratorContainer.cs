@@ -69,7 +69,7 @@ namespace OmniGenerator.Lib.Generators
         /// </summary>
         /// <param name="name">The name of the element to refresh</param>
         /// <returns>A <see cref="FieldCollection"/></returns>
-        public FieldCollection GenerateRegularFields(string name)
+        public IDictionary<string, Field> GenerateRegularFields(string name)
         {
             return _generators[name].GenerateRegularFields();
         }
@@ -79,7 +79,7 @@ namespace OmniGenerator.Lib.Generators
         /// </summary>
         /// <param name="name">The name of the element to refresh</param>
         /// <returns>A <see cref="FieldCollection"/></returns>
-        public FieldCollection GenerateAggregateFields(string name, Group group)
+        public IDictionary<string, Field> GenerateAggregateFields(string name, Group group)
         {
             return _generators[name].GenerateAggregateFields(group);
         }
@@ -89,7 +89,7 @@ namespace OmniGenerator.Lib.Generators
         /// Note that root element cannot contain aggregate fields
         /// </summary>
         /// <returns>A <see cref="FieldCollection"/></returns>
-        public FieldCollection GenerateRootFields()
+        public IDictionary<string, Field> GenerateRootFields()
         {
             return GenerateRegularFields(HierarchyConfiguration.Name);
         }

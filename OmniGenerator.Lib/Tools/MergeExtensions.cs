@@ -1,4 +1,5 @@
 ﻿using OmniGenerator.Lib.Configuration.Fields;
+using OmniGenerator.Lib.Hierarchy;
 using System;
 using System.Collections.Generic;
 using System.Linq;

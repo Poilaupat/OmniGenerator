@@ -5,6 +5,7 @@ using System.Collections.Concurrent;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Generators;
+using OmniGenerator.Lib.Tools;
 
 /// <summary>
 /// Provides functionality to build a document generation hierarchy (a <see cref="Root"/>)
@@ -60,7 +61,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
         if (fgc.RootHasFields())
         {
             var fields = fgc.GenerateRootFields();
-            root.Fields.AddRange(fields);
+            root.Fields.Merge(fields);
         }
 
         NotifyProgress(force: true);
@@ -94,7 +95,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
             var group = new Group(groupConfiguration.Name, subGroups, subdocuments);
             group.GenerateFields(fgc);
             Interlocked.Increment(ref _countProcessedGroup);
-            Interlocked.Add(ref _countField, group.Fields.FieldCount);
+            Interlocked.Add(ref _countField, group.Fields.Count);
             groups.Enqueue(group);
 
             NotifyProgress();
@@ -121,7 +122,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
             var document = new Document(documentConfiguration.Name, documentConfiguration.ImageComposer);
             document.GenerateFields(fgc);
             Interlocked.Increment(ref _countProcessedDoc);
-            Interlocked.Add(ref _countField, document.Fields.FieldCount);
+            Interlocked.Add(ref _countField, document.Fields.Count);
             documents.Enqueue(document);
 
             NotifyProgress();
