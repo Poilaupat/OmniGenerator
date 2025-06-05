@@ -8,7 +8,7 @@ using System.Xml.Linq;
 namespace OmniGenerator.Lib.Hierarchy
 {
     /// <summary>
-    /// Modelize a <see cref="Group"/> with its inner <see cref="Document"/> or <see cref="Group"/> as <see cref="Element"/>.
+    /// Represents a group element in the hierarchy, containing inner <see cref="Document"/> and <see cref="Group"/> elements.
     /// </summary>
     [DebuggerDisplay("Group = {Name}")]
     public class Group : Element
@@ -17,17 +17,40 @@ namespace OmniGenerator.Lib.Hierarchy
         private Document[] _documents;
 
         /// <summary>
-        /// Creates a new <see cref="Group"/>.
+        /// Initializes a new instance of the <see cref="Group"/> class with the specified name, groups, and documents.
         /// </summary>
         /// <param name="name">The name of the group. Can be seen as a group type.</param>
-        /// <param name="groups">Inner groups of this grou</param>
-        /// <param name="documents">Inner documents of this grou</param>
+        /// <param name="groups">The inner groups of this group.</param>
+        /// <param name="documents">The inner documents of this group.</param>
         public Group(string name, Group[] groups, Document[] documents)
             : base("group", name)
         {
-            _groups = groups ?? new Group[0];
-            _documents = documents ?? new Document[0];
+            _groups = groups ?? Array.Empty<Group>();
+            _documents = documents ?? Array.Empty<Document>();
+            Init();
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Group"/> class with the specified name, groups, documents, and fields.
+        /// </summary>
+        /// <param name="name">The name of the group. Can be seen as a group type.</param>
+        /// <param name="groups">The inner groups of this group.</param>
+        /// <param name="documents">The inner documents of this group.</param>
+        /// <param name="fields">The fields to associate with the group.</param>
+        public Group(string name, Group[] groups, Document[] documents, IDictionary<string, Field> fields)
+            : base("group", name, fields)
+        {
+            _groups = groups ?? Array.Empty<Group>();
+            _documents = documents ?? Array.Empty<Document>();
+            Init();
+            Fields = fields ?? new Dictionary<string, Field>();
+        }
+
+        /// <summary>
+        /// Initializes the parent references for inner groups and documents.
+        /// </summary>
+        private void Init()
+        {
             foreach (var group in _groups)
             {
                 group.Parent = this;
@@ -40,10 +63,11 @@ namespace OmniGenerator.Lib.Hierarchy
         }
 
         /// <summary>
-        /// Gets all the child documents
+        /// Gets all the child documents of this group, optionally searching recursively in sub-groups.
         /// </summary>
-        /// <param name="recursive">Indicates if the search is limited to the direct child or must scope to the sub-groups</param>
-        /// <returns>The list of document</returns>
+        /// <param name="name">The name of the documents to retrieve, or null to retrieve all documents.</param>
+        /// <param name="recursive">Indicates if the search should include sub-groups recursively.</param>
+        /// <returns>An enumerable of <see cref="Document"/> objects.</returns>
         public IEnumerable<Document> GetDocuments(string? name, bool recursive = false)
         {
             foreach (var document in _documents)
@@ -63,10 +87,11 @@ namespace OmniGenerator.Lib.Hierarchy
         }
 
         /// <summary>
-        /// Gets all the child groups
+        /// Gets all the child groups of this group, optionally searching recursively in sub-groups.
         /// </summary>
-        /// <param name="recursive">Indicates if the search is limited to the direct child or must scope to the sub-groups</param>
-        /// <returns>The list of group</returns>
+        /// <param name="name">The name of the groups to retrieve, or null to retrieve all groups.</param>
+        /// <param name="recursive">Indicates if the search should include sub-groups recursively.</param>
+        /// <returns>An enumerable of <see cref="Group"/> objects.</returns>
         public IEnumerable<Group> GetGroups(string? name, bool recursive = false)
         {
             foreach (var group in _groups)
@@ -84,6 +109,12 @@ namespace OmniGenerator.Lib.Hierarchy
             }
         }
 
+        /// <summary>
+        /// Gets all the child elements (documents or groups) of this group with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the elements to retrieve.</param>
+        /// <param name="recursive">Indicates if the search should include sub-groups recursively.</param>
+        /// <returns>An enumerable of <see cref="Element"/> objects.</returns>
         public IEnumerable<Element> GetElements(string name, bool recursive = false)
         {
             return GetType(name).Name switch
@@ -95,24 +126,26 @@ namespace OmniGenerator.Lib.Hierarchy
         }
 
         /// <summary>
-        /// Generate the fields of this group. 
-        /// The regular fields and aggregate fields of scope DirectChildren are generated : It means that this method should be called AFTER all the subDocuments and subGroups have been generated and attached.
+        /// Generates the fields of this group, including regular fields and aggregate fields of scope DirectChildren.
+        /// This method should be called after all sub-documents and sub-groups have been generated and attached.
         /// </summary>
-        /// <param name="generators">A field generator collection</param>
+        /// <param name="generators">A <see cref="FieldGeneratorContainer"/> containing field generators.</param>
         public override void GenerateFields(FieldGeneratorContainer generators)
         {
-            if (generators is null)
-                throw new ArgumentNullException(nameof(generators));
+            base.GenerateFields(generators);
 
             if (generators.ElementHasFields(Name))
             {
-                //Regular fields
-                Fields.Merge(generators.GenerateRegularFields(Name));
-                //Aggregates fields of scope DirectChildren
                 Fields.Merge(generators.GenerateAggregateFields(Name, this));
             }
         }
 
+        /// <summary>
+        /// Determines the type of element (document or group) for the specified name.
+        /// </summary>
+        /// <param name="name">The name of the element to check.</param>
+        /// <returns>The <see cref="Type"/> of the element.</returns>
+        /// <exception cref="ConfigurationException">Thrown if the name does not correspond to a group or document.</exception>
         private Type GetType(string name)
         {
             if (GetDocuments(name, true).Any(e => e.Name.Equals(name)))

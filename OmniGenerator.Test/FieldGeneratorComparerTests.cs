@@ -3,7 +3,7 @@ using OmniGenerator.Lib.Generators.Fields;
 using OmniGenerator.Lib.Interfaces.FieldGenerators;
 using System.CodeDom;
 
-namespace OmniGenerator.Test
+namespace OmniGenerator.Test.FieldGenerators
 {
     [Parallelizable(ParallelScope.Self)]
     [TestFixture]

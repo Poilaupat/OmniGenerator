@@ -10,12 +10,18 @@ using System.Globalization;
 namespace OmniGenerator.Plugins.Packagers
 {
     /// <summary>
-    /// A <see cref="IPackager"/> that writes data and image file in a directory
-    /// The directory name is the concatenation of the current date+time with the root numlot
+    /// A packager that exports images along with CSV files containing each document's fields.
     /// </summary>
     [OmniGeneratorPluginMetadata("packager.omni.plain", "A packager that exports images along with csv files containing each document fields")]
     public class PlainPackager : OmniGeneratorPluginBase, IPackager
     {
+        /// <summary>
+        /// Processes the specified <see cref="Root"/> object and exports its documents and groups as CSV files,
+        /// and document images as JPEG files, into a new package directory under the given base path.
+        /// </summary>
+        /// <param name="root">The root object containing documents and groups to export.</param>
+        /// <param name="basepath">The base directory path where the package will be created.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
         public async Task ProcessAsync(Root root, string basepath)
         {
             var packagename = $"PlainPackage_{DateTime.Now:yyyyMMddHHmmss}";
@@ -24,23 +30,29 @@ namespace OmniGenerator.Plugins.Packagers
             if (!Directory.Exists(packagepath))
                 Directory.CreateDirectory(packagepath);
 
-            //Documents CSV generation
+            // Documents CSV generation
             foreach (var docsByType in root.GetDocuments().GroupBy(x => x.Name))
             {
                 var filefullpath = Path.Combine(packagepath, $"{docsByType.Key}.csv");
                 using (var writer = new StringWriter())
                 using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
                 {
-                    foreach (var document in docsByType)
+                    var data = docsByType
+                        .Select(x => x.Fields.ToExpando());
+
+                    if (data is not null && data.Any())
                     {
-                        csv.WriteRecord(document.Fields.ToExpando());
+                        csv.WriteDynamicHeader(data.First());
                         csv.NextRecord();
+                        csv.WriteRecords(data);
+
+                        await File.WriteAllTextAsync(filefullpath, writer.ToString());
                     }
                     await File.WriteAllTextAsync(filefullpath, writer.ToString());
                 }
             }
 
-            //Groups CSV generation
+            // Groups CSV generation
             foreach (var grpByType in root.GetGroups().GroupBy(x => x.Name))
             {
                 var filefullpath = Path.Combine(packagepath, $"{grpByType.Key}.csv");
@@ -48,7 +60,6 @@ namespace OmniGenerator.Plugins.Packagers
                 using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
                 {
                     var data = grpByType
-                        //.SelectMany(x => x.GetGroups(grpByType.Key))
                         .Select(x => x.Fields.ToExpando());
 
                     if (data is not null && data.Any())
@@ -62,7 +73,7 @@ namespace OmniGenerator.Plugins.Packagers
                 }
             }
 
-            //Document images generation
+            // Document images generation
             var documents = root
                 .GetDocuments()
                 .ToArray();
@@ -73,6 +84,12 @@ namespace OmniGenerator.Plugins.Packagers
             }
         }
 
+        /// <summary>
+        /// Writes the recto and verso images of a document to disk as JPEG files, if present.
+        /// </summary>
+        /// <param name="i">The index of the document, used for file naming.</param>
+        /// <param name="document">The document whose images are to be written.</param>
+        /// <param name="path">The directory path where images will be saved.</param>
         private void WriteDocumentImages(int i, Document document, string path)
         {
             if (document.RectoImage is not null)

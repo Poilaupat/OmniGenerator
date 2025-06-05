@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace OmniGenerator.Lib.Generators.Fields
 {
     /// <summary>
-    /// Generates a sequence of incrementing long values, starting from a specified value and increasing by a fixed increment on each call.
+    /// Provides a field generator that produces a sequence of incrementing <see cref="long"/> values.
+    /// The sequence starts from a specified value and increases by a fixed increment on each generation.
     /// This generator is thread-safe.
     /// </summary>
     internal class FieldGeneratorIncrement : AbstractFieldGenerator<long>
@@ -30,16 +31,16 @@ namespace OmniGenerator.Lib.Generators.Fields
         }
 
         /// <summary>
-        /// Generates the next value in the sequence, incrementing the internal counter by the specified increment.
+        /// Generates the next value in the incrementing sequence.
+        /// The method is thread-safe and returns the current value before incrementation.
         /// </summary>
         /// <returns>
-        /// The current value before incrementing.
+        /// The current <see cref="long"/> value before incrementing.
         /// </returns>
         protected override long GenerateValue()
         {
-            var value = Interlocked.Read(ref _value);
-            Interlocked.Add(ref _value, _increment);
-            return value;
+            // Atomically adds the increment to the value and returns the value before incrementation.
+            return Interlocked.Add(ref _value, _increment) - _increment;
         }
     }
 }

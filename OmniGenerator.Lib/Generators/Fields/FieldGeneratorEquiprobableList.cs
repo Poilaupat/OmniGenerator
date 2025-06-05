@@ -3,7 +3,8 @@
 namespace OmniGenerator.Lib.Generators.Fields
 {
     /// <summary>
-    /// The <see cref="FieldGeneratorEquiprobableList"/> picks a random values within a collection. Each item of the collection has an equiprobable chance to be picked up. 
+    /// The <see cref="FieldGeneratorEquiprobableList"/> picks a random value from a collection. 
+    /// Each item of the collection has an equiprobable chance to be picked.
     /// </summary>
     internal class FieldGeneratorEquiprobableList : AbstractFieldGeneratorFromListBase<string, string>
     {
@@ -11,10 +12,11 @@ namespace OmniGenerator.Lib.Generators.Fields
         private readonly int _listcount;
 
         /// <summary>
-        /// Creates a new <see cref="FieldGeneratorEquiprobableList"
+        /// Initializes a new instance of the <see cref="FieldGeneratorEquiprobableList"/> class.
         /// </summary>
-        /// <param name="name">The name of the generator</param>
-        /// <param name="listpath">The path to the list file</param>
+        /// <param name="name">The name of the generator.</param>
+        /// <param name="list">The collection of possible values to pick from.</param>
+        /// <param name="listFilePath">The path to the list file (for reference or loading).</param>
         public FieldGeneratorEquiprobableList(string name, IEnumerable<string>? list, string listFilePath)
             : base(name, list, listFilePath)
         {
@@ -22,6 +24,12 @@ namespace OmniGenerator.Lib.Generators.Fields
             _listcount = List.Count();
         }
 
+        /// <summary>
+        /// Picks a random value from the list with equal probability.
+        /// </summary>
+        /// <returns>
+        /// A randomly selected value from the list, or an empty string if the list is empty.
+        /// </returns>
         protected override string GenerateValue()
         {
             if (List.Any())
@@ -34,6 +42,11 @@ namespace OmniGenerator.Lib.Generators.Fields
             }
         }
 
+        /// <summary>
+        /// Parses a line from the list file into a value.
+        /// </summary>
+        /// <param name="line">The line to parse.</param>
+        /// <returns>The parsed value (the line itself).</returns>
         protected override string ParseLine(string line)
         {
             return line;

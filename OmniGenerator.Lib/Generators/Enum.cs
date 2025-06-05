@@ -8,31 +8,59 @@ using System.Threading.Tasks;
 namespace OmniGenerator.Lib.Generators
 {
     /// <summary>
-    /// The aggregate type of the <see cref="FieldGeneratorAggregate" generators
+    /// Specifies the aggregate operation type for <see cref="FieldGeneratorAggregate"/> generators.
     /// </summary>
     public enum EFFieldAggregateType
     {
+        /// <summary>
+        /// Represents a count aggregation.
+        /// </summary>
         Count,
+        /// <summary>
+        /// Represents a sum aggregation.
+        /// </summary>
         Sum,
     }
 
     /// <summary>
-    /// The scope of the <see cref="FieldGeneratorAggregate"/> generators
+    /// Specifies the scope for <see cref="FieldGeneratorAggregate"/> generators.
     /// </summary>
     public enum EScope
     {
+        /// <summary>
+        /// The aggregation applies to all elements overall.
+        /// </summary>
         Overall,
+        /// <summary>
+        /// The aggregation applies only to direct children.
+        /// </summary>
         DirectChildren,
     }
 
     /// <summary>
-    /// The key type of the <see cref="FieldGeneratorKeyCalculator"/> generators
+    /// Specifies the key type for <see cref="FieldGeneratorKeyCalculator"/> generators.
     /// </summary>
     public enum EKeyType
     {
+        /// <summary>
+        /// Dummy key type (for unit test).
+        /// </summary>
+        Dummy,
+        /// <summary>
+        /// RLMC key type.
+        /// </summary>
         Rlmc,
+        /// <summary>
+        /// RIB key type.
+        /// </summary>
         Rib,
+        /// <summary>
+        /// TIP key type.
+        /// </summary>
         Tip,
+        /// <summary>
+        /// TIP Group 6 key type.
+        /// </summary>
         TipGroup6
     }
 }

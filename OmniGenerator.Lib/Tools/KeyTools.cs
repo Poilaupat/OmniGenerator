@@ -1,17 +1,29 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Drawing;
+using System.Net.NetworkInformation;
+using System.Text.RegularExpressions;
 
 namespace OmniGenerator.Lib.Tools
 {
     /// <summary>
-    /// Some tools to compute different types of checksum
+    /// Provides utility methods to compute various types of checksums and keys, such as RIB, RLMC, TIP, and SEPA group 6 keys.
     /// </summary>
     public static class KeyTools
     {
         /// <summary>
-        /// Computes a RIB checksum
+        /// Returns the input string as a dummy key.
         /// </summary>
-        /// <param name="rib">The RIB. Can contain letters.</param>
-        /// <returns>The checksum</returns>
+        /// <param name="input">The input string.</param>
+        /// <returns>The same input string.</returns>
+        public static string ComputeDummyKey(string input)
+        {
+            return input;
+        }
+
+        /// <summary>
+        /// Computes a RIB checksum key.
+        /// </summary>
+        /// <param name="rib">The RIB string, which can contain letters.</param>
+        /// <returns>The computed RIB checksum as a two-digit string.</returns>
         public static string ComputeRibKey(string rib)
         {
             string numericstring = string.Concat(rib, "00");
@@ -20,12 +32,12 @@ namespace OmniGenerator.Lib.Tools
         }
 
         /// <summary>
-        /// Computes a RLMC checksum
+        /// Computes a RLMC checksum key from Z4, Z3, and Z2 CMC7 components.
         /// </summary>
-        /// <param name="z4">The Z4 of the CMC7</param>
-        /// <param name="z3">The Z3 of the CMC7</param>
-        /// <param name="z2">The Z2 of the CMC7</param>
-        /// <returns>The RLMC key</returns>
+        /// <param name="z4">The Z4 component of the CMC7.</param>
+        /// <param name="z3">The Z3 component of the CMC7.</param>
+        /// <param name="z2">The Z2 component of the CMC7.</param>
+        /// <returns>The computed RLMC key as a two-digit string.</returns>
         public static string ComputeRlmcKey(string z4, string z3, string z2)
         {
             string numericstring = string.Concat(z4, z3, z2);
@@ -33,10 +45,10 @@ namespace OmniGenerator.Lib.Tools
         }
 
         /// <summary>
-        /// Computes a RLMC checksum
+        /// Computes a RLMC checksum key from a CMC7 string.
         /// </summary>
-        /// <param name="cmc7">The CMC7 of the check. It can be a space separated strings or in one go.</param>
-        /// <returns>The RLMC key</returns>
+        /// <param name="cmc7">The CMC7 string, which can be space-separated or a single string.</param>
+        /// <returns>The computed RLMC key as a two-digit string.</returns>
         public static string ComputeRlmcKey(string cmc7)
         {
             string numericstring = string.Concat(string.Join("", cmc7.Split(' ', StringSplitOptions.RemoveEmptyEntries)), "00");
@@ -45,15 +57,15 @@ namespace OmniGenerator.Lib.Tools
         }
 
         /// <summary>
-        /// Computes a TIP checksum
+        /// Computes a TIP checksum key.
         /// </summary>
         /// <param name="numericstring">A numeric string. Spaces are allowed.</param>
-        /// <returns>The checksum</returns>
-        /// <exception cref="ArgumentException">Thrown if the string contains non-numeric chars</exception>
+        /// <returns>The computed TIP checksum as a two-digit string.</returns>
+        /// <exception cref="ArgumentException">Thrown if the string contains non-numeric characters.</exception>
         public static string ComputeTipKey(string numericstring)
         {
             numericstring = Regex.Replace(numericstring, @"\s", "");
-            
+
             if (!Regex.IsMatch(numericstring, @"\d+"))
             {
                 throw new ArgumentException("Parameter numericstring must contain only digits");
@@ -62,7 +74,7 @@ namespace OmniGenerator.Lib.Tools
             int key = 0;
 
             for (int i = 0; i < numericstring.Length; i++)
-		    {
+            {
                 key = (key + int.Parse(numericstring.Substring(numericstring.Length - i - 1, 1)) * (i + 1)) % 100;
             }
 
@@ -70,10 +82,10 @@ namespace OmniGenerator.Lib.Tools
         }
 
         /// <summary>
-        /// Compute the specific checksum used for the 6th group in a SEPA slip
+        /// Computes the specific checksum used for the 6th group in a SEPA slip.
         /// </summary>
-        /// <param name="numericstring">A numeric string</param>
-        /// <returns>The checksum</returns>
+        /// <param name="numericstring">A numeric string.</param>
+        /// <returns>The computed checksum as a single-digit string.</returns>
         public static string ComputeTipGroup6Key(string numericstring)
         {
             int twoDigitsKey = 11 - ComputeModulo(numericstring, 11, false);
@@ -82,14 +94,14 @@ namespace OmniGenerator.Lib.Tools
         }
 
         /// <summary>
-        /// Computes a modulo on a numeric string
-        /// Optionnaly can replace letters by digits according to the RIB specification
+        /// Computes a modulo on a numeric string.
+        /// Optionally replaces letters by digits according to the RIB specification.
         /// </summary>
-        /// <param name="numericstring">The string</param>
-        /// <param name="modulo">The value of the modulo</param>
-        /// <param name="replaceLetters">If set to true, replaces alpha chars by digits</param>
-        /// <returns>The modulo</returns>
-        /// <exception cref="ArgumentException">Thrown if replace letters is false and numericstring contains letters</exception>
+        /// <param name="numericstring">The input string.</param>
+        /// <param name="modulo">The modulo value.</param>
+        /// <param name="replaceLetters">If set to true, replaces alpha characters by digits.</param>
+        /// <returns>The computed modulo value.</returns>
+        /// <exception cref="ArgumentException">Thrown if replaceLetters is false and numericstring contains letters.</exception>
         private static int ComputeModulo(string numericstring, int modulo, bool replaceLetters)
         {
             numericstring = Regex.Replace(numericstring, @"\s", "");
@@ -115,10 +127,10 @@ namespace OmniGenerator.Lib.Tools
         }
 
         /// <summary>
-        /// Replaces alpha chars by digit according to RIB specifications
+        /// Replaces alpha characters by digits according to RIB specifications.
         /// </summary>
-        /// <param name="str">The input string</param>
-        /// <returns>A numeric string</returns>
+        /// <param name="str">The input string.</param>
+        /// <returns>A numeric string with letters replaced by digits.</returns>
         private static string ReplaceLetters(string str)
         {
             return str
@@ -150,7 +162,7 @@ namespace OmniGenerator.Lib.Tools
                 .Replace('Y', '8')
                 .Replace('Z', '9')
                 ;
-        }      
+        }
     }
 }
 

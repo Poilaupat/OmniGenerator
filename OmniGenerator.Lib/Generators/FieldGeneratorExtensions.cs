@@ -65,7 +65,7 @@ namespace OmniGenerator.Lib.Generators
                 foreach (var dependencyName in generator.DependenceNames)
                 {
                     var dependency = generators.Single(x => x.Name == dependencyName);
-                    generator.Dependences.Add(dependency);
+                    generator.GeneratorDependencies.Add(dependency);
                 }
             }
 

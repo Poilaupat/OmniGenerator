@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ParamFiles", "ParamFiles", 
 		ParamFiles\fields-payment.json = ParamFiles\fields-payment.json
 		ParamFiles\fields-slip.json = ParamFiles\fields-slip.json
 		ParamFiles\fields-talon-optique.json = ParamFiles\fields-talon-optique.json
+		ParamFiles\param-all-generators.json = ParamFiles\param-all-generators.json
 		ParamFiles\param-compliance-eligibility.json = ParamFiles\param-compliance-eligibility.json
 		ParamFiles\param-debug.json = ParamFiles\param-debug.json
 		ParamFiles\param-sql.json = ParamFiles\param-sql.json
