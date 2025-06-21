@@ -61,7 +61,7 @@ namespace OmniGenerator.Lib.Generators.Fields
         /// <returns>The parsed value-weight pair.</returns>
         protected override (string, double) ParseLine(string line)
         {
-            var parts = line.Split(',');
+            var parts = line.Split(new char[] { ',', ';', '|'});
             if (parts.Length != 2 || !double.TryParse(parts[1], out double weight))
                 throw new FormatException("Each line must be in the format 'value,weight'.");
             return (parts[0], weight);

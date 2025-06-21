@@ -1,5 +1,5 @@
 {
-  "packager": "packager.omni.plain",
+  "packager": "packager.omni.zip",
   "hierarchy": {
     "fields": [],
     "root": {
@@ -27,7 +27,22 @@
           "increment": 3
         }
       ],
-      "elements": []
+      "elements": [
+        {
+          "$type": "document",
+          "name": "slip",
+          "min-occurs": 1,
+          "max-occurs": 1,
+          "fields": [
+            {
+              "$type": "increment",
+              "name": "incr2",
+              "start": 10,
+              "increment": 5
+            }
+          ]
+        }
+      ]
     }
   }
 }

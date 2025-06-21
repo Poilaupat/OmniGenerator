@@ -8,58 +8,58 @@ using System.Threading.Tasks;
 namespace OmniGenerator.Lib.Generators
 {
     /// <summary>
-    /// Specifies the aggregate operation type for <see cref="FieldGeneratorAggregate"/> generators.
+    /// Enumerates the types of aggregate operations available for <see cref="FieldGeneratorAggregate"/> generators.
     /// </summary>
     public enum EFFieldAggregateType
     {
         /// <summary>
-        /// Represents a count aggregation.
+        /// Aggregates by counting the number of elements.
         /// </summary>
         Count,
         /// <summary>
-        /// Represents a sum aggregation.
+        /// Aggregates by summing the values of elements.
         /// </summary>
         Sum,
     }
 
     /// <summary>
-    /// Specifies the scope for <see cref="FieldGeneratorAggregate"/> generators.
+    /// Enumerates the possible scopes for aggregation in <see cref="FieldGeneratorAggregate"/> generators.
     /// </summary>
     public enum EScope
     {
         /// <summary>
-        /// The aggregation applies to all elements overall.
+        /// The aggregation is performed over all children elements, regardless of hierarchy.
         /// </summary>
         Overall,
         /// <summary>
-        /// The aggregation applies only to direct children.
+        /// The aggregation is performed only on direct child elements.
         /// </summary>
         DirectChildren,
     }
 
     /// <summary>
-    /// Specifies the key type for <see cref="FieldGeneratorKeyCalculator"/> generators.
+    /// Enumerates the supported key types for <see cref="FieldGeneratorKeyCalculator"/> generators.
     /// </summary>
     public enum EKeyType
     {
         /// <summary>
-        /// Dummy key type (for unit test).
+        /// Dummy key type, typically used for unit testing.
         /// </summary>
         Dummy,
         /// <summary>
-        /// RLMC key type.
+        /// RLMC (Recomposition Ligne Magnétique Chèque) key type.
         /// </summary>
         Rlmc,
         /// <summary>
-        /// RIB key type.
+        /// RIB (Relevé d'Identité Bancaire) key type.
         /// </summary>
         Rib,
         /// <summary>
-        /// TIP key type.
+        /// TIP (Titre Interbancaire de Paiement) key type.
         /// </summary>
         Tip,
         /// <summary>
-        /// TIP Group 6 key type.
+        /// TIP Group 6 key type, used only in the group 6 of a TIP.
         /// </summary>
         TipGroup6
     }

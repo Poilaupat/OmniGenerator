@@ -12,8 +12,8 @@ namespace OmniGenerator.Plugins.Packagers
     /// <summary>
     /// A packager that exports images along with CSV files containing each document's fields.
     /// </summary>
-    [OmniGeneratorPluginMetadata("packager.omni.plain", "A packager that exports images along with csv files containing each document fields")]
-    public class PlainPackager : OmniGeneratorPluginBase, IPackager
+    [OmniGeneratorPluginMetadata("packager.omni.csv", "A packager that exports images along with csv files containing each document fields")]
+    public class CsvPackager : OmniGeneratorPluginBase, IPackager
     {
         /// <summary>
         /// Processes the specified <see cref="Root"/> object and exports its documents and groups as CSV files,
@@ -24,7 +24,7 @@ namespace OmniGenerator.Plugins.Packagers
         /// <returns>A task representing the asynchronous operation.</returns>
         public async Task ProcessAsync(Root root, string basepath)
         {
-            var packagename = $"PlainPackage_{DateTime.Now:yyyyMMddHHmmss}";
+            var packagename = $"CsvPackage_{DateTime.Now:yyyyMMddHHmmss}";
             var packagepath = Path.Combine(basepath, packagename);
 
             if (!Directory.Exists(packagepath))

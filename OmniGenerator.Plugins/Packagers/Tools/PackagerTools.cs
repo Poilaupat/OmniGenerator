@@ -17,35 +17,6 @@ namespace OmniGenerator.Plugins.Packagers.Tools
     public static class PackagerTools
     {
         /// <summary>
-        /// Procuces a human readable file containing data of the documents
-        /// </summary>
-        /// <param name="root">The root containing the documents</param>
-        /// <returns>The lines of the file</returns>
-        /// <exception cref="NotSupportedException">Thrown if an unknown document is found</exception>
-        public static IEnumerable<string> GetDefaultTextFileContent(Root root)
-        {
-            yield return $"00 {DateTime.Now:yyyyMMddHHmmss} {root.Fields["numlot"].Value}";
-
-            var documents = root
-                .GetDocuments()
-                .ToArray();
-
-            for (var i = 0; i < documents.Count(); i++)
-            {
-                if (documents[i].Fields is not null)
-                {
-                    yield return documents[i].Name switch
-                    {
-                        "slip" => $"{documents[i].Fields["encline"].Value} {i}",
-                        "talon-optique" => $"{documents[i].Fields["encline"].Value} {i}",
-                        "cheque" => $"{documents[i].Fields["encline"].Value} {i}",
-                        _ => throw new NotSupportedException("{document.Name} was an unexpected document type"),
-                    };
-                }
-            }
-        }
-
-        /// <summary>
         /// Renders an image from a SvgDocument and writes it to a file
         /// </summary>
         /// <param name="svg">The SvgDocument</param>
