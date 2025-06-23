@@ -9,20 +9,13 @@ using System.Threading.Tasks;
 
 namespace OmniGenerator.Cli.Commands
 {
-    /// <summary>
-    /// Base class for plugin-related command settings.
-    /// Can be extended to define settings for specific plugin commands.
-    /// </summary>
-    internal class PluginCommandSettings : CommandSettings
-    {
 
-    }
 
     /// <summary>
     /// Command settings for listing available plugins.
     /// Allows filtering by type: packagers and/or drawers.
     /// </summary>
-    internal sealed class PluginListCommandSettings : PluginCommandSettings
+    internal sealed class PluginListCommandSettings : PluginCommandSettingsBase
     {
         /// <summary>
         /// Gets or sets a value indicating whether to display packager plugins.
@@ -47,17 +40,5 @@ namespace OmniGenerator.Cli.Commands
         /// Defaults to true if neither option is explicitly specified.
         /// </summary>
         public bool ShowDrawers => (DrawersOptions ?? false) || (PackagersOption is null && DrawersOptions is null);
-    }
-
-    /// <summary>
-    /// Command settings for displaying detailed information about a specific plugin.
-    /// </summary>
-    internal sealed class PluginDetailCommandSettings : PluginCommandSettings
-    {
-        /// <summary>
-        /// Gets or sets the name of the plugin to display details for.
-        /// </summary>
-        [CommandArgument(0, "<PLUGIN_NAME>")]
-        public string PluginName { get; set; } = string.Empty;
     }
 }

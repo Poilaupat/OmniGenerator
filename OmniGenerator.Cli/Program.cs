@@ -33,7 +33,7 @@ try
 
         commands.AddCommand<GenerateCommand>("generate");
 
-        commands.AddBranch<PluginCommandSettings>("plugin", plugin =>
+        commands.AddBranch<PluginCommandSettingsBase>("plugin", plugin =>
         {
             plugin.AddCommand<PluginListCommand>("list")
                 .WithDescription("List plugins installed")
