@@ -5,7 +5,7 @@ using OmniGenerator.Lib.Tools;
 using System;
 using System.Collections.Generic;
 
-namespace OmniGenerator.Test.FieldGenerators
+namespace OmniGenerator.Test.Lib.FieldGenerators
 {
     [TestFixture]
     public class FieldGeneratorKeyCalculatorTests

@@ -3,7 +3,7 @@ using OmniGenerator.Lib.Generators.Fields;
 using System;
 using System.Text.RegularExpressions;
 
-namespace OmniGenerator.Test.FieldGenerators
+namespace OmniGenerator.Test.Lib.FieldGenerators
 {
     [TestFixture]
     public class FieldGeneratorRegexTests

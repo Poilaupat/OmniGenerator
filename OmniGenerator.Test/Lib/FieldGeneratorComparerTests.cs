@@ -3,7 +3,7 @@ using OmniGenerator.Lib.Generators.Fields;
 using OmniGenerator.Lib.Interfaces.FieldGenerators;
 using System.CodeDom;
 
-namespace OmniGenerator.Test.FieldGenerators
+namespace OmniGenerator.Test.Lib
 {
     [Parallelizable(ParallelScope.Self)]
     [TestFixture]
@@ -55,7 +55,7 @@ namespace OmniGenerator.Test.FieldGenerators
             var b = new FieldGeneratorComposite("BField", "CField", "{{CField}}");
             var c = new FieldGeneratorRegex("CField", ".*");
 
-            var fields = 
+            var fields =
                 new IFieldGenerator[] { b, a, c }
                 .SetCollateralDependencies()
                 .OrderBy(x => x, new FieldGeneratorComparer())
@@ -75,7 +75,7 @@ namespace OmniGenerator.Test.FieldGenerators
             var d = new FieldGeneratorRegex("DField", ".*");
             var ak = new FieldGeneratorKeyCalculator("AKField", "AField", EKeyType.Rlmc);
 
-            var fields = 
+            var fields =
                 new IFieldGenerator[] { ak, a, b, c, d }
                 .SetCollateralDependencies()
                 .OrderBy(x => x, new FieldGeneratorComparer()).ToArray()

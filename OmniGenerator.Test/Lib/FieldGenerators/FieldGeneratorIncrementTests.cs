@@ -4,7 +4,7 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OmniGenerator.Test.FieldGenerators
+namespace OmniGenerator.Test.Lib.FieldGenerators
 {
     [TestFixture]
     public class FieldGeneratorIncrementTests

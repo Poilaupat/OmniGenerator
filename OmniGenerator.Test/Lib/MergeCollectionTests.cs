@@ -5,15 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OmniGenerator.Test
+namespace OmniGenerator.Test.Lib
 {
     [TestFixture]
     internal class MergeCollectionTests
     {
         private class Dummy
         {
-            public string Name { get;}
-            public int Value { get;}
+            public string Name { get; }
+            public int Value { get; }
 
             public Dummy(string name, int value)
             {
@@ -24,14 +24,14 @@ namespace OmniGenerator.Test
             public override bool Equals(object? obj)
             {
                 if (obj is not null && obj is Dummy dummy)
-                    return this.Name == dummy.Name;
+                    return Name == dummy.Name;
 
                 return false;
             }
 
             public override int GetHashCode()
             {
-                return this.Name.GetHashCode();
+                return Name.GetHashCode();
             }
 
         }

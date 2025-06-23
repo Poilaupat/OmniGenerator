@@ -104,7 +104,6 @@ namespace OmniGenerator.Cli.Commands
 
         /// <summary>
         /// Core logic of the generation pipeline:
-        /// - Reads and validates configuration
         /// - Builds data hierarchy
         /// - Generates images (if applicable)
         /// - Packages the output using the configured packager

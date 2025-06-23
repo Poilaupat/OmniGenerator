@@ -6,6 +6,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+	
+  <ItemGroup>
+	<InternalsVisibleTo Include="OmniGenerator.Cli" />
+	<InternalsVisibleTo Include="OmniGenerator.Test" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="8.3.0" />

@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using OmniGenerator.Lib.Generators.Fields;
 
-namespace OmniGenerator.Test.FieldGenerators
+namespace OmniGenerator.Test.Lib.FieldGenerators
 {
     [TestFixture]
     public class FieldGeneratorConstantTests

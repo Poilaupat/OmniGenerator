@@ -2,7 +2,7 @@ using NUnit.Framework;
 using OmniGenerator.Lib.Generators.Fields;
 using System;
 
-namespace OmniGenerator.Test.FieldGenerators
+namespace OmniGenerator.Test.Lib.FieldGenerators
 {
     [TestFixture]
     public class FieldGeneratorDateTests

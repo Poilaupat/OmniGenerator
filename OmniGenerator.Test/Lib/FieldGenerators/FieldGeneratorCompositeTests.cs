@@ -3,7 +3,7 @@ using OmniGenerator.Lib.Generators.Fields;
 using OmniGenerator.Lib.Hierarchy;
 using System.Collections.Generic;
 
-namespace OmniGenerator.Test.FieldGenerators
+namespace OmniGenerator.Test.Lib.FieldGenerators
 {
     [TestFixture]
     public class FieldGeneratorCompositeTests
