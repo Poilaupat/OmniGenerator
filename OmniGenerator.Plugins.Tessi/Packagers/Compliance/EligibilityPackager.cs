@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace OmniGenerator.Plugin.Tessi.Packagers.Compliance
 {
-    [OmniGeneratorPluginMetadata("packager.tessi.eligibility", "A packager that produces eligibility resquest from Wecheck Compliance")]
+    [OmniGeneratorPluginMetadata("packager.tessi.eligibility", "A packager that produces eligibility resquest for Wecheck Compliance")]
 
     public class EligibilityPackager : OmniGeneratorPluginBase, IPackager
     {
