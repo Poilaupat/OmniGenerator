@@ -34,7 +34,7 @@
     },
     "OmniGenerator.Cli.Generate.Default": {
       "commandName": "Project",
-      "commandLineArgs": "generate \"..\\..\\..\\..\\ParamFiles\\param.json\" \"..\\..\\..\\..\\Output\""
+      "commandLineArgs": "generate \"..\\..\\..\\..\\ParamFiles\\Remettant\\param.json\" \"..\\..\\..\\..\\Output\""
     },
     "OmniGenerator.Cli.Generate.Debug": {
       "commandName": "Project",

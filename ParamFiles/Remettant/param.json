@@ -1,5 +1,5 @@
 {
-  "packager":  "packager.omni.plain",
+  "packager": "packager.omni.csv",
   "hierarchy": {
     "fields": [
       {
@@ -11,8 +11,8 @@
     "root": {
       "$type": "group",
       "name": "remittance",
-      "min-occurs": 1,
-      "max-occurs": 1,
+      "min-occurs": 3,
+      "max-occurs": 7,
       "fields": [
         {
           "$type": "aggregate",
@@ -32,14 +32,6 @@
         }
       ],
       "elements": [
-        {
-          "$type": "document",
-          "name": "slip",
-          "min-occurs": 1,
-          "max-occurs": 1,
-          "field-configuration-file": "fields-slip.json",
-          "fields": []
-        },
         {
           "$type": "group",
           "name": "payment",
