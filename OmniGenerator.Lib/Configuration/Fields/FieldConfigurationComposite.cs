@@ -10,7 +10,7 @@ namespace OmniGenerator.Lib.Configuration.Fields
         public required string Format 
         { 
             get { return _format; }
-            set { _format = value.Replace("-", "_"); }
+            set { _format = value; }
         }
     }
 }

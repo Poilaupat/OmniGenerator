@@ -126,7 +126,7 @@ namespace OmniGenerator.Cli.Commands
                     await DrawImagesAsync(ldc, settings, root);
 
                     // Step 3: Output packaging
-                    await PackageAsync(ldc, settings, root, configuration);
+                     await PackageAsync(ldc, settings, root, configuration);
                 });
         }
 

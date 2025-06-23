@@ -7,7 +7,7 @@ namespace OmniGenerator.Lib.Configuration.Fields
         private string _name = default!;
 
         [JsonPropertyName("name"), JsonPropertyOrder(0)]
-        public required string Name { get { return _name; } set { _name = value.Replace("-", "_"); } }
+        public required string Name { get { return _name; } set { _name = value; } }
 
         public override bool Equals(object? obj)
         {

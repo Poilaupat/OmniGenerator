@@ -10,7 +10,7 @@ namespace OmniGenerator.Lib.Configuration.Fields
         public required string DependentUpon 
         {
             get { return _dependentUpon; } 
-            set { _dependentUpon = value.Replace("-","_"); } 
+            set { _dependentUpon = value; } 
         }
     }
 }
