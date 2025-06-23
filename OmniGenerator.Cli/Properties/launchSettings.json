@@ -30,7 +30,7 @@
     },
     "OmniGenerator.Cli.Generate.Eligibility": {
       "commandName": "Project",
-      "commandLineArgs": "generate \"..\\..\\..\\..\\ParamFiles\\param-compliance-eligibility.json\" \"..\\..\\..\\..\\Output\""
+      "commandLineArgs": "generate \"..\\..\\..\\..\\ParamFiles\\Compliance\\param-compliance-eligibility.json\" \"..\\..\\..\\..\\Output\""
     },
     "OmniGenerator.Cli.Generate.Default": {
       "commandName": "Project",

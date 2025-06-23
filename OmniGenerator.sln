@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniGenerator.Test", "OmniG
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ParamFiles", "ParamFiles", "{D1F10929-6948-4062-906D-D4E9F7C4F731}"
 	ProjectSection(SolutionItems) = preProject
-		ParamFiles\fields-slip.json = ParamFiles\fields-slip.json
-		ParamFiles\param-compliance-eligibility.json = ParamFiles\param-compliance-eligibility.json
 		ParamFiles\param-debug.json = ParamFiles\param-debug.json
 		ParamFiles\param-sql.json = ParamFiles\param-sql.json
 	EndProjectSection
@@ -22,6 +20,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniGenerator.Plugins", "OmniGenerator.Plugins\OmniGenerator.Plugins.csproj", "{0D00A240-F9F5-430D-B93D-7BF948038245}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LotPakJpk", "LotPakJpk", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		ParamFiles\LotPakJpk\fields-slip.json = ParamFiles\LotPakJpk\fields-slip.json
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Remettant", "Remettant", "{1030305D-4280-4C24-8CBF-4ADA60201B4C}"
 	ProjectSection(SolutionItems) = preProject
@@ -29,6 +30,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Remettant", "Remettant", "{
 		ParamFiles\Remettant\fields-payment.json = ParamFiles\Remettant\fields-payment.json
 		ParamFiles\Remettant\fields-talon-optique.json = ParamFiles\Remettant\fields-talon-optique.json
 		ParamFiles\Remettant\param.json = ParamFiles\Remettant\param.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Compliance", "Compliance", "{A5DBC654-AEB7-4437-83D0-BA31E433B025}"
+	ProjectSection(SolutionItems) = preProject
+		ParamFiles\Compliance\param-compliance-eligibility.json = ParamFiles\Compliance\param-compliance-eligibility.json
 	EndProjectSection
 EndProject
 Global
@@ -64,6 +70,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {D1F10929-6948-4062-906D-D4E9F7C4F731}
 		{1030305D-4280-4C24-8CBF-4ADA60201B4C} = {D1F10929-6948-4062-906D-D4E9F7C4F731}
+		{A5DBC654-AEB7-4437-83D0-BA31E433B025} = {D1F10929-6948-4062-906D-D4E9F7C4F731}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B380405C-EC37-4774-9865-2308ECD6113F}
