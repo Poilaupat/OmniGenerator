@@ -22,7 +22,7 @@ namespace OmniGenerator.Plugins.Packagers
         /// <param name="root">The root object containing documents and groups to export.</param>
         /// <param name="basepath">The base directory path where the package will be created.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
-        public async Task ProcessAsync(Root root, string basepath)
+        public async Task ProcessAsync(Root root, string basepath, int imageRenderingResolution)
         {
             var packagename = $"CsvPackage_{DateTime.Now:yyyyMMddHHmmss}";
             var packagepath = Path.Combine(basepath, packagename);
@@ -80,7 +80,7 @@ namespace OmniGenerator.Plugins.Packagers
 
             for (var i = 0; i < documents.Count(); i++)
             {
-                WriteDocumentImages(i, documents[i], packagepath);
+                WriteDocumentImages(i, documents[i], packagepath, imageRenderingResolution);
             }
         }
 
@@ -90,20 +90,20 @@ namespace OmniGenerator.Plugins.Packagers
         /// <param name="i">The index of the document, used for file naming.</param>
         /// <param name="document">The document whose images are to be written.</param>
         /// <param name="path">The directory path where images will be saved.</param>
-        private void WriteDocumentImages(int i, Document document, string path)
+        private void WriteDocumentImages(int i, Document document, string path, int imageRenderingResolution)
         {
             if (document.RectoImage is not null)
                 PackagerTools.WriteImage(
                     document.RectoImage,
                     Path.Combine(path, $"{i:000000}R.jpg"),
-                    200,
+                    imageRenderingResolution,
                     ImageFormat.Jpeg);
 
             if (document.VersoImage is not null)
                 PackagerTools.WriteImage(
                     document.VersoImage,
                     Path.Combine(path, $"{i:000000}V.jpg"),
-                    200,
+                    imageRenderingResolution,
                     ImageFormat.Jpeg);
         }
     }

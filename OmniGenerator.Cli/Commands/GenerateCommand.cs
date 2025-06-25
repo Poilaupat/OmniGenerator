@@ -243,7 +243,7 @@ namespace OmniGenerator.Cli.Commands
             _tasks["package"].SetProcessing();
             try
             {
-                await packager.ProcessAsync(root, settings.OutputFolderPath);
+                await packager.ProcessAsync(root, settings.OutputFolderPath, configuration.RenderResolutionDPI);
                 _tasks["package"].SetSucceeded();
             }
             catch (Exception ex)

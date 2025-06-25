@@ -22,9 +22,13 @@ namespace OmniGenerator.Lib.Interfaces
         /// The absolute or relative path to the directory where the generated files should be written.
         /// Implementations should ensure this directory exists or create it as needed.
         /// </param>
+        /// <param name="imageRenderingResolution">
+        /// The resolution (in DPI or pixels per inch) to use when rendering images associated with the documents.
+        /// Implementations should use this value to control the quality and size of generated image files.
+        /// </param>
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous packaging operation.
         /// </returns>
-        Task ProcessAsync(Root root, string basepath);
+        Task ProcessAsync(Root root, string basepath, int imageRenderingResolution);
     }
 }

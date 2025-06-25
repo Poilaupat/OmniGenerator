@@ -17,24 +17,13 @@ namespace OmniGenerator.Plugins.Packagers
     [OmniGeneratorPluginMetadata("packager.omni.zip", "Similar to CsvPackager but the output is zipped")]
     public class ZipPackager : OmniGeneratorPluginBase, IPackager
     {
-        public async Task ProcessAsync(Root root, string basepath)
+        public async Task ProcessAsync(Root root, string basepath, int imageRenderingResolution)
         {
             var packagename = $"ZipPackage_{DateTime.Now:yyyyMMddHHmmss}";
 
             using (var fs = new FileStream($"{Path.Combine(basepath, string.Concat(packagename, ".zip"))}", FileMode.CreateNew))
             using (var archive = new ZipArchive(fs, ZipArchiveMode.Create))
             {
-                //var txtfile = archive.CreateEntry($"{packagename}.txt");
-
-                //using (var es = txtfile.Open())
-                //using (var sw = new StreamWriter(es))
-                //{
-                //    foreach (var line in PackagerTools.GetDefaultTextFileContent(root))
-                //    {
-                //        await sw.WriteLineAsync(line);
-                //    }
-                //}
-
                 // Documents CSV generation
                 foreach (var docsByType in root.GetDocuments().GroupBy(x => x.Name))
                 {
@@ -81,18 +70,18 @@ namespace OmniGenerator.Plugins.Packagers
 
                 for (var i = 0; i < documents.Count(); i++)
                 {
-                    WriteDocumentImages(i, documents[i], archive);
+                    WriteDocumentImages(i, documents[i], archive, imageRenderingResolution);
                 }
             }
         }
-        private void WriteDocumentImages(int i, Document document, ZipArchive archive)
+        private void WriteDocumentImages(int i, Document document, ZipArchive archive, int imageRenderingResolution)
         {
             if (document.RectoImage is not null)
                 PackagerTools.WriteImage(
                     document.RectoImage,
                     archive,
                     $"{i:000000}R.jpg",
-                    200,
+                    imageRenderingResolution,
                     ImageFormat.Jpeg);
 
             if (document.VersoImage is not null)
@@ -100,7 +89,7 @@ namespace OmniGenerator.Plugins.Packagers
                     document.VersoImage,
                     archive,
                     $"{i:000000}V.jpg",
-                    200,
+                    imageRenderingResolution,
                     ImageFormat.Jpeg);
         }
     }

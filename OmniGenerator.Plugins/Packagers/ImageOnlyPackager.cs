@@ -13,7 +13,7 @@ namespace OmniGenerator.Plugins.Packagers
     [OmniGeneratorPluginMetadata("packager.omni.imageonly", "A packager that only exports images of documents")]
     public class ImageOnlyPackager : OmniGeneratorPluginBase, IPackager
     {
-        public async Task ProcessAsync(Root root, string basepath)
+        public async Task ProcessAsync(Root root, string basepath, int imageRenderingResolution)
         {
             var packagename = $"{DateTime.Now:yyyyMMddHHmmss}_{root.Fields["numlot"].Value}";
             var packagepath = Path.Combine(basepath, packagename);
@@ -27,26 +27,26 @@ namespace OmniGenerator.Plugins.Packagers
 
             for (var i = 0; i < documents.Count(); i++)
             {
-                WriteDocumentImages(i, documents[i], packagepath);
+                WriteDocumentImages(i, documents[i], packagepath, imageRenderingResolution);
             }
 
             await Task.CompletedTask;
         }
 
-        private void WriteDocumentImages(int i, Document document, string path)
+        private void WriteDocumentImages(int i, Document document, string path, int imageRenderingResolution)
         {
             if (document.RectoImage is not null)
                 PackagerTools.WriteImage(
                     document.RectoImage,
                     Path.Combine(path, $"{i:000000}R.jpg"),
-                    200,
+                    imageRenderingResolution,
                     ImageFormat.Jpeg);
 
             if (document.VersoImage is not null)
                 PackagerTools.WriteImage(
                     document.VersoImage,
                     Path.Combine(path, $"{i:000000}V.jpg"),
-                    200,
+                    imageRenderingResolution,
                     ImageFormat.Jpeg);
         }
     }

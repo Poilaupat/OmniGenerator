@@ -10,7 +10,7 @@ namespace OmniGenerator.Plugin.Tessi.Packagers.Compliance
 
     public class EligibilityPackager : OmniGeneratorPluginBase, IPackager
     {
-        public async Task ProcessAsync(Root root, string path)
+        public async Task ProcessAsync(Root root, string path, int imageRenderingResolution)
         {
             var header = new Header(
                 root.Fields["bankCode"].StringValue,
