@@ -17,10 +17,11 @@ namespace OmniGenerator.Plugins.Packagers
     {
         /// <summary>
         /// Processes the specified <see cref="Root"/> object and exports its documents and groups as CSV files,
-        /// and document images as JPEG files, into a new package directory under the given base path.
+        /// and document images as JPEG and TIFF files, into a new package directory under the given base path.
         /// </summary>
         /// <param name="root">The root object containing documents and groups to export.</param>
         /// <param name="basepath">The base directory path where the package will be created.</param>
+        /// <param name="imageRenderingResolution">The resolution (in DPI) to use when rendering images.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
         public async Task ProcessAsync(Root root, string basepath, int imageRenderingResolution)
         {
@@ -80,31 +81,33 @@ namespace OmniGenerator.Plugins.Packagers
 
             for (var i = 0; i < documents.Count(); i++)
             {
-                WriteDocumentImages(i, documents[i], packagepath, imageRenderingResolution);
+                await WriteDocumentImagesAsync(i+1, documents[i], packagepath, imageRenderingResolution);
             }
         }
 
         /// <summary>
-        /// Writes the recto and verso images of a document to disk as JPEG files, if present.
+        /// Writes the recto and verso images of a document to disk as JPEG and TIFF (Group 4) files, if present.
         /// </summary>
         /// <param name="i">The index of the document, used for file naming.</param>
         /// <param name="document">The document whose images are to be written.</param>
         /// <param name="path">The directory path where images will be saved.</param>
-        private void WriteDocumentImages(int i, Document document, string path, int imageRenderingResolution)
+        /// <param name="imageRenderingResolution">The resolution (in DPI) to use when rendering images.</param>
+        /// <returns>A task representing the asynchronous file writing operation.</returns>
+        private async Task WriteDocumentImagesAsync(int i, Document document, string path, int imageRenderingResolution)
         {
             if (document.RectoImage is not null)
-                PackagerTools.WriteImage(
-                    document.RectoImage,
-                    Path.Combine(path, $"{i:000000}R.jpg"),
-                    imageRenderingResolution,
-                    ImageFormat.Jpeg);
+            {
+                var renderer = new SvgRenderer(document.RectoImage, imageRenderingResolution);
+                await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}R.jpg"), renderer.ToJpeg());
+                await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}R.tiff"), renderer.ToTiffGroup4());
+            }
 
             if (document.VersoImage is not null)
-                PackagerTools.WriteImage(
-                    document.VersoImage,
-                    Path.Combine(path, $"{i:000000}V.jpg"),
-                    imageRenderingResolution,
-                    ImageFormat.Jpeg);
+            {
+                var renderer = new SvgRenderer(document.VersoImage, imageRenderingResolution);
+                await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}V.jpg"), renderer.ToJpeg());
+                await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}V.tiff"), renderer.ToTiffGroup4());
+            }
         }
     }
 }

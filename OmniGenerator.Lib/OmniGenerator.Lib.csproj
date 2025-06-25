@@ -30,6 +30,7 @@
 		<PackageReference Include="AutoMapper" Version="14.0.0" />
 		<PackageReference Include="BenchmarkDotNet.Annotations" Version="0.14.0" />
 		<PackageReference Include="Fare" Version="2.2.1" />
+		<PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.6.0" />
 		<PackageReference Include="McMaster.NETCore.Plugins" Version="2.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.5" />
 		<PackageReference Include="Microsoft.ProgramSynthesis.Detection" Version="10.11.0" />

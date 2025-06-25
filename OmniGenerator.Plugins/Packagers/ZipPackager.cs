@@ -6,6 +6,7 @@ using OmniGenerator.Lib.Tools;
 using OmniGenerator.Plugins.Packagers.Tools;
 using System.Drawing.Imaging;
 using System.Globalization;
+using System.IO;
 using System.IO.Compression;
 
 namespace OmniGenerator.Plugins.Packagers
@@ -70,27 +71,49 @@ namespace OmniGenerator.Plugins.Packagers
 
                 for (var i = 0; i < documents.Count(); i++)
                 {
-                    WriteDocumentImages(i, documents[i], archive, imageRenderingResolution);
+                    await WriteDocumentImagesAsync(i + 1, documents[i], archive, imageRenderingResolution);
                 }
             }
         }
-        private void WriteDocumentImages(int i, Document document, ZipArchive archive, int imageRenderingResolution)
+        private async Task WriteDocumentImagesAsync(int i, Document document, ZipArchive archive, int imageRenderingResolution)
         {
             if (document.RectoImage is not null)
-                PackagerTools.WriteImage(
-                    document.RectoImage,
-                    archive,
-                    $"{i:000000}R.jpg",
-                    imageRenderingResolution,
-                    ImageFormat.Jpeg);
+            {
+                var renderer = new SvgRenderer(document.RectoImage, imageRenderingResolution);
+
+                var jpgEntry = archive.CreateEntry($"{i:000000}R.jpg");
+                using (var ms = new MemoryStream(renderer.ToJpeg()))
+                using (var es = jpgEntry.Open())
+                {
+                    await ms.CopyToAsync(es);
+                }
+
+                var tiffEntry = archive.CreateEntry($"{i:000000}R.tiff");
+                using (var ms = new MemoryStream(renderer.ToTiffGroup4()))
+                using (var es = tiffEntry.Open())
+                {
+                    await ms.CopyToAsync(es);
+                }
+            }
 
             if (document.VersoImage is not null)
-                PackagerTools.WriteImage(
-                    document.VersoImage,
-                    archive,
-                    $"{i:000000}V.jpg",
-                    imageRenderingResolution,
-                    ImageFormat.Jpeg);
+            {
+                var renderer = new SvgRenderer(document.VersoImage, imageRenderingResolution);
+
+                var jpgEntry = archive.CreateEntry($"{i:000000}V.jpg");
+                using (var ms = new MemoryStream(renderer.ToJpeg()))
+                using (var es = jpgEntry.Open())
+                {
+                    await ms.CopyToAsync(es);
+                }
+
+                var tiffEntry = archive.CreateEntry($"{i:000000}V.tiff");
+                using (var ms = new MemoryStream(renderer.ToTiffGroup4()))
+                using (var es = tiffEntry.Open())
+                {
+                    await ms.CopyToAsync(es);
+                }
+            }
         }
     }
 }
