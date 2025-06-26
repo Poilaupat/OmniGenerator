@@ -1,5 +1,5 @@
 {
-  "packager": "packager.omni.zip",
+  "packager": "packager.omni.csv",
   "render-resolution":  300,
   "hierarchy": {
     "fields": [

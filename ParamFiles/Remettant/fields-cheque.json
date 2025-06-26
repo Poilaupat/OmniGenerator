@@ -16,6 +16,11 @@
     "pattern": "\\d{7} \\d{9}908 \\d{12}"
   },
   {
+    "$type": "regex",
+    "name": "deposit-account",
+    "pattern": "\\d{11}"
+  },
+  {
     "$type": "key",
     "name": "rlmc",
     "dependent-upon": "cmc7",

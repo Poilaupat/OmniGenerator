@@ -146,5 +146,15 @@ namespace OmniGenerator.Plugins.Drawers
             svg.Children.Add(new SvgLine { ID = "bar1", StartX = 110f, StartY = 15f, EndX = 100, EndY = 35f, Stroke = new SvgColourServer(Color.DarkBlue), StrokeWidth = 0.2f });
             svg.Children.Add(new SvgLine { ID = "bar2", StartX = 105f, StartY = 15f, EndX = 95, EndY = 35f, Stroke = new SvgColourServer(Color.DarkBlue), StrokeWidth = 0.2f });
         }
+
+        public override SvgDocument DrawVerso(Document document)
+        {
+            var svg = SvgExtensions.NewBlankSvg(Width, Height);
+
+            svg.DrawText("N° compte : ", "deposit-account-title", 8f, 39f, "Arial", 5f, Color.Black);
+            svg.DrawText(document.Fields["deposit-account"].StringValue, "deposit-account", 40f, 39f, "Arial", 5f, Color.Black);
+
+            return svg;
+        }
     }
 }
