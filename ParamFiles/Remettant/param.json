@@ -1,5 +1,5 @@
 {
-  "packager": "packager.omni.csv",
+  "packager": "packager.tessi.lotpakjpk",
   "render-resolution":  300,
   "hierarchy": {
     "fields": [
@@ -7,6 +7,37 @@
         "$type": "regex",
         "name": "numlot",
         "pattern": "\\d{9}"
+      },
+      {
+        "$type": "constant",
+        "name": "code-org",
+        "value": "30002"
+      },
+      {
+        "$type": "constant",
+        "name": "code-ou",
+        "value": "00001"
+      },
+      {
+        "$type": "constant",
+        "name": "code-cp",
+        "value": "00002"
+      },
+      {
+        "$type": "constant",
+        "name": "code-scanner",
+        "value": "002"
+      },
+      {
+        "$type": "date",
+        "name": "seed-date",
+        "day-diff-min": 1,
+        "day-diff-max": 5
+      },
+      {
+        "$type": "constant",
+        "name": "scanner-serial-number",
+        "value": "666666666"
       }
     ],
     "root": {

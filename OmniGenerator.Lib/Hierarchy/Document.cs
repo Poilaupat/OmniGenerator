@@ -17,12 +17,12 @@ namespace OmniGenerator.Lib.Hierarchy
         /// <summary>
         /// Gets or sets the SVG representation of the <see cref="Document"/> recto (front side).
         /// </summary>
-        public SvgDocument? RectoImage { get; set; }
+        public SvgDocument? RectoVectorImage { get; set; }
 
         /// <summary>
         /// Gets or sets the SVG representation of the <see cref="Document"/> verso (back side).
         /// </summary>
-        public SvgDocument? VersoImage { get; set; }
+        public SvgDocument? VersoVectorImage { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Document"/> class with the specified name and image composer.

@@ -77,9 +77,9 @@ namespace OmniGenerator.Plugins.Packagers
         }
         private async Task WriteDocumentImagesAsync(int i, Document document, ZipArchive archive, int imageRenderingResolution)
         {
-            if (document.RectoImage is not null)
+            if (document.RectoVectorImage is not null)
             {
-                var renderer = new SvgRenderer(document.RectoImage, imageRenderingResolution);
+                var renderer = new SvgRenderer(document.RectoVectorImage, imageRenderingResolution);
 
                 var jpgEntry = archive.CreateEntry($"{i:000000}R.jpg");
                 using (var ms = new MemoryStream(renderer.ToJpeg()))
@@ -96,9 +96,9 @@ namespace OmniGenerator.Plugins.Packagers
                 }
             }
 
-            if (document.VersoImage is not null)
+            if (document.VersoVectorImage is not null)
             {
-                var renderer = new SvgRenderer(document.VersoImage, imageRenderingResolution);
+                var renderer = new SvgRenderer(document.VersoVectorImage, imageRenderingResolution);
 
                 var jpgEntry = archive.CreateEntry($"{i:000000}V.jpg");
                 using (var ms = new MemoryStream(renderer.ToJpeg()))

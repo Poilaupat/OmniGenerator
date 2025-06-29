@@ -51,10 +51,10 @@ namespace OmniGenerator.Lib.Drawers
                     foreach (var doc in docByComposer)
                     {
                         var recto = drawer.DrawRecto(doc);
-                        doc.RectoImage = recto;
+                        doc.RectoVectorImage = recto;
 
                         var verso = drawer.DrawVerso(doc);
-                        doc.VersoImage = verso;
+                        doc.VersoVectorImage = verso;
                     }
                 }
             }

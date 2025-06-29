@@ -53,16 +53,16 @@ namespace OmniGenerator.Plugins.Packagers
         /// <returns>A <see cref="Task"/> representing the asynchronous file writing operation.</returns>
         private async Task WriteDocumentImagesAsync(int i, Document document, string path, int imageRenderingResolution)
         {
-            if (document.RectoImage is not null)
+            if (document.RectoVectorImage is not null)
             {
-                var renderer = new SvgRenderer(document.RectoImage, imageRenderingResolution);
+                var renderer = new SvgRenderer(document.RectoVectorImage, imageRenderingResolution);
                 await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}R.jpg"), renderer.ToJpeg());
                 await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}R.tiff"), renderer.ToTiffGroup4());
             }
 
-            if (document.VersoImage is not null)
+            if (document.VersoVectorImage is not null)
             {
-                var renderer = new SvgRenderer(document.VersoImage, imageRenderingResolution);
+                var renderer = new SvgRenderer(document.VersoVectorImage, imageRenderingResolution);
                 await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}V.jpg"), renderer.ToJpeg());
                 await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}V.tiff"), renderer.ToTiffGroup4());
             }
