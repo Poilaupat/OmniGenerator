@@ -40,7 +40,7 @@ namespace OmniGenerator.Test.Lib.FieldGenerators
         {
             var generator = new FieldGeneratorComposite("CompositeField", "A,B", "{{A}}-{{B}}");
             Assert.That(generator.Name, Is.EqualTo("CompositeField"));
-            Assert.That(generator.Format, Is.EqualTo("{{A}}-{{B}}"));
+            Assert.That(generator.Format, Is.EqualTo("{{A}}_{{B}}"));
         }
     }
 }
