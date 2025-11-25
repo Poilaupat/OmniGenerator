@@ -1,5 +1,4 @@
-﻿using Microsoft.Diagnostics.Tracing.Parsers.MicrosoftWindowsTCPIP;
-using Spectre.Console;
+﻿using Spectre.Console;
 using Spectre.Console.Rendering;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ namespace OmniGenerator.Cli.Widgets
 {
     internal sealed class TaskList : Renderable, IRenderable
     {
-        private Dictionary<string, TaskItem> _tasks = new Dictionary<string, TaskItem>();
+        private readonly Dictionary<string, TaskItem> _tasks = [];
 
         public TaskItem this[string name] => _tasks[name];
 

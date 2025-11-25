@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace OmniGenerator.Plugins.Packagers.Tools
 {
     /// <summary>
-    /// Provides extension methods for collections and dictionaries, 
+    /// Provides extension methods for collections and dictionaries
     /// including bulk addition and conversion to dynamic objects.
     /// </summary>
     internal static class FieldDictionaryExtensions

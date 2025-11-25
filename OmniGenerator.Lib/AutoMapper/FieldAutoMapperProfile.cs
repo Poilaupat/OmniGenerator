@@ -37,7 +37,6 @@ namespace OmniGenerator.Lib.AutoMapper
                 .Include(typeof(FieldConfigurationEquiprobableList), typeof(FieldGeneratorEquiprobableList))
                 .Include(typeof(FieldConfigurationProbabilityDensityList), typeof(FieldGeneratorProbabilityDensityList));
 
-
             ////Derived types based upon FieldConfigurationBase
             CreateMap<FieldConfigurationRegex, FieldGeneratorRegex>();
             CreateMap<FieldConfigurationEquiprobableList, FieldGeneratorEquiprobableList>();

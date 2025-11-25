@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using AutoMapper;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Engines;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OmniGenerator.Lib.Configuration;

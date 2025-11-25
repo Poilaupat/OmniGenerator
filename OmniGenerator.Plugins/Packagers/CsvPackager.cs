@@ -34,43 +34,41 @@ namespace OmniGenerator.Plugins.Packagers
             // Documents CSV generation
             foreach (var docsByType in root.GetDocuments().GroupBy(x => x.Name))
             {
+                await using var writer = new StringWriter();
+                await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
                 var filefullpath = Path.Combine(packagepath, $"{docsByType.Key}.csv");
-                using (var writer = new StringWriter())
-                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                var data = docsByType
+                    .Select(x => x.Fields.ToDynamic());
+
+                if (data?.Any() == true)
                 {
-                    var data = docsByType
-                        .Select(x => x.Fields.ToExpando());
+                    csv.WriteDynamicHeader(data.First());
+                    csv.NextRecord();
+                    csv.WriteRecords(data);
 
-                    if (data is not null && data.Any())
-                    {
-                        csv.WriteDynamicHeader(data.First());
-                        csv.NextRecord();
-                        csv.WriteRecords(data);
-
-                        await File.WriteAllTextAsync(filefullpath, writer.ToString());
-                    }
                     await File.WriteAllTextAsync(filefullpath, writer.ToString());
                 }
+                await File.WriteAllTextAsync(filefullpath, writer.ToString());
             }
 
             // Groups CSV generation
             foreach (var grpByType in root.GetGroups().GroupBy(x => x.Name))
             {
+                await using var writer = new StringWriter();
+                await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
                 var filefullpath = Path.Combine(packagepath, $"{grpByType.Key}.csv");
-                using (var writer = new StringWriter())
-                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                var data = grpByType
+                    .Select(x => x.Fields.ToDynamic());
+
+                if (data?.Any() == true)
                 {
-                    var data = grpByType
-                        .Select(x => x.Fields.ToExpando());
+                    csv.WriteDynamicHeader(data.First());
+                    csv.NextRecord();
+                    csv.WriteRecords(data);
 
-                    if (data is not null && data.Any())
-                    {
-                        csv.WriteDynamicHeader(data.First());
-                        csv.NextRecord();
-                        csv.WriteRecords(data);
-
-                        await File.WriteAllTextAsync(filefullpath, writer.ToString());
-                    }
+                    await File.WriteAllTextAsync(filefullpath, writer.ToString());
                 }
             }
 
@@ -79,7 +77,7 @@ namespace OmniGenerator.Plugins.Packagers
                 .GetDocuments()
                 .ToArray();
 
-            for (var i = 0; i < documents.Count(); i++)
+            for (var i = 0; i < documents.Length; i++)
             {
                 await WriteDocumentImagesAsync(i+1, documents[i], packagepath, imageRenderingResolution);
             }
@@ -93,7 +91,7 @@ namespace OmniGenerator.Plugins.Packagers
         /// <param name="path">The directory path where images will be saved.</param>
         /// <param name="imageRenderingResolution">The resolution (in DPI) to use when rendering images.</param>
         /// <returns>A task representing the asynchronous file writing operation.</returns>
-        private async Task WriteDocumentImagesAsync(int i, Document document, string path, int imageRenderingResolution)
+        private static async Task WriteDocumentImagesAsync(int i, Document document, string path, int imageRenderingResolution)
         {
             if (document.RectoVectorImage is not null)
             {
@@ -111,4 +109,3 @@ namespace OmniGenerator.Plugins.Packagers
         }
     }
 }
-

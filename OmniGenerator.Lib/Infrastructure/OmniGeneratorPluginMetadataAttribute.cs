@@ -6,15 +6,10 @@ using System.Threading.Tasks;
 
 namespace OmniGenerator.Lib.Infrastructure
 {
-    public class OmniGeneratorPluginMetadataAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public class OmniGeneratorPluginMetadataAttribute(string pluginName, string pluginDescription) : Attribute
     {
-        public string PluginName { get; }
-        public string PluginDescription { get; }
-
-        public OmniGeneratorPluginMetadataAttribute(string pluginName, string pluginDescription)
-        {
-            PluginName = pluginName;
-            PluginDescription = pluginDescription;
-        }
+        public string PluginName { get; } = pluginName;
+        public string PluginDescription { get; } = pluginDescription;
     }
 }

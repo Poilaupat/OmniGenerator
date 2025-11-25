@@ -22,7 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="Nerdbank.GitVersioning" Version="3.7.115" />
+    <PackageReference Update="Nerdbank.GitVersioning" Version="3.8.118" />
+    <PackageReference Include="Roslynator.Analyzers" Version="4.8.0" PrivateAssets="all" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

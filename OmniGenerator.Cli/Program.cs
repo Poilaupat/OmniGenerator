@@ -52,7 +52,7 @@ try
 #endif
     });
     //Spectre.Cli app run
-    await app.RunAsync(args); 
+    await app.RunAsync(args);
 }
 catch (Exception e)
 {
@@ -62,7 +62,3 @@ finally
 {
     await Log.CloseAndFlushAsync();
 }
-
-
-
-

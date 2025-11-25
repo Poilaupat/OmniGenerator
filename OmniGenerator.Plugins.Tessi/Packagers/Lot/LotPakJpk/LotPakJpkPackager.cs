@@ -22,9 +22,9 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
 
             string packagename = $"todoname_{DateTime.Now:yyyyMMddHHmmss}";
 
-            using var lot = new StreamWriter(new FileStream(Path.Combine(basepath, $"{packagename}.lot"), FileMode.Create));
-            using var pak = new BinaryWriter(new FileStream(Path.Combine(basepath, $"{packagename}.pak"), FileMode.Create));
-            using var jpk = new BinaryWriter(new FileStream(Path.Combine(basepath, $"{packagename}.jpk"), FileMode.Create));
+            await using var lot = new StreamWriter(new FileStream(Path.Combine(basepath, $"{packagename}.lot"), FileMode.Create));
+            await using var pak = new BinaryWriter(new FileStream(Path.Combine(basepath, $"{packagename}.pak"), FileMode.Create));
+            await using var jpk = new BinaryWriter(new FileStream(Path.Combine(basepath, $"{packagename}.jpk"), FileMode.Create));
 
             await WriteHeaderAsync(root, 1, lot);
 

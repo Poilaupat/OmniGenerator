@@ -22,75 +22,74 @@ namespace OmniGenerator.Plugins.Packagers
         {
             var packagename = $"ZipPackage_{DateTime.Now:yyyyMMddHHmmss}";
 
-            using (var fs = new FileStream($"{Path.Combine(basepath, string.Concat(packagename, ".zip"))}", FileMode.CreateNew))
-            using (var archive = new ZipArchive(fs, ZipArchiveMode.Create))
+            await using var fs = new FileStream($"{Path.Combine(basepath, string.Concat(packagename, ".zip"))}", FileMode.CreateNew);
+            using var archive = new ZipArchive(fs, ZipArchiveMode.Create);
+
+            // Documents CSV generation
+            foreach (var docsByType in root.GetDocuments().GroupBy(x => x.Name))
             {
-                // Documents CSV generation
-                foreach (var docsByType in root.GetDocuments().GroupBy(x => x.Name))
+                var entry = archive.CreateEntry($"{docsByType.Key}.csv");
+
+                await using var stream = entry.Open();
+                await using var writer = new StreamWriter(stream);
+                await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
+                var data = docsByType
+                    .Select(x => x.Fields.ToDynamic());
+
+                if (data?.Any() == true)
                 {
-                    var entry = archive.CreateEntry($"{docsByType.Key}.csv");
-                    using (var stream = entry.Open())
-                    using (var writer = new StreamWriter(stream))
-                    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-                    {
-                        var data = docsByType
-                            .Select(x => x.Fields.ToExpando());
-
-                        if (data is not null && data.Any())
-                        {
-                            csv.WriteDynamicHeader(data.First());
-                            csv.NextRecord();
-                            csv.WriteRecords(data);
-                        }
-                    }
-                }
-
-                // Groups CSV generation
-                foreach (var grpByType in root.GetGroups().GroupBy(x => x.Name))
-                {
-                    var entry = archive.CreateEntry($"{grpByType.Key}.csv");
-                    using (var stream = entry.Open())
-                    using (var writer = new StreamWriter(stream))
-                    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-                    {
-                        var data = grpByType
-                            .Select(x => x.Fields.ToExpando());
-
-                        if (data is not null && data.Any())
-                        {
-                            csv.WriteDynamicHeader(data.First());
-                            csv.NextRecord();
-                            csv.WriteRecords(data);
-                        }
-                    }
-                }
-
-                var documents = root
-                .GetDocuments()
-                .ToArray();
-
-                for (var i = 0; i < documents.Count(); i++)
-                {
-                    await WriteDocumentImagesAsync(i + 1, documents[i], archive, imageRenderingResolution);
+                    csv.WriteDynamicHeader(data.First());
+                    csv.NextRecord();
+                    csv.WriteRecords(data);
                 }
             }
+
+            // Groups CSV generation
+            foreach (var grpByType in root.GetGroups().GroupBy(x => x.Name))
+            {
+                var entry = archive.CreateEntry($"{grpByType.Key}.csv");
+
+                await using var stream = entry.Open();
+                await using var writer = new StreamWriter(stream);
+                await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
+                var data = grpByType
+                    .Select(x => x.Fields.ToDynamic());
+
+                if (data?.Any() == true)
+                {
+                    csv.WriteDynamicHeader(data.First());
+                    csv.NextRecord();
+                    csv.WriteRecords(data);
+                }
+            }
+
+            var documents = root
+            .GetDocuments()
+            .ToArray();
+
+            for (var i = 0; i < documents.Length; i++)
+            {
+                await WriteDocumentImagesAsync(i + 1, documents[i], archive, imageRenderingResolution);
+            }
         }
-        private async Task WriteDocumentImagesAsync(int i, Document document, ZipArchive archive, int imageRenderingResolution)
+        private static async Task WriteDocumentImagesAsync(int i, Document document, ZipArchive archive, int imageRenderingResolution)
         {
             if (document.RectoVectorImage is not null)
             {
                 var renderer = new SvgRenderer(document.RectoVectorImage, imageRenderingResolution);
 
                 var jpgEntry = archive.CreateEntry($"{i:000000}R.jpg");
-                using (var ms = new MemoryStream(renderer.ToJpeg()))
-                using (var es = jpgEntry.Open())
+                await using (var ms = new MemoryStream(renderer.ToJpeg()))
+                await using (var es = jpgEntry.Open())
                 {
                     await ms.CopyToAsync(es);
                 }
 
                 var tiffEntry = archive.CreateEntry($"{i:000000}R.tiff");
-                using (var ms = new MemoryStream(renderer.ToTiffGroup4()))
-                using (var es = tiffEntry.Open())
+                await using (var ms = new MemoryStream(renderer.ToTiffGroup4()))
+                await using (var es = tiffEntry.Open())
                 {
                     await ms.CopyToAsync(es);
                 }
@@ -101,15 +100,15 @@ namespace OmniGenerator.Plugins.Packagers
                 var renderer = new SvgRenderer(document.VersoVectorImage, imageRenderingResolution);
 
                 var jpgEntry = archive.CreateEntry($"{i:000000}V.jpg");
-                using (var ms = new MemoryStream(renderer.ToJpeg()))
-                using (var es = jpgEntry.Open())
+                await using (var ms = new MemoryStream(renderer.ToJpeg()))
+                await using (var es = jpgEntry.Open())
                 {
                     await ms.CopyToAsync(es);
                 }
 
                 var tiffEntry = archive.CreateEntry($"{i:000000}V.tiff");
-                using (var ms = new MemoryStream(renderer.ToTiffGroup4()))
-                using (var es = tiffEntry.Open())
+                await using (var ms = new MemoryStream(renderer.ToTiffGroup4()))
+                await using (var es = tiffEntry.Open())
                 {
                     await ms.CopyToAsync(es);
                 }

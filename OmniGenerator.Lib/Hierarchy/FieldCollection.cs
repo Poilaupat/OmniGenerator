@@ -1,7 +1,10 @@
+using Microsoft.ProgramSynthesis.Split.Text.Build.RuleNodeTypes;
+using Microsoft.ProgramSynthesis.Utils.Interactive;
 using System.Collections;
 using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
+using static Microsoft.ProgramSynthesis.Diagnostics.Location;
 
 namespace OmniGenerator.Lib.Hierarchy
 {
@@ -20,7 +23,7 @@ namespace OmniGenerator.Lib.Hierarchy
         /// <summary>
         /// Internal storage for fields keyed by their name.
         /// </summary>
-        private readonly Dictionary<string, Field> _fields = new();
+        private readonly Dictionary<string, Field> _fields = [];
 
         /// <summary>
         /// Gets the number of fields in the collection.
@@ -78,10 +81,7 @@ namespace OmniGenerator.Lib.Hierarchy
         /// </remarks>
         internal void Add(Field field)
         {
-            if (!_fields.ContainsKey(field.Name))
-            {
-                _fields.Add(field.Name, field);
-            }
+            _fields.TryAdd(field.Name, field);
         }
 
         /// <summary>
@@ -121,7 +121,17 @@ namespace OmniGenerator.Lib.Hierarchy
         /// <remarks>
         /// The returned dictionary is independent; modifications to it do not affect this collection.
         /// </remarks>
-        public Dictionary<string, Field> ToDictionary() => new Dictionary<string, Field>(_fields);
+        public Dictionary<string, Field> ToDictionary() => new(_fields);
+
+        public dynamic ToDynamic()
+        {
+            var expando = new ExpandoObject() as IDictionary<string, object>;
+            foreach(var field in _fields)
+            {
+                expando.Add(field.Key,field.Value);
+            }
+            return expando;
+        }
 
         /// <summary>
         /// Implicitly converts a <see cref="FieldCollection"/> to a <see cref="Dictionary{TKey, TValue}"/>.
@@ -129,28 +139,5 @@ namespace OmniGenerator.Lib.Hierarchy
         /// <param name="collection">The collection to convert.</param>
         /// <returns>A new dictionary containing a copy of the field data.</returns>
         public static implicit operator Dictionary<string, Field>(FieldCollection collection) => collection.ToDictionary();
-
-        /// <summary>
-        /// Creates an <see cref="ExpandoObject"/> with properties corresponding to field names and values.
-        /// </summary>
-        /// <returns>A dynamic object exposing each field name as a property with its raw <see cref="Field.Value"/>.</returns>
-        /// <remarks>
-        /// Useful for serialization scenarios or dynamic binding where field names are not known at compile time.
-        /// </remarks>
-        /// <example>
-        /// <code>
-        /// dynamic expando = fieldCollection.ToExpando();
-        /// Console.WriteLine(expando.AccountNumber);
-        /// </code>
-        /// </example>
-        public dynamic ToExpando()
-        {
-            IDictionary<string, object> expando = new ExpandoObject();
-            foreach (var kv in _fields)
-            {
-                expando.Add(kv.Key, kv.Value.Value);
-            }
-            return expando;
-        }
     }
 }

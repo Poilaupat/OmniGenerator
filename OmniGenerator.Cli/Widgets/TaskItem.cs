@@ -1,5 +1,4 @@
 ﻿using JasperFx.Core.Reflection;
-using Microsoft.Diagnostics.Tracing.Parsers.AspNet;
 using Spectre.Console;
 using Spectre.Console.Rendering;
 using System;

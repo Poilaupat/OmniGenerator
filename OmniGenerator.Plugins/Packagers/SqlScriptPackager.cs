@@ -19,8 +19,8 @@ namespace OmniGenerator.Plugins.Packagers
 
             var filefullpath = Path.Combine(basepath, packagename);
 
-            using (var fs = new FileStream(filefullpath, FileMode.Create, FileAccess.ReadWrite))
-            using (var sw = new StreamWriter(fs))
+            await using (var fs = new FileStream(filefullpath, FileMode.Create, FileAccess.ReadWrite))
+            await using (var sw = new StreamWriter(fs))
             {
                 var deletes = GetDeletes(root);
                 foreach (var delete in deletes)

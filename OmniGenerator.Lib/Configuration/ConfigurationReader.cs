@@ -12,8 +12,13 @@ using OmniGenerator.Lib.Tools;
 
 namespace OmniGenerator.Lib.Configuration
 {
-    public class ConfigurationReader
+    public static class ConfigurationReader
     {
+        private static readonly JsonSerializerOptions _options = new()
+        {
+            TypeInfoResolver = new PolymorphicTypeResolver(),
+        };
+
         public static async Task<OmniGeneratorConfiguration> ReadConfigurationAsync(string filePath)
         {
             try
@@ -21,7 +26,7 @@ namespace OmniGenerator.Lib.Configuration
                 var directory = Path.GetDirectoryName(filePath);
                 var config = await ConfigurationReader.DeserializeAsync<OmniGeneratorConfiguration>(filePath);
 
-                if(!string.IsNullOrWhiteSpace(config.Hierarchy.FieldConfigurationFile))
+                if (!string.IsNullOrWhiteSpace(config.Hierarchy.FieldConfigurationFile))
                 {
                     var rootfields = await ConfigurationReader.DeserializeAsync<List<AbstractFieldConfigurationBase>>(directory, config.Hierarchy.FieldConfigurationFile);
                     config.Hierarchy.Fields.Merge(rootfields);
@@ -47,22 +52,17 @@ namespace OmniGenerator.Lib.Configuration
 
         private static async Task<T> DeserializeAsync<T>(string filepath)
         {
-            var options = new JsonSerializerOptions
-            {
-                TypeInfoResolver = new PolymorphicTypeResolver(),
-            };
-
             try
             {
                 string json = await File.ReadAllTextAsync(filepath);
-                var config = JsonSerializer.Deserialize<T>(json, options);
+                var config = JsonSerializer.Deserialize<T>(json, _options);
 
-                if (config is null)
+                if (config is not null)
                 {
-                    throw new ConfigurationException($"The reading of the file '{filepath}' returned a null param object");
+                    return (T)config;
                 }
 
-                return (T)config;
+                throw new ConfigurationException($"The reading of the file '{filepath}' returned a null param object");
             }
             catch (ConfigurationException)
             {
@@ -95,12 +95,9 @@ namespace OmniGenerator.Lib.Configuration
 
         public static void CheckConfiguration(OmniGeneratorConfiguration config)
         {
-            if(config is null)
-            {
-                throw new ArgumentNullException(nameof(config));   
-            }
+            ArgumentNullException.ThrowIfNull(config, nameof(config));
 
-            ConfigurationException exception = new ConfigurationException("The provided parameter file in not valid");
+            ConfigurationException exception = new("The provided parameter file in not valid");
 
             // Check : Document should not have aggregate fields
             var documents = config
