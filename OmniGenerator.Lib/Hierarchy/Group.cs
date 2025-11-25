@@ -2,8 +2,6 @@
 using OmniGenerator.Lib.Generators;
 using OmniGenerator.Lib.Tools;
 using System.Diagnostics;
-using System.Reflection.Metadata;
-using System.Xml.Linq;
 
 namespace OmniGenerator.Lib.Hierarchy
 {
@@ -13,8 +11,8 @@ namespace OmniGenerator.Lib.Hierarchy
     [DebuggerDisplay("Group = {Name}")]
     public class Group : Element
     {
-        private Group[] _groups;
-        private Document[] _documents;
+        private readonly ElementCollection<Group> _groups;
+        private readonly ElementCollection<Document> _documents;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Group"/> class with the specified name, groups, and documents.
@@ -25,9 +23,10 @@ namespace OmniGenerator.Lib.Hierarchy
         public Group(string name, Group[] groups, Document[] documents)
             : base("group", name)
         {
-            _groups = groups ?? Array.Empty<Group>();
-            _documents = documents ?? Array.Empty<Document>();
-            Init();
+            _groups = new ElementCollection<Group>(this);
+            _documents = new ElementCollection<Document>(this);
+            _groups.AddRange(groups);
+            _documents.AddRange(documents);
         }
 
         /// <summary>
@@ -40,25 +39,10 @@ namespace OmniGenerator.Lib.Hierarchy
         public Group(string name, Group[] groups, Document[] documents, IDictionary<string, Field> fields)
             : base("group", name, fields)
         {
-            _groups = groups ?? Array.Empty<Group>();
-            _documents = documents ?? Array.Empty<Document>();
-            Init();
-        }
-
-        /// <summary>
-        /// Initializes the parent references for inner groups and documents.
-        /// </summary>
-        private void Init()
-        {
-            foreach (var group in _groups)
-            {
-                group.Parent = this;
-            }
-
-            foreach (var document in _documents)
-            {
-                document.Parent = this;
-            }
+            _groups = new ElementCollection<Group>(this);
+            _documents = new ElementCollection<Document>(this);
+            _groups.AddRange(groups);
+            _documents.AddRange(documents);
         }
 
         /// <summary>
@@ -69,7 +53,7 @@ namespace OmniGenerator.Lib.Hierarchy
         /// <returns>An enumerable of <see cref="Document"/> objects.</returns>
         public IEnumerable<Document> GetDocuments(string? name, bool recursive = false)
         {
-            foreach (var document in _documents)
+            foreach (var document in _documents.AsEnumerable())
             {
                 if (name is null || document.Name.Equals(name))
                     yield return document;
@@ -77,7 +61,7 @@ namespace OmniGenerator.Lib.Hierarchy
 
             if (recursive)
             {
-                foreach (var group in _groups)
+                foreach (var group in _groups.AsEnumerable())
                 {
                     foreach (var document in group.GetDocuments(name, recursive))
                         yield return document;
@@ -93,7 +77,7 @@ namespace OmniGenerator.Lib.Hierarchy
         /// <returns>An enumerable of <see cref="Group"/> objects.</returns>
         public IEnumerable<Group> GetGroups(string? name, bool recursive = false)
         {
-            foreach (var group in _groups)
+            foreach (var group in _groups.AsEnumerable())
             {
                 if (name is null || group.Name.Equals(name))
                 {
