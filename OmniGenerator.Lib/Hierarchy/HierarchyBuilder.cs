@@ -61,7 +61,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
         if (fgc.RootHasFields())
         {
             var fields = fgc.GenerateRootFields();
-            root.Fields.Merge(fields);
+            root.AddFields(fields);
         }
 
         NotifyProgress(force: true);

@@ -45,9 +45,9 @@ namespace OmniGenerator.Lib.Hierarchy
         }
 
         /// <summary>
-        /// Gets or sets the fields of the <see cref="Element"/>.
+        /// Gets the fields of the <see cref="Element"/>.
         /// </summary>
-        public IDictionary<string, Field> Fields { get; set; } = new Dictionary<string, Field>();
+        public FieldCollection Fields { get; private set; } = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Element"/> class.
@@ -73,7 +73,7 @@ namespace OmniGenerator.Lib.Hierarchy
             if (fields is null)
                 throw new ArgumentNullException(nameof(fields));
 
-            Fields = fields;
+            Fields.AddRange(fields); // Use AddRange instead of loop
         }
 
         /// <summary>
@@ -91,7 +91,8 @@ namespace OmniGenerator.Lib.Hierarchy
 
             if (generators.ElementHasFields(Name))
             {
-                Fields.Merge(generators.GenerateRegularFields(Name));
+                var generated = generators.GenerateRegularFields(Name);
+                Fields.AddRange(generated); // Use AddRange instead of loop
             }
         }
     }

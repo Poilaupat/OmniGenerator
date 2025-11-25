@@ -43,7 +43,6 @@ namespace OmniGenerator.Lib.Hierarchy
             _groups = groups ?? Array.Empty<Group>();
             _documents = documents ?? Array.Empty<Document>();
             Init();
-            Fields = fields ?? new Dictionary<string, Field>();
         }
 
         /// <summary>
@@ -136,7 +135,8 @@ namespace OmniGenerator.Lib.Hierarchy
 
             if (generators.ElementHasFields(Name))
             {
-                Fields.Merge(generators.GenerateAggregateFields(Name, this));
+                var aggregates = generators.GenerateAggregateFields(Name, this);
+                Fields.AddRange(aggregates); // Use AddRange
             }
         }
 

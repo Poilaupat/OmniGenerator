@@ -10,7 +10,7 @@
         /// The top level fields. 
         /// Those fields should only contain top level information in the hierarchy such as batch number or capture date.
         /// </summary>
-        public IDictionary<string, Field> Fields { get; set; } = new Dictionary<string, Field>();
+        public FieldCollection Fields { get; private set; } = new();
 
         /// <summary>
         /// The top level groups
@@ -46,6 +46,14 @@
             return Groups
                 .Union(Groups
                     .SelectMany(g => g.GetGroups(null, true)));
+        }
+
+        /// <summary>
+        /// Adds generated fields to the root collection (preserving existing ones).
+        /// </summary>
+        internal void AddFields(IDictionary<string, Field> generated)
+        {
+            Fields.AddRange(generated);
         }
     }
 }

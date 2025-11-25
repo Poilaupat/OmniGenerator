@@ -67,7 +67,7 @@ namespace OmniGenerator.Plugins.Packagers
             }
         }
 
-        private string GetValues(IDictionary<string, Field> fields)
+        private string GetValues(IReadOnlyDictionary<string, Field> fields)
         {
             return string.Join(",", fields
                 .Keys

@@ -50,48 +50,33 @@ namespace OmniGenerator.Lib.Generators
         /// Indicates if the root element has fields generators
         /// </summary>
         /// <returns>True if root has at least one field. False if not.</returns>
-        public bool RootHasFields()
-        {
-            return _generators.ContainsKey(HierarchyConfiguration.Name);
-        }
+        public bool RootHasFields() => _generators.ContainsKey(HierarchyConfiguration.Name);
 
         /// <summary>
         /// Indicates if the element specified by its name has fields generators
         /// </summary>
         /// <returns>True if the element has at least one field. False if not.</returns>
-        public bool ElementHasFields(string name)
-        {
-            return _generators.ContainsKey(name);
-        }
+        public bool ElementHasFields(string name) => _generators.ContainsKey(name);
 
         /// <summary>
         /// Refreshes the regular fields of the element specified by its name, uses those values to build a <see cref="FieldCollection"/>
         /// </summary>
         /// <param name="name">The name of the element to refresh</param>
         /// <returns>A <see cref="FieldCollection"/></returns>
-        public IDictionary<string, Field> GenerateRegularFields(string name)
-        {
-            return _generators[name].GenerateRegularFields();
-        }
+        public IDictionary<string, Field> GenerateRegularFields(string name) => _generators[name].GenerateRegularFields();
 
         /// <summary>
         /// Refreshes the aggregate fields of the specified scope of the element specified by its name, uses those values to build a <see cref="FieldCollection"/>
         /// </summary>
         /// <param name="name">The name of the element to refresh</param>
         /// <returns>A <see cref="FieldCollection"/></returns>
-        public IDictionary<string, Field> GenerateAggregateFields(string name, Group group)
-        {
-            return _generators[name].GenerateAggregateFields(group);
-        }
+        public IDictionary<string, Field> GenerateAggregateFields(string name, Group group) => _generators[name].GenerateAggregateFields(group);
 
         /// <summary>
         /// Refreshes the regular fields of the root element, uses those values to build a <see cref="FieldCollection"/>
         /// Note that root element cannot contain aggregate fields
         /// </summary>
         /// <returns>A <see cref="FieldCollection"/></returns>
-        public IDictionary<string, Field> GenerateRootFields()
-        {
-            return GenerateRegularFields(HierarchyConfiguration.Name);
-        }
+        public IDictionary<string, Field> GenerateRootFields() => GenerateRegularFields(HierarchyConfiguration.Name);
     }
 }
