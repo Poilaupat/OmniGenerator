@@ -22,11 +22,25 @@ namespace OmniGenerator.Cli.Commands
     /// This command builds the data hierarchy, generates images, and packages the output,
     /// providing real-time progress updates in the console.
     /// </summary>
-    internal class GenerateCommand : CancellableAsyncCommand<GenerateCommandSettings>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="GenerateCommand"/> class.
+    /// </remarks>
+    /// <param name="appsettings">Application-level configuration settings.</param>
+    /// <param name="pluginService">Service used to retrieve plugins such as packagers.</param>
+    /// <param name="hierarchyBuilder">Service used to build the content hierarchy.</param>
+    /// <param name="imageComposerProcessor">Service used to draw/generate images.</param>
+    /// <param name="logger">Logger instance for this command.</param>
+    internal class GenerateCommand(
+        IOptions<AppSettings> appsettings,
+        IPluginService pluginService,
+        IHierarchyBuilder hierarchyBuilder,
+        IDocumentDrawerManager imageComposerProcessor,
+        ILogger<GenerateCommand> logger
+        ) : AsyncCommand<GenerateCommandSettings>
     {
         private readonly int DEFAULT_PROGRESS_RESOLUTION = 1000; // 1 second
 
-        private Table _layout = new Table()
+        private readonly Table _layout = new Table()
                 .Border(TableBorder.None)
                 .AddColumns("column")
                 .HideHeaders()
@@ -35,43 +49,14 @@ namespace OmniGenerator.Cli.Commands
                 .AddEmptyRow()
                 .AddEmptyRow();
 
-        private TaskList _tasks = new TaskList()
-                .AddTask(new TaskItem("hierarchy", new Markup($"[blue]Data Generation[/]")))
-                .AddTask(new TaskItem("images", new Markup($"[blue]Vector images Generation[/]")))
-                .AddTask(new TaskItem("package", new Markup($"[blue]Package Generation[/]")));
+        private readonly TaskList _tasks = new TaskList()
+                .AddTask(new TaskItem("hierarchy", new Markup("[blue]Data Generation[/]")))
+                .AddTask(new TaskItem("images", new Markup("[blue]Vector images Generation[/]")))
+                .AddTask(new TaskItem("package", new Markup("[blue]Package Generation[/]")));
 
-        private Stopwatch _watch = new Stopwatch();
+        private readonly Stopwatch _watch = new();
 
-        private readonly AppSettings _appsettings;
-        private readonly IHierarchyBuilder _hierarchyBuilder;
-        private readonly IDocumentDrawerManager _imageComposerProcessor;
-        private readonly IPluginService _pluginService;
-        private readonly ILogger<GenerateCommand> _logger;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GenerateCommand"/> class.
-        /// </summary>
-        /// <param name="appsettings">Application-level configuration settings.</param>
-        /// <param name="pluginService">Service used to retrieve plugins such as packagers.</param>
-        /// <param name="hierarchyBuilder">Service used to build the content hierarchy.</param>
-        /// <param name="imageComposerProcessor">Service used to draw/generate images.</param>
-        /// <param name="logger">Logger instance for this command.</param>
-        /// <param name="baselogger">Logger used by the base cancellable command class.</param>
-        public GenerateCommand(
-            IOptions<AppSettings> appsettings,
-            IPluginService pluginService,
-            IHierarchyBuilder hierarchyBuilder,
-            IDocumentDrawerManager imageComposerProcessor,
-            ILogger<GenerateCommand> logger,
-            ILogger<CancellableAsyncCommand> baselogger
-        ) : base(baselogger)
-        {
-            _appsettings = appsettings.Value;
-            _pluginService = pluginService;
-            _hierarchyBuilder = hierarchyBuilder;
-            _imageComposerProcessor = imageComposerProcessor;
-            _logger = logger;
-        }
+        private readonly AppSettings _appsettings = appsettings.Value;
 
         /// <summary>
         /// Executes the generate command asynchronously, reading input settings,
@@ -95,7 +80,7 @@ namespace OmniGenerator.Cli.Commands
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred during the generation process.");
+                logger.LogError(ex, "An error occurred during the generation process.");
                 return -1;
             }
 
@@ -126,7 +111,7 @@ namespace OmniGenerator.Cli.Commands
                     await DrawImagesAsync(ldc, settings, root);
 
                     // Step 3: Output packaging
-                     await PackageAsync(ldc, settings, root, configuration);
+                     await PackageAsync(settings, root, configuration);
                 });
         }
 
@@ -167,8 +152,8 @@ namespace OmniGenerator.Cli.Commands
         private async Task<Root> BuildHierarchyAsync(LiveDisplayContext ldc, GenerateCommandSettings settings, OmniGeneratorConfiguration configuration)
         {
             _tasks["hierarchy"].SetProcessing();
-            _hierarchyBuilder.ProgressResolution = _appsettings.ProgressResolution ?? DEFAULT_PROGRESS_RESOLUTION;
-            _hierarchyBuilder.Progress = new Progress<HierarchyBuilderProgress>(progress =>
+            hierarchyBuilder.ProgressResolution = _appsettings.ProgressResolution ?? DEFAULT_PROGRESS_RESOLUTION;
+            hierarchyBuilder.Progress = new Progress<HierarchyBuilderProgress>(progress =>
             {
                 UpdateUI(settings, progress.ToWidget());
                 ldc.Refresh();
@@ -176,13 +161,13 @@ namespace OmniGenerator.Cli.Commands
 
             try
             {
-                var root = await _hierarchyBuilder.BuildAsync(configuration);
+                var root = await hierarchyBuilder.BuildAsync(configuration);
                 _tasks["hierarchy"].SetSucceeded();
                 return root;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while building the hierarchy.");
+                logger.LogError(ex, "An error occurred while building the hierarchy.");
                 _tasks["hierarchy"].SetFailed();
                 throw;
             }
@@ -196,7 +181,7 @@ namespace OmniGenerator.Cli.Commands
         /// <param name="root">The generated document hierarchy.</param>
         private async Task DrawImagesAsync(LiveDisplayContext ldc, GenerateCommandSettings settings, Root root)
         {
-            if (_imageComposerProcessor is null || !root.GetDocuments().Any(d => !string.IsNullOrWhiteSpace(d.ImageComposer)))
+            if (imageComposerProcessor is null || root.GetDocuments().All(d => string.IsNullOrWhiteSpace(d.ImageComposer)))
             {
                 _tasks["images"].SetSkipped();
                 return;
@@ -204,8 +189,8 @@ namespace OmniGenerator.Cli.Commands
 
             _tasks["images"].SetProcessing();
 
-            _imageComposerProcessor.ProgressResolution = _appsettings.ProgressResolution ?? DEFAULT_PROGRESS_RESOLUTION;
-            _imageComposerProcessor.Progress = new Progress<DocumentDrawerManagerProgress>(progress =>
+            imageComposerProcessor.ProgressResolution = _appsettings.ProgressResolution ?? DEFAULT_PROGRESS_RESOLUTION;
+            imageComposerProcessor.Progress = new Progress<DocumentDrawerManagerProgress>(progress =>
             {
                 UpdateUI(settings, progress.ToWidget());
                 ldc.Refresh();
@@ -213,12 +198,12 @@ namespace OmniGenerator.Cli.Commands
 
             try
             {
-                await _imageComposerProcessor.DrawImagesAsync(root);
+                await imageComposerProcessor.DrawImagesAsync(root);
                 _tasks["images"].SetSucceeded();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while drawing images.");
+                logger.LogError(ex, "An error occurred while drawing images.");
                 _tasks["images"].SetFailed();
                 throw;
             }
@@ -227,13 +212,12 @@ namespace OmniGenerator.Cli.Commands
         /// <summary>
         /// Packages the generated output using the configured packager plugin and updates the UI with progress.
         /// </summary>
-        /// <param name="ldc">The live display context for UI updates.</param>
         /// <param name="settings">The current command settings.</param>
         /// <param name="root">The generated document hierarchy.</param>
         /// <param name="configuration">The generator configuration.</param>
-        private async Task PackageAsync(LiveDisplayContext ldc, GenerateCommandSettings settings, Root root, OmniGeneratorConfiguration configuration)
+        private async Task PackageAsync(GenerateCommandSettings settings, Root root, OmniGeneratorConfiguration configuration)
         {
-            var packager = _pluginService.GetPlugin<IPackager>(configuration.PackagerName);
+            var packager = pluginService.GetPlugin<IPackager>(configuration.PackagerName);
             if (packager is null)
             {
                 _tasks["package"].SetSkipped();
@@ -248,7 +232,7 @@ namespace OmniGenerator.Cli.Commands
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while packaging the output.");
+                logger.LogError(ex, "An error occurred while packaging the output.");
                 _tasks["package"].SetFailed();
                 throw;
             }

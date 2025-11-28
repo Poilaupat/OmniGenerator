@@ -11,5 +11,5 @@ namespace OmniGenerator.Cli.Commands
     /// Base class for plugin-related command settings.
     /// Can be extended to define settings for specific plugin commands.
     /// </summary>
-    internal abstract class PluginCommandSettingsBase : CommandSettings { }
+    internal abstract class PluginCommandSettingsBase : CommandSettings;
 }

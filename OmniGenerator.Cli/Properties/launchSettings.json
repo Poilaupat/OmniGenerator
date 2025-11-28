@@ -10,7 +10,7 @@
     },
     "Omnigenerator.Cli.Infinite": {
       "commandName": "Project",
-      "commandLineArgs": "infinite --cancellable"
+      "commandLineArgs": "infinite"
     },
     "OmniGenerator.Cli.About": {
       "commandName": "Project",

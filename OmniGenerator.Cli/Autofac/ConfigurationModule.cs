@@ -21,7 +21,8 @@ namespace OmniGenerator.Cli.Autofac
         /// <param name="configuration">The application's configuration root (e.g., loaded from appsettings.json)</param>
         public ConfigurationModule(IConfiguration configuration)
         {
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            ArgumentNullException.ThrowIfNull(configuration, nameof(configuration));
+            _configuration = configuration;
         }
 
         /// <summary>

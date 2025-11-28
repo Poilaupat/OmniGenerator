@@ -14,18 +14,12 @@ namespace OmniGenerator.Cli.Commands
     /// Represents a CLI command that shows detailed information about a specific plugin,
     /// including name, type, description, version, and path.
     /// </summary>
-    internal sealed class PluginDetailCommand : AsyncCommand<PluginDetailCommandSettings>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="PluginDetailCommand"/> class.
+    /// </remarks>
+    /// <param name="pluginservice">Service used to query plugin metadata.</param>
+    internal sealed class PluginDetailCommand(IPluginService pluginservice) : AsyncCommand<PluginDetailCommandSettings>
     {
-        private readonly IPluginService _pluginservice;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PluginDetailCommand"/> class.
-        /// </summary>
-        /// <param name="pluginservice">Service used to query plugin metadata.</param>
-        public PluginDetailCommand(IPluginService pluginservice)
-        {
-            _pluginservice = pluginservice;
-        }
 
         /// <summary>
         /// Displays detailed information about the specified plugin in a key-value table format.
@@ -33,10 +27,10 @@ namespace OmniGenerator.Cli.Commands
         /// <param name="context">The current command context.</param>
         /// <param name="settings">The settings containing the name of the plugin to inspect.</param>
         /// <returns>A task representing the asynchronous execution, returning 0 on success.</returns>
-        public override Task<int> ExecuteAsync(CommandContext context, PluginDetailCommandSettings settings)
+        public override Task<int> ExecuteAsync(CommandContext context, PluginDetailCommandSettings settings, CancellationToken ct)
         {
-            var plugin = _pluginservice.GetPluginsInfo<IDocumentDrawer>()
-                .Union(_pluginservice.GetPluginsInfo<IPackager>())
+            var plugin = pluginservice.GetPluginsInfo<IDocumentDrawer>()
+                .Union(pluginservice.GetPluginsInfo<IPackager>())
                 .SingleOrDefault(p => p.PluginName.Equals(settings.PluginName, StringComparison.InvariantCultureIgnoreCase));
 
             if (plugin is not null)

@@ -5,10 +5,10 @@ using OmniGenerator.Cli.Autofac;
 using OmniGenerator.Cli.Commands;
 using OmniGenerator.Lib.Autofac;
 using Serilog;
+using Spectre.Console;
 using Spectre.Console.Cli;
 
-
-//Configuration
+//Configuration file
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .Build();
@@ -17,9 +17,27 @@ var configuration = new ConfigurationBuilder()
 var builder = new ContainerBuilder();
 builder.RegisterModule(new ConfigurationModule(configuration));
 builder.RegisterModule(new OmniGeneratorModule(configuration));
-
 var registrar = new AutofacTypeRegistrar(builder);
 
+// Managing clean process stop
+using var cts = new CancellationTokenSource();
+var forceCloseAppOnNextCancel = false;
+Console.CancelKeyPress += (sender, e) =>
+{
+    if (!forceCloseAppOnNextCancel)
+    {
+        e.Cancel = true; //Cancelling event to let some time to commands to end gracefully
+        AnsiConsole.MarkupLine("[yellow]User cancellation requested. Trying to close app gracefully[/]");
+        cts.Cancel();
+        forceCloseAppOnNextCancel = true;
+    }
+    else
+    {
+        e.Cancel = false; // Lets event propagate to system in order to force app close
+        AnsiConsole.MarkupLine("[red]User force cancellation requested. Closing app[/]");
+        Environment.Exit(2);
+    }
+};
 
 try
 {
@@ -45,14 +63,15 @@ try
         });
 
 #if DEBUG
-            commands.AddCommand<InfiniteCommand>("infinite")
-            .WithDescription("An command that takes an infinite amount of time to execute. Usefull to test CancellableAsyncCommand.")
-            .WithExample("infinite")
-            .WithExample("infinite", "--cancellable");
+        commands.AddCommand<InfiniteCommand>("infinite")
+        .WithDescription("An command that takes an infinite amount of time to execute. Usefull to test CancellableAsyncCommand.")
+        .WithExample("infinite")
+        .WithExample("infinite", "--cancellable");
 #endif
     });
+
     //Spectre.Cli app run
-    await app.RunAsync(args);
+    await app.RunAsync(args, cts.Token);
 }
 catch (Exception e)
 {

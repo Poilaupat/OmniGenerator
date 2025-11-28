@@ -7,32 +7,27 @@ namespace OmniGenerator.Cli.Commands
     /// <summary>
     /// Represents the command-line settings for the "generate" command.
     /// </summary>
-    internal class GenerateCommandSettings : CommandSettings
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="GenerateCommandSettings"/> class.
+    /// </remarks>
+    /// <param name="settingsFilePath">The path to the settings file used for generation.</param>
+    /// <param name="outputFolderPath">The path to the output directory.</param>
+    internal class GenerateCommandSettings(string settingsFilePath, string outputFolderPath) : CommandSettings
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GenerateCommandSettings"/> class.
-        /// </summary>
-        /// <param name="settingsFilePath">The path to the settings file used for generation.</param>
-        /// <param name="outputFolderPath">The path to the output directory.</param>
-        public GenerateCommandSettings(string settingsFilePath, string outputFolderPath)
-        {
-            SettingsFilePath = settingsFilePath;
-            OutputFolderPath = outputFolderPath;
-        }
 
         /// <summary>
         /// Gets or sets the path to the generation settings file.
         /// </summary>
         [Description("The path of the generation setting file")]
         [CommandArgument(0, "<SettingsFilePath>")]
-        public string SettingsFilePath { get; set; }
+        public string SettingsFilePath { get; set; } = settingsFilePath;
 
         /// <summary>
         /// Gets or sets the path to the output folder where generated content will be saved.
         /// </summary>
         [Description("The path of the output folder")]
         [CommandArgument(1, "<OutputFolder>")]
-        public string OutputFolderPath { get; set; }
+        public string OutputFolderPath { get; set; } = outputFolderPath;
 
         /// <summary>
         /// Validates the provided command-line arguments.
@@ -48,7 +43,7 @@ namespace OmniGenerator.Cli.Commands
 
             if (File.Exists(OutputFolderPath))
             {
-                return ValidationResult.Error($"The output-folder must be a directory");
+                return ValidationResult.Error("The output-folder must be a directory");
             }
 
             if (!Directory.Exists(OutputFolderPath))

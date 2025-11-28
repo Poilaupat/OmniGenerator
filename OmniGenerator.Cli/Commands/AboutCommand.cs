@@ -10,7 +10,7 @@ namespace OmniGenerator.Cli.Commands
     /// CLI command that displays information about the application,
     /// such as name, version, and author.
     /// </summary>
-    internal class AboutCommand : Command
+    internal class AboutCommand : AsyncCommand
     {
         private readonly AppSettings _appSettings;
         private readonly ILogger<AboutCommand> _logger;
@@ -34,16 +34,16 @@ namespace OmniGenerator.Cli.Commands
         /// </summary>
         /// <param name="context">The current command context.</param>
         /// <returns>Returns 0 if the command executed successfully.</returns>
-        public override int Execute(CommandContext context)
+        public override async Task<int> ExecuteAsync(CommandContext context, CancellationToken ct)
         {
             var assembly = Assembly
                 .GetExecutingAssembly()
                 .GetName();
 
             AnsiConsole.MarkupLineInterpolated($"[bold blue]{assembly.Name}[/] Version {assembly.Version}");
-            AnsiConsole.MarkupLineInterpolated($":copyright:2025 Ruben Delapille");
+            AnsiConsole.MarkupLine($":copyright:2025 Ruben Delapille");
 
-            return 0;
+            return await Task.FromResult(0);
         }
     }
 }

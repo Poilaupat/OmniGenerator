@@ -1,12 +1,5 @@
-﻿using JasperFx.Core.Reflection;
-using Spectre.Console;
-using Spectre.Console.Rendering;
-using System;
-using System.Collections.Generic;
+﻿using Spectre.Console;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OmniGenerator.Cli.Widgets
 {
@@ -19,11 +12,11 @@ namespace OmniGenerator.Cli.Widgets
         Success,
     }
 
-    internal sealed class TaskItem
+    internal sealed class TaskItem(string name, Markup label)
     {
-        private Stopwatch _watch = new Stopwatch();
+        private readonly Stopwatch _watch = new();
         private ETaskItemState _state = ETaskItemState.Pending;
-        private Dictionary<ETaskItemState, Markup> _states = new Dictionary<ETaskItemState, Markup>
+        private readonly Dictionary<ETaskItemState, Markup> _states = new()
         {
             { ETaskItemState.Pending, new Markup("Pending...") },
             { ETaskItemState.Processing, new Markup("[yellow]Processing...[/]") },
@@ -32,16 +25,10 @@ namespace OmniGenerator.Cli.Widgets
             { ETaskItemState.Success, new Markup("[green]Success[/]") }
         };
 
-        public string Name { get; private set; }
-        public Markup Label { get; private set; }
+        public string Name { get; } = name;
+        public Markup Label { get; } = label;
         public Markup State => _states[_state];
         public long Elapsed => _watch.ElapsedMilliseconds;
-
-        public TaskItem(string name, Markup label)
-        {
-            Name = name;
-            Label = label;
-        }
 
         public void SetPending()
         {

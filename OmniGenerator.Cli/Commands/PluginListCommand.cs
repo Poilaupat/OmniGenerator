@@ -10,18 +10,12 @@ namespace OmniGenerator.Cli.Commands
     /// Represents a CLI command that lists available plugins (drawers and/or packagers)
     /// using a formatted table output in the console.
     /// </summary>
-    internal sealed class PluginListCommand : AsyncCommand<PluginListCommandSettings>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="PluginListCommand"/> class.
+    /// </remarks>
+    /// <param name="pluginservice">Service used to retrieve available plugins.</param>
+    internal sealed class PluginListCommand(IPluginService pluginservice) : AsyncCommand<PluginListCommandSettings>
     {
-        private readonly IPluginService _pluginservice;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PluginListCommand"/> class.
-        /// </summary>
-        /// <param name="pluginservice">Service used to retrieve available plugins.</param>
-        public PluginListCommand(IPluginService pluginservice)
-        {
-            _pluginservice = pluginservice;
-        }
 
         /// <summary>
         /// Lists available plugins according to the user-defined options and displays them in a formatted table.
@@ -29,15 +23,15 @@ namespace OmniGenerator.Cli.Commands
         /// <param name="context">The current command context.</param>
         /// <param name="settings">The settings parsed from the command-line arguments.</param>
         /// <returns>A task representing the asynchronous execution, returning 0 on success.</returns>
-        public override Task<int> ExecuteAsync(CommandContext context, PluginListCommandSettings settings)
+        public override Task<int> ExecuteAsync(CommandContext context, PluginListCommandSettings settings, CancellationToken ct)
         {
             var plugins = new List<PluginInfo>();
 
             if (settings.ShowDrawers)
-                plugins.AddRange(_pluginservice.GetPluginsInfo<IDocumentDrawer>());
+                plugins.AddRange(pluginservice.GetPluginsInfo<IDocumentDrawer>());
 
             if (settings.ShowPackagers)
-                plugins.AddRange(_pluginservice.GetPluginsInfo<IPackager>());
+                plugins.AddRange(pluginservice.GetPluginsInfo<IPackager>());
 
             var table = new Table();
             table.Border(TableBorder.Rounded);

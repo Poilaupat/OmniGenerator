@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace OmniGenerator.Cli.Commands
@@ -7,22 +8,12 @@ namespace OmniGenerator.Cli.Commands
     /// A command used for testing purposes that simulates a long-running, cancellable operation.
     /// Logs periodic messages and optionally stops if cancellation is requested.
     /// </summary>
-    internal sealed class InfiniteCommand : CancellableAsyncCommand<InfiniteCommandSettings>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="InfiniteCommand"/> class.
+    /// </remarks>
+    /// <param name="logger">Logger instance for this command.</param>
+    internal sealed class InfiniteCommand(ILogger<InfiniteCommand> logger) : AsyncCommand<InfiniteCommandSettings>
     {
-        private readonly ILogger<InfiniteCommand> _logger;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InfiniteCommand"/> class.
-        /// </summary>
-        /// <param name="logger">Logger instance for this command.</param>
-        /// <param name="baselogger">Logger passed to the base command class.</param>
-        public InfiniteCommand(
-            ILogger<InfiniteCommand> logger,
-            ILogger<CancellableAsyncCommand> baselogger)
-            : base(baselogger)
-        {
-            _logger = logger;
-        }
 
         /// <summary>
         /// Executes the infinite command asynchronously.
@@ -39,14 +30,18 @@ namespace OmniGenerator.Cli.Commands
             {
                 if (cancellation.IsCancellationRequested)
                 {
-                    _logger.LogInformation("Cancellation requested");
                     if (settings.IsCancellable)
                     {
+                        AnsiConsole.Console.MarkupLine("[green]Cancelling infinite command gracefully ![/]");
                         return Task.FromResult(-1);
+                    }
+                    else
+                    {
+                        AnsiConsole.Console.MarkupLine("[yellow]Taking an infinite time to close[/]");
                     }
                 }
 
-                _logger.LogInformation("I'm alive!");
+                AnsiConsole.Console.MarkupLine("[green]I'm alive![/]");
                 Thread.Sleep(2000);
             }
         }
