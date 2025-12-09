@@ -9,7 +9,7 @@ namespace OmniGenerator.Lib.Generators.Fields
     {
         /// <summary>
         /// The aggregate type. Its configures how the aggregate is computed (count, sum, ...)
-        /// <see cref="EFFieldAggregateType"/> for complete list 
+        /// <see cref="EFFieldAggregateType"/> for complete list
         /// </summary>
         public EFFieldAggregateType AggregateType { get; set; }
 

@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ParamFiles", "ParamFiles", "{D1F10929-6948-4062-906D-D4E9F7C4F731}"
 	ProjectSection(SolutionItems) = preProject
 		ParamFiles\param-debug.json = ParamFiles\param-debug.json
+		ParamFiles\param-lists.json = ParamFiles\param-lists.json
 		ParamFiles\param-sql.json = ParamFiles\param-sql.json
 	EndProjectSection
 EndProject

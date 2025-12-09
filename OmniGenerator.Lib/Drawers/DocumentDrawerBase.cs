@@ -26,7 +26,7 @@ namespace OmniGenerator.Lib.Drawers
         /// The special font available are :
         ///  - CMC7
         ///  - OCRB
-        ///  
+        ///
         /// Other system fonts can be used without having to load them
         /// </summary>
         static DocumentDrawerBase()

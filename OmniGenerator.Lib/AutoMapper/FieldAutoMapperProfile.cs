@@ -2,6 +2,8 @@
 using OmniGenerator.Lib.Generators.Fields;
 using OmniGenerator.Lib.Configuration.Fields;
 using OmniGenerator.Lib.Interfaces.FieldGenerators;
+using OmniGenerator.Lib.Tools;
+using System.Collections.Generic;
 
 namespace OmniGenerator.Lib.AutoMapper
 {
@@ -34,12 +36,10 @@ namespace OmniGenerator.Lib.AutoMapper
 
             CreateMap(typeof(AbstractFieldConfigurationCollectionBase), typeof(IFieldGeneratorFromList<>))
                 .IncludeBase(typeof(AbstractFieldConfigurationBase), typeof(IFieldGenerator))
-                .Include(typeof(FieldConfigurationEquiprobableList), typeof(FieldGeneratorEquiprobableList))
-                .Include(typeof(FieldConfigurationProbabilityDensityList), typeof(FieldGeneratorProbabilityDensityList));
+                .Include(typeof(FieldConfigurationWeightedList), typeof(FieldGeneratorWeightedList));
 
             ////Derived types based upon FieldConfigurationBase
             CreateMap<FieldConfigurationRegex, FieldGeneratorRegex>();
-            CreateMap<FieldConfigurationEquiprobableList, FieldGeneratorEquiprobableList>();
             CreateMap<FieldConfigurationConstant, FieldGeneratorConstant>();
             CreateMap<FieldConfigurationNumeric, FieldGeneratorNumeric>();
             CreateMap<FieldConfigurationDate, FieldGeneratorDate>();
@@ -51,8 +51,13 @@ namespace OmniGenerator.Lib.AutoMapper
             CreateMap<FieldConfigurationAggregate, FieldGeneratorAggregate>();
 
             ////Derived types based upon FieldConfigurationCollectionBase
-            CreateMap<FieldConfigurationEquiprobableList, FieldGeneratorEquiprobableList>();
-            CreateMap<FieldConfigurationProbabilityDensityList, FieldGeneratorProbabilityDensityList>();
+            CreateMap<FieldConfigurationWeightedList, FieldGeneratorWeightedList>()
+                .ConstructUsing((src, ctx) =>
+                {
+                    var list = ctx.Mapper.Map<IEnumerable<WeightedValue>>(src.List);
+                    return new FieldGeneratorWeightedList(src.Name, list);
+                })
+                .ForMember(dest => dest.List, opt => opt.MapFrom<WeightedListResolver>());
         }
     }
 }

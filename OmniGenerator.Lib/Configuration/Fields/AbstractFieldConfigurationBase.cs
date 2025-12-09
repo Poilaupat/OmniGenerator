@@ -11,13 +11,13 @@ namespace OmniGenerator.Lib.Configuration.Fields
         {
             if (obj is not null && obj is AbstractFieldConfigurationBase field)
                 return this.Name == field.Name;
-            
+
             return false;
         }
 
-        public override int GetHashCode() 
-        { 
-            return Name.GetHashCode(); 
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
         }
     }
 }

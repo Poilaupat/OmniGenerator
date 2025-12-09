@@ -8,8 +8,8 @@ namespace OmniGenerator.Lib.Configuration
         [JsonPropertyName("elements")]
         public List<ElementConfiguration> Elements { get; set; } = new List<ElementConfiguration>();
 
-        private IEnumerable<T> GetElementsConfiguration<T>(bool recursive) 
-            where T : ElementConfiguration 
+        private IEnumerable<T> GetElementsConfiguration<T>(bool recursive)
+            where T : ElementConfiguration
         {
             foreach (var element in Elements.Where(x => x is T))
             {
@@ -30,7 +30,7 @@ namespace OmniGenerator.Lib.Configuration
 
         public IEnumerable<ElementConfiguration> GetElementsConfiguration(bool recursive)
         {
-            return GetElementsConfiguration<ElementConfiguration>(recursive); 
+            return GetElementsConfiguration<ElementConfiguration>(recursive);
         }
 
         public IEnumerable<DocumentConfiguration> GetDocumentsConfiguration(bool recursive)

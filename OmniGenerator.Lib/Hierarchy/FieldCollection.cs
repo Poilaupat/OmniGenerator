@@ -128,7 +128,7 @@ namespace OmniGenerator.Lib.Hierarchy
             var expando = new ExpandoObject() as IDictionary<string, object>;
             foreach(var field in _fields)
             {
-                expando.Add(field.Key,field.Value);
+                expando.Add(field.Key,field.Value.StringValue);
             }
             return expando;
         }

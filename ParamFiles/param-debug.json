@@ -9,13 +9,13 @@
       "max-occurs": 10,
       "fields": [
         {
-          "$type": "equiprobable-list",
+          "$type": "list",
           "name": "test1",
           "list": [],
           "list-file": ".\\Resources\\Lists\\dice.txt"
         },
         {
-          "$type": "probadensity-list",
+          "$type": "list",
           "name": "test2",
           "list": {},
           "list-file": ".\\Resources\\Lists\\dice_pdf.txt"

@@ -1,11 +1,11 @@
 [
   {
-    "$type": "equiprobable-list",
+    "$type": "list",
     "name": "payor-firstname",
     "list-file": ".\\Resources\\Lists\\first_names.txt"
   },
   {
-    "$type": "equiprobable-list",
+    "$type": "list",
     "name": "payor-lastname",
     "list-file": ".\\Resources\\Lists\\last_names.txt"
   },
@@ -16,12 +16,12 @@
     "format": "{{payor-firstname}} {{payor-lastname}}"
   },
   {
-    "$type": "equiprobable-list",
+    "$type": "list",
     "name": "payor-zip-city",
     "list-file": ".\\Resources\\Lists\\zipcodes_cities.txt"
   },
   {
-    "$type": "equiprobable-list",
+    "$type": "list",
     "name": "payor-lane",
     "list-file": ".\\Resources\\Lists\\addresses.txt"
   },

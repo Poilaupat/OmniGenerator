@@ -8,48 +8,48 @@ using System.Threading.Tasks;
 
 namespace OmniGenerator.Lib.Infrastructure
 {
-    /// <summary>  
+    /// <summary>
     /// The parent type of the plugin, indicating whether it is a packager or a drawer.
-    /// </summary>  
+    /// </summary>
     public enum EPluginParentType
     {
-        /// <summary>  
-        /// Indicates that the plugin is a packager.  
-        /// </summary>  
+        /// <summary>
+        /// Indicates that the plugin is a packager.
+        /// </summary>
         Packager,
 
-        /// <summary>  
-        /// Indicates that the plugin is a document drawer.  
-        /// </summary>  
+        /// <summary>
+        /// Indicates that the plugin is a document drawer.
+        /// </summary>
         Drawer
     }
 
-    /// <summary>  
-    /// Encapsulates detailed information about a plugin, such as its name, description, type, location, and parent type.  
-    /// </summary>  
+    /// <summary>
+    /// Encapsulates detailed information about a plugin, such as its name, description, type, location, and parent type.
+    /// </summary>
     public sealed class PluginInfo
     {
-        /// <summary>  
-        /// Gets the name of the plugin.  
-        /// </summary>  
+        /// <summary>
+        /// Gets the name of the plugin.
+        /// </summary>
         public string PluginName { get; }
 
-        /// <summary>  
-        /// Gets the description of the plugin.  
-        /// </summary>  
+        /// <summary>
+        /// Gets the description of the plugin.
+        /// </summary>
         public string PluginDescription { get; }
 
-        /// <summary>  
-        /// Gets the <see cref="Type"/> of the plugin.  
-        /// </summary>  
+        /// <summary>
+        /// Gets the <see cref="Type"/> of the plugin.
+        /// </summary>
         public Type PluginType { get; }
 
-        /// <summary>  
-        /// Gets the parent type of the plugin, indicating whether it is a packager or a drawer.  
-        /// </summary>  
-        /// <exception cref="NotImplementedException">  
-        /// Thrown if the plugin type does not match any known parent type.  
-        /// </exception>  
+        /// <summary>
+        /// Gets the parent type of the plugin, indicating whether it is a packager or a drawer.
+        /// </summary>
+        /// <exception cref="NotImplementedException">
+        /// Thrown if the plugin type does not match any known parent type.
+        /// </exception>
         public EPluginParentType ParentType => PluginType switch
         {
             _ when typeof(IDocumentDrawer).IsAssignableFrom(PluginType) => EPluginParentType.Drawer,
@@ -57,24 +57,24 @@ namespace OmniGenerator.Lib.Infrastructure
             _ => throw new NotImplementedException()
         };
 
-        /// <summary>  
-        /// Gets the file system location of the plugin assembly.  
-        /// </summary>  
+        /// <summary>
+        /// Gets the file system location of the plugin assembly.
+        /// </summary>
         public string Location { get; }
 
-        /// <summary>  
-        /// Gets the version of the plugin assembly.  
-        /// </summary>  
+        /// <summary>
+        /// Gets the version of the plugin assembly.
+        /// </summary>
         public string AssemblyVersion { get; }
 
-        /// <summary>  
-        /// Initializes a new instance of the <see cref="PluginInfo"/> class.  
-        /// </summary>  
-        /// <param name="pluginName">The name of the plugin.</param>  
-        /// <param name="pluginDescription">The description of the plugin.</param>  
-        /// <param name="pluginType">The <see cref="Type"/> of the plugin.</param>  
-        /// <param name="location">The file system location of the plugin assembly.</param>  
-        /// <param name="assemblyVersion">The version of the plugin assembly.</param>  
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PluginInfo"/> class.
+        /// </summary>
+        /// <param name="pluginName">The name of the plugin.</param>
+        /// <param name="pluginDescription">The description of the plugin.</param>
+        /// <param name="pluginType">The <see cref="Type"/> of the plugin.</param>
+        /// <param name="location">The file system location of the plugin assembly.</param>
+        /// <param name="assemblyVersion">The version of the plugin assembly.</param>
         public PluginInfo(
             string pluginName,
             string pluginDescription,

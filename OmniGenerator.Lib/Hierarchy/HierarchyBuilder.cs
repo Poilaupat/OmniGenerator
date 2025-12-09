@@ -64,7 +64,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
             root.AddFields(fields);
         }
 
-        NotifyProgress(force: true);
+         NotifyProgress(force: true);
         return await Task.FromResult(root);
     }
 

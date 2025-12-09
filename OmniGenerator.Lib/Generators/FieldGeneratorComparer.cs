@@ -12,7 +12,7 @@ namespace OmniGenerator.Lib.Generators
         /// Rules for comparison :
         ///     1. IFieldGenerator < IFieldGeneratorDependant
         ///     2. IFieldGeneratorDependant A < IFieldGeneratorDependant B if B is dependant on A
-        ///     3. if "equal", order alphabetically against Name property  
+        ///     3. if "equal", order alphabetically against Name property
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>

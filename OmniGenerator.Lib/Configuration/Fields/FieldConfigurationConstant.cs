@@ -6,5 +6,5 @@ namespace OmniGenerator.Lib.Configuration.Fields
     {
         [JsonPropertyName("value")]
         public required string Constant { get; set; }
-    } 
+    }
 }

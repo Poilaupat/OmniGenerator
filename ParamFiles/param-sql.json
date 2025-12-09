@@ -27,7 +27,7 @@
               "value": "99999"
             },
             {
-              "$type": "equiprobable-list",
+              "$type": "list",
               "name": "providerSourceId",
               "list-file": ".\\Resources\\Lists\\codes_banques.txt"
             },

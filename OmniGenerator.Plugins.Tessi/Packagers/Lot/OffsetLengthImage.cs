@@ -34,7 +34,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot
         /// </summary>
         /// <param name="image">The image data to set.</param>
         /// <param name="offset">
-        /// The reference offset to set for this image. 
+        /// The reference offset to set for this image.
         /// After setting, the offset is updated to point to the next position after the image.
         /// </param>
         public void Set(byte[] image, ref int offset)

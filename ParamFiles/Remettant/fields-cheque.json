@@ -32,12 +32,12 @@
     "value": "Banque Specimen"
   },
   {
-    "$type": "equiprobable-list",
+    "$type": "list",
     "name": "bank-zip-city",
     "list-file": ".\\Resources\\Lists\\zipcodes_cities.txt"
   },
   {
-    "$type": "equiprobable-list",
+    "$type": "list",
     "name": "bank-lane",
     "list-file": ".\\Resources\\Lists\\addresses.txt"
   },
@@ -63,7 +63,7 @@
     "value": "Simon Delapille"
   },
   {
-    "$type": "equiprobable-list",
+    "$type": "list",
     "name": "place",
     "list-file": ".\\Resources\\Lists\\zipcodes_cities.txt"
   },

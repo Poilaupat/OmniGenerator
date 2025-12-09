@@ -26,7 +26,7 @@ namespace OmniGenerator.Lib.Configuration
         /// </summary>
         [JsonPropertyName("render-resolution")]
         public int RenderResolutionDPI { get; set; } = 240;
- 
+
         /// <summary>
         /// Gets or sets the hierarchy configuration, which defines the structure of the documents to be generated.
         /// This value is required and must be provided in the configuration.

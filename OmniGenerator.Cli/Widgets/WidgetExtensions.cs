@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace OmniGenerator.Cli.Widgets
 {
     public static class WidgetExtensions
-    {        
+    {
         public static IRenderable ToWidget(this HierarchyBuilderProgress progress)
         {
             var grid = new Grid();

@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace OmniGenerator.Lib.Interfaces.Infrastructure
 {
     /// <summary>
-    /// Defines a contract for long-running task that regularly reports their progress 
+    /// Defines a contract for long-running task that regularly reports their progress
     /// </summary>
-    public interface IProgressReporter<TReport> 
+    public interface IProgressReporter<TReport>
     {
         /// <summary>
         /// Gets of sets an optionnal progress reporter used to receive updates about the process.
@@ -19,7 +19,7 @@ namespace OmniGenerator.Lib.Interfaces.Infrastructure
 
         /// <summary>
         /// Gets or sets the minimum time interval, in milliseconds, between two progress updates.
-        /// This value controls how frequently progress notifications should be emitted. 
+        /// This value controls how frequently progress notifications should be emitted.
         /// </summary>
         int ProgressResolution { get; set; }
     }

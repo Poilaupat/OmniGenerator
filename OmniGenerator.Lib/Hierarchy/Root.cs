@@ -7,7 +7,7 @@
     public class Root
     {
         /// <summary>
-        /// The top level fields. 
+        /// The top level fields.
         /// Those fields should only contain top level information in the hierarchy such as batch number or capture date.
         /// </summary>
         public FieldCollection Fields { get; private set; } = new();

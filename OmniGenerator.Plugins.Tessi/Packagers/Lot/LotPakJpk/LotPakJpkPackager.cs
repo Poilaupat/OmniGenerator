@@ -43,7 +43,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         {
             LotHeaderLine header = new(root, packetNumber);
             await lot.WriteLineAsync(header.ToFixedLengthString());
-            return; 
+            return;
         }
 
         public async Task<(int newBwOffset, int newGsOffset)> WriteDocumentAsync(

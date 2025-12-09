@@ -11,33 +11,33 @@ using McMaster.NETCore.Plugins;
 
 namespace OmniGenerator.Lib.Infrastructure
 {
-    /// <summary>  
+    /// <summary>
     /// Provides plugin discovery and access for the application.
-    /// This service locates, loads, and exposes plugins such as packagers and document drawers from the Plugins directory.  
-    /// </summary>  
+    /// This service locates, loads, and exposes plugins such as packagers and document drawers from the Plugins directory.
+    /// </summary>
     internal sealed class PluginService : IPluginService
     {
         private Dictionary<string, PluginInfo> _repository = new Dictionary<string, PluginInfo>();
 
-        /// <summary>  
-        /// Initializes a new instance of the <see cref="PluginService"/> class.  
-        /// Scans the Plugins directory for available plugins.  
-        /// </summary>  
-        /// <exception cref="DirectoryNotFoundException">  
-        /// Thrown if the Plugins directory does not exist.  
-        /// </exception>  
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PluginService"/> class.
+        /// Scans the Plugins directory for available plugins.
+        /// </summary>
+        /// <exception cref="DirectoryNotFoundException">
+        /// Thrown if the Plugins directory does not exist.
+        /// </exception>
         public PluginService()
         {
             LoadPlugins();
         }
 
-        /// <summary>  
-        /// Loads plugins from the Plugins directory.  
-        /// Each plugin is expected to be in a folder with the same name as its DLL file.  
-        /// </summary>  
-        /// <exception cref="DirectoryNotFoundException">  
-        /// Thrown if the Plugins directory does not exist.  
-        /// </exception>  
+        /// <summary>
+        /// Loads plugins from the Plugins directory.
+        /// Each plugin is expected to be in a folder with the same name as its DLL file.
+        /// </summary>
+        /// <exception cref="DirectoryNotFoundException">
+        /// Thrown if the Plugins directory does not exist.
+        /// </exception>
         private void LoadPlugins()
         {
             var pluginsDir = Path.Combine(AppContext.BaseDirectory, "plugins");
@@ -61,12 +61,12 @@ namespace OmniGenerator.Lib.Infrastructure
             }
         }
 
-        /// <summary>  
-        /// Retrieves a plugin instance by its name.  
-        /// </summary>  
-        /// <typeparam name="TPlugin">The type of plugin to retrieve.</typeparam>  
-        /// <param name="pluginName">The name of the plugin to retrieve.</param>  
-        /// <returns>An instance of the plugin if found; otherwise, <c>null</c>.</returns>  
+        /// <summary>
+        /// Retrieves a plugin instance by its name.
+        /// </summary>
+        /// <typeparam name="TPlugin">The type of plugin to retrieve.</typeparam>
+        /// <param name="pluginName">The name of the plugin to retrieve.</param>
+        /// <returns>An instance of the plugin if found; otherwise, <c>null</c>.</returns>
         public TPlugin? GetPlugin<TPlugin>(string pluginName)
             where TPlugin : IOmniGeneratorPlugin
         {
@@ -82,10 +82,10 @@ namespace OmniGenerator.Lib.Infrastructure
             return default;
         }
 
-        /// <summary>  
-        /// Attempts to add a plugin to the repository.  
-        /// </summary>  
-        /// <param name="pluginType">The type of the plugin to add.</param>  
+        /// <summary>
+        /// Attempts to add a plugin to the repository.
+        /// </summary>
+        /// <param name="pluginType">The type of the plugin to add.</param>
         private void TryAddPlugin(Type pluginType)
         {
             var instance = Activator.CreateInstance(pluginType) as IOmniGeneratorPlugin;
@@ -106,13 +106,13 @@ namespace OmniGenerator.Lib.Infrastructure
             }
         }
 
-        /// <summary>  
-        /// Gets metadata information about all available plugins of the specified type.  
-        /// </summary>  
-        /// <typeparam name="TPlugin">The type of plugin to search for (e.g., <see cref="IPackager"/>, <see cref="IDocumentDrawer"/>).</typeparam>  
-        /// <returns>  
-        /// An enumerable collection of <see cref="PluginInfo"/> objects describing each discovered plugin.  
-        /// </returns>  
+        /// <summary>
+        /// Gets metadata information about all available plugins of the specified type.
+        /// </summary>
+        /// <typeparam name="TPlugin">The type of plugin to search for (e.g., <see cref="IPackager"/>, <see cref="IDocumentDrawer"/>).</typeparam>
+        /// <returns>
+        /// An enumerable collection of <see cref="PluginInfo"/> objects describing each discovered plugin.
+        /// </returns>
         public IEnumerable<PluginInfo> GetPluginsInfo<TPlugin>()
             where TPlugin : IOmniGeneratorPlugin
         {

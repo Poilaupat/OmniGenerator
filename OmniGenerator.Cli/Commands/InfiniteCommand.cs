@@ -11,8 +11,7 @@ namespace OmniGenerator.Cli.Commands
     /// <remarks>
     /// Initializes a new instance of the <see cref="InfiniteCommand"/> class.
     /// </remarks>
-    /// <param name="logger">Logger instance for this command.</param>
-    internal sealed class InfiniteCommand(ILogger<InfiniteCommand> logger) : AsyncCommand<InfiniteCommandSettings>
+    internal sealed class InfiniteCommand() : AsyncCommand<InfiniteCommandSettings>
     {
 
         /// <summary>
