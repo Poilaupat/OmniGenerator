@@ -1,10 +1,6 @@
-using Microsoft.ProgramSynthesis.Split.Text.Build.RuleNodeTypes;
-using Microsoft.ProgramSynthesis.Utils.Interactive;
 using System.Collections;
 using System.Diagnostics;
 using System.Dynamic;
-using System.Linq;
-using static Microsoft.ProgramSynthesis.Diagnostics.Location;
 
 namespace OmniGenerator.Lib.Hierarchy
 {
@@ -62,6 +58,38 @@ namespace OmniGenerator.Lib.Hierarchy
         /// <param name="value">When this method returns, contains the field if found; otherwise, the default value.</param>
         /// <returns><c>true</c> if the field was found; otherwise, <c>false</c>.</returns>
         public bool TryGetValue(string key, out Field value) => _fields.TryGetValue(key, out value);
+
+        /// <summary>
+        /// Attempts to retrieve the string value of a field by name.
+        /// </summary>
+        /// <param name="key">The field name to locate.</param>
+        /// <param name="stringValue">When this method returns, contains the string value of the field if found; otherwise, <c>null</c>.</param>
+        /// <returns><c>true</c> if the field was found; otherwise, <c>false</c>.</returns>
+        public bool TryGetStringValue(string key, out string? stringValue)
+        {
+            if (_fields.TryGetValue(key, out var field))
+            {
+                stringValue = field.StringValue;
+                return true;
+            }
+            stringValue = null;
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the string value of a field by name, or returns a default value if the field is not found or has a null value.
+        /// </summary>
+        /// <param name="key">The field name to locate.</param>
+        /// <param name="defaultValue">The default value to return if the field is not found or has a null value.</param>
+        /// <returns>The string value of the field if found and non-null; otherwise, the specified <paramref name="defaultValue"/>.</returns>
+        public string GetStringValueOrDefault(string key, string defaultValue)
+        {
+            if (_fields.TryGetValue(key, out var field))
+            {
+                return field.StringValue ?? defaultValue;
+            }
+            return defaultValue;
+        }
 
         /// <summary>
         /// Returns an enumerator that iterates through the field collection.
@@ -123,12 +151,20 @@ namespace OmniGenerator.Lib.Hierarchy
         /// </remarks>
         public Dictionary<string, Field> ToDictionary() => new(_fields);
 
+        /// <summary>
+        /// Converts the field collection to a dynamic object (ExpandoObject).
+        /// Each field's name becomes a property on the dynamic object, with its string value as the property value.
+        /// </summary>
+        /// <returns>A dynamic <see cref="ExpandoObject"/> containing all fields as properties.</returns>
+        /// <remarks>
+        /// This is useful for scenarios requiring dynamic property access, such as templating or scripting.
+        /// </remarks>
         public dynamic ToDynamic()
         {
             var expando = new ExpandoObject() as IDictionary<string, object>;
-            foreach(var field in _fields)
+            foreach (var field in _fields)
             {
-                expando.Add(field.Key,field.Value.StringValue);
+                expando.Add(field.Key, field.Value.StringValue);
             }
             return expando;
         }
