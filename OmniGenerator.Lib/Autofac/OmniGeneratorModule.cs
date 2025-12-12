@@ -1,11 +1,11 @@
 ﻿using Autofac;
-using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using OmniGenerator.Lib.Drawers;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
+using OmniGenerator.Lib.Mappers;
 
 namespace OmniGenerator.Lib.Autofac
 {
@@ -35,8 +35,8 @@ namespace OmniGenerator.Lib.Autofac
             // Register Serilog logger into the Autofac container using extension method
             builder.AddSerilog(_configuration);
 
-            // Register AutoMapper instance with scanned profiles from the executing assembly
-            builder.RegisterInstance(GetMapper()).As<IMapper>().SingleInstance();
+            // Register Mapperly mapper instance
+            builder.RegisterType<FieldConfigurationMapper>().As<IFieldMapper>().SingleInstance();
 
             // Register core OmniGenerator services and interfaces
             builder.RegisterType<HierarchyBuilder>().As<IHierarchyBuilder>().InstancePerLifetimeScope();
@@ -48,20 +48,6 @@ namespace OmniGenerator.Lib.Autofac
 
             // Register concrete progress report type
             builder.RegisterType<HierarchyBuilderProgress>().InstancePerDependency();
-        }
-
-        /// <summary>
-        /// Creates and configures the AutoMapper instance used throughout the application.
-        /// Automatically scans the current assembly for profile definitions.
-        /// </summary>
-        /// <returns>An initialized <see cref="IMapper"/> instance.</returns>
-        private static IMapper GetMapper()
-        {
-            return new MapperConfiguration(cfg =>
-            {
-                // Automatically scan current assembly for AutoMapper profiles
-                cfg.AddMaps(System.Reflection.Assembly.GetExecutingAssembly());
-            }).CreateMapper();
         }
     }
 }

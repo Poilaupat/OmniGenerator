@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using AutoMapper;
 using BenchmarkDotNet.Attributes;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

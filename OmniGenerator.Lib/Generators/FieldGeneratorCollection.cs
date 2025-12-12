@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using OmniGenerator.Lib.Hierarchy;
+﻿using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Interfaces.FieldGenerators;
 using System;
 using System.Collections.Generic;

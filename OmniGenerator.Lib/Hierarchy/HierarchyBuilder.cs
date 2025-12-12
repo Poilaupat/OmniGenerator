@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using OmniGenerator.Lib.Configuration;
-
+﻿using OmniGenerator.Lib.Configuration;
 using System.Collections.Concurrent;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Hierarchy;
@@ -23,7 +21,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
 
     #endregion
 
-    private readonly IMapper _mapper;
+    private readonly IFieldMapper _mapper;
     private readonly Random _random;
     private DateTime _lastNotification = DateTime.Now;
     private long _countDoc = 0;
@@ -36,9 +34,9 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
     /// Initializes a new instance of the <see cref="HierarchyBuilder"/> class.
     /// </summary>
     /// <param name="mapper">
-    /// An instance of <see cref="IMapper"/> used to map field configurations to field generators.
+    /// An instance of <see cref="IFieldMapper"/> used to map field configurations to field generators.
     /// </param>
-    public HierarchyBuilder(IMapper mapper)
+    public HierarchyBuilder(IFieldMapper mapper)
     {
         _mapper = mapper;
         _random = new Random();

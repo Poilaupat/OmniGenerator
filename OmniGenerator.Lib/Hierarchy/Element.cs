@@ -84,7 +84,7 @@ namespace OmniGenerator.Lib.Hierarchy
         /// If the collection contains no generators for this <see cref="Element"/>, no fields are generated.
         /// </param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="generators"/> is null.</exception>
-        public virtual void GenerateFields(FieldGeneratorContainer generators)
+        internal virtual void GenerateFields(FieldGeneratorContainer generators)
         {
             if (generators is null)
                 throw new ArgumentNullException(nameof(generators));

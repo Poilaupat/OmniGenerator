@@ -1,18 +1,18 @@
-﻿using AutoMapper;
-using Microsoft.ProgramSynthesis.Utils.Interactive;
+﻿using Microsoft.ProgramSynthesis.Utils.Interactive;
 using OmniGenerator.Lib.Exceptions;
 using OmniGenerator.Lib.Configuration;
 using System.Data;
 using OmniGenerator.Lib.Interfaces.FieldGenerators;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Generators.Fields;
+using OmniGenerator.Lib.Interfaces;
 
 namespace OmniGenerator.Lib.Generators
 {
     /// <summary>
     /// Manages <see cref="AbstractFieldGenerator{T}"/> by <see cref="Document"/> or <see cref="Group"/>
     /// </summary>
-    public class FieldGeneratorContainer
+    internal class FieldGeneratorContainer
     {
         /// <summary>
         /// The generators by <see cref="Document"/> or <see cref="Group"/>
@@ -24,25 +24,25 @@ namespace OmniGenerator.Lib.Generators
         /// </summary>
         /// <param name="rootConfiguration">The root configuration</param>
         /// <param name="mapper">The mapper that projects configuration to fields</param>
-        public FieldGeneratorContainer(HierarchyConfiguration rootConfiguration, IMapper mapper)
+        public FieldGeneratorContainer(HierarchyConfiguration rootConfiguration, IFieldMapper mapper)
         {
             //Root field generators (this is why the name 'root' is reserved in param)
             _generators.Add(
                 HierarchyConfiguration.Name,
-                new FieldGeneratorCollection(HierarchyConfiguration.Name, mapper.Map<List<IFieldGenerator>>(rootConfiguration.Fields)));
+                new FieldGeneratorCollection(HierarchyConfiguration.Name, mapper.MapList(rootConfiguration.Fields)));
 
             //Document field generators
             rootConfiguration
                 .Root
                 .GetDocumentsConfiguration(true)
-                .Select(x => new { x.Name, Fields = mapper.Map<List<IFieldGenerator>>(x.Fields) })
+                .Select(x => new { x.Name, Fields = mapper.MapList(x.Fields) })
                 .ForEach(x => _generators.Add(x.Name, new FieldGeneratorCollection(x.Name, x.Fields)));
 
             //Group field generators
             rootConfiguration
                .Root
                .GetGroupsAndSelfConfiguration(true)
-               .Select(x => new { x.Name, Fields = mapper.Map<List<IFieldGenerator>>(x.Fields) })
+               .Select(x => new { x.Name, Fields = mapper.MapList(x.Fields) })
                .ForEach(x => _generators.Add(x.Name, new FieldGeneratorCollection(x.Name, x.Fields)));
         }
 

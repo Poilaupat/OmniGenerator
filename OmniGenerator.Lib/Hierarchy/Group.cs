@@ -113,7 +113,7 @@ namespace OmniGenerator.Lib.Hierarchy
         /// This method should be called after all sub-documents and sub-groups have been generated and attached.
         /// </summary>
         /// <param name="generators">A <see cref="FieldGeneratorContainer"/> containing field generators.</param>
-        public override void GenerateFields(FieldGeneratorContainer generators)
+        internal override void GenerateFields(FieldGeneratorContainer generators)
         {
             base.GenerateFields(generators);
 
