@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace OmniGenerator.Lib.Tools
+namespace OmniGenerator.Lib.Mapping
 {
     /// <summary>
     /// Helper class to resolve lists from configuration and/or file

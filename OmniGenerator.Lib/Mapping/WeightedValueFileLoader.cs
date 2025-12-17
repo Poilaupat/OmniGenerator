@@ -1,11 +1,12 @@
 using OmniGenerator.Lib.Exceptions;
 using OmniGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Tools;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace OmniGenerator.Lib.Tools
+namespace OmniGenerator.Lib.Mapping
 {
     /// <summary>
     /// Loads WeightedValue items from a file

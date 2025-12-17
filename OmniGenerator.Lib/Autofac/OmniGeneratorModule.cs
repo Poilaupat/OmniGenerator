@@ -5,7 +5,7 @@ using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
-using OmniGenerator.Lib.Mappers;
+using OmniGenerator.Lib.Mapping;
 
 namespace OmniGenerator.Lib.Autofac
 {

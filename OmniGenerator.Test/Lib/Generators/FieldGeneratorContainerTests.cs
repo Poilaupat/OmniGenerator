@@ -3,7 +3,7 @@ using OmniGenerator.Lib.Generators;
 using OmniGenerator.Lib.Generators.Fields;
 using OmniGenerator.Lib.Configuration;
 using OmniGenerator.Lib.Configuration.Fields;
-using OmniGenerator.Lib.Mappers;
+using OmniGenerator.Lib.Mapping;
 using OmniGenerator.Lib.Hierarchy;
 using System.Collections.Generic;
 using System.Linq;
