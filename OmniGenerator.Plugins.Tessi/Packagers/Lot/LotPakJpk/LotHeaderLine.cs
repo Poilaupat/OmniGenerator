@@ -78,7 +78,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         [FixedLengthLineField(411, 24, ' ', PadDirection.Right)]
         public string Identifiant { get; }
 
-        public LotHeaderLine(Root root, int packetNumber)
+        public LotHeaderLine(Root root, string packetNumber)
         {
             Copyright = "ATHIC";
             Database = string.Empty;
@@ -100,7 +100,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
             Free = string.Empty;
             BankID = root.Fields["code-org"].StringValue;
             SerialNumber = root.Fields.ContainsKey("scanner-serial-number") ? root.Fields["scanner-serial-number"].StringValue : "123456789";
-            SequenceNumber = packetNumber.ToString();
+            SequenceNumber = packetNumber;
             Identifiant = string.Empty;
         }
     }

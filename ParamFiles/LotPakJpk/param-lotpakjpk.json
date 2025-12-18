@@ -1,0 +1,47 @@
+{
+  "packager": "packager.tessi.lotpakjpk",
+  "hierarchy": {
+    "fields": [
+      {
+        "$type": "constant",
+        "name": "deposit-bank-code",
+        "value": "16038"
+      },
+      {
+        "$type": "constant",
+        "name": "deposit-agency-code",
+        "value": "16001"
+      },
+      {
+        "$type": "constant",
+        "name": "scanner-code",
+        "value": "001"
+      },
+      {
+        "$type": "constant",
+        "name": "scanner-serial-number",
+        "value": "123456789"
+      },
+      {
+        "$type": "increment",
+        "name": "packet-number",
+        "start": 1,
+        "increment": 1
+      },
+      {
+        "$type": "composite",
+        "name": "packet-name",
+        "dependent-upon": "deposit-bank-code,deposit-agency-code,scanner-code,scanner-serial-number,packet-number",
+        "format": "{{deposit-bank-code}}{{deposit-agency-code}}{{scanner-code}}{{scanner-serial-number}}{{packet-number:0000}}"
+      }
+    ],
+    "root": {
+      "$type": "group",
+      "name": "remittance",
+      "min-occurs": 10,
+      "max-occurs": 10,
+      "fields": [],
+      "elements": []
+    }
+  }
+}

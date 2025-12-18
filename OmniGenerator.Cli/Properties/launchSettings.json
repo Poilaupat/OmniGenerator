@@ -47,6 +47,10 @@
     "OmniGenerator.Cli.Generate.List": {
       "commandName": "Project",
       "commandLineArgs": "generate \"..\\..\\..\\..\\ParamFiles\\param-lists.json\" \"..\\..\\..\\..\\Output\""
+    },
+    "OmniGenerator.Cli.Generate.LotPakJpk": {
+      "commandName": "Project",
+      "commandLineArgs": "generate \"..\\..\\..\\..\\ParamFiles\\LotPakJpk\\param-lotpakjpk.json\" \"..\\..\\..\\..\\Output\""
     }
   }
 }

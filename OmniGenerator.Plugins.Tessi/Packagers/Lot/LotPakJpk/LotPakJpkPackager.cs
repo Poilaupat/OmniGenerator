@@ -20,13 +20,13 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         {
             _resolution = imageRenderingResolution;
 
-            string packagename = $"todoname_{DateTime.Now:yyyyMMddHHmmss}";
+            string packagename = $"{DateTime.Now:yyMMddHHmmss}{root.Fields["packet-name"].StringValue}";
 
             await using var lot = new StreamWriter(new FileStream(Path.Combine(basepath, $"{packagename}.lot"), FileMode.Create));
             await using var pak = new BinaryWriter(new FileStream(Path.Combine(basepath, $"{packagename}.pak"), FileMode.Create));
             await using var jpk = new BinaryWriter(new FileStream(Path.Combine(basepath, $"{packagename}.jpk"), FileMode.Create));
 
-            await WriteHeaderAsync(root, 1, lot);
+            await WriteHeaderAsync(root, root.Fields.GetStringValueOrDefault("packet-number", "0001"), lot);
 
             int bwOffset = 0, gsOffset = 0;
             foreach (var doc in root.GetDocuments())
@@ -39,7 +39,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
             return;
         }
 
-        public async Task WriteHeaderAsync(Root root, int packetNumber, StreamWriter lot)
+        public async Task WriteHeaderAsync(Root root, string packetNumber, StreamWriter lot)
         {
             LotHeaderLine header = new(root, packetNumber);
             await lot.WriteLineAsync(header.ToFixedLengthString());
@@ -75,8 +75,8 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
                 bwVerso.Set(renderer.ToTiffGroup4(), ref bwOffset);
                 gsVerso.Set(renderer.ToJpeg(), ref gsOffset);
 
-                pak.Write(bwRecto.Image);
-                jpk.Write(gsRecto.Image);
+                pak.Write(bwVerso.Image);
+                jpk.Write(gsVerso.Image);
             }
 
             await lot.WriteLineAsync($"" +
