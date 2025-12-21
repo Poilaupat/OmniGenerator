@@ -18,8 +18,8 @@
         {
           "$type": "document",
           "name": "T_CONF_ELIGIBILITY_CONSECUTIVE_CHECKS",
-          "min-occurs": 10000000,
-          "max-occurs": 10000000,
+          "min-occurs": 100,
+          "max-occurs": 100,
           "fields": [
             {
               "$type": "constant",

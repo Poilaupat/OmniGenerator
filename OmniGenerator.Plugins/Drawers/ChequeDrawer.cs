@@ -29,53 +29,53 @@ namespace OmniGenerator.Plugins.Drawers
             DrawRectoBackground(svg);
 
             //CMC7 with separator chars
-            string[] cmc7 = document.Fields["cmc7"].StringValue.Split(" ");
-            svg.DrawText($"{{{cmc7[0]} {{{cmc7[1]}}} {cmc7[2]}[", "cmc7", 6f, 74f, "CMC7", 4f, Color.Black);
+            string[] dataread = document.Fields.GetStringValue("dataread").Split(" ");
+            svg.DrawText($"{{{dataread[0]} {{{dataread[1]}}} {dataread[2]}[", "dataread", 6f, 74f, "CMC7", 4f, Color.Black);
             //RLMC Key
-            svg.DrawText($"({document.Fields["rlmc"].StringValue})", "rlmc", 163f, 62f, "Arial", 3f, Color.Black);
+            svg.DrawText($"({document.Fields.GetStringValue("rlmc")})", "rlmc", 163f, 62f, "Arial", 3f, Color.Black);
 
             //NumCheque
-            svg.DrawText($"N° {cmc7[0]}", "numcheque", 8f, 63f, "TimesNewRoman", 3f, Color.Black);
+            svg.DrawText($"N° {dataread[0]}", "numcheque", 8f, 63f, "TimesNewRoman", 3f, Color.Black);
 
             //Ocrb1
-            svg.DrawText($"{cmc7[0]}{cmc7[1]}", "ocrb1", 138f, 5f, "OCRB", 2.5f, Color.Black);
+            svg.DrawText($"{dataread[0]}{dataread[1]}", "ocrb1", 138f, 5f, "OCRB", 2.5f, Color.Black);
             //Ocrb2
-            svg.DrawText(cmc7[2], "ocrb2", 150.5f, 9f, "OCRB", 2.5f, Color.Black);
+            svg.DrawText(dataread[2], "ocrb2", 150.5f, 9f, "OCRB", 2.5f, Color.Black);
 
             //Bank Name
-            svg.DrawText(document.Fields["bank-name"].StringValue, "bank-name", 8f, 42.5f, "TimesNewRoman", 2f, Color.Black);
+            svg.DrawText(document.Fields.GetStringValueOrDefault("bank-name", "Default Bank Name"), "bank-name", 8f, 42.5f, "TimesNewRoman", 2f, Color.Black);
             //Bank Address
-            svg.DrawText(document.Fields["bank-address"].StringValue, "bank-address", 8f, 45f, "TimesNewRoman", 2f, Color.Black);
+            svg.DrawText(document.Fields.GetStringValueOrDefault("bank-address", string.Empty), "bank-address", 8f, 45f, "TimesNewRoman", 2f, Color.Black);
             //Bank ZipCode and City
-            svg.DrawText(document.Fields["bank-zip-city"].StringValue, "bank-zipcity", 8f, 47.5f, "TimesNewRoman", 2f, Color.Black);
+            svg.DrawText(document.Fields.GetStringValueOrDefault("bank-zip-city", string.Empty), "bank-zipcity", 8f, 47.5f, "TimesNewRoman", 2f, Color.Black);
             //Bank Phone
-            svg.DrawText($"TEL {document.Fields["bank-phone"].StringValue}", "bank-phone", 8f, 50f, "TimesNewRoman", 2f, Color.Black);
+            svg.DrawText($"TEL {document.Fields.GetStringValueOrDefault("bank-phone", string.Empty)}", "bank-phone", 8f, 50f, "TimesNewRoman", 2f, Color.Black);
 
             //Payor Name
-            svg.DrawText($"{document.Parent.Fields["payor-name"].StringValue.ToUpper()}", "payor-name", 61f, 42.5f, "TimesNewRoman", 2f, Color.Black);
+            svg.DrawText($"{document.Parent.Fields.GetStringValue("payor-name").ToUpper()}", "payor-name", 61f, 42.5f, "TimesNewRoman", 2f, Color.Black);
             //Payor Address
-            svg.DrawText(document.Parent.Fields["payor-address"].StringValue, "payor-address", 61f, 45f, "TimesNewRoman", 2f, Color.Black);
+            svg.DrawText(document.Parent.Fields.GetStringValue("payor-address"), "payor-address", 61f, 45f, "TimesNewRoman", 2f, Color.Black);
             //Payor ZipCode and City
-            svg.DrawText(document.Parent.Fields["payor-zip-city"].StringValue, "payor-zipcity", 61f, 47.5f, "TimesNewRoman", 2f, Color.Black);
+            svg.DrawText(document.Parent.Fields.GetStringValue("payor-zip-city"), "payor-zipcity", 61f, 47.5f, "TimesNewRoman", 2f, Color.Black);
 
             //Lar
-            var amountparts = document.Fields["amount"].StringValue.Split(",");
+            var amountparts = document.Fields.GetStringValue("amount").Split(",");
             string lar = $"{NumberToWords.Convert(int.Parse(amountparts[0]))} euros";
             if (amountparts.Length > 1)
                 lar += $" et {NumberToWords.Convert(int.Parse(amountparts[1]))} centimes";
             svg.DrawText(lar, "lar", 40f, 19.5f, "Arial", 3f, Color.Black);
 
             //Car
-            svg.DrawText($"{document.Fields["amount"].Value:F2} €", "car", 132f, 31f, "Arial", 3f, Color.Black);
+            svg.DrawText($"{document.Fields.GetValue("amount").Value:F2} €", "car", 132f, 31f, "Arial", 3f, Color.Black);
 
             //Payee
-            svg.DrawText($"{document.Fields["payee-name"].StringValue}", "payee", 10f, 32f, "Arial", 3f, Color.Black);
+            svg.DrawText($"{document.Fields.GetStringValue("payee-name")}", "payee", 10f, 32f, "Arial", 3f, Color.Black);
 
             //Place
-            svg.DrawText($"{string.Join(' ', document.Fields["place"].StringValue.Split(" ").Skip(1))}", "payee", 132f, 39.5f, "Arial", 2f, Color.Black);
+            svg.DrawText($"{string.Join(' ', document.Fields.GetStringValue("place").Split(" ").Skip(1))}", "payee", 132f, 39.5f, "Arial", 2f, Color.Black);
 
             //Date
-            svg.DrawText($"{document.Fields["date"].StringValue}", "date", 132f, 44f, "Arial", 2f, Color.Black);
+            svg.DrawText($"{document.Fields.GetStringValue("date")}", "date", 132f, 44f, "Arial", 2f, Color.Black);
 
             return svg;
         }
@@ -152,7 +152,7 @@ namespace OmniGenerator.Plugins.Drawers
             var svg = SvgExtensions.NewBlankSvg(Width, Height);
 
             svg.DrawText("N° compte : ", "deposit-account-title", 8f, 39f, "Arial", 5f, Color.Black);
-            svg.DrawText(document.Fields["deposit-account"].StringValue, "deposit-account", 40f, 39f, "Arial", 5f, Color.Black);
+            svg.DrawText(document.Fields.GetStringValue("deposit-account"), "deposit-account", 40f, 39f, "Arial", 5f, Color.Black);
 
             return svg;
         }

@@ -61,7 +61,7 @@ namespace OmniGenerator.Plugins.Packagers
                     .DistinctBy(d => d.Name);
 
                 foreach (var table in tables)
-                    yield return $"DELETE FROM {table.Name};";
+                    yield return $"TRUNCATE TABLE {table.Name};";
 
                 yield return string.Empty;
             }

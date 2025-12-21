@@ -12,7 +12,7 @@
   },
   {
     "$type": "regex",
-    "name": "cmc7",
+    "name": "dataread",
     "pattern": "\\d{7} \\d{9}908 \\d{12}"
   },
   {
@@ -23,7 +23,7 @@
   {
     "$type": "key",
     "name": "rlmc",
-    "dependent-upon": "cmc7",
+    "dependent-upon": "dataread",
     "key-type": "rlmc"
   },
   {

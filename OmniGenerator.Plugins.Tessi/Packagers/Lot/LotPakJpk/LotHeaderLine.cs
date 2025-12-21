@@ -82,7 +82,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         {
             Copyright = "ATHIC";
             Database = string.Empty;
-            Date = root.Fields.ContainsKey("seed-date") ? ((DateTime)(root.Fields["seed-date"].Value)).ToString("ddMMyyyy") : DateTime.Now.ToString("ddMMyyyy");
+            Date = root.Fields.ContainsKey("packet-date") ? ((DateTime)(root.Fields["packet-date"].Value)).ToString("ddMMyyyy") : DateTime.Now.ToString("ddMMyyyy");
             BranchID = root.Fields["code-cp"].StringValue;
             MachineID = root.Fields.ContainsKey("code-scanner") ? root.Fields["code-scanner"].StringValue : "001";
             ImagePath = "\\No\\Path\\Image";

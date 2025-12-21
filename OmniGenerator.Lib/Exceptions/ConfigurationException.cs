@@ -11,7 +11,7 @@ namespace OmniGenerator.Lib.Exceptions
     /// </summary>
     public class ConfigurationException : Exception
     {
-        public List<string> Errors { get; set; } = new List<string>();
+        public List<string> Errors { get; set; } = new();
 
         public ConfigurationException() { }
 

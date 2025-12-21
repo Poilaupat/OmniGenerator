@@ -210,6 +210,92 @@ namespace OmniGenerator.Test.Lib.Hierarchy
 
         #endregion
 
+        #region GetValue and GetStringValue Tests
+
+        [Test]
+        public void GetValue_ExistingField_ReturnsField()
+        {
+            // Arrange
+            var collection = new FieldCollection();
+            var field = new Field("TestField", "TestValue");
+            collection.Add(field);
+
+            // Act
+            var result = collection.GetValue("TestField");
+
+            // Assert
+            Assert.That(result.Name, Is.EqualTo("TestField"));
+            Assert.That(result.Value, Is.EqualTo("TestValue"));
+        }
+
+        [Test]
+        public void GetValue_NonExistingField_ThrowsFieldNotFoundException()
+        {
+            // Arrange
+            var collection = new FieldCollection();
+
+            // Act & Assert
+            var ex = Assert.Throws<OmniGenerator.Lib.Exceptions.FieldNotFoundException>(() => 
+                collection.GetValue("NonExistent"));
+            Assert.That(ex.Message, Does.Contain("NonExistent"));
+        }
+
+        [Test]
+        public void GetStringValue_ExistingField_ReturnsStringValue()
+        {
+            // Arrange
+            var collection = new FieldCollection();
+            collection.Add(new Field("TestField", "TestValue"));
+
+            // Act
+            var result = collection.GetStringValue("TestField");
+
+            // Assert
+            Assert.That(result, Is.EqualTo("TestValue"));
+        }
+
+        [Test]
+        public void GetStringValue_ExistingFieldWithNumericValue_ReturnsConvertedString()
+        {
+            // Arrange
+            var collection = new FieldCollection();
+            collection.Add(new Field("NumericField", 42));
+
+            // Act
+            var result = collection.GetStringValue("NumericField");
+
+            // Assert
+            Assert.That(result, Is.EqualTo("42"));
+        }
+
+        [Test]
+        public void GetStringValue_NonExistingField_ThrowsFieldNotFoundException()
+        {
+            // Arrange
+            var collection = new FieldCollection();
+
+            // Act & Assert
+            var ex = Assert.Throws<OmniGenerator.Lib.Exceptions.FieldNotFoundException>(() => 
+                collection.GetStringValue("NonExistent"));
+            Assert.That(ex.Message, Does.Contain("NonExistent"));
+        }
+
+        [Test]
+        public void GetStringValue_FieldWithNullValue_ReturnsEmptyString()
+        {
+            // Arrange
+            var collection = new FieldCollection();
+            collection.Add(new Field("NullField", null!));
+
+            // Act
+            var result = collection.GetStringValue("NullField");
+
+            // Assert
+            Assert.That(result, Is.EqualTo(string.Empty));
+        }
+
+        #endregion
+
         #region GetStringValueOrDefault Tests
 
         [Test]

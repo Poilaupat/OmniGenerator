@@ -9,37 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniGenerator.Lib", "OmniGe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniGenerator.Test", "OmniGenerator.Test\OmniGenerator.Test.csproj", "{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ParamFiles", "ParamFiles", "{D1F10929-6948-4062-906D-D4E9F7C4F731}"
-	ProjectSection(SolutionItems) = preProject
-		ParamFiles\param-debug.json = ParamFiles\param-debug.json
-		ParamFiles\param-lists.json = ParamFiles\param-lists.json
-		ParamFiles\param-sql.json = ParamFiles\param-sql.json
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniGenerator.Plugins.Tessi", "OmniGenerator.Plugins.Tessi\OmniGenerator.Plugins.Tessi.csproj", "{EC36842D-000A-4273-B98E-CC3BFA2A9B97}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniGenerator.Plugins", "OmniGenerator.Plugins\OmniGenerator.Plugins.csproj", "{0D00A240-F9F5-430D-B93D-7BF948038245}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LotPakJpk", "LotPakJpk", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-	ProjectSection(SolutionItems) = preProject
-		ParamFiles\LotPakJpk\fields-slip.json = ParamFiles\LotPakJpk\fields-slip.json
-		ParamFiles\LotPakJpk\param-lotpakjpk.json = ParamFiles\LotPakJpk\param-lotpakjpk.json
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Remettant", "Remettant", "{1030305D-4280-4C24-8CBF-4ADA60201B4C}"
-	ProjectSection(SolutionItems) = preProject
-		ParamFiles\Remettant\fields-cheque.json = ParamFiles\Remettant\fields-cheque.json
-		ParamFiles\Remettant\fields-payment.json = ParamFiles\Remettant\fields-payment.json
-		ParamFiles\Remettant\fields-talon-optique.json = ParamFiles\Remettant\fields-talon-optique.json
-		ParamFiles\Remettant\param.json = ParamFiles\Remettant\param.json
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Compliance", "Compliance", "{A5DBC654-AEB7-4437-83D0-BA31E433B025}"
-	ProjectSection(SolutionItems) = preProject
-		ParamFiles\Compliance\param-compliance-eligibility.json = ParamFiles\Compliance\param-compliance-eligibility.json
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmniGenerator.Plugins.Tessi.Test", "OmniGenerator.Plugins.Tessi.Test\OmniGenerator.Plugins.Tessi.Test.csproj", "{A90C47FD-C559-4B24-BF7D-6DEF330AAB69}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Assets", "Assets\Assets.shproj", "{B4C82661-B68F-481D-BF68-68C4F4948AA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,12 +51,10 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {D1F10929-6948-4062-906D-D4E9F7C4F731}
-		{1030305D-4280-4C24-8CBF-4ADA60201B4C} = {D1F10929-6948-4062-906D-D4E9F7C4F731}
-		{A5DBC654-AEB7-4437-83D0-BA31E433B025} = {D1F10929-6948-4062-906D-D4E9F7C4F731}
-	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B380405C-EC37-4774-9865-2308ECD6113F}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Assets\Assets.projitems*{b4c82661-b68f-481d-bf68-68c4f4948aa0}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

@@ -28,7 +28,7 @@ namespace OmniGenerator.Lib.Configuration
 
                 if (!string.IsNullOrWhiteSpace(config.Hierarchy.FieldConfigurationFile))
                 {
-                    var rootfields = await ConfigurationReader.DeserializeAsync<List<AbstractFieldConfigurationBase>>(directory, config.Hierarchy.FieldConfigurationFile);
+                    var rootfields = await ConfigurationReader.DeserializeAsync<List<AbstractFieldConfigurationBase>>(directory ?? string.Empty, config.Hierarchy.FieldConfigurationFile);
                     config.Hierarchy.Fields.Merge(rootfields);
                 }
 
@@ -82,15 +82,20 @@ namespace OmniGenerator.Lib.Configuration
             }
         }
 
-        private static async Task<T> DeserializeAsync<T>(string? directory, string filename)
+        private static async Task<T> DeserializeAsync<T>(string directory, string filename)
         {
-            if (Directory.Exists(directory))
+            if(Path.IsPathRooted(filename) && File.Exists(filename))
             {
-                string filepath = Path.Combine(directory, filename);
+                return await DeserializeAsync<T>(filename);
+            }
+
+            string filepath = Path.Combine(directory, filename);
+            if (File.Exists(filepath))
+            {
                 return await DeserializeAsync<T>(filepath);
             }
 
-            throw new ConfigurationException($"The directory {directory} was not found.");
+            throw new ConfigurationException($"The file {filename} was not found.");
         }
 
         public static void CheckConfiguration(OmniGeneratorConfiguration config)

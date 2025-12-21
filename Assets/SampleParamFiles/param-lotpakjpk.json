@@ -29,10 +29,16 @@
         "increment": 1
       },
       {
+        "$type": "date",
+        "name": "packet-date",
+        "day-diff-min": -2,
+        "day-diff-max": 0
+      },
+      {
         "$type": "composite",
         "name": "packet-name",
         "dependent-upon": "deposit-bank-code,deposit-agency-code,scanner-code,scanner-serial-number,packet-number",
-        "format": "{{deposit-bank-code}}{{deposit-agency-code}}{{scanner-code}}{{scanner-serial-number}}{{packet-number:0000}}"
+        "format": "{{packet-date:}}{{deposit-bank-code}}{{deposit-agency-code}}{{scanner-code}}{{scanner-serial-number}}{{packet-number:0000}}"
       }
     ],
     "root": {

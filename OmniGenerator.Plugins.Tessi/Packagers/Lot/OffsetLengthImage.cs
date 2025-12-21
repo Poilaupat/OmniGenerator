@@ -16,7 +16,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot
         /// <summary>
         /// Gets or sets the image data as a byte array.
         /// </summary>
-        public byte[] Image { get; set; } = Array.Empty<byte>();
+        public byte[] Image { get; set; } = [];
 
         /// <summary>
         /// Gets the offset of the image in the package.

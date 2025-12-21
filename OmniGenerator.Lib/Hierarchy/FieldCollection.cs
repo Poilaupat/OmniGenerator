@@ -1,3 +1,4 @@
+using OmniGenerator.Lib.Exceptions;
 using System.Collections;
 using System.Diagnostics;
 using System.Dynamic;
@@ -74,6 +75,33 @@ namespace OmniGenerator.Lib.Hierarchy
             }
             stringValue = null;
             return false;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Field"/> with the specified name.
+        /// </summary>
+        /// <param name="key">The field name to locate.</param>
+        /// <returns>The <see cref="Field"/> instance.</returns>
+        /// <exception cref="FieldNotFoundException">Thrown when the field name does not exist in the collection.</exception>
+        public Field GetValue(string key)
+        {
+            if (!_fields.TryGetValue(key, out Field value))
+                throw new FieldNotFoundException($"The field '{key}' was not found in the collection.");
+
+            return value;
+        }
+
+        /// <summary>
+        /// Gets the string value of a field by name.
+        /// </summary>
+        /// <param name="key">The field name to locate.</param>
+        /// <returns>The string value of the field.</returns>
+        /// <exception cref="FieldNotFoundException">Thrown when the field name does not exist in the collection.</exception>
+        public string GetStringValue(string key)
+        {
+            var value = GetValue(key);
+
+            return value.StringValue;
         }
 
         /// <summary>
