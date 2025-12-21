@@ -1,10 +1,12 @@
 ﻿using Autofac;
+using DotLiquid;
 using Microsoft.Extensions.Configuration;
 using OmniGenerator.Lib.Drawers;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
+using OmniGenerator.Lib.Liquid;
 using OmniGenerator.Lib.Mapping;
 
 namespace OmniGenerator.Lib.Autofac
@@ -16,6 +18,7 @@ namespace OmniGenerator.Lib.Autofac
     internal class OmniGeneratorModule : Module
     {
         private readonly IConfiguration _configuration;
+        private static bool _liquidFiltersRegistered = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OmniGeneratorModule"/> class.
@@ -24,6 +27,21 @@ namespace OmniGenerator.Lib.Autofac
         public OmniGeneratorModule(IConfiguration configuration)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            
+            // Register DotLiquid custom filters once
+            RegisterLiquidFilters();
+        }
+
+        /// <summary>
+        /// Registers custom DotLiquid filters for use in composite field templates.
+        /// This method is called once during module initialization.
+        /// </summary>
+        private static void RegisterLiquidFilters()
+        {
+            if (_liquidFiltersRegistered) return;
+            
+            Template.RegisterFilter(typeof(LiquidCustomFilters));
+            _liquidFiltersRegistered = true;
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿using Mustache;
+﻿using DotLiquid;
 using OmniGenerator.Lib.Hierarchy;
 
 namespace OmniGenerator.Lib.Generators.Fields
@@ -11,8 +11,8 @@ namespace OmniGenerator.Lib.Generators.Fields
     {
         /// <summary>
         /// Gets or sets the formatting pattern for the composite field.
-        /// The pattern must follow the Mustache for C# syntax.
-        /// See https://danielescipioni.github.io/Mustache/ for more details.
+        /// The pattern must follow the Liquid for C# (DotLiquid) syntax.
+        /// See https://github.com/dotliquid/dotliquid for more details.
         /// </summary>
         public string Format { get; set; }
 
@@ -29,17 +29,14 @@ namespace OmniGenerator.Lib.Generators.Fields
         }
 
         /// <summary>
-        /// Generates the composite field value by rendering the Mustache template with the current field dependencies.
+        /// Generates the composite field value by rendering the Liquid template with the current field dependencies.
         /// </summary>
         /// <returns>The generated composite string value.</returns>
         protected override string GenerateValue()
         {
             var data = GeneratorDependencies.ToDictionary(x => x.Name.Replace("-", "_"), y => y.LastValue);
-            FormatCompiler compiler = new FormatCompiler();
-            Generator generator = compiler.Compile(Format);
-            string result = generator.Render(data);
-
-            return result;
+            Template template= Template.Parse(Format);
+            return template.Render(Hash.FromDictionary(data));
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Mustache;
-using OmniGenerator.Lib.Generators.Fields;
+﻿using OmniGenerator.Lib.Generators.Fields;
 using OmniGenerator.Lib.Interfaces.FieldGenerators;
 using System;
 using System.Collections.Generic;
@@ -56,7 +55,7 @@ namespace OmniGenerator.Lib.Generators
         /// <summary>
         /// Sets the Dependencies (from dependency names) of <see cref="AbstractFieldGeneratorDependant{T}"/> generators in the provided list of field generators
         /// </summary>
-        /// <param name="generatorsByElements">The list of field generators</param>
+        /// <param name="generators">The list of field generators</param>
         /// <returns>The enriched list</returns>
         public static IEnumerable<IFieldGenerator> SetCollateralDependencies(this IEnumerable<IFieldGenerator> generators)
         {
