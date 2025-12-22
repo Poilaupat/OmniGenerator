@@ -20,7 +20,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         {
             _resolution = imageRenderingResolution;
 
-            string packagename = $"{DateTime.Now:yyMMddHHmmss}{root.Fields.GetStringValueOrDefault("packet-name", "DefaultName")}";
+            string packagename = root.Fields.GetStringValueOrDefault("packet-name", "DefaultName");
 
             await using var lot = new StreamWriter(new FileStream(Path.Combine(basepath, $"{packagename}.lot"), FileMode.Create));
             await using var pak = new BinaryWriter(new FileStream(Path.Combine(basepath, $"{packagename}.pak"), FileMode.Create));
@@ -28,12 +28,11 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
 
             await WriteHeaderAsync(root, root.Fields.GetStringValueOrDefault("packet-number", "0001"), lot);
 
-            var docs = root.GetDocuments();
             int bwOffset = 0, gsOffset = 0;
-            for(int i = 0; i < docs.Count(); i++)
+            int index = 1;
+            foreach(var document in root.GetDocuments())
             {
-                var doc = docs.ElementAt(i);
-                var (newBwOffset, newGsOffset) = await WriteDocumentAsync(i, doc, lot, pak, jpk, bwOffset, gsOffset);
+                var (newBwOffset, newGsOffset) = await WriteBodyAsync(index++, document, root, lot, pak, jpk, bwOffset, gsOffset);
                 bwOffset = newBwOffset;
                 gsOffset = newGsOffset;
             }
@@ -48,9 +47,10 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
             return;
         }
 
-        public async Task<(int newBwOffset, int newGsOffset)> WriteDocumentAsync(
+        public async Task<(int newBwOffset, int newGsOffset)> WriteBodyAsync(
             int index,
             Document doc,
+            Root root,
             StreamWriter lot,
             BinaryWriter pak,
             BinaryWriter jpk,
@@ -88,6 +88,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
             LotBodyLine body = new(
                 index,
                 doc,
+                root,
                 bwRecto,
                 bwVerso,
                 gsRecto,

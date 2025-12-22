@@ -83,12 +83,12 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
             Copyright = "ATHIC";
             Database = string.Empty;
             Date = root.Fields.ContainsKey("packet-date") ? ((DateTime)(root.Fields["packet-date"].Value)).ToString("ddMMyyyy") : DateTime.Now.ToString("ddMMyyyy");
-            BranchID = root.Fields["code-cp"].StringValue;
-            MachineID = root.Fields.ContainsKey("code-scanner") ? root.Fields["code-scanner"].StringValue : "001";
+            BranchID = root.Fields["capture-point-code"].StringValue;
+            MachineID = root.Fields.ContainsKey("scanner-code") ? root.Fields["scanner-code"].StringValue : "001";
             ImagePath = "\\No\\Path\\Image";
             SeedVersion = "Format A V4.10";
             AppVersion = "OG Tessi Plugin V0.X";
-            BranchOrigID = root.Fields["code-ou"].StringValue;
+            BranchOrigID = root.Fields["organization-unit-code"].StringValue;
             OperationDate = Date;
             UserName = "OmniGenerator";
             SignatureID = string.Empty;
@@ -98,7 +98,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
             DotPerMillimeterVersoJpk = string.Empty;
             FileTimeStamp = DateTime.Now.ToString("yyMMddHHmmss");
             Free = string.Empty;
-            BankID = root.Fields["code-org"].StringValue;
+            BankID = root.Fields["organization-code"].StringValue;
             SerialNumber = root.Fields.ContainsKey("scanner-serial-number") ? root.Fields["scanner-serial-number"].StringValue : "123456789";
             SequenceNumber = packetNumber;
             Identifiant = string.Empty;

@@ -4,12 +4,17 @@
     "fields": [
       {
         "$type": "constant",
-        "name": "deposit-bank-code",
+        "name": "organization-code",
         "value": "16038"
       },
       {
         "$type": "constant",
-        "name": "deposit-agency-code",
+        "name": "organization-unit-code",
+        "value": "16001"
+      },
+      {
+        "$type": "constant",
+        "name": "capture-point-code",
         "value": "16001"
       },
       {
@@ -37,17 +42,55 @@
       {
         "$type": "composite",
         "name": "packet-name",
-        "dependent-upon": "deposit-bank-code,deposit-agency-code,scanner-code,scanner-serial-number,packet-number",
-        "format": "{{packet-date:}}{{deposit-bank-code}}{{deposit-agency-code}}{{scanner-code}}{{scanner-serial-number}}{{packet-number:0000}}"
+        "dependent-upon": "packet-date,organization-code,organization-unit-code,scanner-code,scanner-serial-number,packet-number",
+        "format": "{{packet-date | format:\"yyMMddHHmmss\"}}{{organization-code}}{{organization-unit-code}}{{scanner-code}}{{scanner-serial-number}}{{packet-number | pad_left:4 }}"
       }
     ],
     "root": {
       "$type": "group",
       "name": "remittance",
-      "min-occurs": 10,
-      "max-occurs": 10,
-      "fields": [],
-      "elements": []
+      "min-occurs": 1,
+      "max-occurs": 1,
+      "fields": [
+        {
+          "$type": "aggregate",
+          "name": "total-amount",
+          "aggregate-type": "Sum",
+          "scope": "DirectChildren",
+          "target-element": "cheque",
+          "dependent-upon": "amount"
+
+        },
+        {
+          "$type": "aggregate",
+          "name": "total-cheque",
+          "aggregate-type": "Count",
+          "scope": "DirectChildren",
+          "target-element": "cheque",
+          "dependent-upon": ""
+
+        }
+      ],
+      "elements": [
+        {
+          "$type": "document",
+          "drawer": "",
+          "name": "slip",
+          "min-occurs": 1,
+          "max-occurs": 1,
+          "field-configuration-file": "DocsAndGroups\\fields-slip.json",
+          "fields": []
+        },
+        {
+          "$type": "document",
+          "drawer": "drawer.omni.cheque",
+          "name": "cheque",
+          "min-occurs": 1,
+          "max-occurs": 3,
+          "field-configuration-file": "DocsAndGroups\\fields-cheque.json",
+          "fields": []
+        }
+      ]
     }
   }
 }

@@ -13,7 +13,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         [FixedLengthLineField(3, 5, '0', PadDirection.Left)]
         public string RefEndos { get; } = string.Empty;
 
-        [FixedLengthLineField(10, 64, ' ', PadDirection.Right)]
+        [FixedLengthLineField(9, 64, ' ', PadDirection.Right)]
         public string Dataread { get; } = string.Empty;
         
         [FixedLengthLineField(74, 12, ' ', PadDirection.Right)]
@@ -46,7 +46,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         [FixedLengthLineField(157, 5, '0', PadDirection.Left)]
         public string BankCode { get; } = string.Empty;
 
-        [FixedLengthLineField(165, 3, '0', PadDirection.Left)]
+        [FixedLengthLineField(163, 3, '0', PadDirection.Left)]
         public string ProcessCode { get; } = string.Empty;
 
         [FixedLengthLineField(167, 1, '0', PadDirection.Left)]
@@ -85,7 +85,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         [FixedLengthLineField(286, 10, '0', PadDirection.Left)]
         public string OffsetVersoPak { get; } = string.Empty;
 
-        [FixedLengthLineField(299, 9, '0', PadDirection.Left)]
+        [FixedLengthLineField(297, 9, '0', PadDirection.Left)]
         public string LengthRectoJpk { get; } = string.Empty;
 
         [FixedLengthLineField(307, 10, '0', PadDirection.Left)]
@@ -94,7 +94,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         [FixedLengthLineField(318, 9, '0', PadDirection.Left)]
         public string LengthVersoJpk { get; } = string.Empty;
 
-        [FixedLengthLineField(329, 10, '0', PadDirection.Left)]
+        [FixedLengthLineField(328, 10, '0', PadDirection.Left)]
         public string OffsetVersoJpk { get; } = string.Empty;
 
         [FixedLengthLineField(339, 5, '0', PadDirection.Left)]
@@ -109,10 +109,9 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         [FixedLengthLineField(354, 10, '0', PadDirection.Left)]
         public string Amount { get; } = string.Empty;
 
-        public LotBodyLine(int index, Document document, OffsetLengthImage bwRecto, OffsetLengthImage bwVerso, OffsetLengthImage gsRecto, OffsetLengthImage gsVerso)
+        public LotBodyLine(int index, Document document, Root root, OffsetLengthImage bwRecto, OffsetLengthImage bwVerso, OffsetLengthImage gsRecto, OffsetLengthImage gsVerso)
         {
             var remittance = document.Parent;
-            var root = remittance.Parent;
 
             DocType = document.Fields.GetStringValue("encline");
             RefEndos = index.ToString();
@@ -126,7 +125,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
             TimeStamp = DateTime.Now.TimeOfDay.TotalSeconds.ToString();
             RefDoc = document.Fields.GetStringValueOrDefault("ref-doc", string.Empty);
             Signature = document.Fields.GetStringValueOrDefault("signature", "---SIGNATURE---");
-            BankCode = root.Fields.GetStringValueOrDefault("bank-code", "00001");
+            BankCode = root.Fields.GetStringValueOrDefault("organization-code", "00001");
             ProcessCode = root.Fields.GetStringValueOrDefault("process-code", "000");
             Reconciliation = root.Fields.GetStringValueOrDefault("reconciliation", "0");
             Status = document.Fields.GetStringValueOrDefault("status", "0");

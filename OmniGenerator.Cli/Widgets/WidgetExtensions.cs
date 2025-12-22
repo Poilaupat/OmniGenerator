@@ -25,9 +25,7 @@ namespace OmniGenerator.Cli.Widgets
             grid.AddRow(new Markup("[blue]Fields generated[/]"), new Markup($"{progress.CountField}"));
 
             var panel = new Panel(grid)
-            .RoundedBorder()
-            .Header(new PanelHeader("Data generation", Justify.Left))
-            .Expand();
+                .ConfigurePanel("Data generation");
 
             return panel;
         }
@@ -36,10 +34,7 @@ namespace OmniGenerator.Cli.Widgets
         {
             var text = new Markup($"[blue]Achieved :[/] {progress.Percentage}%");
 
-            var panel = new Panel(text)
-            .RoundedBorder()
-            .Header(new PanelHeader("Vector image generation", Justify.Left))
-            .Expand();
+            var panel = new Panel(text).ConfigurePanel("Vector image generation");
 
             return panel;
         }

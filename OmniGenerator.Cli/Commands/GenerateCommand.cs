@@ -104,14 +104,21 @@ namespace OmniGenerator.Cli.Commands
                 .Overflow(VerticalOverflow.Crop)
                 .StartAsync(async ldc =>
                 {
-                    // Step 1: Data hierarchy generation
-                    var root = await BuildHierarchyAsync(ldc, settings, configuration);
+                    try
+                    {
+                        // Step 1: Data hierarchy generation
+                        var root = await BuildHierarchyAsync(ldc, settings, configuration);
 
-                    // Step 2: Vector images generation
-                    await DrawImagesAsync(ldc, settings, root);
+                        // Step 2: Vector images generation
+                        await DrawImagesAsync(ldc, settings, root);
 
-                    // Step 3: Output packaging
-                     await PackageAsync(settings, root, configuration);
+                        // Step 3: Output packaging
+                        await PackageAsync(settings, root, configuration);
+                    }
+                    catch (Exception ex)
+                    {
+                        AnsiConsole.MarkupLineInterpolated($"[red]ERROR : {ex.Message}[/]");
+                    }
                 });
         }
 

@@ -52,11 +52,11 @@ namespace OmniGenerator.Plugins.Drawers
             svg.DrawText($"TEL {document.Fields.GetStringValueOrDefault("bank-phone", string.Empty)}", "bank-phone", 8f, 50f, "TimesNewRoman", 2f, Color.Black);
 
             //Payor Name
-            svg.DrawText($"{document.Parent.Fields.GetStringValue("payor-name").ToUpper()}", "payor-name", 61f, 42.5f, "TimesNewRoman", 2f, Color.Black);
+            svg.DrawText($"{document.Fields.GetStringValue("payor-name").ToUpper()}", "payor-name", 61f, 42.5f, "TimesNewRoman", 2f, Color.Black);
             //Payor Address
-            svg.DrawText(document.Parent.Fields.GetStringValue("payor-address"), "payor-address", 61f, 45f, "TimesNewRoman", 2f, Color.Black);
+            svg.DrawText(document.Fields.GetStringValue("payor-address"), "payor-address", 61f, 45f, "TimesNewRoman", 2f, Color.Black);
             //Payor ZipCode and City
-            svg.DrawText(document.Parent.Fields.GetStringValue("payor-zip-city"), "payor-zipcity", 61f, 47.5f, "TimesNewRoman", 2f, Color.Black);
+            svg.DrawText(document.Fields.GetStringValue("payor-zip-city"), "payor-zipcity", 61f, 47.5f, "TimesNewRoman", 2f, Color.Black);
 
             //Lar
             var amountparts = document.Fields.GetStringValue("amount").Split(",");
