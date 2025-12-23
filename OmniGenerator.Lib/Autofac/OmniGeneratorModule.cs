@@ -8,6 +8,7 @@ using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
 using OmniGenerator.Lib.Liquid;
 using OmniGenerator.Lib.Mapping;
+using OmniGenerator.Lib.Orchestration;
 
 namespace OmniGenerator.Lib.Autofac
 {
@@ -60,6 +61,7 @@ namespace OmniGenerator.Lib.Autofac
             builder.RegisterType<HierarchyBuilder>().As<IHierarchyBuilder>().InstancePerLifetimeScope();
             builder.RegisterType<DocumentDrawerManager>().As<IDocumentDrawerManager>().InstancePerLifetimeScope();
             builder.RegisterType<PluginService>().As<IPluginService>().InstancePerLifetimeScope();
+            builder.RegisterType<GenerationOrchestrator>().As<IGenerationOrchestrator>().InstancePerLifetimeScope();
 
             // Register open generic type for progress reporting
             builder.RegisterGeneric(typeof(Progress<>)).As(typeof(IProgress<>)).InstancePerLifetimeScope();
