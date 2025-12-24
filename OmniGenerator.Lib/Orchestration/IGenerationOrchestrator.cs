@@ -1,13 +1,11 @@
 using OmniGenerator.Lib.Configuration;
 using OmniGenerator.Lib.Hierarchy;
+using OmniGenerator.Lib.Interfaces.Infrastructure;
 
 namespace OmniGenerator.Lib.Orchestration
 {
-    public interface IGenerationOrchestrator
+    public interface IGenerationOrchestrator : INotifier<GenerationProgress>
     {
-        IProgress<GenerationProgress>? Progress { get; set; }
-        int ProgressResolution { get; set; }
-
         Task<Root> ExecuteAsync(
             OmniGeneratorConfiguration configuration,
             string outputFolderPath,

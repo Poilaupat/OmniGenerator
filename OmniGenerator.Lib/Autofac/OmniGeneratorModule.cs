@@ -64,10 +64,18 @@ namespace OmniGenerator.Lib.Autofac
             builder.RegisterType<GenerationOrchestrator>().As<IGenerationOrchestrator>().InstancePerLifetimeScope();
 
             // Register open generic type for progress reporting
-            builder.RegisterGeneric(typeof(Progress<>)).As(typeof(IProgress<>)).InstancePerLifetimeScope();
+            //builder.RegisterGeneric(typeof(Progress<>)).As(typeof(IProgress<>)).InstancePerLifetimeScope();
+            builder.RegisterGeneric(typeof(Notifier<>))
+                .WithParameters(new[]
+                {
+                    new NamedParameter("resolution", _configuration.GetValue<int>("AppSettings:progress-resolution")),
+                    new NamedParameter("isEnabled", true)
+                })
+                .InstancePerLifetimeScope();
 
             // Register concrete progress report type
             builder.RegisterType<HierarchyBuilderProgress>().InstancePerDependency();
+            builder.RegisterType<DocumentDrawerManagerProgress>().InstancePerDependency();
         }
     }
 }

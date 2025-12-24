@@ -8,7 +8,7 @@ namespace OmniGenerator.Lib.Interfaces
     /// <summary>
     /// Defines a contract for building a document generation hierarchy represented by a <see cref="Root"/> object.
     /// </summary>
-    public interface IHierarchyBuilder : IProgressReporter<HierarchyBuilderProgress>
+    public interface IHierarchyBuilder : INotifier<HierarchyBuilderProgress>
     {
         /// <summary>
         /// Asynchronously builds a <see cref="Root"/> hierarchy based on the provided generator configuration.

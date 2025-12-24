@@ -7,7 +7,7 @@ namespace OmniGenerator.Lib.Interfaces
     /// <summary>
     /// The interface that defines objects responsible of image generation
     /// </summary>
-    public interface IDocumentDrawerManager : IProgressReporter<DocumentDrawerManagerProgress>
+    public interface IDocumentDrawerManager : INotifier<DocumentDrawerManagerProgress>
     {
         /// <summary>
         /// Generates all the images of the documents of a root

@@ -4,6 +4,8 @@ using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Generators;
 using OmniGenerator.Lib.Tools;
+using OmniGenerator.Lib.Infrastructure;
+using OmniGenerator.Lib.Interfaces.Infrastructure;
 
 /// <summary>
 /// Provides functionality to build a document generation hierarchy (a <see cref="Root"/>)
@@ -11,16 +13,6 @@ using OmniGenerator.Lib.Tools;
 /// </summary>
 internal sealed class HierarchyBuilder : IHierarchyBuilder
 {
-    #region Interface properties
-
-    /// <inheritdoc />
-    public IProgress<HierarchyBuilderProgress>? Progress { get; set; }
-
-    /// <inheritdoc />
-    public int ProgressResolution { get; set; }
-
-    #endregion
-
     private readonly IFieldMapper _mapper;
     private readonly Random _random;
     private DateTime _lastNotification = DateTime.Now;
@@ -30,16 +22,19 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
     private long _countProcessedGroup = 0;
     private long _countField = 0;
 
+    public Notifier<HierarchyBuilderProgress> Notifier { get; }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="HierarchyBuilder"/> class.
     /// </summary>
     /// <param name="mapper">
     /// An instance of <see cref="IFieldMapper"/> used to map field configurations to field generators.
     /// </param>
-    public HierarchyBuilder(IFieldMapper mapper)
+    public HierarchyBuilder(IFieldMapper mapper, Notifier<HierarchyBuilderProgress> notifier)
     {
         _mapper = mapper;
         _random = new Random();
+        Notifier = notifier;
     }
 
     /// <summary>
@@ -62,7 +57,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
             root.AddFields(fields);
         }
 
-         NotifyProgress(force: true);
+        Notifier.SendNotification(GetHierarchyBuilderProgress());
         return await Task.FromResult(root);
     }
 
@@ -96,7 +91,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
             Interlocked.Add(ref _countField, group.Fields.Count);
             groups.Enqueue(group);
 
-            NotifyProgress();
+            Notifier.SendNotification(GetHierarchyBuilderProgress());
         });
 
         return groups.ToArray();
@@ -123,7 +118,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
             Interlocked.Add(ref _countField, document.Fields.Count);
             documents.Enqueue(document);
 
-            NotifyProgress();
+            Notifier.SendNotification(GetHierarchyBuilderProgress());
         });
 
         return documents.ToArray();
@@ -141,26 +136,15 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
         return Math.Max(_random.Next(minOccurs, maxOccurs + 1), 0);
     }
 
-    /// <summary>
-    /// Reports the current progress if the configured time interval has passed or if forced.
-    /// </summary>
-    /// <param name="force">Whether to force a progress update regardless of interval.</param>
-    private void NotifyProgress(bool force = false)
+    private HierarchyBuilderProgress GetHierarchyBuilderProgress()
     {
-        var now = DateTime.Now;
-        if (Progress is not null &&
-            (force || (now - _lastNotification).TotalMilliseconds >= ProgressResolution))
+        return new HierarchyBuilderProgress()
         {
-            Progress.Report(new HierarchyBuilderProgress()
-            {
-                CountField = Interlocked.Read(ref _countField),
-                CountGroup = Interlocked.Read(ref _countGroup),
-                CountDocument = Interlocked.Read(ref _countDoc),
-                CountProcessedGroup = Interlocked.Read(ref _countProcessedGroup),
-                CountProcessedDocument = Interlocked.Read(ref _countProcessedDoc),
-            });
-
-            _lastNotification = now;
-        }
+            CountField = Interlocked.Read(ref _countField),
+            CountGroup = Interlocked.Read(ref _countGroup),
+            CountDocument = Interlocked.Read(ref _countDoc),
+            CountProcessedGroup = Interlocked.Read(ref _countProcessedGroup),
+            CountProcessedDocument = Interlocked.Read(ref _countProcessedDoc),
+        };
     }
 }

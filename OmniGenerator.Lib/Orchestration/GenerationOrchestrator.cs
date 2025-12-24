@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using OmniGenerator.Lib.Configuration;
 using OmniGenerator.Lib.Drawers;
 using OmniGenerator.Lib.Hierarchy;
+using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
 
@@ -14,19 +15,22 @@ namespace OmniGenerator.Lib.Orchestration
         private readonly IDocumentDrawerManager _imageComposerProcessor;
         private readonly ILogger<GenerationOrchestrator> _logger;
 
-        public IProgress<GenerationProgress>? Progress { get; set; }
-        public int ProgressResolution { get; set; } = 1000;
+        public Notifier<GenerationProgress> Notifier { get; }
 
         public GenerationOrchestrator(
             IPluginService pluginService,
             IHierarchyBuilder hierarchyBuilder,
             IDocumentDrawerManager imageComposerProcessor,
+            Notifier<GenerationProgress> notifier,
             ILogger<GenerationOrchestrator> logger)
         {
             _pluginService = pluginService;
             _hierarchyBuilder = hierarchyBuilder;
             _imageComposerProcessor = imageComposerProcessor;
             _logger = logger;
+
+            Notifier = notifier;
+            Notifier.UseRegulation = true;
         }
 
         public async Task<Root> ExecuteAsync(
@@ -45,24 +49,28 @@ namespace OmniGenerator.Lib.Orchestration
             OmniGeneratorConfiguration configuration,
             CancellationToken cancellationToken)
         {
-            ReportProgress(GenerationStep.Hierarchy, StepStatus.Processing);
+            ReportProgress(GenerationStep.Hierarchy, StepStatus.Processing, force: true);
+
+            HierarchyBuilderProgress? lastProgress = null;
 
             try
             {
-                _hierarchyBuilder.ProgressResolution = ProgressResolution;
-                _hierarchyBuilder.Progress = new Progress<HierarchyBuilderProgress>(progress =>
+                _hierarchyBuilder.Notifier.Progress = new Progress<HierarchyBuilderProgress>(progress =>
                 {
+                    lastProgress = progress;
                     ReportProgress(GenerationStep.Hierarchy, StepStatus.Processing, progress);
                 });
 
                 var root = await _hierarchyBuilder.BuildAsync(configuration);
-                ReportProgress(GenerationStep.Hierarchy, StepStatus.Succeeded);
+                
+                // Report final progress with Succeeded status
+                ReportProgress(GenerationStep.Hierarchy, StepStatus.Succeeded, lastProgress, force: true);
                 return root;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while building the hierarchy.");
-                ReportProgress(GenerationStep.Hierarchy, StepStatus.Failed, error: ex);
+                ReportProgress(GenerationStep.Hierarchy, StepStatus.Failed, error: ex, force: true);
                 throw;
             }
         }
@@ -71,27 +79,32 @@ namespace OmniGenerator.Lib.Orchestration
         {
             if (_imageComposerProcessor is null || root.GetDocuments().All(d => string.IsNullOrWhiteSpace(d.ImageComposer)))
             {
-                ReportProgress(GenerationStep.Images, StepStatus.Skipped);
+                ReportProgress(GenerationStep.Images, StepStatus.Skipped, force: true);
                 return;
             }
 
-            ReportProgress(GenerationStep.Images, StepStatus.Processing);
+            ReportProgress(GenerationStep.Images, StepStatus.Processing, force: true);
+
+            DocumentDrawerManagerProgress? lastProgress = null;
 
             try
             {
-                _imageComposerProcessor.ProgressResolution = ProgressResolution;
-                _imageComposerProcessor.Progress = new Progress<DocumentDrawerManagerProgress>(progress =>
+                //_imageComposerProcessor.ProgressResolution = ProgressResolution;
+                _imageComposerProcessor.Notifier.Progress = new Progress<DocumentDrawerManagerProgress>(progress =>
                 {
+                    lastProgress = progress;
                     ReportProgress(GenerationStep.Images, StepStatus.Processing, progress);
                 });
 
                 await _imageComposerProcessor.DrawImagesAsync(root);
-                ReportProgress(GenerationStep.Images, StepStatus.Succeeded);
+                
+                // Report final progress with Succeeded status
+                ReportProgress(GenerationStep.Images, StepStatus.Succeeded, lastProgress, force: true);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while drawing images.");
-                ReportProgress(GenerationStep.Images, StepStatus.Failed, error: ex);
+                ReportProgress(GenerationStep.Images, StepStatus.Failed, error: ex, force: true);
                 throw;
             }
         }
@@ -105,34 +118,34 @@ namespace OmniGenerator.Lib.Orchestration
             var packager = _pluginService.GetPlugin<IPackager>(configuration.PackagerName);
             if (packager is null)
             {
-                ReportProgress(GenerationStep.Package, StepStatus.Skipped);
+                ReportProgress(GenerationStep.Package, StepStatus.Skipped, force: true);
                 return;
             }
 
-            ReportProgress(GenerationStep.Package, StepStatus.Processing);
+            ReportProgress(GenerationStep.Package, StepStatus.Processing, force: true);
 
             try
             {
                 await packager.ProcessAsync(root, outputFolderPath, configuration.RenderResolutionDPI);
-                ReportProgress(GenerationStep.Package, StepStatus.Succeeded);
+                ReportProgress(GenerationStep.Package, StepStatus.Succeeded, force: true);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while packaging the output.");
-                ReportProgress(GenerationStep.Package, StepStatus.Failed, error: ex);
+                ReportProgress(GenerationStep.Package, StepStatus.Failed, error: ex, force: true);
                 throw;
             }
         }
 
-        private void ReportProgress(GenerationStep step, StepStatus status, object? data = null, Exception? error = null)
+        private void ReportProgress(GenerationStep step, StepStatus status, object? data = null, Exception? error = null, bool force = false)
         {
-            Progress?.Report(new GenerationProgress
+            Notifier.SendNotification(new GenerationProgress
             {
                 Step = step,
                 Status = status,
                 Data = data,
                 Error = error
-            });
+            }, force);
         }
     }
 }

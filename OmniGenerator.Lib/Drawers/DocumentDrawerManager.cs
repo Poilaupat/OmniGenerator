@@ -1,5 +1,6 @@
 ﻿using Autofac.Features.Metadata;
 using OmniGenerator.Lib.Hierarchy;
+using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
 
@@ -13,20 +14,22 @@ namespace OmniGenerator.Lib.Drawers
     {
         #region Interface properties
 
-        public IProgress<DocumentDrawerManagerProgress>? Progress { get; set; }
-        public int ProgressResolution { get; set; }
+        public Notifier<DocumentDrawerManagerProgress> Notifier { get; }
 
         #endregion
 
-        IPluginService _pluginService;
+        private readonly IPluginService _pluginService;
+        private long _totalDocuments = 0;
+        private long _processedDocuments = 0;
 
         /// <summary>
         /// Creates a new <see cref="DocumentDrawerManager"/>
         /// </summary>
-        /// <param name="composers">The available <see cref="IDocumentDrawer"/> with appropriate meta data to pick one</param>
-        public DocumentDrawerManager(IPluginService pluginService)
+        /// <param name="pluginService">The plugin service used to retrieve document drawers</param>
+        public DocumentDrawerManager(IPluginService pluginService, Notifier<DocumentDrawerManagerProgress> notifier)
         {
             _pluginService = pluginService;
+            Notifier = notifier;
         }
 
         /// <summary>
@@ -39,6 +42,14 @@ namespace OmniGenerator.Lib.Drawers
         {
             var docsByComposer = root.GetDocuments()
                 .GroupBy(x => x.ImageComposer);
+
+            // Count total documents to process
+            _totalDocuments = docsByComposer
+                .Where(g => !string.IsNullOrWhiteSpace(g.Key))
+                .Sum(g => g.Count());
+            _processedDocuments = 0;
+
+            Notifier.SendNotification(GetNotificationData());
 
             foreach (var docByComposer in docsByComposer.Where(g => !string.IsNullOrWhiteSpace(g.Key)))
             {
@@ -55,11 +66,24 @@ namespace OmniGenerator.Lib.Drawers
 
                         var verso = drawer.DrawVerso(doc);
                         doc.VersoVectorImage = verso;
+
+                        Interlocked.Increment(ref _processedDocuments);
+                        Notifier.SendNotification(GetNotificationData());
                     }
                 }
             }
 
+            Notifier.SendNotification(GetNotificationData());
             await Task.CompletedTask;
+        }
+
+        private DocumentDrawerManagerProgress GetNotificationData()
+        {
+            return new DocumentDrawerManagerProgress()
+            {
+                TotalDocuments = Interlocked.Read(ref _totalDocuments),
+                ProcessedDocuments = Interlocked.Read(ref _processedDocuments)
+            };
         }
     }
 }

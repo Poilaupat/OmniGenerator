@@ -34,8 +34,6 @@ namespace OmniGenerator.Cli.Commands
         ILogger<GenerateCommand> logger
         ) : AsyncCommand<GenerateCommandSettings>
     {
-        private readonly int DEFAULT_PROGRESS_RESOLUTION = 1000; // 1 second
-
         private readonly Table _layout = new Table()
                 .Border(TableBorder.None)
                 .AddColumns("column")
@@ -54,7 +52,9 @@ namespace OmniGenerator.Cli.Commands
 
         private readonly AppSettings _appsettings = appsettings.Value;
 
-        private Exception? _currentError;
+        private Exception? _error;
+        private HierarchyBuilderProgress? _hierarchyProgress;
+        private DocumentDrawerManagerProgress? _imageProgress;
 
         /// <summary>
         /// Executes the generate command asynchronously, reading input settings,
@@ -82,18 +82,21 @@ namespace OmniGenerator.Cli.Commands
                     {
                         try
                         {
-                            orchestrator.ProgressResolution = _appsettings.ProgressResolution ?? DEFAULT_PROGRESS_RESOLUTION;
-                            orchestrator.Progress = new Progress<GenerationProgress>(progress =>
+                            orchestrator.Notifier.Progress = new Progress<GenerationProgress>(progress =>
                             {
                                 HandleProgress(settings, ldc, progress);
                             });
 
                             await orchestrator.ExecuteAsync(generatorConfig, settings.OutputFolderPath, ct);
+                            
+                            // Final UI refresh to ensure all updates are visible
+                            UpdateUI(settings);
+                            ldc.Refresh();
                         }
                         catch (Exception ex)
                         {
-                            _currentError = ex;
-                            UpdateUI(settings, new Markup(string.Empty));
+                            _error = ex;
+                            UpdateUI(settings);
                             ldc.Refresh();
                         }
                     });
@@ -113,8 +116,7 @@ namespace OmniGenerator.Cli.Commands
         /// Updates the console UI with the current progress and status of each generation step.
         /// </summary>
         /// <param name="settings">The current command settings.</param>
-        /// <param name="progress">A renderable progress widget.</param>
-        private void UpdateUI(GenerateCommandSettings settings, IRenderable progress)
+        private void UpdateUI(GenerateCommandSettings settings)
         {
             _layout.UpdateCell(0, 0,
                 new Panel(new TextPath(Path.GetFullPath(settings.SettingsFilePath)).LeafColor(Color.Red))
@@ -126,13 +128,31 @@ namespace OmniGenerator.Cli.Commands
                     .ConfigurePanel("Tasks")
             );
 
-            _layout.UpdateCell(2, 0,
-                progress
-            );
+            // Build combined progress view
+            var progressWidgets = new List<IRenderable>();
+            
+            if (_hierarchyProgress is not null)
+            {
+                progressWidgets.Add(_hierarchyProgress.ToWidget());
+            }
+            
+            if (_imageProgress is not null)
+            {
+                progressWidgets.Add(_imageProgress.ToWidget());
+            }
 
-            var executionContent = _currentError is null
+            IRenderable progressContent = progressWidgets.Count switch
+            {
+                0 => new Markup(string.Empty),
+                1 => progressWidgets[0],
+                _ => new Rows(progressWidgets)
+            };
+
+            _layout.UpdateCell(2, 0, progressContent);
+
+            var executionContent = _error is null
                 ? new Markup($"[blue]Elapsed time[/] : {_watch.Elapsed.ToFluidUnitString()}")
-                : new Markup($"[blue]Elapsed time[/] : {_watch.Elapsed.ToFluidUnitString()}\n[red]Error:[/] {_currentError.Message.EscapeMarkup()}");
+                : new Markup($"[blue]Elapsed time[/] : {_watch.Elapsed.ToFluidUnitString()}\n[red]Error:[/] {_error.Message.EscapeMarkup()}");
 
             _layout.UpdateCell(3, 0,
                 new Panel(executionContent)
@@ -156,18 +176,25 @@ namespace OmniGenerator.Cli.Commands
                 _ => throw new ArgumentOutOfRangeException()
             };
 
+            if (progress.Data is not null)
+            {
+                switch (progress.Data)
+                {
+                    case HierarchyBuilderProgress hbp:
+                        _hierarchyProgress = hbp;
+                        break;
+                    case DocumentDrawerManagerProgress ip:
+                        _imageProgress = ip;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             switch (progress.Status)
             {
                 case StepStatus.Processing:
                     _tasks[taskKey].SetProcessing();
-                    if (progress.Data is HierarchyBuilderProgress hbProgress)
-                    {
-                        UpdateUI(settings, hbProgress.ToWidget());
-                    }
-                    else if (progress.Data is DocumentDrawerManagerProgress ddmProgress)
-                    {
-                        UpdateUI(settings, ddmProgress.ToWidget());
-                    }
                     break;
 
                 case StepStatus.Succeeded:
@@ -178,7 +205,7 @@ namespace OmniGenerator.Cli.Commands
                     _tasks[taskKey].SetFailed();
                     if (progress.Error is not null)
                     {
-                        _currentError = progress.Error;
+                        _error = progress.Error;
                     }
                     break;
 
@@ -187,6 +214,7 @@ namespace OmniGenerator.Cli.Commands
                     break;
             }
 
+            UpdateUI(settings);
             ldc.Refresh();
         }
     }

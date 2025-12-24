@@ -32,9 +32,15 @@ namespace OmniGenerator.Cli.Widgets
 
         public static IRenderable ToWidget(this DocumentDrawerManagerProgress progress)
         {
-            var text = new Markup($"[blue]Achieved :[/] {progress.Percentage}%");
+            var grid = new Grid();
+            grid.AddColumn();
+            grid.AddColumn();
 
-            var panel = new Panel(text).ConfigurePanel("Vector image generation");
+            grid.AddRow(new Markup("[blue]Documents processed[/]"), new Markup($"{progress.ProcessedDocuments} / {progress.TotalDocuments}"));
+            grid.AddRow(new Markup("[blue]Progress[/]"), new Markup($"{progress.Percentage}%"));
+
+            var panel = new Panel(grid)
+                .ConfigurePanel("Vector image generation");
 
             return panel;
         }
