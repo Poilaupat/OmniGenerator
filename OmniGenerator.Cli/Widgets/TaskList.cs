@@ -27,7 +27,7 @@ namespace OmniGenerator.Cli.Widgets
                 .AddColumns(2)
                 .LeftAligned();
 
-            foreach(var task in _tasks)
+            foreach (var task in _tasks)
             {
                 grid.AddRow(task.Value.Label, task.Value.State);
             }

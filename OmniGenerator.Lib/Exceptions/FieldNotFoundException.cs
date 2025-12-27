@@ -8,10 +8,10 @@ namespace OmniGenerator.Lib.Exceptions
 {
     internal class FieldNotFoundException : Exception
     {
-        public FieldNotFoundException(): base() {}
+        public FieldNotFoundException() : base() { }
 
-        public FieldNotFoundException(string message) : base(message) { } 
-        
+        public FieldNotFoundException(string message) : base(message) { }
+
         public FieldNotFoundException(string message, Exception innerException) : base(message, innerException) { }
     }
 }

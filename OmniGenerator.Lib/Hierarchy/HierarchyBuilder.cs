@@ -15,7 +15,6 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
 {
     private readonly IFieldMapper _mapper;
     private readonly Random _random;
-    private DateTime _lastNotification = DateTime.Now;
     private long _countDoc = 0;
     private long _countProcessedDoc = 0;
     private long _countGroup = 0;

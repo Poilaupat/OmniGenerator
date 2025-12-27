@@ -79,7 +79,7 @@ namespace OmniGenerator.Plugins.Packagers
 
             for (var i = 0; i < documents.Length; i++)
             {
-                await WriteDocumentImagesAsync(i+1, documents[i], packagepath, imageRenderingResolution);
+                await WriteDocumentImagesAsync(i + 1, documents[i], packagepath, imageRenderingResolution);
             }
         }
 

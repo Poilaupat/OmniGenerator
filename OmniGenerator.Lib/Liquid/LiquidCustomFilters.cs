@@ -45,7 +45,7 @@
         public static string PadLeft(object input, int length, string paddingChar = "0")
         {
             if (input == null) return string.Empty.PadLeft(length, paddingChar[0]);
-            
+
             return input.ToString()!.PadLeft(length, paddingChar[0]);
         }
 
@@ -63,7 +63,7 @@
         public static string PadRight(object input, int length, string paddingChar = " ")
         {
             if (input == null) return string.Empty.PadRight(length, paddingChar[0]);
-            
+
             return input.ToString()!.PadRight(length, paddingChar[0]);
         }
     }

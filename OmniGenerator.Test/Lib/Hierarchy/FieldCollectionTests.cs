@@ -235,7 +235,7 @@ namespace OmniGenerator.Test.Lib.Hierarchy
             var collection = new FieldCollection();
 
             // Act & Assert
-            var ex = Assert.Throws<OmniGenerator.Lib.Exceptions.FieldNotFoundException>(() => 
+            var ex = Assert.Throws<OmniGenerator.Lib.Exceptions.FieldNotFoundException>(() =>
                 collection.GetValue("NonExistent"));
             Assert.That(ex.Message, Does.Contain("NonExistent"));
         }
@@ -275,7 +275,7 @@ namespace OmniGenerator.Test.Lib.Hierarchy
             var collection = new FieldCollection();
 
             // Act & Assert
-            var ex = Assert.Throws<OmniGenerator.Lib.Exceptions.FieldNotFoundException>(() => 
+            var ex = Assert.Throws<OmniGenerator.Lib.Exceptions.FieldNotFoundException>(() =>
                 collection.GetStringValue("NonExistent"));
             Assert.That(ex.Message, Does.Contain("NonExistent"));
         }

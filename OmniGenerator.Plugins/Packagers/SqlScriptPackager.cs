@@ -7,7 +7,7 @@ using OmniGenerator.Lib.Interfaces;
 
 namespace OmniGenerator.Plugins.Packagers
 {
-    [OmniGeneratorPluginMetadata("packager.omni.sql","A packager a builds SQL scripts from groups acting as tables and documents acting as table rows")]
+    [OmniGeneratorPluginMetadata("packager.omni.sql", "A packager a builds SQL scripts from groups acting as tables and documents acting as table rows")]
     public class SqlScriptPackager : OmniGeneratorPluginBase, IPackager
     {
         public async Task ProcessAsync(Root root, string basepath, int imageRenderingResolution)

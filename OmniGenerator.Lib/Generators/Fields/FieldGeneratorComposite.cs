@@ -23,10 +23,7 @@ namespace OmniGenerator.Lib.Generators.Fields
         /// <param name="dependentUpon">The names of the field dependencies to build this composite field.</param>
         /// <param name="format">The Mustache format string.</param>
         public FieldGeneratorComposite(string name, string dependentUpon, string format)
-            : base(name, dependentUpon)
-        {
-            Format = format.Replace("-", "_");
-        }
+            : base(name, dependentUpon) => Format = format.Replace("-", "_");
 
         /// <summary>
         /// Generates the composite field value by rendering the Liquid template with the current field dependencies.
@@ -35,7 +32,7 @@ namespace OmniGenerator.Lib.Generators.Fields
         protected override string GenerateValue()
         {
             var data = GeneratorDependencies.ToDictionary(x => x.Name.Replace("-", "_"), y => y.LastValue);
-            Template template= Template.Parse(Format);
+            Template template = Template.Parse(Format);
             return template.Render(Hash.FromDictionary(data));
         }
     }

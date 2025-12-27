@@ -8,20 +8,15 @@ namespace OmniGenerator.Cli.Autofac
     /// Provides an Autofac-based implementation of <see cref="ITypeRegistrar"/> for integrating
     /// Autofac with Spectre.Console.Cli dependency injection.
     /// </summary>
-    public sealed class AutofacTypeRegistrar : ITypeRegistrar
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="AutofacTypeRegistrar"/> class
+    /// using the specified <see cref="ContainerBuilder"/>.
+    /// </remarks>
+    /// <param name="builder">The Autofac <see cref="ContainerBuilder"/> used for service registration.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="builder"/> is <c>null</c>.</exception>
+    public sealed class AutofacTypeRegistrar(ContainerBuilder builder) : ITypeRegistrar
     {
-        private readonly ContainerBuilder _builder;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AutofacTypeRegistrar"/> class
-        /// using the specified <see cref="ContainerBuilder"/>.
-        /// </summary>
-        /// <param name="builder">The Autofac <see cref="ContainerBuilder"/> used for service registration.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="builder"/> is <c>null</c>.</exception>
-        public AutofacTypeRegistrar(ContainerBuilder builder)
-        {
-            _builder = builder ?? throw new ArgumentNullException(nameof(builder));
-        }
+        private readonly ContainerBuilder _builder = builder ?? throw new ArgumentNullException(nameof(builder));
 
         /// <summary>
         /// Registers a service type and its corresponding implementation type in the Autofac container.
@@ -50,7 +45,7 @@ namespace OmniGenerator.Cli.Autofac
         /// <param name="factory">A factory method that returns an instance of the service.</param>
         public void RegisterLazy(Type service, Func<object> factory)
         {
-            _builder.Register(context => factory()).As(service);
+            _builder.Register(_ => factory()).As(service);
         }
 
         /// <summary>

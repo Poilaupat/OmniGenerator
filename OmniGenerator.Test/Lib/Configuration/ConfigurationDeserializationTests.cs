@@ -136,10 +136,10 @@ namespace OmniGenerator.Test.Lib.Configuration
             // Assert
             Assert.That(config.Hierarchy.Root.Fields, Is.Not.Null);
             Assert.That(config.Hierarchy.Root.Fields.Count, Is.EqualTo(1));
-            
+
             var field = config.Hierarchy.Root.Fields.First();
             Assert.That(field, Is.InstanceOf<FieldConfigurationRegex>());
-            
+
             var regexField = field as FieldConfigurationRegex;
             Assert.That(regexField!.Name, Is.EqualTo("DocumentID"));
             Assert.That(regexField.Pattern, Is.EqualTo(@"[A-Z]{3}\d{6}"));
@@ -176,7 +176,7 @@ namespace OmniGenerator.Test.Lib.Configuration
             // Assert
             var field = config.Hierarchy.Root.Fields.First();
             Assert.That(field, Is.InstanceOf<FieldConfigurationConstant>());
-            
+
             var constantField = field as FieldConfigurationConstant;
             Assert.That(constantField!.Name, Is.EqualTo("Status"));
             Assert.That(constantField.Constant, Is.EqualTo("ACTIVE"));
@@ -214,7 +214,7 @@ namespace OmniGenerator.Test.Lib.Configuration
             // Assert
             var field = config.Hierarchy.Root.Fields.First();
             Assert.That(field, Is.InstanceOf<FieldConfigurationNumeric>());
-            
+
             var numericField = field as FieldConfigurationNumeric;
             Assert.That(numericField!.Name, Is.EqualTo("Amount"));
             Assert.That(numericField.Min, Is.EqualTo(100));
@@ -253,7 +253,7 @@ namespace OmniGenerator.Test.Lib.Configuration
             // Assert
             var field = config.Hierarchy.Root.Fields.First();
             Assert.That(field, Is.InstanceOf<FieldConfigurationDate>());
-            
+
             var dateField = field as FieldConfigurationDate;
             Assert.That(dateField!.Name, Is.EqualTo("CreatedDate"));
             Assert.That(dateField.DayDiffMin, Is.EqualTo(-365));
@@ -292,7 +292,7 @@ namespace OmniGenerator.Test.Lib.Configuration
             // Assert
             var field = config.Hierarchy.Root.Fields.First();
             Assert.That(field, Is.InstanceOf<FieldConfigurationIncrement>());
-            
+
             var incrementField = field as FieldConfigurationIncrement;
             Assert.That(incrementField!.Name, Is.EqualTo("Sequence"));
             Assert.That(incrementField.Start, Is.EqualTo(1000));
@@ -338,12 +338,12 @@ namespace OmniGenerator.Test.Lib.Configuration
             // Assert
             var field = config.Hierarchy.Root.Fields.First();
             Assert.That(field, Is.InstanceOf<FieldConfigurationWeightedList>());
-            
+
             var weightedListField = field as FieldConfigurationWeightedList;
             Assert.That(weightedListField!.Name, Is.EqualTo("ProductType"));
             Assert.That(weightedListField.List, Is.Not.Null);
             Assert.That(weightedListField.List!.Count(), Is.EqualTo(3));
-            
+
             var items = weightedListField.List!.ToList();
             Assert.That(items.Any(i => i.Value == "Premium" && i.Weight == 0.2), Is.True);
             Assert.That(items.Any(i => i.Value == "Standard" && i.Weight == 0.5), Is.True);
@@ -381,12 +381,12 @@ namespace OmniGenerator.Test.Lib.Configuration
             // Assert
             var field = config.Hierarchy.Root.Fields.First();
             Assert.That(field, Is.InstanceOf<FieldConfigurationWeightedList>());
-            
+
             var listField = field as FieldConfigurationWeightedList;
             Assert.That(listField!.Name, Is.EqualTo("Color"));
             Assert.That(listField.List, Is.Not.Null);
             Assert.That(listField.List!.Count(), Is.EqualTo(3));
-            
+
             var items = listField.List!.ToList();
             Assert.That(items.All(i => i.Weight == 1.0), Is.True);
             Assert.That(items.Any(i => i.Value == "Red"), Is.True);
@@ -431,7 +431,7 @@ Basic,0.3";
             // Assert
             var field = config.Hierarchy.Root.Fields.First();
             Assert.That(field, Is.InstanceOf<FieldConfigurationWeightedList>());
-            
+
             var weightedListField = field as FieldConfigurationWeightedList;
             Assert.That(weightedListField!.Name, Is.EqualTo("ProductType"));
             Assert.That(weightedListField.ListFilePath, Is.EqualTo("products.txt"));
@@ -484,7 +484,7 @@ Basic,0.3";
             var compositeField = config.Hierarchy.Root.Fields.FirstOrDefault(f => f.Name == "FullName");
             Assert.That(compositeField, Is.Not.Null);
             Assert.That(compositeField, Is.InstanceOf<FieldConfigurationComposite>());
-            
+
             var composite = compositeField as FieldConfigurationComposite;
             Assert.That(composite!.Format, Is.EqualTo("{FirstName} {LastName}"));
             Assert.That(composite.DependentUpon, Is.EqualTo("FirstName"));
@@ -528,7 +528,7 @@ Basic,0.3";
             var keyCalcField = config.Hierarchy.Root.Fields.FirstOrDefault(f => f.Name == "CalculatedKey");
             Assert.That(keyCalcField, Is.Not.Null);
             Assert.That(keyCalcField, Is.InstanceOf<FieldConfigurationKeyCalculator>());
-            
+
             var keyCalc = keyCalcField as FieldConfigurationKeyCalculator;
             Assert.That(keyCalc!.KeyType, Is.EqualTo(EKeyType.Rlmc));
             Assert.That(keyCalc.DependentUpon, Is.EqualTo("ReferenceField"));
@@ -575,7 +575,7 @@ Basic,0.3";
             var aggregateField = config.Hierarchy.Root.Fields.FirstOrDefault(f => f.Name == "TotalAmount");
             Assert.That(aggregateField, Is.Not.Null);
             Assert.That(aggregateField, Is.InstanceOf<FieldConfigurationAggregate>());
-            
+
             var aggregate = aggregateField as FieldConfigurationAggregate;
             Assert.That(aggregate!.AggregateType, Is.EqualTo(EFFieldAggregateType.Sum));
             Assert.That(aggregate.Scope, Is.EqualTo(EScope.DirectChildren));
@@ -641,7 +641,7 @@ Basic,0.3";
             // Assert
             Assert.That(config.Hierarchy.Root.Fields, Is.Not.Null);
             Assert.That(config.Hierarchy.Root.Fields.Count, Is.EqualTo(5));
-            
+
             Assert.That(config.Hierarchy.Root.Fields.ElementAt(0), Is.InstanceOf<FieldConfigurationIncrement>());
             Assert.That(config.Hierarchy.Root.Fields.ElementAt(1), Is.InstanceOf<FieldConfigurationRegex>());
             Assert.That(config.Hierarchy.Root.Fields.ElementAt(2), Is.InstanceOf<FieldConfigurationConstant>());
@@ -697,11 +697,11 @@ Basic,0.3";
             // External fields are merged into hierarchy.Fields
             Assert.That(config.Hierarchy.Fields, Is.Not.Null);
             Assert.That(config.Hierarchy.Fields.Count, Is.EqualTo(2));
-            
+
             var hierarchyFieldNames = config.Hierarchy.Fields.Select(f => f.Name).ToList();
             Assert.That(hierarchyFieldNames, Contains.Item("ExternalField1"));
             Assert.That(hierarchyFieldNames, Contains.Item("ExternalField2"));
-            
+
             // Internal field is in root.Fields
             Assert.That(config.Hierarchy.Root.Fields, Is.Not.Null);
             Assert.That(config.Hierarchy.Root.Fields.Count, Is.EqualTo(1));

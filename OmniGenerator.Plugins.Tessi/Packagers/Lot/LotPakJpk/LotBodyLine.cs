@@ -15,7 +15,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
 
         [FixedLengthLineField(9, 64, ' ', PadDirection.Right)]
         public string Dataread { get; } = string.Empty;
-        
+
         [FixedLengthLineField(74, 12, ' ', PadDirection.Right)]
         public string LotID { get; } = string.Empty;
 
@@ -57,7 +57,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
 
         [FixedLengthLineField(171, 3, ' ', PadDirection.Right)]
         public string Priority { get; } = string.Empty;
-        
+
         [FixedLengthLineField(175, 23, ' ', PadDirection.Right)]
         public string RIB { get; } = string.Empty;
 

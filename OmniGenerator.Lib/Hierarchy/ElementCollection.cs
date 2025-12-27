@@ -30,10 +30,7 @@ namespace OmniGenerator.Lib.Hierarchy
         /// </summary>
         /// <param name="owner">The owning group. Cannot be null.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="owner"/> is null.</exception>
-        public ElementCollection(Group owner)
-        {
-            _owner = owner ?? throw new ArgumentNullException(nameof(owner));
-        }
+        public ElementCollection(Group owner) => _owner = owner ?? throw new ArgumentNullException(nameof(owner));
 
         /// <summary>
         /// Gets the number of elements contained in the collection.

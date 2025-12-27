@@ -180,8 +180,8 @@ namespace OmniGenerator.Test.Lib.Liquid
             var template = Template.Parse("{{date | date:'yyMMdd'}}{{bank | pad_left:5}}{{agency | pad_left:5}}{{number | pad_left:4}}");
 
             // Act
-            var result = template.Render(Hash.FromAnonymousObject(new 
-            { 
+            var result = template.Render(Hash.FromAnonymousObject(new
+            {
                 date = new DateTime(2024, 1, 15),
                 bank = "16038",
                 agency = "16001",

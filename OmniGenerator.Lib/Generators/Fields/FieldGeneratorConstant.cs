@@ -16,10 +16,7 @@
         /// <param name="name">The name of the field generator.</param>
         /// <param name="constant">The constant value to return for each generation.</param>
         public FieldGeneratorConstant(string name, string constant)
-            : base(name)
-        {
-            Constant = constant;
-        }
+            : base(name) => Constant = constant;
 
         /// <summary>
         /// Generates the constant value.

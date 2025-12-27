@@ -14,12 +14,23 @@ namespace OmniGenerator.Lib.Drawers
         /// <summary>
         /// The recto and verso image Width in millimeter
         /// </summary>
-        public int Width { get; protected set; }
+        public int Width { get; init; }
 
         /// <summary>
         /// The recto and verso image Height in millimeter
         /// </summary>
-        public int Height { get; protected set; }
+        public int Height { get; init; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DocumentDrawerBase"/> class.
+        /// </summary>
+        /// <param name="width">The width of the document in millimeters.</param>
+        /// <param name="height">The height of the document in millimeters.</param>
+        protected DocumentDrawerBase(int width, int height)
+        {
+            Width = width;
+            Height = height;
+        }
 
         /// <summary>
         /// Load special fonts needed for the image generation. Special fonts are embedded in application.
@@ -29,10 +40,7 @@ namespace OmniGenerator.Lib.Drawers
         ///
         /// Other system fonts can be used without having to load them
         /// </summary>
-        static DocumentDrawerBase()
-        {
-            LoadFonts();
-        }
+        static DocumentDrawerBase() => LoadFonts();
 
         /// <summary>
         /// Composes the recto

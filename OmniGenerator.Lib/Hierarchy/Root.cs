@@ -21,10 +21,7 @@
         /// Creates a new <see cref="Root"/>
         /// </summary>
         /// <param name="groups">The root top level groups</param>
-        public Root(IEnumerable<Group> groups)
-        {
-            Groups = groups;
-        }
+        public Root(IEnumerable<Group> groups) => Groups = groups;
 
         /// <summary>
         /// Gets the <see cref="Document"/> of the root

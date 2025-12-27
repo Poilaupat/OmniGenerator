@@ -30,10 +30,7 @@ namespace OmniGenerator.Lib.Hierarchy
         /// <param name="name">The name of the <see cref="Document"/>. It can be seen as a document type.</param>
         /// <param name="imageComposer">The key of the image composer to use when generating images. If null, no image will be generated.</param>
         public Document(string name, string? imageComposer)
-            : base("document", name)
-        {
-            ImageComposer = imageComposer;
-        }
+            : base("document", name) => ImageComposer = imageComposer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Document"/> class with the specified name, image composer, and fields.
@@ -42,9 +39,6 @@ namespace OmniGenerator.Lib.Hierarchy
         /// <param name="imageComposer">The key of the image composer to use when generating images. If null, no image will be generated.</param>
         /// <param name="fields">The fields to associate with the document.</param>
         public Document(string name, string? imageComposer, IDictionary<string, Field> fields)
-            : base("document", name, fields)
-        {
-            ImageComposer = imageComposer;
-        }
+            : base("document", name, fields) => ImageComposer = imageComposer;
     }
 }

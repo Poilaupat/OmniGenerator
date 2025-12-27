@@ -28,7 +28,7 @@ namespace OmniGenerator.Lib.Autofac
         public OmniGeneratorModule(IConfiguration configuration)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-            
+
             // Register DotLiquid custom filters once
             RegisterLiquidFilters();
         }
@@ -40,7 +40,7 @@ namespace OmniGenerator.Lib.Autofac
         private static void RegisterLiquidFilters()
         {
             if (_liquidFiltersRegistered) return;
-            
+
             Template.RegisterFilter(typeof(LiquidCustomFilters));
             _liquidFiltersRegistered = true;
         }
@@ -64,7 +64,6 @@ namespace OmniGenerator.Lib.Autofac
             builder.RegisterType<GenerationOrchestrator>().As<IGenerationOrchestrator>().InstancePerLifetimeScope();
 
             // Register open generic type for progress reporting
-            //builder.RegisterGeneric(typeof(Progress<>)).As(typeof(IProgress<>)).InstancePerLifetimeScope();
             builder.RegisterGeneric(typeof(Notifier<>))
                 .WithParameters(new[]
                 {

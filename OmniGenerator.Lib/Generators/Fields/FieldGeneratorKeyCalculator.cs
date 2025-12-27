@@ -22,10 +22,7 @@ namespace OmniGenerator.Lib.Generators.Fields
         /// <param name="dependentUpon">The name of the dependent field whose value will be used to compute the key.</param>
         /// <param name="keyType">The type of key to compute.</param>
         public FieldGeneratorKeyCalculator(string name, string dependentUpon, EKeyType keyType)
-            : base(name, dependentUpon)
-        {
-            KeyType = keyType;
-        }
+            : base(name, dependentUpon) => KeyType = keyType;
 
         /// <summary>
         /// Generates the computed key value based on the dependent field's value and the specified key type.

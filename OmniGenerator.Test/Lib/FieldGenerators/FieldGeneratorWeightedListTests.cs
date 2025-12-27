@@ -45,7 +45,7 @@ namespace OmniGenerator.Test.Lib.FieldGenerators
         [Test]
         public void Name_Property_IsSetCorrectly()
         {
-            var items = new[] { new WeightedValue("X", 1.0)};
+            var items = new[] { new WeightedValue("X", 1.0) };
             var generator = new FieldGeneratorWeightedList("MyList", items);
             Assert.That(generator.Name, Is.EqualTo("MyList"));
         }

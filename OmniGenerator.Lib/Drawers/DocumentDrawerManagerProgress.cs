@@ -18,8 +18,8 @@
         /// <summary>
         /// Gets the percentage of completion (0-100).
         /// </summary>
-        public int Percentage => TotalDocuments > 0 
-            ? (int)((ProcessedDocuments * 100) / TotalDocuments) 
+        public int Percentage => TotalDocuments > 0
+            ? (int)((ProcessedDocuments * 100) / TotalDocuments)
             : 0;
     }
 }

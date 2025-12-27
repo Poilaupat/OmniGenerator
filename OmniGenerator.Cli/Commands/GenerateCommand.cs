@@ -25,11 +25,9 @@ namespace OmniGenerator.Cli.Commands
     /// <remarks>
     /// Initializes a new instance of the <see cref="GenerateCommand"/> class.
     /// </remarks>
-    /// <param name="appsettings">Application-level configuration settings.</param>
     /// <param name="orchestrator">Orchestrator responsible for the generation pipeline.</param>
     /// <param name="logger">Logger instance for this command.</param>
     internal class GenerateCommand(
-        IOptions<AppSettings> appsettings,
         IGenerationOrchestrator orchestrator,
         ILogger<GenerateCommand> logger
         ) : AsyncCommand<GenerateCommandSettings>
@@ -49,8 +47,6 @@ namespace OmniGenerator.Cli.Commands
                 .AddTask(new TaskItem("package", new Markup("[blue]Package Generation[/]")));
 
         private readonly Stopwatch _watch = new();
-
-        private readonly AppSettings _appsettings = appsettings.Value;
 
         private Exception? _error;
         private HierarchyBuilderProgress? _hierarchyProgress;
@@ -82,13 +78,10 @@ namespace OmniGenerator.Cli.Commands
                     {
                         try
                         {
-                            orchestrator.Notifier.Progress = new Progress<GenerationProgress>(progress =>
-                            {
-                                HandleProgress(settings, ldc, progress);
-                            });
+                            orchestrator.Notifier.Progress = new Progress<GenerationProgress>(progress => HandleProgress(settings, ldc, progress));
 
                             await orchestrator.ExecuteAsync(generatorConfig, settings.OutputFolderPath, ct);
-                            
+
                             // Final UI refresh to ensure all updates are visible
                             UpdateUI(settings);
                             ldc.Refresh();
@@ -130,12 +123,12 @@ namespace OmniGenerator.Cli.Commands
 
             // Build combined progress view
             var progressWidgets = new List<IRenderable>();
-            
+
             if (_hierarchyProgress is not null)
             {
                 progressWidgets.Add(_hierarchyProgress.ToWidget());
             }
-            
+
             if (_imageProgress is not null)
             {
                 progressWidgets.Add(_imageProgress.ToWidget());
@@ -173,22 +166,18 @@ namespace OmniGenerator.Cli.Commands
                 GenerationStep.Hierarchy => "hierarchy",
                 GenerationStep.Images => "images",
                 GenerationStep.Package => "package",
-                _ => throw new ArgumentOutOfRangeException()
+                _ => throw new ArgumentOutOfRangeException($"Unknown step : {progress.Step}")
             };
 
-            if (progress.Data is not null)
+            // Update progress data if provided
+            switch (progress.Data)
             {
-                switch (progress.Data)
-                {
-                    case HierarchyBuilderProgress hbp:
-                        _hierarchyProgress = hbp;
-                        break;
-                    case DocumentDrawerManagerProgress ip:
-                        _imageProgress = ip;
-                        break;
-                    default:
-                        break;
-                }
+                case HierarchyBuilderProgress hbp:
+                    _hierarchyProgress = hbp;
+                    break;
+                case DocumentDrawerManagerProgress ddmp:
+                    _imageProgress = ddmp;
+                    break;
             }
 
             switch (progress.Status)

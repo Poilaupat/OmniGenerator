@@ -231,15 +231,12 @@ namespace OmniGenerator.Plugin.Tessi.Packagers.Compliance
         [JsonPropertyName("zone")]
         public List<Zone> Zone { get; set; }
 
-        public Micr(string z4, string z3, string z2)
-        {
-            Zone = new List<Zone>
+        public Micr(string z4, string z3, string z2) => Zone = new List<Zone>
             {
                 new Zone("Z4", z4),
                 new Zone("Z3", z3),
                 new Zone("Z2", z2),
             };
-        }
     }
 
     public class OtherReference
@@ -250,10 +247,7 @@ namespace OmniGenerator.Plugin.Tessi.Packagers.Compliance
         [JsonPropertyName("value")]
         public string? Value { get; set; }
 
-        public OtherReference(string key)
-        {
-            Key = key;
-        }
+        public OtherReference(string key) => Key = key;
     }
 
     public class JsonRoot

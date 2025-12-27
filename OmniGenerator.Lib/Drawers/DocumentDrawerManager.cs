@@ -41,25 +41,33 @@ namespace OmniGenerator.Lib.Drawers
         public async Task DrawImagesAsync(Root root)
         {
             var docsByComposer = root.GetDocuments()
-                .GroupBy(x => x.ImageComposer);
+                .Where(d => !string.IsNullOrWhiteSpace(d.ImageComposer))
+                .ToList();
 
             // Count total documents to process
-            _totalDocuments = docsByComposer
-                .Where(g => !string.IsNullOrWhiteSpace(g.Key))
-                .Sum(g => g.Count());
+            _totalDocuments = docsByComposer.Count;
             _processedDocuments = 0;
 
             Notifier.SendNotification(GetNotificationData());
 
-            foreach (var docByComposer in docsByComposer.Where(g => !string.IsNullOrWhiteSpace(g.Key)))
-            {
-                //Getting the appropriate IDocumentDrawer implementation for the current document type
-                var drawer = _pluginService.GetPlugin<IDocumentDrawer>(docByComposer.Key!);
+            // Group documents by composer type for efficient parallel processing
+            var groupedDocs = docsByComposer
+                .GroupBy(x => x.ImageComposer)
+                .ToList();
 
+            // Process each composer type sequentially, but documents within each type in parallel
+            foreach (var docGroup in groupedDocs)
+            {
+                var composerName = docGroup.Key!;
+                var documents = docGroup.ToList();
+
+                // Resolve a single drawer instance for this composer group.
+                // Reusing one instance is safe only if the drawer implementation is thread-safe.
+                var drawer = _pluginService.GetPlugin<IDocumentDrawer>(composerName);
                 if (drawer is not null)
                 {
-                    //Compositing image(s)
-                    foreach (var doc in docByComposer)
+                    // Parallel processing of documents with the same composer
+                    Parallel.ForEach(documents, doc =>
                     {
                         var recto = drawer.DrawRecto(doc);
                         doc.RectoVectorImage = recto;
@@ -69,7 +77,7 @@ namespace OmniGenerator.Lib.Drawers
 
                         Interlocked.Increment(ref _processedDocuments);
                         Notifier.SendNotification(GetNotificationData());
-                    }
+                    });
                 }
             }
 

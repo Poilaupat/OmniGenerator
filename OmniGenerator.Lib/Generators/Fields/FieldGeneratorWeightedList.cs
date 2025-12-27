@@ -53,10 +53,7 @@ namespace OmniGenerator.Lib.Generators.Fields
         /// <param name="name">The name of the generator.</param>
         /// <param name="list">The collection of value-weight pairs to pick from.</param>
         public FieldGeneratorWeightedList(string name, IEnumerable<WeightedValue> list)
-            : base(name, list)
-        {
-            _random = new Random();
-        }
+            : base(name, list) => _random = new Random();
 
         /// <summary>
         /// Picks a random value from the list, with probability proportional to its weight.

@@ -33,7 +33,7 @@ namespace OmniGenerator.Cli.Autofac
         protected override void Load(ContainerBuilder builder)
         {
             // Register the IConfiguration instance so it can be injected wherever needed.
-            builder.Register(context => _configuration).As<IConfiguration>().SingleInstance();
+            builder.Register(_ => _configuration).As<IConfiguration>().SingleInstance();
 
             // Register strongly-typed configuration section (AppSettings) using Microsoft.Extensions.Options pattern
             var services = new ServiceCollection();

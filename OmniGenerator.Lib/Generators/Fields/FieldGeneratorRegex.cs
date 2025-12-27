@@ -16,10 +16,7 @@ namespace OmniGenerator.Lib.Generators.Fields
         /// <param name="name">The name of the generator</param>
         /// <param name="pattern">The regular expression pattern</param>
         public FieldGeneratorRegex(string name, string pattern)
-            : base(name)
-        {
-            _xeger = new Xeger(pattern);
-        }
+            : base(name) => _xeger = new Xeger(pattern);
 
         protected override string GenerateValue()
         {

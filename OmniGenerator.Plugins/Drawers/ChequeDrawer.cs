@@ -13,13 +13,8 @@ namespace OmniGenerator.Plugins.Drawers
     [OmniGeneratorPluginMetadata("drawer.omni.cheque", "Draws french cheque images")]
     public class ChequeDrawer : DocumentDrawerBase
     {
-        /// <summary>
-        /// Creates a new <see cref="ChequeDrawer"/>
-        /// </summary>
-        public ChequeDrawer()
+        public ChequeDrawer() : base(width: 175, height: 80)
         {
-            Width = 175;
-            Height = 80;
         }
 
         public override SvgDocument DrawRecto(Document document)

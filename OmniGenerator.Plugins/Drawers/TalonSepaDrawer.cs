@@ -12,13 +12,8 @@ namespace OmniGenerator.Lib.Drawers.Drawers
     [OmniGeneratorPluginMetadata("drawer.omni.talon", "Draws TIP SEPA images")]
     public class TalonSepaDrawer : DocumentDrawerBase
     {
-        /// <summary>
-        /// Creates a new <see cref="TalonSepaDrawer"/>
-        /// </summary>
-        public TalonSepaDrawer()
+        public TalonSepaDrawer() : base(width: 175, height: 80)
         {
-            Width = 175;
-            Height = 80;
         }
 
         public override SvgDocument DrawRecto(Document document)

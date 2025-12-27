@@ -62,7 +62,7 @@ namespace OmniGenerator.Lib.Orchestration
                 });
 
                 var root = await _hierarchyBuilder.BuildAsync(configuration);
-                
+
                 // Report final progress with Succeeded status
                 ReportProgress(GenerationStep.Hierarchy, StepStatus.Succeeded, lastProgress, force: true);
                 return root;
@@ -97,7 +97,7 @@ namespace OmniGenerator.Lib.Orchestration
                 });
 
                 await _imageComposerProcessor.DrawImagesAsync(root);
-                
+
                 // Report final progress with Succeeded status
                 ReportProgress(GenerationStep.Images, StepStatus.Succeeded, lastProgress, force: true);
             }

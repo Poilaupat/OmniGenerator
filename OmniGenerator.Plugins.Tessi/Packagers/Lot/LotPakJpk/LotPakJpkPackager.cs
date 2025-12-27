@@ -30,7 +30,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
 
             int bwOffset = 0, gsOffset = 0;
             int index = 1;
-            foreach(var document in root.GetDocuments())
+            foreach (var document in root.GetDocuments())
             {
                 var (newBwOffset, newGsOffset) = await WriteBodyAsync(index++, document, root, lot, pak, jpk, bwOffset, gsOffset);
                 bwOffset = newBwOffset;

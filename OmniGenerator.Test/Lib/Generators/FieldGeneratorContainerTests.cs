@@ -483,14 +483,6 @@ namespace OmniGenerator.Test.Lib.Generators
             return config;
         }
 
-        private Group CreateTestGroup()
-        {
-            return new Group(
-                "TestGroup",
-                System.Array.Empty<Group>(),
-                System.Array.Empty<Document>());
-        }
-
         #endregion
     }
 }

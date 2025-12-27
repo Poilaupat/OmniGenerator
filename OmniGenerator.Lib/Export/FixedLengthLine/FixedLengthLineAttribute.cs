@@ -23,9 +23,6 @@ namespace OmniGenerator.Lib.FixedLengthLine
         /// with the specified line length.
         /// </summary>
         /// <param name="length">The total length of the fixed-length line.</param>
-        public FixedLengthLineAttribute(int length)
-        {
-            Length = length;
-        }
+        public FixedLengthLineAttribute(int length) => Length = length;
     }
 }

@@ -26,10 +26,7 @@ namespace OmniGenerator.Lib.Infrastructure
         /// <exception cref="DirectoryNotFoundException">
         /// Thrown if the Plugins directory does not exist.
         /// </exception>
-        public PluginService()
-        {
-            LoadPlugins();
-        }
+        public PluginService() => LoadPlugins();
 
         /// <summary>
         /// Loads plugins from the Plugins directory.

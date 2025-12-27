@@ -21,10 +21,7 @@ namespace OmniGenerator.Lib.Generators.Fields
         /// <param name="name">The name of the generator</param>
         /// <param name="list">The resolved list (from file or configuration)</param>
         public AbstractFieldGeneratorFromListBase(string name, IEnumerable<TCollection> list)
-            : base(name)
-        {
-            List = list;
-        }
+            : base(name) => List = list;
 
         protected override abstract TGenerator GenerateValue();
     }

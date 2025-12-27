@@ -23,11 +23,9 @@ namespace OmniGenerator.Lib.Tools
         /// </summary>
         /// <param name="recto">The SVG document to render.</param>
         /// <param name="resolution">The resolution in pixels per inch (DPI) for rendering the image.</param>
-        public SvgRenderer(SvgDocument recto, int resolution)
-        {
+        public SvgRenderer(SvgDocument recto, int resolution) =>
             //Renders the vector image to a bitmap at the specified resolution
             _image = RenderSvg(recto, resolution);
-        }
 
         /// <summary>
         /// Converts the rendered SVG image to a TIFF file using Group 4 compression.

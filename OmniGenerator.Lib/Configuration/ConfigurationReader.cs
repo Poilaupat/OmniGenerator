@@ -12,6 +12,10 @@ using OmniGenerator.Lib.Tools;
 
 namespace OmniGenerator.Lib.Configuration
 {
+    /// <summary>
+    /// Provides functionality for reading and validating OmniGenerator configuration files.
+    /// Supports loading hierarchical configurations with external field definition files.
+    /// </summary>
     public static class ConfigurationReader
     {
         private static readonly JsonSerializerOptions _options = new()
@@ -19,6 +23,23 @@ namespace OmniGenerator.Lib.Configuration
             TypeInfoResolver = new PolymorphicTypeResolver(),
         };
 
+        /// <summary>
+        /// Reads and parses an OmniGenerator configuration file asynchronously.
+        /// Automatically loads any external field configuration files referenced in the main configuration.
+        /// </summary>
+        /// <param name="filePath">The absolute or relative path to the main configuration file.</param>
+        /// <returns>A fully populated <see cref="OmniGeneratorConfiguration"/> object with all field configurations merged.</returns>
+        /// <exception cref="ConfigurationException">
+        /// Thrown when the configuration file cannot be read, parsed, or contains invalid data.
+        /// </exception>
+        /// <remarks>
+        /// This method performs the following operations:
+        /// <list type="number">
+        /// <item>Deserializes the main configuration file.</item>
+        /// <item>Loads root-level field configurations if specified.</item>
+        /// <item>Recursively loads field configurations for all hierarchy elements (groups and documents).</item>
+        /// </list>
+        /// </remarks>
         public static async Task<OmniGeneratorConfiguration> ReadConfigurationAsync(string filePath)
         {
             try
@@ -36,7 +57,7 @@ namespace OmniGenerator.Lib.Configuration
                 {
                     if (!string.IsNullOrWhiteSpace(configElement.FieldConfigurationFile))
                     {
-                        var filefields = await ConfigurationReader.DeserializeAsync<List<AbstractFieldConfigurationBase>>(directory, configElement.FieldConfigurationFile);
+                        var filefields = await ConfigurationReader.DeserializeAsync<List<AbstractFieldConfigurationBase>>(directory ?? string.Empty, configElement.FieldConfigurationFile);
                         configElement.Fields.Merge(filefields);
                     }
                 }
@@ -50,6 +71,15 @@ namespace OmniGenerator.Lib.Configuration
             }
         }
 
+        /// <summary>
+        /// Deserializes a JSON file into an object of type <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of object to deserialize.</typeparam>
+        /// <param name="filepath">The absolute path to the JSON file.</param>
+        /// <returns>The deserialized object of type <typeparamref name="T"/>.</returns>
+        /// <exception cref="ConfigurationException">
+        /// Thrown when the file cannot be found, read, or the JSON deserialization fails.
+        /// </exception>
         private static async Task<T> DeserializeAsync<T>(string filepath)
         {
             try
@@ -82,9 +112,24 @@ namespace OmniGenerator.Lib.Configuration
             }
         }
 
+        /// <summary>
+        /// Deserializes a JSON file into an object of type <typeparamref name="T"/>.
+        /// Supports both absolute and relative file paths.
+        /// </summary>
+        /// <typeparam name="T">The type of object to deserialize.</typeparam>
+        /// <param name="directory">The base directory to resolve relative paths. Used when <paramref name="filename"/> is not an absolute path.</param>
+        /// <param name="filename">The filename or absolute path to the JSON file.</param>
+        /// <returns>The deserialized object of type <typeparamref name="T"/>.</returns>
+        /// <exception cref="ConfigurationException">
+        /// Thrown when the file cannot be found in either the specified absolute path or relative to the directory.
+        /// </exception>
+        /// <remarks>
+        /// The method first checks if <paramref name="filename"/> is an absolute path and the file exists.
+        /// If not, it attempts to locate the file relative to the specified <paramref name="directory"/>.
+        /// </remarks>
         private static async Task<T> DeserializeAsync<T>(string directory, string filename)
         {
-            if(Path.IsPathRooted(filename) && File.Exists(filename))
+            if (Path.IsPathRooted(filename) && File.Exists(filename))
             {
                 return await DeserializeAsync<T>(filename);
             }
@@ -98,6 +143,26 @@ namespace OmniGenerator.Lib.Configuration
             throw new ConfigurationException($"The file {filename} was not found.");
         }
 
+        /// <summary>
+        /// Validates an OmniGenerator configuration against business rules and constraints.
+        /// </summary>
+        /// <param name="config">The configuration to validate.</param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="config"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="ConfigurationException">
+        /// Thrown when the configuration violates one or more validation rules.
+        /// The exception contains a collection of all validation errors found.
+        /// </exception>
+        /// <remarks>
+        /// The following validation rules are enforced:
+        /// <list type="bullet">
+        /// <item>Documents cannot contain aggregate fields.</item>
+        /// <item>The name "omni.generator.hierarchy" is reserved and cannot be used for hierarchy elements.</item>
+        /// </list>
+        /// All validation errors are collected before throwing the exception, allowing the caller
+        /// to view all issues at once rather than one at a time.
+        /// </remarks>
         public static void CheckConfiguration(OmniGeneratorConfiguration config)
         {
             ArgumentNullException.ThrowIfNull(config, nameof(config));

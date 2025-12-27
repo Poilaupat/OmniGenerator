@@ -47,7 +47,7 @@ namespace OmniGenerator.Lib.Configuration
         {
             yield return this;
 
-            foreach(var subgroup in GetElementsConfiguration<GroupConfiguration>(recursive))
+            foreach (var subgroup in GetElementsConfiguration<GroupConfiguration>(recursive))
             {
                 yield return subgroup;
             }
