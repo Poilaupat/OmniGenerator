@@ -1,5 +1,5 @@
 ﻿using Microsoft.ProgramSynthesis.Utils.JetBrains.Annotations;
-using OmniGenerator.Lib.Drawers;
+using OmniGenerator.Lib.Renderers;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
 using Spectre.Console;
@@ -30,7 +30,7 @@ namespace OmniGenerator.Cli.Widgets
             return panel;
         }
 
-        public static IRenderable ToWidget(this DocumentDrawerManagerProgress progress)
+        public static IRenderable ToWidget(this DocumentRendererManagerProgress progress)
         {
             var grid = new Grid();
             grid.AddColumn();

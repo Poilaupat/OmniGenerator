@@ -2,26 +2,26 @@
 using Svg;
 using System.Drawing;
 using OmniGenerator.Lib.Infrastructure;
-using OmniGenerator.Lib.Drawers;
+using OmniGenerator.Lib.Renderers;
 using OmniGenerator.Lib.Hierarchy;
 
-namespace OmniGenerator.Plugins.Drawers
+namespace OmniGenerator.Plugins.Renderers
 {
     /// <summary>
-    /// A <see cref="IDocumentDrawer"/> for cheque image generation
+    /// A <see cref="IDocumentRenderer"/> for cheque image generation
     /// </summary>
-    [OmniGeneratorPluginMetadata("drawer.omni.cheque", "Draws french cheque images")]
-    public class ChequeDrawer : DocumentDrawerBase
+    [OmniGeneratorPluginMetadata("renderer.omni.cheque", "Renders french cheque images")]
+    public class ChequeRenderer : DocumentRendererBase
     {
-        public ChequeDrawer() : base(width: 175, height: 80)
+        public ChequeRenderer() : base(width: 175, height: 80)
         {
         }
 
-        public override SvgDocument DrawRecto(Document document)
+        public override SvgDocument RenderRecto(Document document)
         {
             var svg = SvgExtensions.NewBlankSvg(Width, Height);
 
-            DrawRectoBackground(svg);
+            RenderRectoBackground(svg);
 
             //CMC7 with separator chars
             string[] dataread = document.Fields.GetStringValue("dataread").Split(" ");
@@ -75,7 +75,7 @@ namespace OmniGenerator.Plugins.Drawers
             return svg;
         }
 
-        private void DrawRectoBackground(SvgDocument svg)
+        private void RenderRectoBackground(SvgDocument svg)
         {
             svg.Children.Add(new SvgRectangle { ID = "background", X = 0, Y = 0, Height = this.Height - 15, Width = this.Width, Fill = new SvgColourServer(Color.LightGray) });
             svg.Children.Add(new SvgRectangle { ID = "amount-cell", X = 131, Y = 25, Height = 9, Width = 41, Fill = new SvgColourServer(Color.White), Stroke = new SvgColourServer(Color.LightSkyBlue), StrokeWidth = 1 });
@@ -142,7 +142,7 @@ namespace OmniGenerator.Plugins.Drawers
             svg.Children.Add(new SvgLine { ID = "bar2", StartX = 105f, StartY = 15f, EndX = 95, EndY = 35f, Stroke = new SvgColourServer(Color.DarkBlue), StrokeWidth = 0.2f });
         }
 
-        public override SvgDocument DrawVerso(Document document)
+        public override SvgDocument RenderVerso(Document document)
         {
             var svg = SvgExtensions.NewBlankSvg(Width, Height);
 

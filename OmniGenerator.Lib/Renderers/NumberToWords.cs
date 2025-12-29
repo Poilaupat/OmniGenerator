@@ -1,4 +1,4 @@
-﻿namespace OmniGenerator.Lib.Drawers
+﻿namespace OmniGenerator.Lib.Renderers
 {
     /// <summary>
     /// Provides a string representation of numbers in french

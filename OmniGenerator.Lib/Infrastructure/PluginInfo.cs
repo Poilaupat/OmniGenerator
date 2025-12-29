@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace OmniGenerator.Lib.Infrastructure
 {
     /// <summary>
-    /// The parent type of the plugin, indicating whether it is a packager or a drawer.
+    /// The parent type of the plugin, indicating whether it is a packager or a renderer.
     /// </summary>
     public enum EPluginParentType
     {
@@ -19,9 +19,9 @@ namespace OmniGenerator.Lib.Infrastructure
         Packager,
 
         /// <summary>
-        /// Indicates that the plugin is a document drawer.
+        /// Indicates that the plugin is a document renderer.
         /// </summary>
-        Drawer
+        Renderer
     }
 
     /// <summary>
@@ -45,14 +45,14 @@ namespace OmniGenerator.Lib.Infrastructure
         public Type PluginType { get; }
 
         /// <summary>
-        /// Gets the parent type of the plugin, indicating whether it is a packager or a drawer.
+        /// Gets the parent type of the plugin, indicating whether it is a packager or a renderer.
         /// </summary>
         /// <exception cref="NotImplementedException">
         /// Thrown if the plugin type does not match any known parent type.
         /// </exception>
         public EPluginParentType ParentType => PluginType switch
         {
-            _ when typeof(IDocumentDrawer).IsAssignableFrom(PluginType) => EPluginParentType.Drawer,
+            _ when typeof(IDocumentRenderer).IsAssignableFrom(PluginType) => EPluginParentType.Renderer,
             _ when typeof(IPackager).IsAssignableFrom(PluginType) => EPluginParentType.Packager,
             _ => throw new NotImplementedException()
         };

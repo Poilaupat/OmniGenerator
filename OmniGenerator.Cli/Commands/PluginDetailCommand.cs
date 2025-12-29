@@ -29,8 +29,7 @@ namespace OmniGenerator.Cli.Commands
         /// <returns>A task representing the asynchronous execution, returning 0 on success.</returns>
         public override Task<int> ExecuteAsync(CommandContext context, PluginDetailCommandSettings settings, CancellationToken ct)
         {
-            var plugin = pluginservice.GetPluginsInfo<IDocumentDrawer>()
-                .Union(pluginservice.GetPluginsInfo<IPackager>())
+            var plugin = pluginservice.GetAllPluginsInfo()
                 .SingleOrDefault(p => p.PluginName.Equals(settings.PluginName, StringComparison.InvariantCultureIgnoreCase));
 
             if (plugin is not null)

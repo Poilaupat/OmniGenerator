@@ -1,9 +1,9 @@
-﻿namespace OmniGenerator.Lib.Drawers
+﻿namespace OmniGenerator.Lib.Renderers
 {
     /// <summary>
-    /// Represents the progress of the document drawer manager.
+    /// Represents the progress of the document renderer manager.
     /// </summary>
-    public sealed class DocumentDrawerManagerProgress
+    public sealed class DocumentRendererManagerProgress
     {
         /// <summary>
         /// Gets or sets the total number of documents to process.

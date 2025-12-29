@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using OmniGenerator.Cli.Tools;
 using OmniGenerator.Cli.Widgets;
 using OmniGenerator.Lib.Configuration;
-using OmniGenerator.Lib.Drawers;
+using OmniGenerator.Lib.Renderers;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
@@ -50,7 +50,7 @@ namespace OmniGenerator.Cli.Commands
 
         private Exception? _error;
         private HierarchyBuilderProgress? _hierarchyProgress;
-        private DocumentDrawerManagerProgress? _imageProgress;
+        private DocumentRendererManagerProgress? _imageProgress;
 
         /// <summary>
         /// Executes the generate command asynchronously, reading input settings,
@@ -175,8 +175,8 @@ namespace OmniGenerator.Cli.Commands
                 case HierarchyBuilderProgress hbp:
                     _hierarchyProgress = hbp;
                     break;
-                case DocumentDrawerManagerProgress ddmp:
-                    _imageProgress = ddmp;
+                case DocumentRendererManagerProgress drmp:
+                    _imageProgress = drmp;
                     break;
             }
 

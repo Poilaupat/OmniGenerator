@@ -1,8 +1,8 @@
 using NUnit.Framework;
-using OmniGenerator.Lib.Drawers;
+using OmniGenerator.Lib.Renderers;
 using System;
 
-namespace OmniGenerator.Test.Lib.Drawers
+namespace OmniGenerator.Test.Lib.Renderers
 {
     [TestFixture]
     public class NumberToWordsTests

@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using DotLiquid;
 using Microsoft.Extensions.Configuration;
-using OmniGenerator.Lib.Drawers;
+using OmniGenerator.Lib.Renderers;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
@@ -59,7 +59,7 @@ namespace OmniGenerator.Lib.Autofac
 
             // Register core OmniGenerator services and interfaces
             builder.RegisterType<HierarchyBuilder>().As<IHierarchyBuilder>().InstancePerLifetimeScope();
-            builder.RegisterType<DocumentDrawerManager>().As<IDocumentDrawerManager>().InstancePerLifetimeScope();
+            builder.RegisterType<DocumentRendererManager>().As<IDocumentRendererManager>().InstancePerLifetimeScope();
             builder.RegisterType<PluginService>().As<IPluginService>().InstancePerLifetimeScope();
             builder.RegisterType<GenerationOrchestrator>().As<IGenerationOrchestrator>().InstancePerLifetimeScope();
 
@@ -72,9 +72,9 @@ namespace OmniGenerator.Lib.Autofac
                 })
                 .InstancePerLifetimeScope();
 
-            // Register concrete progress report type
+            // Register concrete progress report types
             builder.RegisterType<HierarchyBuilderProgress>().InstancePerDependency();
-            builder.RegisterType<DocumentDrawerManagerProgress>().InstancePerDependency();
+            builder.RegisterType<DocumentRendererManagerProgress>().InstancePerDependency();
         }
     }
 }

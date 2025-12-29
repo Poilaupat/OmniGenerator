@@ -7,7 +7,7 @@ using Spectre.Console.Cli;
 namespace OmniGenerator.Cli.Commands
 {
     /// <summary>
-    /// Represents a CLI command that lists available plugins (drawers and/or packagers)
+    /// Represents a CLI command that lists available plugins (renderers and/or packagers)
     /// using a formatted table output in the console.
     /// </summary>
     /// <remarks>
@@ -27,8 +27,8 @@ namespace OmniGenerator.Cli.Commands
         {
             var plugins = new List<PluginInfo>();
 
-            if (settings.ShowDrawers)
-                plugins.AddRange(pluginservice.GetPluginsInfo<IDocumentDrawer>());
+            if (settings.ShowRenderers)
+                plugins.AddRange(pluginservice.GetPluginsInfo<IDocumentRenderer>());
 
             if (settings.ShowPackagers)
                 plugins.AddRange(pluginservice.GetPluginsInfo<IPackager>());

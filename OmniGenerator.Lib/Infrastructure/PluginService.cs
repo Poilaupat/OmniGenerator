@@ -44,8 +44,8 @@ namespace OmniGenerator.Lib.Infrastructure
                 if (File.Exists(dll))
                 {
                     var loader = PluginLoader.CreateFromAssemblyFile(
-                        dll,
-                        sharedTypes: new[] { typeof(IPackager), typeof(IDocumentDrawer) });
+                            dll,
+                            sharedTypes: new[] { typeof(IPackager), typeof(IDocumentRenderer) });
 
                     foreach (var pluginType in loader
                         .LoadDefaultAssembly()
@@ -106,7 +106,7 @@ namespace OmniGenerator.Lib.Infrastructure
         /// <summary>
         /// Gets metadata information about all available plugins of the specified type.
         /// </summary>
-        /// <typeparam name="TPlugin">The type of plugin to search for (e.g., <see cref="IPackager"/>, <see cref="IDocumentDrawer"/>).</typeparam>
+        /// <typeparam name="TPlugin">The type of plugin to search for (e.g., <see cref="IPackager"/>, <see cref="IDocumentRenderer"/>).</typeparam>
         /// <returns>
         /// An enumerable collection of <see cref="PluginInfo"/> objects describing each discovered plugin.
         /// </returns>
@@ -116,6 +116,16 @@ namespace OmniGenerator.Lib.Infrastructure
             return _repository
                 .Where(p => p.Value.PluginType.IsAssignableTo(typeof(TPlugin)))
                 .Select(p => p.Value);
+        }
+
+        /// <summary>
+        /// Retrieves information about all available plugins.
+        /// </summary>
+        /// <returns>An enumerable collection of <see cref="PluginInfo"/> objects representing all plugins. The collection will
+        /// be empty if no plugins are available.</returns>
+        public IEnumerable<PluginInfo> GetAllPluginsInfo()
+        {
+            return _repository.Values;
         }
     }
 }

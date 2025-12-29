@@ -24,10 +24,17 @@ namespace OmniGenerator.Lib.Interfaces.Infrastructure
         /// <summary>
         /// Gets metadata information about all available plugins of the specified type.
         /// </summary>
-        /// <typeparam name="TPlugin">The type of plugin to search for (e.g., <see cref="IPackager"/>, <see cref="IDocumentDrawer"/>).</typeparam>
+        /// <typeparam name="TPlugin">The type of plugin to search for (e.g., <see cref="IPackager"/>, <see cref="IDocumentRenderer"/>).</typeparam>
         /// <returns>
         /// An enumerable collection of <see cref="PluginInfo"/> objects describing each discovered plugin.
         /// </returns>
         IEnumerable<PluginInfo> GetPluginsInfo<TPlugin>() where TPlugin : IOmniGeneratorPlugin;
+
+        /// <summary>
+        /// Retrieves information about all available plugins.
+        /// </summary>
+        /// <returns>An enumerable collection of <see cref="PluginInfo"/> objects, each representing a plugin. The collection is
+        /// empty if no plugins are available.</returns>
+        IEnumerable<PluginInfo> GetAllPluginsInfo();
     }
 }

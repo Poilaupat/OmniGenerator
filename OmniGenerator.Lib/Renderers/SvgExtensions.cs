@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Reflection;
 
-namespace OmniGenerator.Lib.Drawers
+namespace OmniGenerator.Lib.Renderers
 {
     /// <summary>
     /// A set of tools for SVG images

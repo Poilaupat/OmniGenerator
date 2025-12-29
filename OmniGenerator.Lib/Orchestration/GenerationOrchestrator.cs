@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 using OmniGenerator.Lib.Configuration;
-using OmniGenerator.Lib.Drawers;
+using OmniGenerator.Lib.Renderers;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
@@ -12,7 +12,7 @@ namespace OmniGenerator.Lib.Orchestration
     {
         private readonly IPluginService _pluginService;
         private readonly IHierarchyBuilder _hierarchyBuilder;
-        private readonly IDocumentDrawerManager _imageComposerProcessor;
+        private readonly IDocumentRendererManager _imageRendererProcessor;
         private readonly ILogger<GenerationOrchestrator> _logger;
 
         public Notifier<GenerationProgress> Notifier { get; }
@@ -20,13 +20,13 @@ namespace OmniGenerator.Lib.Orchestration
         public GenerationOrchestrator(
             IPluginService pluginService,
             IHierarchyBuilder hierarchyBuilder,
-            IDocumentDrawerManager imageComposerProcessor,
+            IDocumentRendererManager imageRendererProcessor,
             Notifier<GenerationProgress> notifier,
             ILogger<GenerationOrchestrator> logger)
         {
             _pluginService = pluginService;
             _hierarchyBuilder = hierarchyBuilder;
-            _imageComposerProcessor = imageComposerProcessor;
+            _imageRendererProcessor = imageRendererProcessor;
             _logger = logger;
 
             Notifier = notifier;
@@ -39,7 +39,7 @@ namespace OmniGenerator.Lib.Orchestration
             CancellationToken cancellationToken = default)
         {
             var root = await BuildHierarchyAsync(configuration, cancellationToken);
-            await DrawImagesAsync(root, cancellationToken);
+            await RenderImagesAsync(root, cancellationToken);
             await PackageAsync(root, configuration, outputFolderPath, cancellationToken);
 
             return root;
@@ -75,9 +75,9 @@ namespace OmniGenerator.Lib.Orchestration
             }
         }
 
-        private async Task DrawImagesAsync(Root root, CancellationToken cancellationToken)
+        private async Task RenderImagesAsync(Root root, CancellationToken cancellationToken)
         {
-            if (_imageComposerProcessor is null || root.GetDocuments().All(d => string.IsNullOrWhiteSpace(d.ImageComposer)))
+            if (_imageRendererProcessor is null || root.GetDocuments().All(d => string.IsNullOrWhiteSpace(d.ImageComposer)))
             {
                 ReportProgress(GenerationStep.Images, StepStatus.Skipped, force: true);
                 return;
@@ -85,25 +85,25 @@ namespace OmniGenerator.Lib.Orchestration
 
             ReportProgress(GenerationStep.Images, StepStatus.Processing, force: true);
 
-            DocumentDrawerManagerProgress? lastProgress = null;
+            DocumentRendererManagerProgress? lastProgress = null;
 
             try
             {
-                //_imageComposerProcessor.ProgressResolution = ProgressResolution;
-                _imageComposerProcessor.Notifier.Progress = new Progress<DocumentDrawerManagerProgress>(progress =>
+                //_imageRendererProcessor.ProgressResolution = ProgressResolution;
+                _imageRendererProcessor.Notifier.Progress = new Progress<DocumentRendererManagerProgress>(progress =>
                 {
                     lastProgress = progress;
                     ReportProgress(GenerationStep.Images, StepStatus.Processing, progress);
                 });
 
-                await _imageComposerProcessor.DrawImagesAsync(root);
+                await _imageRendererProcessor.RenderImagesAsync(root);
 
                 // Report final progress with Succeeded status
                 ReportProgress(GenerationStep.Images, StepStatus.Succeeded, lastProgress, force: true);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while drawing images.");
+                _logger.LogError(ex, "An error occurred while rendering images.");
                 ReportProgress(GenerationStep.Images, StepStatus.Failed, error: ex, force: true);
                 throw;
             }

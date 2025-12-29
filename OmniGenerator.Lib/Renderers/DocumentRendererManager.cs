@@ -4,17 +4,17 @@ using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
 
-namespace OmniGenerator.Lib.Drawers
+namespace OmniGenerator.Lib.Renderers
 {
     /// <summary>
-    /// The image composer processor.
-    /// This processor takes meta data of documents, selects an <see cref="IDocumentDrawer"/> from the PluginService and generates SVG images
+    /// The image renderer processor.
+    /// This processor takes meta data of documents, selects an <see cref="IDocumentRenderer"/> from the PluginService and generates SVG images
     /// </summary>
-    internal sealed class DocumentDrawerManager : IDocumentDrawerManager
+    internal sealed class DocumentRendererManager : IDocumentRendererManager
     {
         #region Interface properties
 
-        public Notifier<DocumentDrawerManagerProgress> Notifier { get; }
+        public Notifier<DocumentRendererManagerProgress> Notifier { get; }
 
         #endregion
 
@@ -23,10 +23,10 @@ namespace OmniGenerator.Lib.Drawers
         private long _processedDocuments = 0;
 
         /// <summary>
-        /// Creates a new <see cref="DocumentDrawerManager"/>
+        /// Creates a new <see cref="DocumentRendererManager"/>
         /// </summary>
-        /// <param name="pluginService">The plugin service used to retrieve document drawers</param>
-        public DocumentDrawerManager(IPluginService pluginService, Notifier<DocumentDrawerManagerProgress> notifier)
+        /// <param name="pluginService">The plugin service used to retrieve document renderers</param>
+        public DocumentRendererManager(IPluginService pluginService, Notifier<DocumentRendererManagerProgress> notifier)
         {
             _pluginService = pluginService;
             Notifier = notifier;
@@ -34,11 +34,11 @@ namespace OmniGenerator.Lib.Drawers
 
         /// <summary>
         /// Generates images for all documents in the given root
-        /// If a document has no <see cref="IDocumentDrawer"/> it will be ignored
+        /// If a document has no <see cref="IDocumentRenderer"/> it will be ignored
         /// </summary>
         /// <param name="root">The root containing the documents</param>
         /// <returns></returns>
-        public async Task DrawImagesAsync(Root root)
+        public async Task RenderImagesAsync(Root root)
         {
             var docsByComposer = root.GetDocuments()
                 .Where(d => !string.IsNullOrWhiteSpace(d.ImageComposer))
@@ -61,18 +61,18 @@ namespace OmniGenerator.Lib.Drawers
                 var composerName = docGroup.Key!;
                 var documents = docGroup.ToList();
 
-                // Resolve a single drawer instance for this composer group.
-                // Reusing one instance is safe only if the drawer implementation is thread-safe.
-                var drawer = _pluginService.GetPlugin<IDocumentDrawer>(composerName);
-                if (drawer is not null)
+                // Resolve a single renderer instance for this composer group.
+                // Reusing one instance is safe only if the renderer implementation is thread-safe.
+                var renderer = _pluginService.GetPlugin<IDocumentRenderer>(composerName);
+                if (renderer is not null)
                 {
                     // Parallel processing of documents with the same composer
                     Parallel.ForEach(documents, doc =>
                     {
-                        var recto = drawer.DrawRecto(doc);
+                        var recto = renderer.RenderRecto(doc);
                         doc.RectoVectorImage = recto;
 
-                        var verso = drawer.DrawVerso(doc);
+                        var verso = renderer.RenderVerso(doc);
                         doc.VersoVectorImage = verso;
 
                         Interlocked.Increment(ref _processedDocuments);
@@ -85,9 +85,9 @@ namespace OmniGenerator.Lib.Drawers
             await Task.CompletedTask;
         }
 
-        private DocumentDrawerManagerProgress GetNotificationData()
+        private DocumentRendererManagerProgress GetNotificationData()
         {
-            return new DocumentDrawerManagerProgress()
+            return new DocumentRendererManagerProgress()
             {
                 TotalDocuments = Interlocked.Read(ref _totalDocuments),
                 ProcessedDocuments = Interlocked.Read(ref _processedDocuments)

@@ -4,12 +4,12 @@ using OmniGenerator.Lib.Interfaces;
 using Svg;
 using System.Drawing;
 
-namespace OmniGenerator.Lib.Drawers
+namespace OmniGenerator.Lib.Renderers
 {
     /// <summary>
-    /// The base class for all <see cref="IDocumentDrawer"/>
+    /// The base class for all <see cref="IDocumentRenderer"/>
     /// </summary>
-    public abstract class DocumentDrawerBase : OmniGeneratorPluginBase, IDocumentDrawer
+    public abstract class DocumentRendererBase : OmniGeneratorPluginBase, IDocumentRenderer
     {
         /// <summary>
         /// The recto and verso image Width in millimeter
@@ -22,11 +22,11 @@ namespace OmniGenerator.Lib.Drawers
         public int Height { get; init; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DocumentDrawerBase"/> class.
+        /// Initializes a new instance of the <see cref="DocumentRendererBase"/> class.
         /// </summary>
         /// <param name="width">The width of the document in millimeters.</param>
         /// <param name="height">The height of the document in millimeters.</param>
-        protected DocumentDrawerBase(int width, int height)
+        protected DocumentRendererBase(int width, int height)
         {
             Width = width;
             Height = height;
@@ -40,24 +40,24 @@ namespace OmniGenerator.Lib.Drawers
         ///
         /// Other system fonts can be used without having to load them
         /// </summary>
-        static DocumentDrawerBase() => LoadFonts();
+        static DocumentRendererBase() => LoadFonts();
 
         /// <summary>
-        /// Composes the recto
+        /// Renders the recto
         /// </summary>
         /// <param name="document">The data of the document</param>
         /// <returns>A SVG representation of the recto</returns>
-        public virtual SvgDocument DrawRecto(Document document)
+        public virtual SvgDocument RenderRecto(Document document)
         {
             return SvgExtensions.NewBlankSvg(Width, Height);
         }
 
         /// <summary>
-        /// Composes the verso
+        /// Renders the verso
         /// </summary>
         /// <param name="document">The data of the document</param>
         /// <returns>A SVG representation of the verso</returns>
-        public virtual SvgDocument DrawVerso(Document document)
+        public virtual SvgDocument RenderVerso(Document document)
         {
             return SvgExtensions.NewBlankSvg(Width, Height);
         }

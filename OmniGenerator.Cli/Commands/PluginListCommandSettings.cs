@@ -13,7 +13,7 @@ namespace OmniGenerator.Cli.Commands
 
     /// <summary>
     /// Command settings for listing available plugins.
-    /// Allows filtering by type: packagers and/or drawers.
+    /// Allows filtering by type: packagers and/or renderers.
     /// </summary>
     internal sealed class PluginListCommandSettings : PluginCommandSettingsBase
     {
@@ -24,21 +24,21 @@ namespace OmniGenerator.Cli.Commands
         public bool? PackagersOption { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to display document drawer plugins.
+        /// Gets or sets a value indicating whether to display document renderer plugins.
         /// </summary>
-        [CommandOption("-d|--drawers")]
-        public bool? DrawersOptions { get; set; }
+        [CommandOption("-r|--renderers")]
+        public bool? RenderersOptions { get; set; }
 
         /// <summary>
         /// Determines whether to show packager plugins based on provided options.
         /// Defaults to true if neither option is explicitly specified.
         /// </summary>
-        public bool ShowPackagers => (PackagersOption ?? false) || (PackagersOption is null && DrawersOptions is null);
+        public bool ShowPackagers => (PackagersOption ?? false) || (PackagersOption is null && RenderersOptions is null);
 
         /// <summary>
-        /// Determines whether to show drawer plugins based on provided options.
+        /// Determines whether to show renderer plugins based on provided options.
         /// Defaults to true if neither option is explicitly specified.
         /// </summary>
-        public bool ShowDrawers => (DrawersOptions ?? false) || (PackagersOption is null && DrawersOptions is null);
+        public bool ShowRenderers => (RenderersOptions ?? false) || (PackagersOption is null && RenderersOptions is null);
     }
 }

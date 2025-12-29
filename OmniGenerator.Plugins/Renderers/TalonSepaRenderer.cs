@@ -3,24 +3,25 @@ using Svg;
 using System.Drawing;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Hierarchy;
+using OmniGenerator.Lib.Renderers;
 
-namespace OmniGenerator.Lib.Drawers.Drawers
+namespace OmniGenerator.Plugins.Renderers
 {
     /// <summary>
-    /// A <see cref="IDocumentDrawer"/> for talon optique image generation
+    /// A <see cref="IDocumentRenderer"/> for talon optique image generation
     /// </summary>
-    [OmniGeneratorPluginMetadata("drawer.omni.talon", "Draws TIP SEPA images")]
-    public class TalonSepaDrawer : DocumentDrawerBase
+    [OmniGeneratorPluginMetadata("renderer.omni.talon", "Renders TIP SEPA images")]
+    public class TalonSepaRenderer : DocumentRendererBase
     {
-        public TalonSepaDrawer() : base(width: 175, height: 80)
+        public TalonSepaRenderer() : base(width: 175, height: 80)
         {
         }
 
-        public override SvgDocument DrawRecto(Document document)
+        public override SvgDocument RenderRecto(Document document)
         {
             var svg = SvgExtensions.NewBlankSvg(Width, Height);
 
-            DrawRectoBackground(svg);
+            RenderRectoBackground(svg);
 
             svg.DrawText($"{document.Fields["amount"].Value}", "amount", 80f, 30f, "Arial", 4f, Color.Black);
 
@@ -36,7 +37,7 @@ namespace OmniGenerator.Lib.Drawers.Drawers
             return svg;
         }
 
-        private void DrawRectoBackground(SvgDocument svg)
+        private void RenderRectoBackground(SvgDocument svg)
         {
             //Box
             svg.Children.Add(new SvgRectangle { ID = "date-sign_rect", X = 1.5f, Y = 22f, Height = 32f, Width = 70f, Stroke = new SvgColourServer(Color.Black), StrokeWidth = 0.1f });

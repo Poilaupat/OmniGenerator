@@ -111,7 +111,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
 
         Parallel.For(0, docCount, i =>
         {
-            var document = new Document(documentConfiguration.Name, documentConfiguration.ImageComposer);
+            var document = new Document(documentConfiguration.Name, documentConfiguration.ImageRenderer);
             document.GenerateFields(fgc);
             Interlocked.Increment(ref _countProcessedDoc);
             Interlocked.Add(ref _countField, document.Fields.Count);

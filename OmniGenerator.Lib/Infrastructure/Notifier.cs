@@ -1,12 +1,4 @@
-﻿using OmniGenerator.Lib.Drawers;
-using OmniGenerator.Lib.Interfaces.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OmniGenerator.Lib.Infrastructure
+﻿namespace OmniGenerator.Lib.Infrastructure
 {
     public class Notifier<TNotificationData> where TNotificationData : notnull
     {
