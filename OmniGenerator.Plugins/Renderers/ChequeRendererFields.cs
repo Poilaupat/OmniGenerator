@@ -33,55 +33,50 @@ namespace OmniGenerator.Plugins.Renderers
         /// <summary>
         /// Gets the bank name.
         /// </summary>
-        [FieldInfo("bank-name", "Bank name", isRequired: false, DefaultValue = "Default Bank Name")]
-        public string BankName => GetOptionalString("bank-name", "Default Bank Name");
+        [FieldInfo("bank-name", "Bank name", isRequired: false, DefaultValue = "OmniBank")]
+        public string BankName => GetOptionalString("bank-name", "OmniBank");
 
         /// <summary>
         /// Gets the bank address.
         /// </summary>
-        [FieldInfo("bank-address", "Bank address", isRequired: false, DefaultValue = "")]
-        public string BankAddress => GetOptionalString("bank-address", string.Empty);
+        [FieldInfo("bank-address", "Bank address", isRequired: false, DefaultValue = "1 rue de la république")]
+        public string BankAddress => GetOptionalString("bank-address", "1 rue de la république");
 
         /// <summary>
         /// Gets the bank zipcode and city.
         /// </summary>
-        [FieldInfo("bank-zip-city", "Bank zipcode and city", isRequired: false, DefaultValue = "")]
-        public string BankZipCity => GetOptionalString("bank-zip-city", string.Empty);
+        [FieldInfo("bank-zip-city", "Bank zipcode and city", isRequired: false, DefaultValue = "75001 Paris")]
+        public string BankZipCity => GetOptionalString("bank-zip-city", "75001 Paris");
 
         /// <summary>
         /// Gets the bank phone number.
         /// </summary>
-        [FieldInfo("bank-phone", "Bank phone number", isRequired: false, DefaultValue = "")]
-        public string BankPhone => GetOptionalString("bank-phone", string.Empty);
+        [FieldInfo("bank-phone", "Bank phone number", isRequired: false, DefaultValue = "01 02 03 04 05")]
+        public string BankPhone => GetOptionalString("bank-phone", "01 02 03 04 05");
 
         /// <summary>
         /// Gets the payor name.
         /// </summary>
-        [FieldInfo("payor-name", "Payor name", isRequired: true)]
-        public string PayorName => GetRequiredString("payor-name");
+        [FieldInfo("payor-name", "Payor name", isRequired: false, DefaultValue = "Bernard Pleinhausas")]
+        public string PayorName => GetOptionalString("payor-name", "Bernard Pleinhausas");
 
         /// <summary>
         /// Gets the payor address.
         /// </summary>
-        [FieldInfo("payor-address", "Payor address", isRequired: true)]
-        public string PayorAddress => GetRequiredString("payor-address");
+        [FieldInfo("payor-address", "Payor address", isRequired: false, DefaultValue = "42 rue de la maille")]
+        public string PayorAddress => GetOptionalString("payor-address", "42 rue de la maille");
 
         /// <summary>
         /// Gets the payor zipcode and city.
         /// </summary>
-        [FieldInfo("payor-zip-city", "Payor zipcode and city", isRequired: true)]
-        public string PayorZipCity => GetRequiredString("payor-zip-city");
+        [FieldInfo("payor-zip-city", "Payor zipcode and city", isRequired: false, DefaultValue = "75016 Paris")]
+        public string PayorZipCity => GetOptionalString("payor-zip-city", "75016 Paris");
 
         /// <summary>
         /// Gets the cheque amount field (for formatting).
         /// </summary>
         [FieldInfo("amount", "Cheque amount", isRequired: true)]
         public Field Amount => GetRequired("amount");
-
-        /// <summary>
-        /// Gets the cheque amount as a string.
-        /// </summary>
-        public string AmountString => GetRequiredString("amount");
 
         /// <summary>
         /// Gets the payee name.

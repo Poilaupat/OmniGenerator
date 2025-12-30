@@ -72,17 +72,20 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
         Interlocked.Add(ref _countGroup, groupCount);
 
         ConcurrentQueue<Group> groups = new();
-
+#if DEBUG
+        for(int i=0; i< groupCount; i++)
+#else
         Parallel.For(0, groupCount, i =>
+#endif
         {
-            Document[] subdocuments = Array.Empty<Document>();
-            Group[] subGroups = Array.Empty<Group>();
+            List<Document> subdocuments = new();
+            List<Group> subGroups = new();
 
             foreach (var subGroupConfiguration in groupConfiguration.GetGroupsConfiguration(false))
-                subGroups = GenerateGroups(subGroupConfiguration, fgc);
+                subGroups.AddRange(GenerateGroups(subGroupConfiguration, fgc));
 
             foreach (var docConfiguration in groupConfiguration.GetDocumentsConfiguration(false))
-                subdocuments = GenerateDocuments(docConfiguration, fgc);
+                subdocuments.AddRange(GenerateDocuments(docConfiguration, fgc));
 
             var group = new Group(groupConfiguration.Name, subGroups, subdocuments);
             group.GenerateFields(fgc);
@@ -91,8 +94,10 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
             groups.Enqueue(group);
 
             Notifier.SendNotification(GetHierarchyBuilderProgress());
-        });
-
+        }
+#if !DEBUG
+        );
+#endif
         return groups.ToArray();
     }
 
@@ -108,8 +113,11 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
         Interlocked.Add(ref _countDoc, docCount);
 
         ConcurrentQueue<Document> documents = new();
-
+#if DEBUG
+        for(int i=0; i< docCount; i++)
+#else
         Parallel.For(0, docCount, i =>
+#endif
         {
             var document = new Document(documentConfiguration.Name, documentConfiguration.ImageRenderer);
             document.GenerateFields(fgc);
@@ -118,7 +126,10 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
             documents.Enqueue(document);
 
             Notifier.SendNotification(GetHierarchyBuilderProgress());
-        });
+        }
+#if !DEBUG
+        );
+#endif
 
         return documents.ToArray();
     }

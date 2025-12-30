@@ -55,7 +55,7 @@ namespace OmniGenerator.Plugins.Renderers
             svg.DrawText(fields.PayorZipCity, "payor-zipcity", 61f, 47.5f, "TimesNewRoman", 2f, Color.Black);
 
             //Lar
-            var amountparts = fields.AmountString.Split(",");
+            var amountparts = fields.Amount.StringValue.Split(",");
             string lar = $"{NumberToWords.Convert(int.Parse(amountparts[0]))} euros";
             if (amountparts.Length > 1)
                 lar += $" et {NumberToWords.Convert(int.Parse(amountparts[1]))} centimes";

@@ -74,7 +74,7 @@
           "elements": [
             {
               "$type": "document",
-              "drawer": "drawer.omni.talon",
+              "renderer": "renderer.omni.talon",
               "name": "talon-optique",
               "min-occurs": 1,
               "max-occurs": 1,
@@ -83,7 +83,7 @@
             },
             {
               "$type": "document",
-              "drawer": "drawer.omni.cheque",
+              "renderer": "renderer.omni.cheque",
               "name": "cheque",
               "min-occurs": 1,
               "max-occurs": 1,

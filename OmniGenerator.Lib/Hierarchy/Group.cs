@@ -20,7 +20,7 @@ namespace OmniGenerator.Lib.Hierarchy
         /// <param name="name">The name of the group. Can be seen as a group type.</param>
         /// <param name="groups">The inner groups of this group.</param>
         /// <param name="documents">The inner documents of this group.</param>
-        public Group(string name, Group[] groups, Document[] documents)
+        public Group(string name, IEnumerable<Group> groups, IEnumerable<Document> documents)
             : base("group", name)
         {
             _groups = new ElementCollection<Group>(this);
