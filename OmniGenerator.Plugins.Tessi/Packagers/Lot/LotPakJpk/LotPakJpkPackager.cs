@@ -18,15 +18,16 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
 
         public async Task ProcessAsync(Root root, string basepath, int imageRenderingResolution)
         {
+            var fields = new LotPakJpkPackagerFields(root.Fields);
             _resolution = imageRenderingResolution;
 
-            string packagename = root.Fields.GetStringValueOrDefault("packet-name", "DefaultName");
+            string packagename = fields.PacketName;
 
             await using var lot = new StreamWriter(new FileStream(Path.Combine(basepath, $"{packagename}.lot"), FileMode.Create));
             await using var pak = new BinaryWriter(new FileStream(Path.Combine(basepath, $"{packagename}.pak"), FileMode.Create));
             await using var jpk = new BinaryWriter(new FileStream(Path.Combine(basepath, $"{packagename}.jpk"), FileMode.Create));
 
-            await WriteHeaderAsync(root, root.Fields.GetStringValueOrDefault("packet-number", "0001"), lot);
+            await WriteHeaderAsync(root, fields.PacketNumber, lot);
 
             int bwOffset = 0, gsOffset = 0;
             int index = 1;

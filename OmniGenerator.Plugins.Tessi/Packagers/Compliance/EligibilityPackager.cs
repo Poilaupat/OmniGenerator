@@ -12,54 +12,58 @@ namespace OmniGenerator.Plugin.Tessi.Packagers.Compliance
     {
         public async Task ProcessAsync(Root root, string path, int imageRenderingResolution)
         {
+            var rootFields = new EligibilityPackagerFields(root.Fields);
+
             var header = new Header(
-                root.Fields["bankCode"].StringValue,
-                root.Fields["bankUnitCode"].StringValue,
-                root.Fields["providerCode"].StringValue,
-                root.Fields["culture"].StringValue,
-                root.Fields["purpose"].StringValue,
-                root.Fields["bankFlow"].StringValue);
+                rootFields.BankCode,
+                rootFields.BankUnitCode,
+                rootFields.ProviderCode,
+                rootFields.Culture,
+                rootFields.Purpose,
+                rootFields.BankFlow);
 
             var jsonRoot = new JsonRoot(
-                root.Fields["schema"].StringValue,
-                root.Fields["version"].StringValue,
+                rootFields.Schema,
+                rootFields.Version,
                 header
                 );
 
-            var documents = root
+            var cheques = root
                 .GetDocuments()
                 .ToArray();
 
-            for (var i = 0; i < documents.Count(); i++)
+            for (var i = 0; i < cheques.Count(); i++)
             {
+                var cheque = new EligibilityPackagerFields(cheques[i].Fields);
+
                 var deposit = new Deposit(
-                    root.Fields["culture"].StringValue,
-                    root.Fields["bankUnitCode"].StringValue,
-                    root.Fields["providerCode"].StringValue,
-                    documents[i].Fields["scanner"].StringValue,
-                    documents[i].Fields["scanType"].StringValue,
-                    documents[i].Fields["chain"].StringValue
+                    rootFields.Culture,
+                    rootFields.BankUnitCode,
+                    rootFields.ProviderCode,
+                    cheque.Scanner,
+                    cheque.ScanType,
+                    cheque.Chain
                 );
 
                 var micr = new Micr(
-                    documents[i].Fields["z4"].StringValue,
-                    documents[i].Fields["z3"].StringValue,
-                    documents[i].Fields["z2"].StringValue
+                    cheque.Z4,
+                    cheque.Z3,
+                    cheque.Z2
                     );
 
                 var check = new Check(
-                    root.Fields["culture"].StringValue,
-                    (int)documents[i].Fields["amount"].Value,
-                    documents[i].Fields["providerId"].StringValue,
+                    rootFields.Culture,
+                    (int)cheque.Amount.Value,
+                    cheque.ProviderId,
                     i,
                     micr
                 );
 
                 var transaction = new Transaction(
-                    (int)documents[i].Fields["amount"].Value,
-                    documents[i].Fields["remittingBranchCode"].StringValue,
-                    documents[i].Fields["deskCode"].StringValue,
-                    documents[i].Fields["accountNumber"].StringValue,
+                    (int)cheque.Amount.Value,
+                    cheque.RemittingBranchCode,
+                    cheque.DeskCode,
+                    cheque.AccountNumber,
                     deposit,
                     check
                 );
@@ -67,7 +71,7 @@ namespace OmniGenerator.Plugin.Tessi.Packagers.Compliance
                 jsonRoot.Transactions.Add(transaction);
             }
 
-            var packagename = $"BosComplianceEligibility.{root.Fields["bankCode"].StringValue}.{root.Fields["bankUnitCode"].StringValue}.{root.Fields["providerCode"].StringValue}.{root.Fields["numlot"].Value}.{DateTime.Now:yyyyMMddHHmmss}";
+            var packagename = $"BosComplianceEligibility.{rootFields.BankCode}.{rootFields.BankUnitCode}.{rootFields.ProviderCode}.{rootFields.Numlot.Value}.{DateTime.Now:yyyyMMddHHmmss}";
             var packagepath = Path.Combine(path, packagename);
 
             if (!Directory.Exists(packagepath))

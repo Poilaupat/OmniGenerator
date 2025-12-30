@@ -52,7 +52,8 @@ namespace OmniGenerator.Plugins.Packagers
 
         private IEnumerable<string> GetDeletes(Root root)
         {
-            var truncateTableBefore = Convert.ToBoolean(root.Fields["truncate-before-insert"].Value);
+            var fields = new SqlScriptPackagerFields(root.Fields);
+            var truncateTableBefore = Convert.ToBoolean(fields.TruncateBeforeInsert.Value);
 
             if (truncateTableBefore)
             {

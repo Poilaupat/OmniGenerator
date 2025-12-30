@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OmniGenerator.Lib.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace OmniGenerator.Lib.Interfaces.Infrastructure
 {
     /// <summary>
     /// Defines the contract for OmniGenerator plugins.
-    /// Plugins implementing this interface must provide metadata such as name and description.
+    /// Plugins implementing this interface must provide metadata such as name, description, and field documentation.
     /// </summary>
     public interface IOmniGeneratorPlugin
     {
@@ -23,5 +24,12 @@ namespace OmniGenerator.Lib.Interfaces.Infrastructure
         /// This description provides additional information about the plugin's functionality.
         /// </summary>
         string PluginDescription { get; }
+
+        /// <summary>
+        /// Gets the collection of fields used by this plugin.
+        /// All plugins must document the fields they use.
+        /// </summary>
+        /// <returns>An enumerable collection of <see cref="PluginFieldInfo"/> describing the fields.</returns>
+        IEnumerable<PluginFieldInfo> GetFieldsDocumentation();
     }
 }

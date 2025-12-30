@@ -25,7 +25,8 @@ namespace OmniGenerator.Plugins.Packagers
         /// <returns>A <see cref="Task"/> representing the asynchronous packaging operation.</returns>
         public async Task ProcessAsync(Root root, string basepath, int imageRenderingResolution)
         {
-            var packagename = $"{DateTime.Now:yyyyMMddHHmmss}_{root.Fields["numlot"].Value}";
+            var fields = new ImageOnlyPackagerFields(root.Fields);
+            var packagename = $"{DateTime.Now:yyyyMMddHHmmss}_{fields.Numlot.Value}";
             var packagepath = Path.Combine(basepath, packagename);
 
             if (!Directory.Exists(packagepath))

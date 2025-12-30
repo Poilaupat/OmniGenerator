@@ -19,16 +19,17 @@ namespace OmniGenerator.Plugins.Renderers
 
         public override SvgDocument RenderRecto(Document document)
         {
+            var fields = new TalonSepaRendererFields(document.Fields);
             var svg = SvgExtensions.NewBlankSvg(Width, Height);
 
             RenderRectoBackground(svg);
 
-            svg.DrawText($"{document.Fields["amount"].Value}", "amount", 80f, 30f, "Arial", 4f, Color.Black);
+            svg.DrawText($"{fields.Amount.Value}", "amount", 80f, 30f, "Arial", 4f, Color.Black);
 
             string lowline = string.Concat(
-                document.Fields["group3"].StringValue,
-                document.Fields["group2"].StringValue,
-                document.Fields["group1"].StringValue
+                fields.Group3,
+                fields.Group2,
+                fields.Group1
                 );
 
             svg.DrawText(lowline, "lowline", 10f, 68f, "OCRB", 3.5f, Color.Black);
