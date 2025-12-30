@@ -59,10 +59,6 @@
     "OmniGenerator.Cli.Generate.Sql": {
       "commandName": "Project",
       "commandLineArgs": "generate \"..\\..\\..\\..\\Assets\\SampleParamFiles\\param-sql.json\" \"..\\..\\..\\..\\Output\""
-    },
-    "OmniGenerator.Cli.Plugin.Field": {
-      "commandName": "Project",
-      "commandLineArgs": "plugin field \"packager.tessi.eligibility\""
     }
   }
 }

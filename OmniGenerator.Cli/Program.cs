@@ -58,12 +58,9 @@ try
                 .WithExample("plugin", "list", "--packagers");
 
             plugin.AddCommand<PluginDetailCommand>("details")
-                .WithDescription("Displays details on a specifi plugin")
-                .WithExample("plugin", "details", "\"PLUGIN_NAME\"");
-
-            plugin.AddCommand<PluginFieldCommand>("field")
-                .WithDescription("List fields used by a specific plugin")
-                .WithExample("plugin", "field", "\"renderer.omni.cheque\"");
+                .WithDescription("Displays detailed information and fields for a specific plugin")
+                .WithExample("plugin", "details", "\"PLUGIN_NAME\"")
+                .WithExample("plugin", "details", "\"renderer.omni.cheque\"");
         });
 
 #if DEBUG
