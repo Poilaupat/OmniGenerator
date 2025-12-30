@@ -1,19 +1,20 @@
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 
-namespace OmniGenerator.Plugins.Packagers
+namespace OmniGenerator.Plugins.Packagers.SqlScriptPackager
 {
     /// <summary>
     /// Strongly-typed field accessor for <see cref="SqlScriptPackager"/>.
     /// Provides type-safe access to root-level fields.
     /// </summary>
-    public class SqlScriptPackagerFields : FieldExtractorBase
+    [FieldEntity(EPluginFieldEntityType.Root)]
+    public class RootFields : FieldExtractorBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SqlScriptPackagerFields"/> class.
+        /// Initializes a new instance of the <see cref="RootFields"/> class.
         /// </summary>
         /// <param name="fields">The field collection from the root.</param>
-        public SqlScriptPackagerFields(FieldCollection fields) : base(fields)
+        public RootFields(FieldCollection fields) : base(fields)
         {
         }
 
@@ -21,7 +22,6 @@ namespace OmniGenerator.Plugins.Packagers
         /// Gets whether to truncate tables before inserting.
         /// </summary>
         [FieldInfo("truncate-before-insert", "Whether to truncate tables before inserting", isRequired: true)]
-        [FieldEntity(EPluginFieldEntityType.Root)]
         public Field TruncateBeforeInsert => GetRequired("truncate-before-insert");
     }
 }

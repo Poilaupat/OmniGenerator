@@ -7,6 +7,7 @@ namespace OmniGenerator.Plugins.Renderers
     /// Strongly-typed field accessor for <see cref="ChequeRenderer"/>.
     /// Provides type-safe access to all cheque-related fields.
     /// </summary>
+    [FieldEntity(EPluginFieldEntityType.Document, "cheque")]
     public class ChequeRendererFields : FieldExtractorBase
     {
         /// <summary>

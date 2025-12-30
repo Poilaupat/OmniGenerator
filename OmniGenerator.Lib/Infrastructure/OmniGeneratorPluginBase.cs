@@ -39,46 +39,37 @@ namespace OmniGenerator.Lib.Infrastructure
         /// <returns>An enumerable collection of <see cref="FieldInfo"/> describing the fields.</returns>
         public virtual IEnumerable<FieldInfo> GetFieldsDocumentation()
         {
-            Type? fieldsType = null;
-
             var pluginType = GetType();
-            var expectedFieldsClassName = $"{pluginType.Name}Fields";
-            var expectedFullName = $"{pluginType.Namespace}.{expectedFieldsClassName}";
 
-            // Search in the same assembly
-            fieldsType = pluginType.Assembly
+            // Search in the same assembly + namespace for classes deriving from FieldExtractorBase
+            var fieldsTypes = pluginType
+                .Assembly
                 .GetTypes()
-                .FirstOrDefault(t =>
-                    t.FullName == expectedFullName &&
+                .Where(t =>
+                    t.Namespace == pluginType.Namespace &&
                     typeof(FieldExtractorBase).IsAssignableFrom(t) &&
                     !t.IsAbstract);
 
-            if (fieldsType != null)
+            if (!fieldsTypes.Any())
+            {
+                return Enumerable.Empty<FieldInfo>();
+            }
+
+            List<FieldInfo> result = new();
+            foreach (var fieldsType in fieldsTypes)
             {
                 var method = typeof(FieldExtractorBase)
-                    .GetMethod(nameof(FieldExtractorBase.ExtractFieldsInfos))
-                    ?.MakeGenericMethod(fieldsType);
+                .GetMethod(nameof(FieldExtractorBase.ExtractFieldsInfos))
+                ?.MakeGenericMethod(fieldsType);
 
-                if (method != null)
+                if (method is not null)
                 {
-                    return (IEnumerable<FieldInfo>)method.Invoke(null, null)!;
+                    var fields = (IEnumerable<FieldInfo>)method.Invoke(null, null)!;
+                    result.AddRange(fields);
                 }
             }
 
-            // No fields class found - return empty collection
-            return Enumerable.Empty<FieldInfo>();
-        }
-
-        /// <summary>
-        /// Helper method to extract fields documentation from a strongly-typed fields class.
-        /// Plugins can use this in their GetFieldsDocumentation override if needed.
-        /// </summary>
-        /// <typeparam name="TFields">The strongly-typed fields class derived from <see cref="FieldExtractorBase"/>.</typeparam>
-        /// <returns>An enumerable collection of <see cref="FieldInfo"/> describing the fields.</returns>
-        protected static IEnumerable<FieldInfo> ExtractFieldsFrom<TFields>()
-            where TFields : FieldExtractorBase
-        {
-            return FieldExtractorBase.ExtractFieldsInfos<TFields>();
+            return result;
         }
     }
 }

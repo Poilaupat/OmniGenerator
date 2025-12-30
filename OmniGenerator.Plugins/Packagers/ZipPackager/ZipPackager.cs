@@ -3,13 +3,10 @@ using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Tools;
-using OmniGenerator.Plugins.Packagers.Tools;
-using System.Drawing.Imaging;
 using System.Globalization;
-using System.IO;
 using System.IO.Compression;
 
-namespace OmniGenerator.Plugins.Packagers
+namespace OmniGenerator.Plugins.Packagers.ZipPackager
 {
     /// <summary>
     /// A <see cref="IPackager"/> that writes data and image file in a zip file

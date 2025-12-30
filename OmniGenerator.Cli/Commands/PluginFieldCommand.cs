@@ -1,7 +1,6 @@
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Interfaces.Infrastructure;
-using OmniGenerator.Lib.Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -25,8 +24,6 @@ namespace OmniGenerator.Cli.Commands
         /// <returns>A task representing the asynchronous execution, returning 0 on success.</returns>
         public override Task<int> ExecuteAsync(CommandContext context, PluginFieldCommandSettings settings, CancellationToken ct)
         {
-            var analyzer = new PluginFieldAnalyzer(pluginService);
-
             var plugin = pluginService.GetAllPluginsInfo()
                 .FirstOrDefault(p => p.PluginName.Equals(settings.PluginName, StringComparison.InvariantCultureIgnoreCase));
 
@@ -36,17 +33,35 @@ namespace OmniGenerator.Cli.Commands
                 return Task.FromResult(1);
             }
 
-            var fields = analyzer.GetFieldsForPlugin(settings.PluginName);
-
-            if (fields == null || !fields.Any())
+            try
             {
-                AnsiConsole.MarkupInterpolated($"[yellow]No field information available for plugin <[italic]{settings.PluginName}[/]>.[/]");
+                var instance = Activator.CreateInstance(plugin.PluginType);
+                if (instance is not IOmniGeneratorPlugin omniplugin)
+                {
+                    AnsiConsole.MarkupInterpolated($"[red]Plugin <[italic]{settings.PluginName}[/]> does not implement IOmniGeneratorPlugin.[/]");
+                    return Task.FromResult(1);
+                }
+
+                var fields = omniplugin.GetFieldsDocumentation()
+                    .OrderBy(p => p.EntityType)
+                    .ThenBy(p => p.EntityName)
+                    .ThenBy(p => p.FieldName)
+                    .ToList();
+
+                if (!fields.Any())
+                {
+                    AnsiConsole.MarkupInterpolated($"[yellow]No field information available for plugin <[italic]{settings.PluginName}[/]>.[/]");
+                    return Task.FromResult(0);
+                }
+
+                DisplayPluginFields(plugin, fields);
                 return Task.FromResult(0);
             }
-
-            DisplayPluginFields(plugin, fields);
-
-            return Task.FromResult(0);
+            catch (Exception ex)
+            {
+                AnsiConsole.MarkupInterpolated($"[red]Error instantiating plugin <[italic]{settings.PluginName}[/]>: {ex.Message}[/]");
+                return Task.FromResult(1);
+            }
         }
 
         /// <summary>
@@ -61,30 +76,30 @@ namespace OmniGenerator.Cli.Commands
             table.LeftAligned();
             table.ShowRowSeparators();
 
+            if (plugin.ParentType == EPluginParentType.Packager)
+            {
+                table.AddColumn(new TableColumn("[blue]Entity Type[/]"));
+                table.AddColumn(new TableColumn("[blue]Entity Name[/]"));
+            }
+
             // Add columns based on plugin type
             table.AddColumn(new TableColumn("[blue]Field Name[/]"));
             table.AddColumn(new TableColumn("[blue]Description[/]"));
             table.AddColumn(new TableColumn("[blue]Required[/]"));
             table.AddColumn(new TableColumn("[blue]Default Value[/]"));
 
-            if (plugin.ParentType == EPluginParentType.Packager)
-            {
-                table.AddColumn(new TableColumn("[blue]Entity Name[/]"));
-                table.AddColumn(new TableColumn("[blue]Entity Type[/]"));
-            }
-
             // Add rows
-            foreach (var field in fields.OrderBy(f => f.FieldName))
+            foreach (var field in fields)
             {
                 if (plugin.ParentType == EPluginParentType.Packager)
                 {
                     table.AddRow(
+                        new Text(field.EntityType?.ToString() ?? "-", new Style(Color.Grey, Color.Black)),
+                        new Text(field.EntityName ?? "-", new Style(Color.Grey, Color.Black)),
                         new Text(field.FieldName, new Style(Color.White, Color.Black)),
                         new Text(field.Description, new Style(Color.Grey, Color.Black)),
                         new Markup(field.IsRequired ? "[green]Yes[/]" : "[grey]No[/]"),
-                        new Text(field.DefaultValue ?? "-", new Style(Color.Grey, Color.Black)),
-                        new Text(field.EntityName ?? "-", new Style(Color.Grey, Color.Black)),
-                        new Text(field.EntityType?.ToString() ?? "-", new Style(Color.Grey, Color.Black))
+                        new Text(field.DefaultValue ?? "-", new Style(Color.Grey, Color.Black))
                     );
                 }
                 else

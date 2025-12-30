@@ -18,7 +18,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
 
         public async Task ProcessAsync(Root root, string basepath, int imageRenderingResolution)
         {
-            var fields = new LotPakJpkPackagerFields(root.Fields);
+            var fields = new RootFields(root.Fields);
             _resolution = imageRenderingResolution;
 
             string packagename = fields.PacketName;

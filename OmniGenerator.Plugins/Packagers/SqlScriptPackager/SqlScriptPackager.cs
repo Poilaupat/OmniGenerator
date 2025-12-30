@@ -5,7 +5,7 @@ using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 
-namespace OmniGenerator.Plugins.Packagers
+namespace OmniGenerator.Plugins.Packagers.SqlScriptPackager
 {
     [OmniGeneratorPluginMetadata("packager.omni.sql", "A packager a builds SQL scripts from groups acting as tables and documents acting as table rows")]
     public class SqlScriptPackager : OmniGeneratorPluginBase, IPackager
@@ -52,7 +52,7 @@ namespace OmniGenerator.Plugins.Packagers
 
         private IEnumerable<string> GetDeletes(Root root)
         {
-            var fields = new SqlScriptPackagerFields(root.Fields);
+            var fields = new RootFields(root.Fields);
             var truncateTableBefore = Convert.ToBoolean(fields.TruncateBeforeInsert.Value);
 
             if (truncateTableBefore)

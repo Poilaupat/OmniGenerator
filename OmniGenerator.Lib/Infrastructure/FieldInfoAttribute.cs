@@ -29,29 +29,6 @@ namespace OmniGenerator.Lib.Infrastructure
         public string? DefaultValue { get; init; }
 
         /// <summary>
-        /// Gets the name of the entity that owns the field (for packagers only).
-        /// Null for renderers.
-        /// </summary>
-        public string? EntityName { get; init; }
-
-        /// <summary>
-        /// Gets the type of the entity that owns the field (for packagers only).
-        /// This property is set via reflection and should not be set directly in the attribute.
-        /// </summary>
-        public EPluginFieldEntityType? EntityType { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FieldInfoAttribute"/> class with automatic field name derivation.
-        /// </summary>
-        /// <param name="description">The description of the field.</param>
-        /// <param name="isRequired">Whether the field is required.</param>
-        public FieldInfoAttribute(string description, bool isRequired = true)
-        {
-            Description = description;
-            IsRequired = isRequired;
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="FieldInfoAttribute"/> class with an explicit field name.
         /// </summary>
         /// <param name="fieldName">The name of the field as it appears in the data source.</param>

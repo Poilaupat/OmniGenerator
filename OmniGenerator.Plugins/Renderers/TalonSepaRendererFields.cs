@@ -7,6 +7,7 @@ namespace OmniGenerator.Plugins.Renderers
     /// Strongly-typed field accessor for <see cref="TalonSepaRenderer"/>.
     /// Provides type-safe access to all TIP SEPA related fields.
     /// </summary>
+    [FieldEntity(EPluginFieldEntityType.Document, "talon")]
     public class TalonSepaRendererFields : FieldExtractorBase
     {
         /// <summary>

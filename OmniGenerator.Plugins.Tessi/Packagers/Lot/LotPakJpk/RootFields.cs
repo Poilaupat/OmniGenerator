@@ -7,13 +7,14 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
     /// Strongly-typed field accessor for <see cref="LotPakJpkPackager"/>.
     /// Provides type-safe access to root-level fields required for LOT+PAK+JPK format.
     /// </summary>
-    public class LotPakJpkPackagerFields : FieldExtractorBase
+    [FieldEntity(EPluginFieldEntityType.Root)]
+    public class RootFields : FieldExtractorBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="LotPakJpkPackagerFields"/> class.
+        /// Initializes a new instance of the <see cref="RootFields"/> class.
         /// </summary>
         /// <param name="fields">The field collection from the root.</param>
-        public LotPakJpkPackagerFields(FieldCollection fields) : base(fields)
+        public RootFields(FieldCollection fields) : base(fields)
         {
         }
 
@@ -21,14 +22,12 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         /// Gets the name of the packet.
         /// </summary>
         [FieldInfo("packet-name", "Name of the packet", isRequired: false, DefaultValue = "DefaultName")]
-        [FieldEntity(EPluginFieldEntityType.Root)]
         public string PacketName => GetOptionalString("packet-name", "DefaultName");
 
         /// <summary>
         /// Gets the number of the packet.
         /// </summary>
         [FieldInfo("packet-number", "Number of the packet", isRequired: false, DefaultValue = "0001")]
-        [FieldEntity(EPluginFieldEntityType.Root)]
         public string PacketNumber => GetOptionalString("packet-number", "0001");
     }
 }

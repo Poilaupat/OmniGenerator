@@ -32,6 +32,9 @@ namespace OmniGenerator.Lib.Infrastructure
         public static IEnumerable<FieldInfo> ExtractFieldsInfos<TFields>()
             where TFields : FieldExtractorBase
         {
+            // Check for parent entity attribute
+            var entityAttribute = typeof(TFields).GetCustomAttribute<FieldEntityAttribute>();
+
             var properties = typeof(TFields).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
             foreach (var property in properties)
@@ -39,19 +42,13 @@ namespace OmniGenerator.Lib.Infrastructure
                 var attribute = property.GetCustomAttribute<FieldInfoAttribute>();
                 if (attribute != null)
                 {
-                    string fieldName = attribute.FieldName;
-
-                    // Check for entity type attribute
-                    var entityAttribute = property.GetCustomAttribute<FieldEntityAttribute>();
-                    EPluginFieldEntityType? entityType = entityAttribute?.EntityType;
-
                     yield return new FieldInfo(
-                        fieldName,
+                        attribute.FieldName,
                         attribute.Description,
                         attribute.IsRequired,
                         attribute.DefaultValue,
-                        attribute.EntityName,
-                        entityType
+                        entityAttribute?.EntityName,
+                        entityAttribute?.EntityType
                     );
                 }
             }

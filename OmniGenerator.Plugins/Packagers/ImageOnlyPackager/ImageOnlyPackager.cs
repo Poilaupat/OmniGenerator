@@ -2,10 +2,8 @@
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Tools;
-using OmniGenerator.Plugins.Packagers.Tools;
-using System.Drawing.Imaging;
 
-namespace OmniGenerator.Plugins.Packagers
+namespace OmniGenerator.Plugins.Packagers.ImageOnlyPackager
 {
     /// <summary>
     /// A <see cref="IPackager"/> implementation that writes only image files for each document in a directory.
@@ -25,7 +23,7 @@ namespace OmniGenerator.Plugins.Packagers
         /// <returns>A <see cref="Task"/> representing the asynchronous packaging operation.</returns>
         public async Task ProcessAsync(Root root, string basepath, int imageRenderingResolution)
         {
-            var fields = new ImageOnlyPackagerFields(root.Fields);
+            var fields = new RootFields(root.Fields);
             var packagename = $"{DateTime.Now:yyyyMMddHHmmss}_{fields.Numlot.Value}";
             var packagepath = Path.Combine(basepath, packagename);
 

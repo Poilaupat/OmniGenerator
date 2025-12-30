@@ -1,10 +1,11 @@
 ﻿using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
+using OmniGenerator.Plugins.Tessi.Packagers.Compliance;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace OmniGenerator.Plugin.Tessi.Packagers.Compliance
+namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance
 {
     [OmniGeneratorPluginMetadata("packager.tessi.eligibility", "A packager that produces eligibility resquest for Wecheck Compliance")]
 
@@ -12,7 +13,7 @@ namespace OmniGenerator.Plugin.Tessi.Packagers.Compliance
     {
         public async Task ProcessAsync(Root root, string path, int imageRenderingResolution)
         {
-            var rootFields = new EligibilityPackagerFields(root.Fields);
+            var rootFields = new RootFields(root.Fields);
 
             var header = new Header(
                 rootFields.BankCode,
@@ -34,7 +35,7 @@ namespace OmniGenerator.Plugin.Tessi.Packagers.Compliance
 
             for (var i = 0; i < cheques.Count(); i++)
             {
-                var cheque = new EligibilityPackagerFields(cheques[i].Fields);
+                var cheque = new ChequeFields(cheques[i].Fields);
 
                 var deposit = new Deposit(
                     rootFields.Culture,

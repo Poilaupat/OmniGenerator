@@ -3,11 +3,9 @@ using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Tools;
-using OmniGenerator.Plugins.Packagers.Tools;
-using System.Drawing.Imaging;
 using System.Globalization;
 
-namespace OmniGenerator.Plugins.Packagers
+namespace OmniGenerator.Plugins.Packagers.CsvPackager
 {
     /// <summary>
     /// A packager that exports images along with CSV files containing each document's fields.
