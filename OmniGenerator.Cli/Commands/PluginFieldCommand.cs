@@ -52,7 +52,7 @@ namespace OmniGenerator.Cli.Commands
         /// <summary>
         /// Displays field information for a plugin in a formatted table.
         /// </summary>
-        private void DisplayPluginFields(PluginInfo plugin, IEnumerable<PluginFieldInfo> fields)
+        private void DisplayPluginFields(PluginInfo plugin, IEnumerable<FieldInfo> fields)
         {
             AnsiConsole.MarkupLineInterpolated($"[bold blue]{plugin.PluginName}[/] [dim]({plugin.ParentType})[/]");
 

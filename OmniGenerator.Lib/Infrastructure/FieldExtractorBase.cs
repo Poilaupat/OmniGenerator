@@ -6,9 +6,9 @@ namespace OmniGenerator.Lib.Infrastructure
 {
     /// <summary>
     /// Base class for strongly-typed plugin field accessors.
-    /// Derived classes define properties decorated with <see cref="PluginFieldAttribute"/> to provide typed access to fields.
+    /// Derived classes define properties decorated with <see cref="FieldInfoAttribute"/> to provide typed access to fields.
     /// </summary>
-    public abstract class PluginFieldsBase
+    public abstract class FieldExtractorBase
     {
         /// <summary>
         /// The underlying field collection from which values are read.
@@ -16,37 +16,36 @@ namespace OmniGenerator.Lib.Infrastructure
         protected readonly FieldCollection _fields;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PluginFieldsBase"/> class.
+        /// Initializes a new instance of the <see cref="FieldExtractorBase"/> class.
         /// </summary>
         /// <param name="fields">The field collection to wrap.</param>
-        protected PluginFieldsBase(FieldCollection fields)
+        protected FieldExtractorBase(FieldCollection fields)
         {
             _fields = fields;
         }
 
         /// <summary>
-        /// Extracts field documentation from all properties decorated with <see cref="PluginFieldAttribute"/>.
+        /// Extracts field documentation from all properties decorated with <see cref="FieldInfoAttribute"/>.
         /// </summary>
         /// <typeparam name="TFields">The concrete fields class type.</typeparam>
-        /// <returns>An enumerable collection of <see cref="PluginFieldInfo"/> describing the fields.</returns>
-        public static IEnumerable<PluginFieldInfo> ExtractFieldsDocumentation<TFields>()
-            where TFields : PluginFieldsBase
+        /// <returns>An enumerable collection of <see cref="FieldInfo"/> describing the fields.</returns>
+        public static IEnumerable<FieldInfo> ExtractFieldsInfos<TFields>()
+            where TFields : FieldExtractorBase
         {
             var properties = typeof(TFields).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
             foreach (var property in properties)
             {
-                var attribute = property.GetCustomAttribute<PluginFieldAttribute>();
+                var attribute = property.GetCustomAttribute<FieldInfoAttribute>();
                 if (attribute != null)
                 {
-                    // Use explicit field name or derive from property name
-                    string fieldName = attribute.FieldName ?? ConvertPropertyNameToFieldName(property.Name);
+                    string fieldName = attribute.FieldName;
 
                     // Check for entity type attribute
-                    var entityAttribute = property.GetCustomAttribute<PluginFieldEntityAttribute>();
+                    var entityAttribute = property.GetCustomAttribute<FieldEntityAttribute>();
                     EPluginFieldEntityType? entityType = entityAttribute?.EntityType;
 
-                    yield return new PluginFieldInfo(
+                    yield return new FieldInfo(
                         fieldName,
                         attribute.Description,
                         attribute.IsRequired,
@@ -56,17 +55,6 @@ namespace OmniGenerator.Lib.Infrastructure
                     );
                 }
             }
-        }
-
-        /// <summary>
-        /// Converts a PascalCase property name to kebab-case field name.
-        /// Example: "PayorName" becomes "payor-name"
-        /// </summary>
-        private static string ConvertPropertyNameToFieldName(string propertyName)
-        {
-            // Insert a hyphen before each uppercase letter (except the first one)
-            // and convert to lowercase
-            return Regex.Replace(propertyName, "(?<!^)([A-Z])", "-$1").ToLowerInvariant();
         }
 
         /// <summary>

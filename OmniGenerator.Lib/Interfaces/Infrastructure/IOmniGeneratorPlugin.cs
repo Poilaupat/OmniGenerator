@@ -29,7 +29,7 @@ namespace OmniGenerator.Lib.Interfaces.Infrastructure
         /// Gets the collection of fields used by this plugin.
         /// All plugins must document the fields they use.
         /// </summary>
-        /// <returns>An enumerable collection of <see cref="PluginFieldInfo"/> describing the fields.</returns>
-        IEnumerable<PluginFieldInfo> GetFieldsDocumentation();
+        /// <returns>An enumerable collection of <see cref="FieldInfo"/> describing the fields.</returns>
+        IEnumerable<FieldInfo> GetFieldsDocumentation();
     }
 }

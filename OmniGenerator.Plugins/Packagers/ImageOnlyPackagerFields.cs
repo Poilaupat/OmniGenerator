@@ -7,7 +7,7 @@ namespace OmniGenerator.Plugins.Packagers
     /// Strongly-typed field accessor for <see cref="ImageOnlyPackager"/>.
     /// Provides type-safe access to root-level fields.
     /// </summary>
-    public class ImageOnlyPackagerFields : PluginFieldsBase
+    public class ImageOnlyPackagerFields : FieldExtractorBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageOnlyPackagerFields"/> class.
@@ -20,8 +20,8 @@ namespace OmniGenerator.Plugins.Packagers
         /// <summary>
         /// Gets the lot number used for directory naming.
         /// </summary>
-        [PluginField("numlot", "Lot number used for directory naming", isRequired: true)]
-        [PluginFieldEntity(EPluginFieldEntityType.Root)]
+        [FieldInfo("numlot", "Lot number used for directory naming", isRequired: true)]
+        [FieldEntity(EPluginFieldEntityType.Root)]
         public Field Numlot => GetRequired("numlot");
     }
 }

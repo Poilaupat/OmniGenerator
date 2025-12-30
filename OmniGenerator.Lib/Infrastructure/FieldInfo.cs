@@ -9,7 +9,7 @@ namespace OmniGenerator.Lib.Infrastructure
     /// <summary>
     /// Describes a field used by a plugin.
     /// </summary>
-    public sealed class PluginFieldInfo
+    public sealed class FieldInfo
     {
         /// <summary>
         /// Gets the name of the field.
@@ -44,7 +44,7 @@ namespace OmniGenerator.Lib.Infrastructure
         public EPluginFieldEntityType? EntityType { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PluginFieldInfo"/> class.
+        /// Initializes a new instance of the <see cref="FieldInfo"/> class.
         /// </summary>
         /// <param name="fieldName">The name of the field.</param>
         /// <param name="description">The description of the field.</param>
@@ -52,7 +52,7 @@ namespace OmniGenerator.Lib.Infrastructure
         /// <param name="defaultValue">The default value for the field.</param>
         /// <param name="entityName">The name of the entity that owns the field.</param>
         /// <param name="entityType">The type of the entity that owns the field.</param>
-        public PluginFieldInfo(
+        public FieldInfo(
             string fieldName,
             string description,
             bool isRequired,

@@ -7,7 +7,7 @@ namespace OmniGenerator.Plugins.Renderers
     /// Strongly-typed field accessor for <see cref="TalonSepaRenderer"/>.
     /// Provides type-safe access to all TIP SEPA related fields.
     /// </summary>
-    public class TalonSepaRendererFields : PluginFieldsBase
+    public class TalonSepaRendererFields : FieldExtractorBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TalonSepaRendererFields"/> class.
@@ -20,25 +20,25 @@ namespace OmniGenerator.Plugins.Renderers
         /// <summary>
         /// Gets the amount to be debited.
         /// </summary>
-        [PluginField("amount", "Amount to be debited", isRequired: true)]
+        [FieldInfo("amount", "Amount to be debited", isRequired: true)]
         public Field Amount => GetRequired("amount");
 
         /// <summary>
         /// Gets the Group 3 part of OCRB code.
         /// </summary>
-        [PluginField("group3", "Group 3 part of OCRB code", isRequired: true)]
+        [FieldInfo("group3", "Group 3 part of OCRB code", isRequired: true)]
         public string Group3 => GetRequiredString("group3");
 
         /// <summary>
         /// Gets the Group 2 part of OCRB code.
         /// </summary>
-        [PluginField("group2", "Group 2 part of OCRB code", isRequired: true)]
+        [FieldInfo("group2", "Group 2 part of OCRB code", isRequired: true)]
         public string Group2 => GetRequiredString("group2");
 
         /// <summary>
         /// Gets the Group 1 part of OCRB code.
         /// </summary>
-        [PluginField("group1", "Group 1 part of OCRB code", isRequired: true)]
+        [FieldInfo("group1", "Group 1 part of OCRB code", isRequired: true)]
         public string Group1 => GetRequiredString("group1");
     }
 }

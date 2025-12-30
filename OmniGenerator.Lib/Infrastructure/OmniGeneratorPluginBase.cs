@@ -36,8 +36,8 @@ namespace OmniGenerator.Lib.Infrastructure
         /// By default, automatically extracts documentation from A class named "{PluginClassName}Fields" in the same namespace
         /// Override this method to provide custom documentation or specify a different fields class.
         /// </summary>
-        /// <returns>An enumerable collection of <see cref="PluginFieldInfo"/> describing the fields.</returns>
-        public virtual IEnumerable<PluginFieldInfo> GetFieldsDocumentation()
+        /// <returns>An enumerable collection of <see cref="FieldInfo"/> describing the fields.</returns>
+        public virtual IEnumerable<FieldInfo> GetFieldsDocumentation()
         {
             Type? fieldsType = null;
 
@@ -50,35 +50,35 @@ namespace OmniGenerator.Lib.Infrastructure
                 .GetTypes()
                 .FirstOrDefault(t =>
                     t.FullName == expectedFullName &&
-                    typeof(PluginFieldsBase).IsAssignableFrom(t) &&
+                    typeof(FieldExtractorBase).IsAssignableFrom(t) &&
                     !t.IsAbstract);
 
             if (fieldsType != null)
             {
-                var method = typeof(PluginFieldsBase)
-                    .GetMethod(nameof(PluginFieldsBase.ExtractFieldsDocumentation))
+                var method = typeof(FieldExtractorBase)
+                    .GetMethod(nameof(FieldExtractorBase.ExtractFieldsInfos))
                     ?.MakeGenericMethod(fieldsType);
 
                 if (method != null)
                 {
-                    return (IEnumerable<PluginFieldInfo>)method.Invoke(null, null)!;
+                    return (IEnumerable<FieldInfo>)method.Invoke(null, null)!;
                 }
             }
 
             // No fields class found - return empty collection
-            return Enumerable.Empty<PluginFieldInfo>();
+            return Enumerable.Empty<FieldInfo>();
         }
 
         /// <summary>
         /// Helper method to extract fields documentation from a strongly-typed fields class.
         /// Plugins can use this in their GetFieldsDocumentation override if needed.
         /// </summary>
-        /// <typeparam name="TFields">The strongly-typed fields class derived from <see cref="PluginFieldsBase"/>.</typeparam>
-        /// <returns>An enumerable collection of <see cref="PluginFieldInfo"/> describing the fields.</returns>
-        protected static IEnumerable<PluginFieldInfo> ExtractFieldsFrom<TFields>()
-            where TFields : PluginFieldsBase
+        /// <typeparam name="TFields">The strongly-typed fields class derived from <see cref="FieldExtractorBase"/>.</typeparam>
+        /// <returns>An enumerable collection of <see cref="FieldInfo"/> describing the fields.</returns>
+        protected static IEnumerable<FieldInfo> ExtractFieldsFrom<TFields>()
+            where TFields : FieldExtractorBase
         {
-            return PluginFieldsBase.ExtractFieldsDocumentation<TFields>();
+            return FieldExtractorBase.ExtractFieldsInfos<TFields>();
         }
     }
 }

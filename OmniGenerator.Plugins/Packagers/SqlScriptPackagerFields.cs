@@ -7,7 +7,7 @@ namespace OmniGenerator.Plugins.Packagers
     /// Strongly-typed field accessor for <see cref="SqlScriptPackager"/>.
     /// Provides type-safe access to root-level fields.
     /// </summary>
-    public class SqlScriptPackagerFields : PluginFieldsBase
+    public class SqlScriptPackagerFields : FieldExtractorBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SqlScriptPackagerFields"/> class.
@@ -20,8 +20,8 @@ namespace OmniGenerator.Plugins.Packagers
         /// <summary>
         /// Gets whether to truncate tables before inserting.
         /// </summary>
-        [PluginField("truncate-before-insert", "Whether to truncate tables before inserting", isRequired: true)]
-        [PluginFieldEntity(EPluginFieldEntityType.Root)]
+        [FieldInfo("truncate-before-insert", "Whether to truncate tables before inserting", isRequired: true)]
+        [FieldEntity(EPluginFieldEntityType.Root)]
         public Field TruncateBeforeInsert => GetRequired("truncate-before-insert");
     }
 }

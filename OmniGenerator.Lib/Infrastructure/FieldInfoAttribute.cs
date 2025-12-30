@@ -5,13 +5,13 @@ namespace OmniGenerator.Lib.Infrastructure
     /// When applied to a property in a plugin fields class, it provides metadata about the field.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public sealed class PluginFieldAttribute : Attribute
+    public sealed class FieldInfoAttribute : Attribute
     {
         /// <summary>
         /// Gets the name of the field as it appears in the data source.
         /// If not specified, the property name will be used (converted to kebab-case).
         /// </summary>
-        public string? FieldName { get; }
+        public string FieldName { get; }
 
         /// <summary>
         /// Gets the description of the field.
@@ -41,23 +41,23 @@ namespace OmniGenerator.Lib.Infrastructure
         public EPluginFieldEntityType? EntityType { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PluginFieldAttribute"/> class with automatic field name derivation.
+        /// Initializes a new instance of the <see cref="FieldInfoAttribute"/> class with automatic field name derivation.
         /// </summary>
         /// <param name="description">The description of the field.</param>
         /// <param name="isRequired">Whether the field is required.</param>
-        public PluginFieldAttribute(string description, bool isRequired = true)
+        public FieldInfoAttribute(string description, bool isRequired = true)
         {
             Description = description;
             IsRequired = isRequired;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PluginFieldAttribute"/> class with an explicit field name.
+        /// Initializes a new instance of the <see cref="FieldInfoAttribute"/> class with an explicit field name.
         /// </summary>
         /// <param name="fieldName">The name of the field as it appears in the data source.</param>
         /// <param name="description">The description of the field.</param>
         /// <param name="isRequired">Whether the field is required.</param>
-        public PluginFieldAttribute(string fieldName, string description, bool isRequired = true)
+        public FieldInfoAttribute(string fieldName, string description, bool isRequired = true)
         {
             FieldName = fieldName;
             Description = description;

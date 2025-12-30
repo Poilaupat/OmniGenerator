@@ -24,7 +24,7 @@ namespace OmniGenerator.Lib.Services
         /// </summary>
         /// <param name="pluginName">The name of the plugin.</param>
         /// <returns>An enumerable collection of field information, or null if the plugin is not found or doesn't document its fields.</returns>
-        public IEnumerable<PluginFieldInfo>? GetFieldsForPlugin(string pluginName)
+        public IEnumerable<FieldInfo>? GetFieldsForPlugin(string pluginName)
         {
             var plugin = _pluginService.GetAllPluginsInfo()
                 .FirstOrDefault(p => p.PluginName.Equals(pluginName, StringComparison.InvariantCultureIgnoreCase));
@@ -40,7 +40,7 @@ namespace OmniGenerator.Lib.Services
         /// </summary>
         /// <param name="pluginType">The type of the plugin to analyze.</param>
         /// <returns>An enumerable collection of field information.</returns>
-        private IEnumerable<PluginFieldInfo> GetFieldsForPluginType(Type pluginType)
+        private IEnumerable<FieldInfo> GetFieldsForPluginType(Type pluginType)
         {
             var instance = Activator.CreateInstance(pluginType);
 
@@ -51,7 +51,7 @@ namespace OmniGenerator.Lib.Services
             }
 
             // This should never happen as all plugins inherit from IOmniGeneratorPlugin
-            return Enumerable.Empty<PluginFieldInfo>();
+            return Enumerable.Empty<FieldInfo>();
         }
     }
 }
