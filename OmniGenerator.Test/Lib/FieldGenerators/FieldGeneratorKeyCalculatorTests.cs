@@ -24,49 +24,53 @@ namespace OmniGenerator.Test.Lib.FieldGenerators
         {
             var input = "abc";
             var gen = CreateWithDependency(EKeyType.Dummy, input);
-            var expected = KeyTools.ComputeDummyKey(input);
             var result = gen.GenerateNextValue();
-            Assert.That(result, Is.EqualTo(expected));
+            Assert.That(result, Is.EqualTo(input));
         }
 
         [Test]
-        public void GenerateValue_RlmcKeyType_CallsComputeRlmcKey()
+        public void GenerateValue_RlmcKeyType_WithExpectedValue()
         {
-            var input = "1234567";
+            var input = "2459163 075005135908 204090215504";
             var gen = CreateWithDependency(EKeyType.Rlmc, input);
-            var expected = KeyTools.ComputeRlmcKey(input);
             var result = gen.GenerateNextValue();
-            Assert.That(result, Is.EqualTo(expected));
+            Assert.That(result, Is.EqualTo("11"));
         }
 
         [Test]
-        public void GenerateValue_RibKeyType_CallsComputeRibKey()
+        public void GenerateValue_RibKeyType_WithExpectedValue()
         {
-            var input = "1234567";
+            var input = "123456X7890";
             var gen = CreateWithDependency(EKeyType.Rib, input);
-            var expected = KeyTools.ComputeRibKey(input);
             var result = gen.GenerateNextValue();
-            Assert.That(result, Is.EqualTo(expected));
+            Assert.That(result, Is.EqualTo("60"));
         }
 
         [Test]
-        public void GenerateValue_TipKeyType_CallsComputeTipKey()
+        public void GenerateValue_TipKeyType_WithExpectedValue()
         {
-            var input = "1234567";
+            var input = "0630000004";
             var gen = CreateWithDependency(EKeyType.Tip, input);
-            var expected = KeyTools.ComputeTipKey(input);
             var result = gen.GenerateNextValue();
-            Assert.That(result, Is.EqualTo(expected));
+            Assert.That(result, Is.EqualTo("82"));
         }
 
         [Test]
-        public void GenerateValue_TipGroup6KeyType_CallsComputeTipGroup6Key()
+        public void GenerateValue_TipGroup6KeyType_WithExpectedValue()
         {
-            var input = "1234567";
+            var input = "123456789";
             var gen = CreateWithDependency(EKeyType.TipGroup6, input);
-            var expected = KeyTools.ComputeTipGroup6Key(input);
             var result = gen.GenerateNextValue();
-            Assert.That(result, Is.EqualTo(expected));
+            Assert.That(result, Is.EqualTo("6"));
+        }
+
+        [Test]
+        public void GenerateValue_IcsKeyType_WithExpectedValue()
+        {
+            var input = "BCD007008";
+            var gen = CreateWithDependency(EKeyType.Ics, input);
+            var result = gen.GenerateNextValue();
+            Assert.That(result, Is.EqualTo("54"));
         }
 
         [Test]

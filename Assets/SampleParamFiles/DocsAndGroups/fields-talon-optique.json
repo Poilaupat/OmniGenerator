@@ -12,19 +12,19 @@
   },
   {
     "$type": "constant",
-    "name": "codecentre",
+    "name": "code-centre",
     "value": "06"
   },
   {
     "$type": "constant",
-    "name": "codenature",
+    "name": "code-nature",
     "value": "8"
   },
   {
     "$type": "composite",
     "name": "group1-payload",
-    "dependent-upon": "codenature, codecentre, amount",
-    "format": "{{codenature}}{{codecentre}} {{amount:00000000}}"
+    "dependent-upon": "code-nature, code-centre, amount",
+    "format": "{{code-nature}}{{code-centre}} {{amount:00000000}}"
   },
   {
     "$type": "key",
@@ -40,12 +40,12 @@
   },
   {
     "$type": "constant",
-    "name": "doctype",
+    "name": "document-type",
     "value": "9"
   },
   {
     "$type": "regex",
-    "name": "codeapp",
+    "name": "code-application",
     "pattern": "(2|3|4|5|6)"
   },
   {
@@ -55,14 +55,14 @@
   },
   {
     "$type": "regex",
-    "name": "refop",
+    "name": "reference-operation",
     "pattern": "\\d{17}"
   },
   {
     "$type": "composite",
     "name": "group2-payload",
-    "dependent-upon": "doctype, codeapp, codique, refop",
-    "format": "{{refop}}{{codique}}{{codeapp}}{{doctype}}"
+    "dependent-upon": "document-type, code-application, codique, reference-operation",
+    "format": "{{reference-operation}}{{codique}}{{code-application}}{{document-type}}"
   },
   {
     "$type": "key",
@@ -78,19 +78,19 @@
   },
   {
     "$type": "constant",
-    "name": "codeetablissement",
+    "name": "code-etablissement",
     "value": "0001"
   },
   {
     "$type": "regex",
-    "name": "codeemetteur",
+    "name": "code-emetteur",
     "pattern": "(920033|930033|930044|940033|940044|950033|960033)"
   },
   {
     "$type": "composite",
     "name": "group3-payload",
-    "dependent-upon": "codeetablissement, codeemetteur",
-    "format": "{{codeemetteur}}{{codeetablissement}}"
+    "dependent-upon": "code-etablissement, code-emetteur",
+    "format": "{{code-emetteur}}{{code-etablissement}}"
   },
   {
     "$type": "key",

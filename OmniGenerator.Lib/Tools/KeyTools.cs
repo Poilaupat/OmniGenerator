@@ -26,8 +26,7 @@ namespace OmniGenerator.Lib.Tools
         /// <returns>The computed RIB checksum as a two-digit string.</returns>
         public static string ComputeRibKey(string rib)
         {
-            string numericstring = string.Concat(rib, "00");
-            var key = 97 - ComputeModulo(numericstring, 97, true);
+            var key = 97 - ComputeModulo(string.Concat(rib, "00"), 97, true);
             return key.ToString("00");
         }
 
@@ -52,7 +51,7 @@ namespace OmniGenerator.Lib.Tools
         public static string ComputeRlmcKey(string cmc7)
         {
             string numericstring = string.Concat(string.Join("", cmc7.Split(' ', StringSplitOptions.RemoveEmptyEntries)), "00");
-            var key = 97 - ComputeModulo(numericstring, 97, false);
+            var key = 97 - ComputeModulo(numericstring, 97);
             return key.ToString("00");
         }
 
@@ -64,20 +63,7 @@ namespace OmniGenerator.Lib.Tools
         /// <exception cref="ArgumentException">Thrown if the string contains non-numeric characters.</exception>
         public static string ComputeTipKey(string numericstring)
         {
-            numericstring = Regex.Replace(numericstring, @"\s", "");
-
-            if (!Regex.IsMatch(numericstring, @"\d+"))
-            {
-                throw new ArgumentException("Parameter numericstring must contain only digits");
-            }
-
-            int key = 0;
-
-            for (int i = 0; i < numericstring.Length; i++)
-            {
-                key = (key + int.Parse(numericstring.Substring(numericstring.Length - i - 1, 1)) * (i + 1)) % 100;
-            }
-
+            var key = ComputeModulo(numericstring, 100, replaceLetters: false, reverseString: true, withRankMultiplier: true);
             return key.ToString("00");
         }
 
@@ -88,9 +74,21 @@ namespace OmniGenerator.Lib.Tools
         /// <returns>The computed checksum as a single-digit string.</returns>
         public static string ComputeTipGroup6Key(string numericstring)
         {
-            int twoDigitsKey = 11 - ComputeModulo(numericstring, 11, false);
-            int oneDigitKey = ComputeModulo(twoDigitsKey.ToString(), 10, false);
+            int twoDigitsKey = 11 - ComputeModulo(numericstring, 11);
+            int oneDigitKey = ComputeModulo(twoDigitsKey.ToString(), 10);
             return oneDigitKey.ToString();
+        }
+
+        /// <summary>
+        /// Computes the checksum key for an ICS (Identifiant Créancier SEPA).
+        /// </summary>
+        /// <param name="ics">The ICS value (3 letters followed by 6 digits).</param>
+        /// <returns>The computed checksum key as a two digits string</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static string ComputeIcsKey(string ics)
+        {
+            var key = ComputeModulo(String.Concat(ics, "00"), 100, replaceLetters: true, reverseString: true, withRankMultiplier: true);
+            return key.ToString("00");
         }
 
         /// <summary>
@@ -102,7 +100,7 @@ namespace OmniGenerator.Lib.Tools
         /// <param name="replaceLetters">If set to true, replaces alpha characters by digits.</param>
         /// <returns>The computed modulo value.</returns>
         /// <exception cref="ArgumentException">Thrown if replaceLetters is false and numericstring contains letters.</exception>
-        private static int ComputeModulo(string numericstring, int modulo, bool replaceLetters)
+        private static int ComputeModulo(string numericstring, int modulo, bool replaceLetters = false, bool reverseString = false, bool withRankMultiplier = false)
         {
             numericstring = Regex.Replace(numericstring, @"\s", "");
 
@@ -113,14 +111,22 @@ namespace OmniGenerator.Lib.Tools
 
             if (!Regex.IsMatch(numericstring, @"^\d+$"))
             {
-                throw new ArgumentException("Input string contains non supported caracters");
+                throw new ArgumentException("Input string contains unsupported characters");
+            }
+
+            if (reverseString)
+            {
+                numericstring = numericstring.ReverseString();
             }
 
             int result = 0;
 
             for (int i = 0; i < numericstring.Length; i++)
             {
-                result = (result * 10 + int.Parse(numericstring.Substring(i, 1))) % modulo;
+                if (withRankMultiplier)
+                    result = (result + int.Parse(numericstring.Substring(i, 1)) * (i + 1)) % modulo;
+                else
+                    result = (result * 10 + int.Parse(numericstring.Substring(i, 1))) % modulo;
             }
 
             return result;
@@ -162,6 +168,13 @@ namespace OmniGenerator.Lib.Tools
                 .Replace('Y', '8')
                 .Replace('Z', '9')
                 ;
+        }
+
+        private static string ReverseString(this string str)
+        {
+            char[] array = str.ToCharArray();
+            Array.Reverse(array);
+            return new string(array);
         }
     }
 }

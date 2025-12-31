@@ -43,8 +43,8 @@
     "root": {
       "$type": "group",
       "name": "remittance",
-      "min-occurs": 3,
-      "max-occurs": 7,
+      "min-occurs": 1,
+      "max-occurs": 1,
       "fields": [
         {
           "$type": "aggregate",

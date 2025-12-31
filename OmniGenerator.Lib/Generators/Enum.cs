@@ -61,6 +61,10 @@ namespace OmniGenerator.Lib.Generators
         /// <summary>
         /// TIP Group 6 key type, used only in the group 6 of a TIP.
         /// </summary>
-        TipGroup6
+        TipGroup6,
+        /// <summary>
+        /// ICS key type. ICS (Identifiant Créancier SEPA) is used in SEPA direct debits.
+        /// </summary>
+        Ics,
     }
 }
