@@ -35,7 +35,7 @@ namespace OmniGenerator.Lib.Generators.Fields
         /// <param name="name">The name of the generator</param>
         /// <param name="dependentUpon">If aggregate type is set to Sum, name of the numeric field to sum. String.Empty either</param>
         /// <param name="aggregateType">The aggregate type. Either Sum or Count</param>
-        /// <param name="scope">The scope. Either DirectChildren or Overall</param>
+        /// <param name="scope">The scope. Either DirectChildren or AllChildren</param>
         /// <param name="targetElement">The name of the target element. Either a <see cref="Document"/> name or a <see cref="Group"/> name</param>
         public FieldGeneratorAggregate(string name, string dependentUpon, EFFieldAggregateType aggregateType, EScope scope, string targetElement)
             : base(name, dependentUpon)
@@ -73,7 +73,7 @@ namespace OmniGenerator.Lib.Generators.Fields
         private int ComputeSumAggregate()
         {
             return Group
-                ?.GetElements(TargetElement, Scope == EScope.Overall)
+                ?.GetElements(TargetElement, Scope == EScope.AllChildren)
                 .Sum(x => Convert.ToInt32(x.Fields[DependenceNames.Single()].Value))
                 ?? 0;
         }
@@ -85,7 +85,7 @@ namespace OmniGenerator.Lib.Generators.Fields
         private int ComputeCountAggregate()
         {
             return Group
-                ?.GetElements(TargetElement, Scope == EScope.Overall)
+                ?.GetElements(TargetElement, Scope == EScope.AllChildren)
                 .Count() ?? 0;
         }
     }

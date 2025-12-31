@@ -109,18 +109,20 @@ namespace OmniGenerator.Lib.Hierarchy
         }
 
         /// <summary>
-        /// Generates the fields of this group, including regular fields and aggregate fields of scope DirectChildren.
+        /// Generates the fields of this group, including regular fields and aggregate fields.
         /// This method should be called after all sub-documents and sub-groups have been generated and attached.
         /// </summary>
         /// <param name="generators">A <see cref="FieldGeneratorContainer"/> containing field generators.</param>
         internal override void GenerateFields(FieldGeneratorContainer generators)
         {
+            //Generate regular fields first
             base.GenerateFields(generators);
 
+            //Then generate aggregate fields
             if (generators.ElementHasFields(Name))
             {
                 var aggregates = generators.GenerateAggregateFields(Name, this);
-                Fields.AddRange(aggregates); // Use AddRange
+                Fields.AddRange(aggregates); 
             }
         }
 

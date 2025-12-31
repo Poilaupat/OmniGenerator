@@ -43,9 +43,9 @@ namespace OmniGenerator.Test.Lib.FieldGenerators
         }
 
         [Test]
-        public void GenerateValue_CountAggregate_Overall_ReturnsCorrectCount()
+        public void GenerateValue_CountAggregate_AllChildren_ReturnsCorrectCount()
         {
-            var generator = new FieldGeneratorAggregate("CountField", "", EFFieldAggregateType.Count, EScope.Overall, "Doc")
+            var generator = new FieldGeneratorAggregate("CountField", "", EFFieldAggregateType.Count, EScope.AllChildren, "Doc")
             {
                 Group = _root
             };
@@ -67,9 +67,9 @@ namespace OmniGenerator.Test.Lib.FieldGenerators
         }
 
         [Test]
-        public void GenerateValue_SumAggregate_Overall_ReturnsCorrectSum()
+        public void GenerateValue_SumAggregate_AllChildren_ReturnsCorrectSum()
         {
-            var gen = new FieldGeneratorAggregate("SumField", "Amount", EFFieldAggregateType.Sum, EScope.Overall, "Doc")
+            var gen = new FieldGeneratorAggregate("SumField", "Amount", EFFieldAggregateType.Sum, EScope.AllChildren, "Doc")
             {
                 Group = _root
             };

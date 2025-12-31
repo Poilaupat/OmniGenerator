@@ -50,7 +50,7 @@
           "$type": "aggregate",
           "name": "total",
           "aggregate-type": "Sum",
-          "scope": "Overall",
+          "scope": "AllChildren",
           "target-element": "cheque",
           "dependent-upon": "amount"
         },
@@ -58,7 +58,7 @@
           "$type": "aggregate",
           "name": "count",
           "aggregate-type": "Count",
-          "scope": "Overall",
+          "scope": "AllChildren",
           "target-element": "cheque",
           "dependent-upon": ""
         }

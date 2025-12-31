@@ -30,7 +30,7 @@ namespace OmniGenerator.Lib.Generators
         /// <summary>
         /// The aggregation is performed over all children elements, regardless of hierarchy.
         /// </summary>
-        Overall,
+        AllChildren,
         /// <summary>
         /// The aggregation is performed only on direct child elements.
         /// </summary>
