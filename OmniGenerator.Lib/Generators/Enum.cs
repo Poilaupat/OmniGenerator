@@ -66,5 +66,9 @@ namespace OmniGenerator.Lib.Generators
         /// ICS key type. ICS (Identifiant Créancier SEPA) is used in SEPA direct debits.
         /// </summary>
         Ics,
+        /// <summary>
+        /// The Iban (International Bank Account Number) key type.
+        /// </summary>
+        Iban,
     }
 }

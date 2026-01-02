@@ -42,6 +42,7 @@ namespace OmniGenerator.Lib.Generators.Fields
                 EKeyType.Tip => KeyTools.ComputeTipKey(value),
                 EKeyType.TipGroup6 => KeyTools.ComputeTipGroup6Key(value),
                 EKeyType.Ics => KeyTools.ComputeIcsKey(value),
+                EKeyType.Iban => KeyTools.ComputeIbanKey(value),
                 _ => throw new Exception($"Key type {KeyType} is not supported")
             };
         }

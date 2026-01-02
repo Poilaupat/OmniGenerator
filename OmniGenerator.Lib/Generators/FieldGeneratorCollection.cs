@@ -67,6 +67,7 @@ namespace OmniGenerator.Lib.Generators
                 var fields = new Dictionary<string, Field>();
                 if (HasRegularGenerators)
                 {
+                    Console.WriteLine($"**********************************************************");
                     foreach (var fieldGenerator in _generators.FilterRegularFieldGenerators())
                     {
                         var value = fieldGenerator.GenerateNextValue();

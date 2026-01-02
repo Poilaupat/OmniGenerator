@@ -1,6 +1,7 @@
 {
+  "$schema": "../omnigenerator-schema.json",
   "packager": "packager.omni.csv",
-  "render-resolution":  300,
+  "render-resolution": 300,
   "hierarchy": {
     "fields": [
       {
@@ -69,7 +70,7 @@
           "name": "payment",
           "min-occurs": 1,
           "max-occurs": 1,
-          "field-configuration-file": "DocsAndGroups\\fields-payment.json",
+          "field-configuration-file": "DocsAndGroups/fields-payment.json",
           "fields": [],
           "elements": [
             {
@@ -78,7 +79,7 @@
               "name": "talon-optique",
               "min-occurs": 1,
               "max-occurs": 1,
-              "field-configuration-file": "DocsAndGroups\\fields-talon-optique.json",
+              "field-configuration-file": "DocsAndGroups/fields-talon-optique.json",
               "fields": []
             },
             {
@@ -87,7 +88,7 @@
               "name": "cheque",
               "min-occurs": 1,
               "max-occurs": 1,
-              "field-configuration-file": "DocsAndGroups\\fields-cheque.json",
+              "field-configuration-file": "DocsAndGroups/fields-cheque.json",
               "fields": []
             }
           ]

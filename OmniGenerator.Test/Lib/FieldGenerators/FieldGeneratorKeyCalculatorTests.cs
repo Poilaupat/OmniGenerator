@@ -74,6 +74,15 @@ namespace OmniGenerator.Test.Lib.FieldGenerators
         }
 
         [Test]
+        public void GenerateValue_IbanKeyType_WithExpectedValue()
+        {
+            var input = "30003732513751873529738FR";
+            var gen = CreateWithDependency(EKeyType.Iban, input);
+            var result = gen.GenerateNextValue();
+            Assert.That(result, Is.EqualTo("76"));
+        }
+
+        [Test]
         public void GenerateValue_UnsupportedKeyType_ThrowsException()
         {
             var input = "unsupported";

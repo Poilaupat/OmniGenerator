@@ -84,7 +84,6 @@ namespace OmniGenerator.Lib.Tools
         /// </summary>
         /// <param name="ics">The ICS value (3 letters followed by 6 digits).</param>
         /// <returns>The computed checksum key as a two digits string</returns>
-        /// <exception cref="NotImplementedException"></exception>
         public static string ComputeIcsKey(string ics)
         {
             var key = ComputeModulo(String.Concat(ics, "00"), 100, replaceLetters: true, reverseString: true, withRankMultiplier: true);
@@ -92,82 +91,60 @@ namespace OmniGenerator.Lib.Tools
         }
 
         /// <summary>
+        /// Computes the IBAN key for a given country code and BBAN.
+        /// </summary>
+        /// <param name="input">Input must be the BBAN (Basic Bank Account Number, RIB including key for french accounts) + The country code (FR for french IBAN)</param>
+        /// <returns>The computed checksum key as a two digits string</returns>
+        public static string ComputeIbanKey(string input)
+        {
+            int key = 98 - ComputeModulo(input + "00", 97, replaceLetters:true, letterMap: ELetterMap.Iban);
+            return key.ToString("00");
+        }
+
+        /// <summary>
         /// Computes a modulo on a numeric string.
         /// Optionally replaces letters by digits according to the RIB specification.
         /// </summary>
-        /// <param name="numericstring">The input string.</param>
+        /// <param name="input">The input string.</param>
         /// <param name="modulo">The modulo value.</param>
         /// <param name="replaceLetters">If set to true, replaces alpha characters by digits.</param>
         /// <returns>The computed modulo value.</returns>
         /// <exception cref="ArgumentException">Thrown if replaceLetters is false and numericstring contains letters.</exception>
-        private static int ComputeModulo(string numericstring, int modulo, bool replaceLetters = false, bool reverseString = false, bool withRankMultiplier = false)
+        private static int ComputeModulo(string input, 
+            int modulo, 
+            bool replaceLetters = false, 
+            bool reverseString = false, 
+            bool withRankMultiplier = false,
+            ELetterMap letterMap = ELetterMap.Rib)
         {
-            numericstring = Regex.Replace(numericstring, @"\s", "");
+            input = Regex.Replace(input, @"\s", "");
 
             if (replaceLetters)
             {
-                numericstring = ReplaceLetters(numericstring);
+                input = LetterMapper.Map(input, letterMap);
             }
 
-            if (!Regex.IsMatch(numericstring, @"^\d+$"))
+            if (!Regex.IsMatch(input, @"^\d+$"))
             {
                 throw new ArgumentException("Input string contains unsupported characters");
             }
 
             if (reverseString)
             {
-                numericstring = numericstring.ReverseString();
+                input = input.ReverseString();
             }
 
             int result = 0;
 
-            for (int i = 0; i < numericstring.Length; i++)
+            for (int i = 0; i < input.Length; i++)
             {
                 if (withRankMultiplier)
-                    result = (result + int.Parse(numericstring.Substring(i, 1)) * (i + 1)) % modulo;
+                    result = (result + int.Parse(input.Substring(i, 1)) * (i + 1)) % modulo;
                 else
-                    result = (result * 10 + int.Parse(numericstring.Substring(i, 1))) % modulo;
+                    result = (result * 10 + int.Parse(input.Substring(i, 1))) % modulo;
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Replaces alpha characters by digits according to RIB specifications.
-        /// </summary>
-        /// <param name="str">The input string.</param>
-        /// <returns>A numeric string with letters replaced by digits.</returns>
-        private static string ReplaceLetters(string str)
-        {
-            return str
-                .ToUpper()
-                .Replace('A', '1')
-                .Replace('B', '2')
-                .Replace('C', '3')
-                .Replace('D', '4')
-                .Replace('E', '5')
-                .Replace('F', '6')
-                .Replace('G', '7')
-                .Replace('H', '8')
-                .Replace('I', '9')
-                .Replace('J', '1')
-                .Replace('K', '2')
-                .Replace('L', '3')
-                .Replace('M', '4')
-                .Replace('N', '5')
-                .Replace('O', '6')
-                .Replace('P', '7')
-                .Replace('Q', '8')
-                .Replace('R', '9')
-                .Replace('S', '2')
-                .Replace('T', '3')
-                .Replace('U', '4')
-                .Replace('V', '5')
-                .Replace('W', '6')
-                .Replace('X', '7')
-                .Replace('Y', '8')
-                .Replace('Z', '9')
-                ;
         }
 
         private static string ReverseString(this string str)

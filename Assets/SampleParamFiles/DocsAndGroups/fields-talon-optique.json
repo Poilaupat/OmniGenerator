@@ -1,107 +1,165 @@
-[
-  {
-    "$type": "constant",
-    "name": "encline",
-    "value": "12"
-  },
-  {
-    "$type": "numeric",
-    "name": "amount",
-    "min": 100,
-    "max": 99999
-  },
-  {
-    "$type": "constant",
-    "name": "code-centre",
-    "value": "06"
-  },
-  {
-    "$type": "constant",
-    "name": "code-nature",
-    "value": "8"
-  },
-  {
-    "$type": "composite",
-    "name": "group1-payload",
-    "dependent-upon": "code-nature, code-centre, amount",
-    "format": "{{code-nature}}{{code-centre}} {{amount:00000000}}"
-  },
-  {
-    "$type": "key",
-    "name": "group1-key",
-    "dependent-upon": "group1-payload",
-    "key-type": "tip"
-  },
-  {
-    "$type": "composite",
-    "name": "group1",
-    "dependent-upon": "group1-payload, group1-key",
-    "format": "{{group1-key}}{{group1-payload}}"
-  },
-  {
-    "$type": "constant",
-    "name": "document-type",
-    "value": "9"
-  },
-  {
-    "$type": "regex",
-    "name": "code-application",
-    "pattern": "(2|3|4|5|6)"
-  },
-  {
-    "$type": "regex",
-    "name": "codique",
-    "pattern": "\\d{6}"
-  },
-  {
-    "$type": "regex",
-    "name": "reference-operation",
-    "pattern": "\\d{17}"
-  },
-  {
-    "$type": "composite",
-    "name": "group2-payload",
-    "dependent-upon": "document-type, code-application, codique, reference-operation",
-    "format": "{{reference-operation}}{{codique}}{{code-application}}{{document-type}}"
-  },
-  {
-    "$type": "key",
-    "name": "group2-key",
-    "dependent-upon": "group2-payload",
-    "key-type": "tip"
-  },
-  {
-    "$type": "composite",
-    "name": "group2",
-    "dependent-upon": "group2-payload, group2-key",
-    "format": "{{group2-key}}{{group2-payload}}"
-  },
-  {
-    "$type": "constant",
-    "name": "code-etablissement",
-    "value": "0001"
-  },
-  {
-    "$type": "regex",
-    "name": "code-emetteur",
-    "pattern": "(920033|930033|930044|940033|940044|950033|960033)"
-  },
-  {
-    "$type": "composite",
-    "name": "group3-payload",
-    "dependent-upon": "code-etablissement, code-emetteur",
-    "format": "{{code-emetteur}}{{code-etablissement}}"
-  },
-  {
-    "$type": "key",
-    "name": "group3-key",
-    "dependent-upon": "group3-payload",
-    "key-type": "tip"
-  },
-  {
-    "$type": "composite",
-    "name": "group3",
-    "dependent-upon": "group3-payload, group3-key",
-    "format": "{{group3-payload}}{{group3-key}} "
-  }
-]
+{
+  "$schema": "../../omnigenerator-schema.json",
+  "fields": [
+    {
+      "$type": "constant",
+      "name": "encline",
+      "value": "12"
+    },
+    {
+      "$type": "numeric",
+      "name": "amount",
+      "min": 100,
+      "max": 99999
+    },
+    {
+      "$type": "constant",
+      "name": "code-centre",
+      "value": "06"
+    },
+    {
+      "$type": "constant",
+      "name": "code-nature",
+      "value": "1"
+    },
+    {
+      "$type": "composite",
+      "name": "group1-payload",
+      "dependent-upon": "code-nature, code-centre, amount",
+      "format": "{{code-nature}}{{code-centre}} {{amount | pad_left: 8,'0'}}"
+    },
+    {
+      "$type": "key",
+      "name": "group1-key",
+      "dependent-upon": "group1-payload",
+      "key-type": "tip"
+    },
+    {
+      "$type": "constant",
+      "name": "code-document",
+      "value": "9"
+    },
+    {
+      "$type": "regex",
+      "name": "code-application",
+      "pattern": "(2|3|4|5|6)"
+    },
+    {
+      "$type": "regex",
+      "name": "codique",
+      "pattern": "\\d{6}"
+    },
+    {
+      "$type": "regex",
+      "name": "reference-operation",
+      "pattern": "\\d{17}"
+    },
+    {
+      "$type": "composite",
+      "name": "group2-payload",
+      "dependent-upon": "code-document, code-application, codique, reference-operation",
+      "format": "{{reference-operation}}{{codique}}{{code-application}}{{code-document}}"
+    },
+    {
+      "$type": "key",
+      "name": "group2-key",
+      "dependent-upon": "group2-payload",
+      "key-type": "tip"
+    },
+    {
+      "$type": "constant",
+      "name": "code-etablissement",
+      "value": "0001"
+    },
+    {
+      "$type": "regex",
+      "name": "code-creancier",
+      "pattern": "(920033|930033|930044|940033|940044|950033|960033)"
+    },
+    {
+      "$type": "composite",
+      "name": "group3-payload",
+      "dependent-upon": "code-etablissement, code-creancier",
+      "format": "{{code-creancier}}{{code-etablissement}}"
+    },
+    {
+      "$type": "key",
+      "name": "group3-key",
+      "dependent-upon": "group3-payload",
+      "key-type": "tip"
+    },
+    {
+      "$type": "composite",
+      "name": "low-line",
+      "dependent-upon": "code-etablissement, code-creancier, group3-key, code-document, code-application, codique, reference-operation, group2-key, code-nature, code-centre, amount, group1-key",
+      "format": "{{code-creancier}}{{code-etablissement}}{{group3-key}} {{group2-key}}{{reference-operation}}{{codique}}{{code-application}}{{code-document}}{{group1-key}}{{code-nature}}{{code-centre}} {{amount | pad_left: 8}}"
+    },
+    {
+      "$type": "regex",
+      "name": "rib",
+      "pattern": "\\d{15}[A-Z0-9]\\d{15}"
+    },
+    {
+      "$type": "key",
+      "name": "rib-key",
+      "dependent-upon": "rib",
+      "key-type": "rib"
+    },
+    {
+      "$type": "constant",
+      "name": "country-code",
+      "value": "FR"
+    },
+    {
+      "$type": "composite",
+      "name": "iban-payload",
+      "dependent-upon": "country-code, rib, rib-key",
+      "format": "{{rib}}{{rib-key}}{{country-code}}"
+    },
+    {
+      "$type": "key",
+      "name": "iban-key",
+      "dependent-upon": "iban-payload",
+      "key-type": "iban"
+    },
+    {
+      "$type": "composite",
+      "name": "iban",
+      "dependent-upon": "rib, rib-key, country-code, iban-key",
+      "format": "{{country-code}}{{iban-key}}{{rib}}{{rib-key}}"
+    },
+    {
+      "$type": "regex",
+      "name": "group6",
+      "pattern": "\\d{11}"
+    },
+    {
+      "$type": "key",
+      "name": "group6-key",
+      "dependent-upon": "group6",
+      "key-type": "tipGroup6"
+    },
+    {
+      "$type": "list",
+      "name": "payor-last-name",
+      "list-file": "./Resources/Lists/last_names.txt"
+    },
+    {
+      "$type": "list",
+      "name": "payor-first-name",
+      "list-file": "./Resources/Lists/first_names.txt"
+    },
+    {
+      "$type": "composite",
+      "name": "payor-name",
+      "dependent-upon": "payor-first-name,payor-last-name",
+      "format": "{{payor-first-name}} {{payor-last-name}}"
+    },
+    {
+      "$type": "composite",
+      "name": "high-line",
+      "dependent-upon": "payor-name, iban, group6, group6-key",
+      "format": "{{group6}}{{group6-key}} {{payor-name | slice: 0, 18}} {{iban}}"
+    }
+  ]
+}

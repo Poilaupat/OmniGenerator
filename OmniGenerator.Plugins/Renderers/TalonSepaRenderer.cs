@@ -25,14 +25,7 @@ namespace OmniGenerator.Plugins.Renderers
             RenderRectoBackground(svg);
 
             svg.DrawText($"{fields.Amount.Value}", "amount", 80f, 30f, "Arial", 4f, Color.Black);
-
-            string lowline = string.Concat(
-                fields.Group3,
-                fields.Group2,
-                fields.Group1
-                );
-
-            svg.DrawText(lowline, "lowline", 10f, 68f, "OCRB", 3.5f, Color.Black);
+            svg.DrawText(fields.LowLine, "lowline", 10f, 68f, "OCRB", 3.5f, Color.Black);
 
 
             return svg;

@@ -9,11 +9,13 @@
     <Import_RootNamespace>Assets</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)omnigenerator-schema.json" />
     <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\DocsAndGroups\fields-cheque.json" />
     <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\DocsAndGroups\fields-payment.json" />
     <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\DocsAndGroups\fields-remittance.json" />
     <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\DocsAndGroups\fields-slip.json" />
     <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\DocsAndGroups\fields-talon-optique.json" />
+    <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\omnigenerator-schema.json" />
     <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\param-all-generators.json" />
     <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\param-compliance-eligibility.json" />
     <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\param-debug.json" />

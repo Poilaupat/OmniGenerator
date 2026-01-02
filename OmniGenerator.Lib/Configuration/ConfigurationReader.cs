@@ -49,16 +49,16 @@ namespace OmniGenerator.Lib.Configuration
 
                 if (!string.IsNullOrWhiteSpace(config.Hierarchy.FieldConfigurationFile))
                 {
-                    var rootfields = await ConfigurationReader.DeserializeAsync<List<AbstractFieldConfigurationBase>>(directory ?? string.Empty, config.Hierarchy.FieldConfigurationFile);
-                    config.Hierarchy.Fields.Merge(rootfields);
+                    var root = await ConfigurationReader.DeserializeAsync<OmniGeneratorFieldConfiguration>(directory ?? string.Empty, config.Hierarchy.FieldConfigurationFile);
+                    config.Hierarchy.Fields.Merge(root.Fields);
                 }
 
                 foreach (var configElement in config.Hierarchy.Root.GetElementsConfiguration(true))
                 {
                     if (!string.IsNullOrWhiteSpace(configElement.FieldConfigurationFile))
                     {
-                        var filefields = await ConfigurationReader.DeserializeAsync<List<AbstractFieldConfigurationBase>>(directory ?? string.Empty, configElement.FieldConfigurationFile);
-                        configElement.Fields.Merge(filefields);
+                        var file = await ConfigurationReader.DeserializeAsync<OmniGeneratorFieldConfiguration>(directory ?? string.Empty, configElement.FieldConfigurationFile);
+                        configElement.Fields.Merge(file.Fields);
                     }
                 }
 

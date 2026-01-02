@@ -25,21 +25,9 @@ namespace OmniGenerator.Plugins.Renderers
         public Field Amount => GetRequired("amount");
 
         /// <summary>
-        /// Gets the Group 3 part of OCRB code.
+        /// Gets the low OCRB line.
         /// </summary>
-        [FieldInfo("group3", "Group 3 part of OCRB code", isRequired: true)]
-        public string Group3 => GetRequiredString("group3");
-
-        /// <summary>
-        /// Gets the Group 2 part of OCRB code.
-        /// </summary>
-        [FieldInfo("group2", "Group 2 part of OCRB code", isRequired: true)]
-        public string Group2 => GetRequiredString("group2");
-
-        /// <summary>
-        /// Gets the Group 1 part of OCRB code.
-        /// </summary>
-        [FieldInfo("group1", "Group 1 part of OCRB code", isRequired: true)]
-        public string Group1 => GetRequiredString("group1");
+        [FieldInfo("low-line", "The low OCRB line", isRequired: true)]
+        public string LowLine => GetRequiredString("low-line");
     }
 }

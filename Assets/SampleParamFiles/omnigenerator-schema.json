@@ -1,0 +1,350 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/Poilaupat/OmniGenerator/schema",
+  "title": "OmniGenerator Configuration Schema",
+  "description": "Schema for OmniGenerator main configuration and satellite field files",
+  
+  "definitions": {
+    "fieldBase": {
+      "type": "object",
+      "required": ["$type", "name"],
+      "properties": {
+        "$type": { "type": "string" },
+        "name": { 
+          "type": "string",
+          "description": "Unique name for this field"
+        }
+      }
+    },
+    
+    "fieldArray": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/fieldTypes" },
+      "description": "Array of field configurations"
+    },
+    
+    "fieldTypes": {
+      "oneOf": [
+        { "$ref": "#/definitions/constantField" },
+        { "$ref": "#/definitions/numericField" },
+        { "$ref": "#/definitions/regexField" },
+        { "$ref": "#/definitions/dateField" },
+        { "$ref": "#/definitions/incrementField" },
+        { "$ref": "#/definitions/listField" },
+        { "$ref": "#/definitions/compositeField" },
+        { "$ref": "#/definitions/keyField" },
+        { "$ref": "#/definitions/aggregateField" }
+      ]
+    },
+    
+    "constantField": {
+      "description": "A field with a constant value",
+      "allOf": [
+        { "$ref": "#/definitions/fieldBase" },
+        {
+          "properties": {
+            "$type": { "const": "constant" },
+            "value": { 
+              "type": "string",
+              "description": "The constant value"
+            }
+          },
+          "required": ["value"]
+        }
+      ]
+    },
+    
+    "numericField": {
+      "description": "A field that generates random numeric values within a range",
+      "allOf": [
+        { "$ref": "#/definitions/fieldBase" },
+        {
+          "properties": {
+            "$type": { "const": "numeric" },
+            "min": { 
+              "type": "integer",
+              "description": "Minimum value (inclusive)"
+            },
+            "max": { 
+              "type": "integer",
+              "description": "Maximum value (inclusive)"
+            }
+          },
+          "required": ["min", "max"]
+        }
+      ]
+    },
+    
+    "regexField": {
+      "description": "A field that generates values matching a regex pattern",
+      "allOf": [
+        { "$ref": "#/definitions/fieldBase" },
+        {
+          "properties": {
+            "$type": { "const": "regex" },
+            "pattern": { 
+              "type": "string",
+              "description": "Regular expression pattern to generate values from"
+            }
+          },
+          "required": ["pattern"]
+        }
+      ]
+    },
+    
+    "dateField": {
+      "description": "A field that generates dates relative to today",
+      "allOf": [
+        { "$ref": "#/definitions/fieldBase" },
+        {
+          "properties": {
+            "$type": { "const": "date" },
+            "day-diff-min": { 
+              "type": "integer",
+              "description": "Minimum day difference from today (negative for past)"
+            },
+            "day-diff-max": { 
+              "type": "integer",
+              "description": "Maximum day difference from today (negative for past)"
+            }
+          },
+          "required": ["day-diff-min", "day-diff-max"]
+        }
+      ]
+    },
+    
+    "incrementField": {
+      "description": "A field that increments with each generation",
+      "allOf": [
+        { "$ref": "#/definitions/fieldBase" },
+        {
+          "properties": {
+            "$type": { "const": "increment" },
+            "start": { 
+              "type": "integer",
+              "description": "Starting value"
+            },
+            "increment": { 
+              "type": "integer",
+              "description": "Increment amount"
+            }
+          },
+          "required": ["start", "increment"]
+        }
+      ]
+    },
+    
+    "listField": {
+      "description": "A field that picks random values from a weighted list",
+      "allOf": [
+        { "$ref": "#/definitions/fieldBase" },
+        {
+          "properties": {
+            "$type": { "const": "list" },
+            "list": {
+              "description": "Inline list of values (array for equal weights, object for weighted)",
+              "oneOf": [
+                {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": { "type": "number" }
+                }
+              ]
+            },
+            "list-file": {
+              "type": "string",
+              "description": "Path to external file containing the list"
+            }
+          },
+          "oneOf": [
+            { "required": ["list"] },
+            { "required": ["list-file"] }
+          ]
+        }
+      ]
+    },
+    
+    "compositeField": {
+      "description": "A field composed from other fields using a template",
+      "allOf": [
+        { "$ref": "#/definitions/fieldBase" },
+        {
+          "properties": {
+            "$type": { "const": "composite" },
+            "format": { 
+              "type": "string",
+              "description": "Template format using {{fieldname}} and Liquid filters"
+            },
+            "dependent-upon": { 
+              "type": "string",
+              "description": "Comma-separated list of field names this field depends on"
+            }
+          },
+          "required": ["format", "dependent-upon"]
+        }
+      ]
+    },
+    
+    "keyField": {
+      "description": "A field that calculates a checksum key from another field",
+      "allOf": [
+        { "$ref": "#/definitions/fieldBase" },
+        {
+          "properties": {
+            "$type": { "const": "key" },
+            "key-type": { 
+              "enum": ["dummy", "rlmc", "rib", "tip", "tipGroup6", "ics", "iban"],
+              "description": "Type of key calculation algorithm"
+            },
+            "dependent-upon": { 
+              "type": "string",
+              "description": "Name of the field to calculate the key from"
+            }
+          },
+          "required": ["key-type", "dependent-upon"]
+        }
+      ]
+    },
+    
+    "aggregateField": {
+      "description": "A field that aggregates values from child elements",
+      "allOf": [
+        { "$ref": "#/definitions/fieldBase" },
+        {
+          "properties": {
+            "$type": { "const": "aggregate" },
+            "aggregate-type": { 
+              "enum": ["Count", "Sum"],
+              "description": "Type of aggregation operation"
+            },
+            "scope": { 
+              "enum": ["AllChildren", "DirectChildren"],
+              "description": "Scope of aggregation (all descendants or direct children only)"
+            },
+            "target-element": { 
+              "type": "string",
+              "description": "Name of the element type to aggregate"
+            },
+            "dependent-upon": { 
+              "type": "string",
+              "description": "Name of the field to aggregate (empty for Count)"
+            }
+          },
+          "required": ["aggregate-type", "scope", "target-element", "dependent-upon"]
+        }
+      ]
+    },
+    
+    "elementConfiguration": {
+      "type": "object",
+      "required": ["$type", "name", "min-occurs", "max-occurs"],
+      "properties": {
+        "$type": { 
+          "enum": ["document", "group"],
+          "description": "Type of element"
+        },
+        "name": { 
+          "type": "string",
+          "description": "Unique name for this element"
+        },
+        "min-occurs": { 
+          "type": "integer",
+          "minimum": 0,
+          "description": "Minimum number of occurrences"
+        },
+        "max-occurs": { 
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum number of occurrences"
+        },
+        "fields": { 
+          "$ref": "#/definitions/fieldArray",
+          "description": "Inline field definitions"
+        },
+        "field-configuration-file": {
+          "type": "string",
+          "description": "Path to external file containing field definitions"
+        },
+        "elements": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/elementConfiguration" },
+          "description": "Child elements (only for groups)"
+        },
+        "renderer": {
+          "type": "string",
+          "description": "Renderer to use for this document (only for documents)"
+        }
+      }
+    },
+    
+    "hierarchyConfiguration": {
+      "type": "object",
+      "required": ["root"],
+      "properties": {
+        "fields": {
+          "$ref": "#/definitions/fieldArray",
+          "description": "Global fields accessible from all elements"
+        },
+        "field-configuration-file": {
+          "type": "string",
+          "description": "Path to external file containing global field definitions"
+        },
+        "root": {
+          "$ref": "#/definitions/elementConfiguration",
+          "description": "Root element of the hierarchy"
+        }
+      }
+    },
+    
+    "mainConfiguration": {
+      "type": "object",
+      "required": ["packager", "hierarchy"],
+      "properties": {
+        "packager": {
+          "type": "string",
+          "description": "Name of the packager to use (e.g., 'packager.omni.csv', 'packager.omni.pdf')"
+        },
+        "render-resolution": {
+          "type": "integer",
+          "minimum": 72,
+          "maximum": 600,
+          "description": "DPI resolution for rendering (default: 300)"
+        },
+        "hierarchy": {
+          "$ref": "#/definitions/hierarchyConfiguration",
+          "description": "Document hierarchy configuration"
+        }
+      }
+    },
+    
+    "satelliteFieldConfiguration": {
+      "type": "object",
+      "required": ["fields"],
+      "properties": {
+        "$schema": {
+          "type": "string",
+          "description": "JSON Schema reference"
+        },
+        "fields": {
+          "$ref": "#/definitions/fieldArray",
+          "description": "Array of field configurations"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  
+  "oneOf": [
+    {
+      "description": "Main configuration file (param-*.json)",
+      "$ref": "#/definitions/mainConfiguration"
+    },
+    {
+      "description": "Satellite fields file with wrapper object (fields-*.json)",
+      "$ref": "#/definitions/satelliteFieldConfiguration"
+    }
+  ]
+}

@@ -36,17 +36,17 @@
         /// </summary>
         /// <param name="input">The value to pad.</param>
         /// <param name="length">The total length of the resulting string.</param>
-        /// <param name="paddingChar">The character to use for padding (default: "0").</param>
+        /// <param name="paddingChar">The character to use for padding (default: blank space).</param>
         /// <returns>The padded string.</returns>
         /// <example>
-        /// Template: <c>{{packet_number | pad_left:4}}</c>
+        /// Template: <c>{{packet_number | pad_left:4,'0'}}</c>
         /// Result: "0042" for input 42
         /// </example>
-        public static string PadLeft(object input, int length, string paddingChar = "0")
+        public static string PadLeft(object input, int length, char paddingChar = ' ')
         {
-            if (input == null) return string.Empty.PadLeft(length, paddingChar[0]);
+            if (input == null) return string.Empty.PadLeft(length, paddingChar);
 
-            return input.ToString()!.PadLeft(length, paddingChar[0]);
+            return input.ToString()!.PadLeft(length, paddingChar);
         }
 
         /// <summary>
@@ -54,17 +54,17 @@
         /// </summary>
         /// <param name="input">The value to pad.</param>
         /// <param name="length">The total length of the resulting string.</param>
-        /// <param name="paddingChar">The character to use for padding (default: " ").</param>
+        /// <param name="paddingChar">The character to use for padding (default: blank space).</param>
         /// <returns>The padded string.</returns>
         /// <example>
         /// Template: <c>{{name | pad_right:20}}</c>
         /// Result: "John                " for input "John"
         /// </example>
-        public static string PadRight(object input, int length, string paddingChar = " ")
+        public static string PadRight(object input, int length, char paddingChar = ' ')
         {
-            if (input == null) return string.Empty.PadRight(length, paddingChar[0]);
+            if (input == null) return string.Empty.PadRight(length, paddingChar);
 
-            return input.ToString()!.PadRight(length, paddingChar[0]);
+            return input.ToString()!.PadRight(length, paddingChar);
         }
     }
 }
