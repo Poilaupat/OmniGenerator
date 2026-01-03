@@ -653,40 +653,40 @@ Basic,0.3";
         public async Task ReadConfigurationAsync_WithExternalFieldConfigurationFile_MergesFields()
         {
             // Arrange
-            var fieldsJson = @"[
-  {
-    ""$type"": ""constant"",
-    ""name"": ""ExternalField1"",
-    ""value"": ""Value1""
-  },
-  {
-    ""$type"": ""constant"",
-    ""name"": ""ExternalField2"",
-    ""value"": ""Value2""
-  }
-]";
+            var fieldsJson = @"{ ""fields"": [
+                  {
+                    ""$type"": ""constant"",
+                    ""name"": ""ExternalField1"",
+                    ""value"": ""Value1""
+                  },
+                  {
+                    ""$type"": ""constant"",
+                    ""name"": ""ExternalField2"",
+                    ""value"": ""Value2""
+                  }
+                ]}";
             var fieldsPath = Path.Combine(_testDataDirectory, "external-fields.json");
             await File.WriteAllTextAsync(fieldsPath, fieldsJson);
 
             var configJson = @"{
-  ""packager"": ""pdf"",
-  ""hierarchy"": {
-    ""field-configuration-file"": ""external-fields.json"",
-    ""root"": {
-      ""$type"": ""document"",
-      ""name"": ""TestDoc"",
-      ""min-occurs"": 1,
-      ""max-occurs"": 1,
-      ""fields"": [
-        {
-          ""$type"": ""constant"",
-          ""name"": ""InternalField"",
-          ""value"": ""InternalValue""
-        }
-      ]
-    }
-  }
-}";
+              ""packager"": ""pdf"",
+              ""hierarchy"": {
+                ""field-configuration-file"": ""external-fields.json"",
+                ""root"": {
+                  ""$type"": ""document"",
+                  ""name"": ""TestDoc"",
+                  ""min-occurs"": 1,
+                  ""max-occurs"": 1,
+                  ""fields"": [
+                    {
+                      ""$type"": ""constant"",
+                      ""name"": ""InternalField"",
+                      ""value"": ""InternalValue""
+                    }
+                  ]
+                }
+              }
+            }";
             var configPath = Path.Combine(_testDataDirectory, "external-fields-config.json");
             await File.WriteAllTextAsync(configPath, configJson);
 

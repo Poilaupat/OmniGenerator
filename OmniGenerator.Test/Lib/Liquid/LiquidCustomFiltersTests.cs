@@ -65,7 +65,7 @@ namespace OmniGenerator.Test.Lib.Liquid
         public void PadLeft_WithInteger_PadsWithZeros()
         {
             // Arrange
-            var template = Template.Parse("{{value | pad_left:6}}");
+            var template = Template.Parse("{{value | pad_left:6,'0'}}");
 
             // Act
             var result = template.Render(Hash.FromAnonymousObject(new { value = 123 }));
@@ -78,7 +78,7 @@ namespace OmniGenerator.Test.Lib.Liquid
         public void PadLeft_WithString_PadsWithZeros()
         {
             // Arrange
-            var template = Template.Parse("{{value | pad_left:4}}");
+            var template = Template.Parse("{{value | pad_left:4, '0'}}");
 
             // Act
             var result = template.Render(Hash.FromAnonymousObject(new { value = "42" }));
@@ -123,7 +123,7 @@ namespace OmniGenerator.Test.Lib.Liquid
             var result = template.Render(Hash.FromAnonymousObject(new { value = (object?)null }));
 
             // Assert
-            Assert.That(result, Is.EqualTo("0000"));
+            Assert.That(result, Is.EqualTo("    "));
         }
 
         #endregion
@@ -177,7 +177,7 @@ namespace OmniGenerator.Test.Lib.Liquid
         public void ComplexTemplate_WithMultipleFilters_FormatsCorrectly()
         {
             // Arrange
-            var template = Template.Parse("{{date | date:'yyMMdd'}}{{bank | pad_left:5}}{{agency | pad_left:5}}{{number | pad_left:4}}");
+            var template = Template.Parse("{{date | date:'yyMMdd'}}{{bank | pad_left:5, '0'}}{{agency | pad_left:5, '0'}}{{number | pad_left:4, '0'}}");
 
             // Act
             var result = template.Render(Hash.FromAnonymousObject(new

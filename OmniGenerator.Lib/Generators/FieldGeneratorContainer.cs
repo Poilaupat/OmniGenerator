@@ -63,7 +63,7 @@ namespace OmniGenerator.Lib.Generators
         /// </summary>
         /// <param name="name">The name of the element to refresh</param>
         /// <returns>A <see cref="FieldCollection"/></returns>
-        public IDictionary<string, Field> GenerateRegularFields(string name) => _generators[name].GenerateRegularFields();
+        public IDictionary<string, Field> GenerateRegularFields(string name) => _generators[name].GenerateFields();
 
         /// <summary>
         /// Refreshes the aggregate fields of the specified scope of the element specified by its name, uses those values to build a <see cref="FieldCollection"/>

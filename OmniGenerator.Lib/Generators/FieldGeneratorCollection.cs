@@ -1,4 +1,5 @@
-﻿using OmniGenerator.Lib.Hierarchy;
+﻿using OmniGenerator.Lib.Generators.Fields;
+using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Interfaces.FieldGenerators;
 using System;
 using System.Collections.Generic;
@@ -23,20 +24,6 @@ namespace OmniGenerator.Lib.Generators
         /// </summary>
         public string Name { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether the collection contains any regular generators.
-        /// </summary>
-        public bool HasRegularGenerators { get; } = false;
-
-        /// <summary>
-        /// Gets a value indicating whether the collection contains any aggregate generators.
-        /// </summary>
-        public bool HasAggregateGenerators { get; } = false;
-
-        /// <summary>
-        /// Gets a value indicating whether the collection contains any dependent generators.
-        /// </summary>
-        public bool HasDependentGenerators { get; } = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FieldGeneratorCollection"/> class.
@@ -45,12 +32,11 @@ namespace OmniGenerator.Lib.Generators
         /// <param name="generators">The field generators to include in the collection.</param>
         public FieldGeneratorCollection(string name, IEnumerable<IFieldGenerator> generators)
         {
-            _generators = generators;
             Name = name;
-            HasRegularGenerators = _generators.FilterRegularFieldGenerators().Any();
-            HasAggregateGenerators = _generators.FilterAggregateFieldGenerators().Any();
-            HasDependentGenerators = _generators.FilterDependantFieldGenerators().Any();
-            _generators.SetCollateralDependencies();
+
+            _generators = generators
+                .SetCollateralDependencies()
+                .TopologicalSort();
         }
 
         /// <summary>
@@ -60,19 +46,15 @@ namespace OmniGenerator.Lib.Generators
         /// <returns>
         /// A dictionary containing the generated fields, where the key is the field name and the value is the <see cref="Field"/> instance.
         /// </returns>
-        public IDictionary<string, Field> GenerateRegularFields()
+        public IDictionary<string, Field> GenerateFields()
         {
             lock (_lock)
             {
                 var fields = new Dictionary<string, Field>();
-                if (HasRegularGenerators)
+                foreach (var fieldGenerator in _generators.Where(x => x is not FieldGeneratorAggregate))
                 {
-                    Console.WriteLine($"**********************************************************");
-                    foreach (var fieldGenerator in _generators.FilterRegularFieldGenerators())
-                    {
-                        var value = fieldGenerator.GenerateNextValue();
-                        fields.Add(fieldGenerator.Name, new Field(fieldGenerator.Name, value));
-                    }
+                    var value = fieldGenerator.GenerateNextValue();
+                    fields.Add(fieldGenerator.Name, new Field(fieldGenerator.Name, value));
                 }
                 return fields;
             }
@@ -91,18 +73,17 @@ namespace OmniGenerator.Lib.Generators
             {
                 var fields = new Dictionary<string, Field>();
 
-                if (HasAggregateGenerators)
+                foreach (var fieldGenerator in _generators.OfType<FieldGeneratorAggregate>())
                 {
-                    foreach (var fieldGenerator in _generators.FilterAggregateFieldGenerators())
-                    {
-                        fieldGenerator.Group = group;
-                        var value = fieldGenerator.GenerateNextValue();
-                        fields.Add(fieldGenerator.Name, new Field(fieldGenerator.Name, value));
-                    }
+                    fieldGenerator.Group = group;
+                    var value = fieldGenerator.GenerateNextValue();
+                    fields.Add(fieldGenerator.Name, new Field(fieldGenerator.Name, value));
                 }
 
                 return fields;
             }
         }
+
+
     }
 }
