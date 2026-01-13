@@ -159,7 +159,41 @@
       "$type": "composite",
       "name": "high-line",
       "dependent-upon": "payor-name, iban, group6, group6-key",
-      "format": "{{group6}}{{group6-key}} {{payor-name | slice: 0, 18}} {{iban}}"
+      "format": "{{group6}}{{group6-key}} {{payor-name | slice: 0, 18 | upcase}} {{iban}}"
+    },
+    {
+      "$type": "constant",
+      "name": "creditor",
+      "value": "CREDITOR"
+    },
+    {
+      "$type": "composite",
+      "name": "ics-payload",
+      "dependent-upon": "code-creancier, country-code",
+      "format": "{{code-creancier}}{{country-code}}"
+    },
+    {
+      "$type": "key",
+      "name": "ics-key",
+      "dependent-upon": "ics-payload",
+      "key-type": "iban"
+    },
+    {
+      "$type": "constant",
+      "name": "activity-code",
+      "value": "ZZZ"
+    },
+    {
+      "$type": "composite",
+      "name": "ics",
+      "dependent-upon": "activity-code, nne, country-code, ics-key",
+      "format": "{{country-code}}{{ics-key}}{{activity-code}}{{nne}}"
+    },
+    {
+      "$type": "composite",
+      "name": "rum",
+      "dependent-upon": "creditor, ics, high-line, low-line",
+      "format": "{{creditor | slice: 0, 16 | upcase}} {{ics}} {{high-line}} {{low-line}}"
     }
   ]
 }
