@@ -5,7 +5,7 @@ using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Renderers;
 
-namespace OmniGenerator.Plugins.Renderers
+namespace OmniGenerator.Plugins.Renderers.TalonRenderer
 {
     /// <summary>
     /// A <see cref="IDocumentRenderer"/> for talon optique image generation

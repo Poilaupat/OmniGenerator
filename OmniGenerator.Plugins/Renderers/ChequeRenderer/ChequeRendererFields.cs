@@ -1,7 +1,7 @@
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 
-namespace OmniGenerator.Plugins.Renderers
+namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
 {
     /// <summary>
     /// Strongly-typed field accessor for <see cref="ChequeRenderer"/>.

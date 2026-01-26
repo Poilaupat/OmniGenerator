@@ -26,7 +26,7 @@
     },
     "OmniGenerator.Cli.PluginList": {
       "commandName": "Project",
-      "commandLineArgs": "plugin list -d -p"
+      "commandLineArgs": "plugin list -r -p"
     },
     "OmniGenerator.Cli.Generate.Eligibility": {
       "commandName": "Project",

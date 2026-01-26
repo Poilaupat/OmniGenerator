@@ -5,7 +5,7 @@ using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Renderers;
 using OmniGenerator.Lib.Hierarchy;
 
-namespace OmniGenerator.Plugins.Renderers
+namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
 {
     /// <summary>
     /// A <see cref="IDocumentRenderer"/> for cheque image generation
@@ -78,7 +78,7 @@ namespace OmniGenerator.Plugins.Renderers
 
         private void RenderRectoBackground(SvgDocument svg)
         {
-            svg.Children.Add(new SvgRectangle { ID = "background", X = 0, Y = 0, Height = this.Height - 15, Width = this.Width, Fill = new SvgColourServer(Color.LightGray) });
+            svg.Children.Add(new SvgRectangle { ID = "background", X = 0, Y = 0, Height = Height - 15, Width = Width, Fill = new SvgColourServer(Color.LightGray) });
             svg.Children.Add(new SvgRectangle { ID = "amount-cell", X = 131, Y = 25, Height = 9, Width = 41, Fill = new SvgColourServer(Color.White), Stroke = new SvgColourServer(Color.LightSkyBlue), StrokeWidth = 1 });
             svg.Children.Add(new SvgLine { ID = "place-line", StartX = 131, StartY = 40, EndX = 173, EndY = 40, Stroke = new SvgColourServer(Color.DarkBlue), StrokeWidth = 0.1f });
             svg.Children.Add(new SvgLine { ID = "date-line", StartX = 131, StartY = 44.5f, EndX = 173, EndY = 44.5f, Stroke = new SvgColourServer(Color.DarkBlue), StrokeWidth = 0.2f });
