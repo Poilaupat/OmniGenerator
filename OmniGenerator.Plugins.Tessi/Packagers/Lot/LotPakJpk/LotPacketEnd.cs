@@ -8,34 +8,34 @@ using System.Threading.Tasks;
 namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
 {
     [FixedLengthLine(180)]
-    internal class LotStatisticLine : FixedLengthLineBase
+    internal class LotPacketEnd : FixedLengthLineBase
     {
         [FixedLengthLineField(0, 2)]
         public string Encline { get; }
         [FixedLengthLineField(3, 5, '0', PadDirection.Left)]
-        public int NbErrors { get; set; } = 0;
+        public int Field1 { get; set; } = 0;
         [FixedLengthLineField(9, 5, '0', PadDirection.Left)]
-        public int NbDoubleFeed { get; set; } = 0;
+        public int Field2 { get; set; } = 0;
         [FixedLengthLineField(15, 5, '0', PadDirection.Left)]
-        public int NbJam { get; set; } = 0;
+        public int Field3 { get; set; } = 0;
         [FixedLengthLineField(21, 5, '0', PadDirection.Left)]
-        public int NbIntervention { get; set; } = 0;
+        public int Field4 { get; set; } = 0;
         [FixedLengthLineField(27, 12, ' ', PadDirection.Right)]
         public string MachineSerialNumber { get; set; } = string.Empty;
         [FixedLengthLineField(40, 30, ' ', PadDirection.Right)]
-        public string FirmwareVersion { get; set; } = string.Empty;
+        public string Field5 { get; set; } = string.Empty;
         [FixedLengthLineField(71, 20, ' ', PadDirection.Right)]
         public string MachineName { get; set; } = string.Empty;
         [FixedLengthLineField(92, 45, ' ', PadDirection.Right)]
         public string Filler1 { get; } = string.Empty;
         [FixedLengthLineField(138, 15, ' ', PadDirection.Right)]
-        public string Signature { get; } = string.Empty;
+        public string Field6 { get; } = string.Empty;
         [FixedLengthLineField(154, 26, ' ', PadDirection.Right)]
         public string Filler2 { get; } = string.Empty;
 
-        public LotStatisticLine(RootFields rootFields)
+        public LotPacketEnd(RootFields rootFields)
         {
-            Encline = "88";
+            Encline = "04";
             MachineSerialNumber = rootFields.MachineSerialNumber;
             MachineName = "OmniGenerator Scan";
         }

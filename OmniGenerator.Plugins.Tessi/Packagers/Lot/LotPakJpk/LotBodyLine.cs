@@ -8,7 +8,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
     internal class LotBodyLine : FixedLengthLineBase
     {
         [FixedLengthLineField(0, 2, '0', PadDirection.Left)]
-        public string DocType { get; } = string.Empty;
+        public string Encline { get; } = string.Empty;
 
         [FixedLengthLineField(3, 5, '0', PadDirection.Left)]
         public string RefEndos { get; } = string.Empty;
@@ -109,31 +109,29 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         [FixedLengthLineField(354, 10, '0', PadDirection.Left)]
         public string Amount { get; } = string.Empty;
 
-        public LotBodyLine(int index, Document document, Root root, OffsetLengthImage bwRecto, OffsetLengthImage bwVerso, OffsetLengthImage gsRecto, OffsetLengthImage gsVerso)
+        public LotBodyLine(int index, DocumentFields documentFields, RemittanceFields remittanceFields, RootFields rootFields, OffsetLengthImage bwRecto, OffsetLengthImage bwVerso, OffsetLengthImage gsRecto, OffsetLengthImage gsVerso)
         {
-            var remittance = document.Parent;
-
-            DocType = document.Fields.GetStringValue("encline");
+            Encline = documentFields.Encline;
             RefEndos = index.ToString();
-            Dataread = document.Fields.GetStringValueOrDefault("dataread", string.Empty);
-            LotID = root.Fields.GetStringValueOrDefault("packet-number", "1");
-            RemittanceID = remittance.Fields.GetStringValueOrDefault("remittance-id", string.Empty);
-            QualityCode = document.Fields.GetStringValueOrDefault("quality-code", "0");
+            Dataread = documentFields.Dataread;
+            LotID = rootFields.PacketNumber;
+            RemittanceID = remittanceFields.RemittanceId;
+            QualityCode = documentFields.QualityCode;
             NumDoc = index.ToString();
             SendGrayLevel = gsRecto.Length > 0 ? "1" : "0";
             SendRear = gsVerso.Length > 0 ? "1" : "0";
             TimeStamp = DateTime.Now.TimeOfDay.TotalSeconds.ToString();
-            RefDoc = document.Fields.GetStringValueOrDefault("ref-doc", string.Empty);
-            Signature = document.Fields.GetStringValueOrDefault("signature", "---SIGNATURE---");
-            BankCode = root.Fields.GetStringValueOrDefault("organization-code", "00001");
-            ProcessCode = root.Fields.GetStringValueOrDefault("process-code", "000");
-            Reconciliation = root.Fields.GetStringValueOrDefault("reconciliation", "0");
-            Status = document.Fields.GetStringValueOrDefault("status", "0");
-            Priority = document.Fields.GetStringValueOrDefault("priority", string.Empty);
-            RIB = document.Fields.GetStringValueOrDefault("rib", string.Empty);
-            NbChecks = document.Fields.GetStringValueOrDefault("nb-checks", string.Empty);
-            ICRConfAmount = document.Fields.GetStringValueOrDefault("icr-conf-amount", string.Empty);
-            ICRAmount = document.Fields.GetStringValueOrDefault("icr-amount", string.Empty);
+            RefDoc = documentFields.RefDoc;
+            Signature = documentFields.Signature;
+            BankCode = rootFields.OrganizationCode;
+            ProcessCode = rootFields.ProcessCode;
+            Reconciliation = rootFields.Reconciliation;
+            Status = documentFields.Status;
+            Priority = documentFields.Priority;
+            RIB = documentFields.RIB;
+            NbChecks = documentFields.NbChecks;
+            ICRConfAmount = documentFields.ICRConfAmount;
+            ICRAmount = documentFields.ICRAmount;
             Free = string.Empty;
             LengthRectoPak = bwRecto.Length.ToString();
             OffsetRectoPak = bwRecto.Offset.ToString();
@@ -143,9 +141,9 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
             OffsetRectoJpk = gsRecto.Offset.ToString();
             LengthVersoJpk = gsVerso.Length.ToString();
             OffsetVersoJpk = gsVerso.Offset.ToString();
-            SortError = document.Fields.GetStringValueOrDefault("sort-error", "0");
-            ImageQuality = document.Fields.GetStringValueOrDefault("image-quality", "0");
-            Deleted = document.Fields.GetStringValueOrDefault("deleted", "0");
+            SortError = documentFields.SortError;
+            ImageQuality = documentFields.ImageQuality;
+            Deleted = documentFields.Deleted;
         }
     }
 }

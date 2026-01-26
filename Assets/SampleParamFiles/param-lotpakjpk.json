@@ -74,7 +74,7 @@
       "elements": [
         {
           "$type": "document",
-          "drawer": "",
+          "renderer": "",
           "name": "slip",
           "min-occurs": 1,
           "max-occurs": 1,
@@ -83,7 +83,7 @@
         },
         {
           "$type": "document",
-          "drawer": "drawer.omni.cheque",
+          "renderer": "drawer.omni.cheque",
           "name": "cheque",
           "min-occurs": 1,
           "max-occurs": 3,

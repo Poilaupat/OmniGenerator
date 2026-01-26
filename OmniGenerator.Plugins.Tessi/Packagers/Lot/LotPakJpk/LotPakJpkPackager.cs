@@ -18,40 +18,46 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
 
         public async Task ProcessAsync(Root root, string basepath, int imageRenderingResolution)
         {
-            var fields = new RootFields(root.Fields);
             _resolution = imageRenderingResolution;
 
-            string packagename = fields.PacketName;
+            var rootFields = new RootFields(root.Fields);
 
-            await using var lot = new StreamWriter(new FileStream(Path.Combine(basepath, $"{packagename}.lot"), FileMode.Create));
-            await using var pak = new BinaryWriter(new FileStream(Path.Combine(basepath, $"{packagename}.pak"), FileMode.Create));
-            await using var jpk = new BinaryWriter(new FileStream(Path.Combine(basepath, $"{packagename}.jpk"), FileMode.Create));
+            await using var lot = new StreamWriter(new FileStream(Path.Combine(basepath, $"{rootFields.PacketName}.lot"), FileMode.Create));
+            await using var pak = new BinaryWriter(new FileStream(Path.Combine(basepath, $"{rootFields.PacketName}.pak"), FileMode.Create));
+            await using var jpk = new BinaryWriter(new FileStream(Path.Combine(basepath, $"{rootFields.PacketName}.jpk"), FileMode.Create));
 
-            await WriteHeaderAsync(root, fields.PacketNumber, lot);
+            await WriteHeaderAsync(rootFields, lot);
 
             int bwOffset = 0, gsOffset = 0;
             int index = 1;
             foreach (var document in root.GetDocuments())
             {
-                var (newBwOffset, newGsOffset) = await WriteBodyAsync(index++, document, root, lot, pak, jpk, bwOffset, gsOffset);
+                var (newBwOffset, newGsOffset) = await WriteBodyAsync(index++, document, rootFields, lot, pak, jpk, bwOffset, gsOffset);
                 bwOffset = newBwOffset;
                 gsOffset = newGsOffset;
             }
 
+            //End of packet
+            await WritePacketEndLine(rootFields, lot);
+
+            //End of LOT file
+            await WriteStatisticsLine(rootFields, lot);
+            await WriteScannerStatisticsLine(lot);
+            await WriteNavetteLine(lot);
+            
             return;
         }
 
-        public async Task WriteHeaderAsync(Root root, string packetNumber, StreamWriter lot)
+        public async Task WriteHeaderAsync(RootFields rootFields, StreamWriter lot)
         {
-            LotHeaderLine header = new(root, packetNumber);
-            await lot.WriteLineAsync(header.ToFixedLengthString());
-            return;
+            LotHeaderLine line = new(rootFields);
+            await lot.WriteLineAsync(line.ToFixedLengthString());
         }
 
         public async Task<(int newBwOffset, int newGsOffset)> WriteBodyAsync(
             int index,
-            Document doc,
-            Root root,
+            Document document,
+            RootFields rootFields,
             StreamWriter lot,
             BinaryWriter pak,
             BinaryWriter jpk,
@@ -64,9 +70,9 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
             OffsetLengthImage gsVerso = new();
 
             // Writing recto images
-            if (doc.RectoVectorImage is not null)
+            if (document.RectoVectorImage is not null)
             {
-                var renderer = new SvgRenderer(doc.RectoVectorImage, _resolution);
+                var renderer = new SvgRenderer(document.RectoVectorImage, _resolution);
                 bwRecto.Set(renderer.ToTiffGroup4(), ref bwOffset);
                 gsRecto.Set(renderer.ToJpeg(), ref gsOffset);
 
@@ -75,9 +81,9 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
             }
 
             // Writing verso images
-            if (doc.VersoVectorImage is not null)
+            if (document.VersoVectorImage is not null)
             {
-                var renderer = new SvgRenderer(doc.VersoVectorImage, _resolution);
+                var renderer = new SvgRenderer(document.VersoVectorImage, _resolution);
                 bwVerso.Set(renderer.ToTiffGroup4(), ref bwOffset);
                 gsVerso.Set(renderer.ToJpeg(), ref gsOffset);
 
@@ -85,18 +91,45 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
                 jpk.Write(gsVerso.Image);
             }
 
+            DocumentFields documentFields = new(document.Fields);
+            RemittanceFields remittanceFields = new(document.Parent.Fields);
+
             // Writing LOT body line
-            LotBodyLine body = new(
+            LotBodyLine line = new(
                 index,
-                doc,
-                root,
+                documentFields,
+                remittanceFields,
+                rootFields,
                 bwRecto,
                 bwVerso,
                 gsRecto,
                 gsVerso);
-            await lot.WriteLineAsync(body.ToFixedLengthString());
+            await lot.WriteLineAsync(line.ToFixedLengthString());
 
             return (bwOffset, gsOffset);
+        }
+
+        public async Task WritePacketEndLine(RootFields rootFields, StreamWriter lot)
+        {
+            LotPacketEnd line = new(rootFields);
+            await lot.WriteLineAsync(line.ToFixedLengthString());
+        }
+
+        public async Task WriteStatisticsLine(RootFields rootFields, StreamWriter lot)
+        {
+            LotStatisticLine line = new(rootFields);
+            await lot.WriteLineAsync(line.ToFixedLengthString());
+        }
+
+        public async Task WriteScannerStatisticsLine(StreamWriter lot)
+        {
+            LotScannerStatisticsLine line = new();
+            await lot.WriteLineAsync(line.ToFixedLengthString());
+        }
+        public async Task WriteNavetteLine(StreamWriter lot)
+        {
+            LotNavetteLine line = new();
+            await lot.WriteLineAsync(line.ToFixedLengthString());
         }
     }
 }
