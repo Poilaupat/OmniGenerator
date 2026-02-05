@@ -73,7 +73,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
 
         ConcurrentQueue<Group> groups = new();
 #if DEBUG
-        for(int i=0; i< groupCount; i++)
+        for (int i = 0; i < groupCount; i++)
 #else
         Parallel.For(0, groupCount, i =>
 #endif
@@ -114,7 +114,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
 
         ConcurrentQueue<Document> documents = new();
 #if DEBUG
-        for(int i=0; i< docCount; i++)
+        for (int i = 0; i < docCount; i++)
 #else
         Parallel.For(0, docCount, i =>
 #endif

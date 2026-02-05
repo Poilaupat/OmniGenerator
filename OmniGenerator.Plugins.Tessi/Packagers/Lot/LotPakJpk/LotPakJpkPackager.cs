@@ -11,11 +11,25 @@ using System.Threading.Tasks;
 
 namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
 {
+    /// <summary>
+    /// A packager that exports documents in the LOT+PAK+JPK format used by Tessi systems.
+    /// This format consists of three files:
+    /// - LOT: A text file containing document metadata and image references in fixed-length format.
+    /// - PAK: A binary file containing black and white TIFF Group 4 compressed images.
+    /// - JPK: A binary file containing grayscale JPEG compressed images.
+    /// </summary>
     [OmniGeneratorPluginMetadata("packager.tessi.lotpakjpk", "A packager that exports documents in the LOT+PAK+JPK fashion")]
     public class LotPakJpkPackager : OmniGeneratorPluginBase, IPackager
     {
         private int _resolution;
 
+        /// <summary>
+        /// Processes the document hierarchy and exports it to LOT, PAK, and JPK files.
+        /// </summary>
+        /// <param name="root">The root of the document hierarchy containing all documents to export.</param>
+        /// <param name="basepath">The base directory path where the output files will be created.</param>
+        /// <param name="imageRenderingResolution">The DPI resolution for rendering images (e.g., 300 for 300 DPI).</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
         public async Task ProcessAsync(Root root, string basepath, int imageRenderingResolution)
         {
             _resolution = imageRenderingResolution;
@@ -44,16 +58,36 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
             await WriteStatisticsLine(rootFields, lot);
             await WriteScannerStatisticsLine(lot);
             await WriteNavetteLine(lot);
-            
+
             return;
         }
 
+        /// <summary>
+        /// Writes the header line to the LOT file.
+        /// The header contains batch-level metadata required by the Tessi system.
+        /// </summary>
+        /// <param name="rootFields">The root-level fields containing batch metadata.</param>
+        /// <param name="lot">The LOT file stream writer.</param>
+        /// <returns>A task representing the asynchronous write operation.</returns>
         public async Task WriteHeaderAsync(RootFields rootFields, StreamWriter lot)
         {
             LotHeaderLine line = new(rootFields);
             await lot.WriteLineAsync(line.ToFixedLengthString());
         }
 
+        /// <summary>
+        /// Writes a document's data to the LOT, PAK, and JPK files.
+        /// Renders the document's recto and verso images, compresses them, and writes metadata to the LOT file.
+        /// </summary>
+        /// <param name="index">The sequential index of the document within the batch.</param>
+        /// <param name="document">The document to process.</param>
+        /// <param name="rootFields">The root-level fields containing batch metadata.</param>
+        /// <param name="lot">The LOT file stream writer.</param>
+        /// <param name="pak">The PAK file binary writer for black and white images.</param>
+        /// <param name="jpk">The JPK file binary writer for grayscale images.</param>
+        /// <param name="bwOffset">The current byte offset in the PAK file.</param>
+        /// <param name="gsOffset">The current byte offset in the JPK file.</param>
+        /// <returns>A tuple containing the updated PAK and JPK byte offsets after writing the document.</returns>
         public async Task<(int newBwOffset, int newGsOffset)> WriteBodyAsync(
             int index,
             Document document,
@@ -109,23 +143,50 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
             return (bwOffset, gsOffset);
         }
 
+        /// <summary>
+        /// Writes the packet end marker line to the LOT file.
+        /// This line signals the end of the document batch in the LOT format.
+        /// </summary>
+        /// <param name="rootFields">The root-level fields containing batch metadata.</param>
+        /// <param name="lot">The LOT file stream writer.</param>
+        /// <returns>A task representing the asynchronous write operation.</returns>
         public async Task WritePacketEndLine(RootFields rootFields, StreamWriter lot)
         {
             LotPacketEnd line = new(rootFields);
             await lot.WriteLineAsync(line.ToFixedLengthString());
         }
 
+        /// <summary>
+        /// Writes the batch statistics line to the LOT file.
+        /// This line contains aggregated statistics about the processed documents in the batch.
+        /// </summary>
+        /// <param name="rootFields">The root-level fields containing batch metadata.</param>
+        /// <param name="lot">The LOT file stream writer.</param>
+        /// <returns>A task representing the asynchronous write operation.</returns>
         public async Task WriteStatisticsLine(RootFields rootFields, StreamWriter lot)
         {
             LotStatisticLine line = new(rootFields);
             await lot.WriteLineAsync(line.ToFixedLengthString());
         }
 
+        /// <summary>
+        /// Writes the scanner statistics line to the LOT file.
+        /// This line contains metadata about the scanning process (even for generated documents).
+        /// </summary>
+        /// <param name="lot">The LOT file stream writer.</param>
+        /// <returns>A task representing the asynchronous write operation.</returns>
         public async Task WriteScannerStatisticsLine(StreamWriter lot)
         {
             LotScannerStatisticsLine line = new();
             await lot.WriteLineAsync(line.ToFixedLengthString());
         }
+
+        /// <summary>
+        /// Writes the navette (shuttle) line to the LOT file.
+        /// This is the final line in the LOT file format, marking the complete end of the file.
+        /// </summary>
+        /// <param name="lot">The LOT file stream writer.</param>
+        /// <returns>A task representing the asynchronous write operation.</returns>
         public async Task WriteNavetteLine(StreamWriter lot)
         {
             LotNavetteLine line = new();

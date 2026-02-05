@@ -122,7 +122,7 @@ namespace OmniGenerator.Lib.Hierarchy
             if (generators.ElementHasFields(Name))
             {
                 var aggregates = generators.GenerateAggregateFields(Name, this);
-                Fields.AddRange(aggregates); 
+                Fields.AddRange(aggregates);
             }
         }
 

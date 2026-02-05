@@ -31,7 +31,7 @@ namespace OmniGenerator.Lib.Generators
                 {
                     var dependency = generators.SingleOrDefault(x => x.Name == dependencyName);
 
-                    if(dependency is null)
+                    if (dependency is null)
                     {
                         throw new ConfigurationException(
                             $"Generator '{generator.Name}' has a dependency on '{dependencyName}', which could not be found among the configured field generators."

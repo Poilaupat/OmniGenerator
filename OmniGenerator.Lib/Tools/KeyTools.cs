@@ -97,7 +97,7 @@ namespace OmniGenerator.Lib.Tools
         /// <returns>The computed checksum key as a two digits string</returns>
         public static string ComputeIbanKey(string input)
         {
-            int key = 98 - ComputeModulo(input + "00", 97, replaceLetters:true, letterMap: ELetterMap.Iban);
+            int key = 98 - ComputeModulo(input + "00", 97, replaceLetters: true, letterMap: ELetterMap.Iban);
             return key.ToString("00");
         }
 
@@ -110,10 +110,10 @@ namespace OmniGenerator.Lib.Tools
         /// <param name="replaceLetters">If set to true, replaces alpha characters by digits.</param>
         /// <returns>The computed modulo value.</returns>
         /// <exception cref="ArgumentException">Thrown if replaceLetters is false and numericstring contains letters.</exception>
-        private static int ComputeModulo(string input, 
-            int modulo, 
-            bool replaceLetters = false, 
-            bool reverseString = false, 
+        private static int ComputeModulo(string input,
+            int modulo,
+            bool replaceLetters = false,
+            bool reverseString = false,
             bool withRankMultiplier = false,
             ELetterMap letterMap = ELetterMap.Rib)
         {
@@ -147,6 +147,11 @@ namespace OmniGenerator.Lib.Tools
             return result;
         }
 
+        /// <summary>
+        /// Reverses a string
+        /// </summary>
+        /// <param name="str">The string to reverse</param>
+        /// <returns>The reversed string</returns>
         private static string ReverseString(this string str)
         {
             char[] array = str.ToCharArray();

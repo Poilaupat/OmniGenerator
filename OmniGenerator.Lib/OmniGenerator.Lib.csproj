@@ -33,18 +33,20 @@
 		<PackageReference Include="Autofac" Version="9.0.0" />
 		<PackageReference Include="Autofac.Configuration" Version="7.0.0" />
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
+		<PackageReference Include="Barcoder" Version="3.0.0" />
+		<PackageReference Include="Barcoder.Renderer.Svg" Version="3.0.0" />
 		<PackageReference Include="BenchmarkDotNet.Annotations" Version="0.15.8" />
 		<PackageReference Include="DotLiquid" Version="2.3.197" />
 		<PackageReference Include="Fare" Version="2.2.1" />
-		<PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.10.0" />
+		<PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.10.2" />
 		<PackageReference Include="McMaster.NETCore.Plugins" Version="2.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.2" />
 		<PackageReference Include="Microsoft.ProgramSynthesis.Detection" Version="10.16.5" />
-		<PackageReference Include="Riok.Mapperly" Version="4.3.0" />
+		<PackageReference Include="Riok.Mapperly" Version="4.3.1" />
 		<PackageReference Include="Serilog.Extensions.Autofac.DependencyInjection" Version="5.0.0" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="10.0.0" />
 		<PackageReference Include="Svg" Version="3.4.7" />
-		<PackageReference Include="Roslynator.Analyzers" Version="4.14.1" PrivateAssets="all" />
+		<PackageReference Include="Roslynator.Analyzers" Version="4.15.0" PrivateAssets="all" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -66,12 +66,24 @@ namespace OmniGenerator.Lib.Infrastructure
         }
 
         /// <summary>
+        /// Gets an optional string value from the underlying field collection.
+        /// Returns null if the field is not found.
+        /// </summary>
+        /// <param name="fieldName">The name of the field.</param>
+        /// <returns>The string value of the field, or null if the field is not found.</returns>
+        protected string? GetOptionalString(string fieldName)
+        {
+            _fields.TryGetStringValue(fieldName, out string value);
+            return value;
+        }
+
+        /// <summary>
         /// Gets an optional string value from the underlying field collection with a default value.
         /// </summary>
         /// <param name="fieldName">The name of the field.</param>
         /// <param name="defaultValue">The default value to return if the field is not found.</param>
         /// <returns>The string value of the field or the default value.</returns>
-        protected string GetOptionalString(string fieldName, string defaultValue)
+        protected string GetOptionalStringOrDefault(string fieldName, string defaultValue)
         {
             return _fields.GetStringValueOrDefault(fieldName, defaultValue);
         }

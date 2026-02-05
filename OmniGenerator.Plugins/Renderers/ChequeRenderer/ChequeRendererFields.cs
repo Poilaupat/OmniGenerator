@@ -34,43 +34,43 @@ namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
         /// Gets the bank name.
         /// </summary>
         [FieldInfo("bank-name", "Bank name", isRequired: false, DefaultValue = "OmniBank")]
-        public string BankName => GetOptionalString("bank-name", "OmniBank");
+        public string BankName => GetOptionalStringOrDefault("bank-name", "OmniBank");
 
         /// <summary>
         /// Gets the bank address.
         /// </summary>
         [FieldInfo("bank-address", "Bank address", isRequired: false, DefaultValue = "1 rue de la république")]
-        public string BankAddress => GetOptionalString("bank-address", "1 rue de la république");
+        public string BankAddress => GetOptionalStringOrDefault("bank-address", "1 rue de la république");
 
         /// <summary>
         /// Gets the bank zipcode and city.
         /// </summary>
         [FieldInfo("bank-zip-city", "Bank zipcode and city", isRequired: false, DefaultValue = "75001 Paris")]
-        public string BankZipCity => GetOptionalString("bank-zip-city", "75001 Paris");
+        public string BankZipCity => GetOptionalStringOrDefault("bank-zip-city", "75001 Paris");
 
         /// <summary>
         /// Gets the bank phone number.
         /// </summary>
         [FieldInfo("bank-phone", "Bank phone number", isRequired: false, DefaultValue = "01 02 03 04 05")]
-        public string BankPhone => GetOptionalString("bank-phone", "01 02 03 04 05");
+        public string BankPhone => GetOptionalStringOrDefault("bank-phone", "01 02 03 04 05");
 
         /// <summary>
         /// Gets the payor name.
         /// </summary>
         [FieldInfo("payor-name", "Payor name", isRequired: false, DefaultValue = "Bernard Pleinhausas")]
-        public string PayorName => GetOptionalString("payor-name", "Bernard Pleinhausas");
+        public string PayorName => GetOptionalStringOrDefault("payor-name", "Bernard Pleinhausas");
 
         /// <summary>
         /// Gets the payor address.
         /// </summary>
         [FieldInfo("payor-address", "Payor address", isRequired: false, DefaultValue = "42 rue de la maille")]
-        public string PayorAddress => GetOptionalString("payor-address", "42 rue de la maille");
+        public string PayorAddress => GetOptionalStringOrDefault("payor-address", "42 rue de la maille");
 
         /// <summary>
         /// Gets the payor zipcode and city.
         /// </summary>
         [FieldInfo("payor-zip-city", "Payor zipcode and city", isRequired: false, DefaultValue = "75016 Paris")]
-        public string PayorZipCity => GetOptionalString("payor-zip-city", "75016 Paris");
+        public string PayorZipCity => GetOptionalStringOrDefault("payor-zip-city", "75016 Paris");
 
         /// <summary>
         /// Gets the cheque amount field (for formatting).

@@ -1,6 +1,6 @@
 {
   "$schema": "../omnigenerator-schema.json",
-  "packager": "packager.omni.csv",
+  "packager": "packager.omni.imageonly",
   "render-resolution": 300,
   "hierarchy": {
     "fields": [
