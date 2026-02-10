@@ -4,7 +4,6 @@ using System.Drawing;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Renderers;
-using QRCoder;
 
 namespace OmniGenerator.Plugins.Renderers.TalonRenderer
 {
@@ -13,7 +12,7 @@ namespace OmniGenerator.Plugins.Renderers.TalonRenderer
     /// Renders standardized payment authorization forms used in SEPA direct debit transactions.
     /// </summary>
     [OmniGeneratorPluginMetadata("renderer.omni.talon", "Renders TIP SEPA images")]
-    public class TalonSepaRenderer : DocumentRendererBase
+    public sealed class TalonSepaRenderer : DocumentRendererBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TalonSepaRenderer"/> class.

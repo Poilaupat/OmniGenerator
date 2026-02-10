@@ -1,5 +1,5 @@
 {
-  "packager": "packager.tessi.lotpakjpk",
+  "packager": "packager.omni.imageonly",
   "hierarchy": {
     "fields": [
       {
@@ -74,16 +74,16 @@
       "elements": [
         {
           "$type": "document",
-          "renderer": "",
+          "renderer": "renderer.omni.deposit-slip",
           "name": "slip",
           "min-occurs": 1,
           "max-occurs": 1,
-          "field-configuration-file": "DocsAndGroups\\fields-slip.json",
+          "field-configuration-file": "DocsAndGroups\\fields-deposit-slip.json",
           "fields": []
         },
         {
           "$type": "document",
-          "renderer": "drawer.omni.cheque",
+          "renderer": "renderer.omni.cheque",
           "name": "cheque",
           "min-occurs": 1,
           "max-occurs": 3,

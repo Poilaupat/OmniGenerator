@@ -11,7 +11,7 @@ namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
     /// A <see cref="IDocumentRenderer"/> for cheque image generation
     /// </summary>
     [OmniGeneratorPluginMetadata("renderer.omni.cheque", "Renders french cheque images")]
-    public class ChequeRenderer : DocumentRendererBase
+    public sealed class ChequeRenderer : DocumentRendererBase
     {
         public ChequeRenderer() : base(width: 175, height: 80)
         {
@@ -56,9 +56,9 @@ namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
 
             //Lar
             var amountparts = fields.Amount.StringValue.Split(",");
-            string lar = $"{NumberToWords.Convert(int.Parse(amountparts[0]))} euros";
+            string lar = $"{NumberToWordsRenderHelper.Convert(int.Parse(amountparts[0]))} euros";
             if (amountparts.Length > 1)
-                lar += $" et {NumberToWords.Convert(int.Parse(amountparts[1]))} centimes";
+                lar += $" et {NumberToWordsRenderHelper.Convert(int.Parse(amountparts[1]))} centimes";
             svg.DrawText(lar, "lar", 40f, 19.5f, "Arial", 3f, Color.Black);
 
             //Car
@@ -71,7 +71,7 @@ namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
             svg.DrawText($"{string.Join(' ', fields.Place.Split(" ").Skip(1))}", "payee", 132f, 39.5f, "Arial", 2f, Color.Black);
 
             //Date
-            svg.DrawText(fields.Date, "date", 132f, 44f, "Arial", 2f, Color.Black);
+            svg.DrawText($"{fields.Date:dd/MM/yyyy}", "date", 132f, 44f, "Arial", 2f, Color.Black);
 
             return svg;
         }

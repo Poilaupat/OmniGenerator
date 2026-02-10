@@ -12,7 +12,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [Test]
         public void Convert_Zero_ReturnsZero()
         {
-            var result = NumberToWords.Convert(0);
+            var result = NumberToWordsRenderHelper.Convert(0);
             Assert.That(result, Is.EqualTo("zéro"));
         }
 
@@ -28,7 +28,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [TestCase(9, "neuf")]
         public void Convert_SingleDigit_ReturnsCorrectWord(int value, string expected)
         {
-            var result = NumberToWords.Convert(value);
+            var result = NumberToWordsRenderHelper.Convert(value);
             Assert.That(result, Is.EqualTo(expected));
         }
 
@@ -49,7 +49,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [TestCase(19, "dix-neuf")]
         public void Convert_Teens_ReturnsCorrectWord(int value, string expected)
         {
-            var result = NumberToWords.Convert(value);
+            var result = NumberToWordsRenderHelper.Convert(value);
             Assert.That(result, Is.EqualTo(expected));
         }
 
@@ -68,7 +68,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [TestCase(90, "quatre-vingt-dix")]
         public void Convert_RoundTens_ReturnsCorrectWord(int value, string expected)
         {
-            var result = NumberToWords.Convert(value);
+            var result = NumberToWordsRenderHelper.Convert(value);
             Assert.That(result, Is.EqualTo(expected));
         }
 
@@ -80,7 +80,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [TestCase(61, "soixante-et-un")]
         public void Convert_TensWithOneBelow70_HasEtPrefix(int value, string expected)
         {
-            var result = NumberToWords.Convert(value);
+            var result = NumberToWordsRenderHelper.Convert(value);
             Assert.That(result, Is.EqualTo(expected));
         }
 
@@ -92,7 +92,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [TestCase(66, "soixante-six")]
         public void Convert_TensWithOtherDigits_ReturnsCorrectFormat(int value, string expected)
         {
-            var result = NumberToWords.Convert(value);
+            var result = NumberToWordsRenderHelper.Convert(value);
             Assert.That(result, Is.EqualTo(expected));
         }
 
@@ -103,7 +103,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [TestCase(79, "soixante-dix-neuf")]
         public void Convert_SeventyRange_UsesSpecialFormat(int value, string expected)
         {
-            var result = NumberToWords.Convert(value);
+            var result = NumberToWordsRenderHelper.Convert(value);
             Assert.That(result, Is.EqualTo(expected));
         }
 
@@ -113,7 +113,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [TestCase(89, "quatre-vingt-neuf")]
         public void Convert_EightyRange_UsesSpecialFormat(int value, string expected)
         {
-            var result = NumberToWords.Convert(value);
+            var result = NumberToWordsRenderHelper.Convert(value);
             Assert.That(result, Is.EqualTo(expected));
         }
 
@@ -123,7 +123,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [TestCase(99, "quatre-vingt-dix-neuf")]
         public void Convert_NinetyRange_UsesSpecialFormat(int value, string expected)
         {
-            var result = NumberToWords.Convert(value);
+            var result = NumberToWordsRenderHelper.Convert(value);
             Assert.That(result, Is.EqualTo(expected));
         }
 
@@ -134,7 +134,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [Test]
         public void Convert_OneHundred_ReturnsCent()
         {
-            var result = NumberToWords.Convert(100);
+            var result = NumberToWordsRenderHelper.Convert(100);
             Assert.That(result, Is.EqualTo("cent"));
         }
 
@@ -145,7 +145,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [TestCase(900, "neuf cents")]
         public void Convert_RoundHundreds_ReturnsPluralForm(int value, string expected)
         {
-            var result = NumberToWords.Convert(value);
+            var result = NumberToWordsRenderHelper.Convert(value);
             Assert.That(result, Is.EqualTo(expected));
         }
 
@@ -157,7 +157,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [TestCase(999, "neuf cent quatre-vingt-dix-neuf")]
         public void Convert_HundredsWithRemainder_ReturnsCorrectFormat(int value, string expected)
         {
-            var result = NumberToWords.Convert(value);
+            var result = NumberToWordsRenderHelper.Convert(value);
             Assert.That(result, Is.EqualTo(expected));
         }
 
@@ -168,7 +168,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [Test]
         public void Convert_OneThousand_ReturnsMille()
         {
-            var result = NumberToWords.Convert(1000);
+            var result = NumberToWordsRenderHelper.Convert(1000);
             Assert.That(result, Is.EqualTo("mille"));
         }
 
@@ -178,7 +178,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [TestCase(10000, "dix milles")]
         public void Convert_RoundThousands_ReturnsCorrectFormat(int value, string expected)
         {
-            var result = NumberToWords.Convert(value);
+            var result = NumberToWordsRenderHelper.Convert(value);
             Assert.That(result, Is.EqualTo(expected));
         }
 
@@ -189,7 +189,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [TestCase(99999, "quatre-vingt-dix-neuf mille neuf cent quatre-vingt-dix-neuf")]
         public void Convert_ThousandsWithRemainder_ReturnsCorrectFormat(int value, string expected)
         {
-            var result = NumberToWords.Convert(value);
+            var result = NumberToWordsRenderHelper.Convert(value);
             Assert.That(result, Is.EqualTo(expected));
         }
 
@@ -200,7 +200,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [Test]
         public void Convert_OneMillion_ReturnsUnMillion()
         {
-            var result = NumberToWords.Convert(1000000);
+            var result = NumberToWordsRenderHelper.Convert(1000000);
             Assert.That(result, Is.EqualTo("un million"));
         }
 
@@ -210,7 +210,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [TestCase(10000000, "dix millions")]
         public void Convert_RoundMillions_ReturnsPluralForm(int value, string expected)
         {
-            var result = NumberToWords.Convert(value);
+            var result = NumberToWordsRenderHelper.Convert(value);
             Assert.That(result, Is.EqualTo(expected));
         }
 
@@ -219,7 +219,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [TestCase(2345678, "deux million trois cent quarante-cinq mille six cent soixante-dix-huit")]
         public void Convert_MillionsWithRemainder_ReturnsCorrectFormat(int value, string expected)
         {
-            var result = NumberToWords.Convert(value);
+            var result = NumberToWordsRenderHelper.Convert(value);
             Assert.That(result, Is.EqualTo(expected));
         }
 
@@ -236,19 +236,19 @@ namespace OmniGenerator.Test.Lib.Renderers
         [TestCase(9999999)]
         public void Convert_MaxValuesForEachRange_DoesNotThrow(int value)
         {
-            Assert.DoesNotThrow(() => NumberToWords.Convert(value));
+            Assert.DoesNotThrow(() => NumberToWordsRenderHelper.Convert(value));
         }
 
         [Test]
         public void Convert_NegativeNumber_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => NumberToWords.Convert(-1));
+            Assert.Throws<NotSupportedException>(() => NumberToWordsRenderHelper.Convert(-1));
         }
 
         [Test]
         public void Convert_NumberTooLarge_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => NumberToWords.Convert(1000000000));
+            Assert.Throws<NotSupportedException>(() => NumberToWordsRenderHelper.Convert(1000000000));
         }
 
         #endregion
@@ -261,7 +261,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [TestCase(2024, "deux mille vingt-quatre")]
         public void Convert_HistoricalYears_ReturnsCorrectFormat(int value, string expected)
         {
-            var result = NumberToWords.Convert(value);
+            var result = NumberToWordsRenderHelper.Convert(value);
             Assert.That(result, Is.EqualTo(expected));
         }
 
@@ -271,7 +271,7 @@ namespace OmniGenerator.Test.Lib.Renderers
         [TestCase(420, "quatre cent vingt")]
         public void Convert_CommonNumbers_ReturnsCorrectFormat(int value, string expected)
         {
-            var result = NumberToWords.Convert(value);
+            var result = NumberToWordsRenderHelper.Convert(value);
             Assert.That(result, Is.EqualTo(expected));
         }
 
@@ -285,16 +285,16 @@ namespace OmniGenerator.Test.Lib.Renderers
         [TestCase(380, "trois cent quatre-vingts")]
         public void Convert_EightyInHundreds_EndsWithS(int value, string expected)
         {
-            var result = NumberToWords.Convert(value);
+            var result = NumberToWordsRenderHelper.Convert(value);
             Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
         public void Convert_ResultsEndingInQuatreVingt_ShouldHaveS()
         {
-            var result80 = NumberToWords.Convert(80);
-            var result180 = NumberToWords.Convert(180);
-            var result280 = NumberToWords.Convert(280);
+            var result80 = NumberToWordsRenderHelper.Convert(80);
+            var result180 = NumberToWordsRenderHelper.Convert(180);
+            var result280 = NumberToWordsRenderHelper.Convert(280);
 
             Assert.That(result80, Does.EndWith("s"), "80 should end with 's'");
             Assert.That(result180, Does.EndWith("s"), "180 should end with 's'");

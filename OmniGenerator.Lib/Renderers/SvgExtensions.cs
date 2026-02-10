@@ -1,5 +1,4 @@
-﻿using QRCoder;
-using Svg;
+﻿using Svg;
 using Svg.Transforms;
 using System.Drawing;
 using System.Reflection;

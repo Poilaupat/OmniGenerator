@@ -48,7 +48,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         {
             get
             {
-                if (TryGet("packet-date", out var field) && field.Value is DateTime dateValue)
+                if (GetOptionalField("packet-date") is Field field && field.Value is DateTime dateValue)
                     return dateValue;
                 return DateTime.Now;
             }

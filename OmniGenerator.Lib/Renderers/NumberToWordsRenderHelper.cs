@@ -5,7 +5,7 @@
     /// This code is based on Eric Moreau's algorithm
     /// https://www.emoreau.com/Entries/Articles/2017/02/Net-code-to-convert-numbers-to-words.aspx
     /// </summary>
-    public sealed class NumberToWords
+    public sealed class NumberToWordsRenderHelper
     {
 
         public static string Convert(int value)

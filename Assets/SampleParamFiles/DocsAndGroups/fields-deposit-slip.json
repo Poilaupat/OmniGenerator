@@ -27,6 +27,12 @@
       "pattern": "\\d{12}"
     },
     {
+      "$type": "composite",
+      "name": "dataread",
+      "dependent-upon": "remittance-number,z3,z2",
+      "format": "{{remittance-number}} {{z3}} {{z2}}"
+    },
+    {
       "$type": "date",
       "name": "date-remise",
       "day-diff-min": -5,

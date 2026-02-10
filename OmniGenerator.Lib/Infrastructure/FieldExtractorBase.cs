@@ -73,7 +73,7 @@ namespace OmniGenerator.Lib.Infrastructure
         /// <returns>The string value of the field, or null if the field is not found.</returns>
         protected string? GetOptionalString(string fieldName)
         {
-            _fields.TryGetStringValue(fieldName, out string value);
+            _ = _fields.TryGetStringValue(fieldName, out string value);
             return value;
         }
 
@@ -94,7 +94,7 @@ namespace OmniGenerator.Lib.Infrastructure
         /// <param name="fieldName">The name of the field.</param>
         /// <returns>The field object.</returns>
         /// <exception cref="Exceptions.FieldNotFoundException">Thrown when the field is not found.</exception>
-        protected Field GetRequired(string fieldName)
+        protected Field GetRequiredField(string fieldName)
         {
             return _fields.GetValue(fieldName);
         }
@@ -103,11 +103,11 @@ namespace OmniGenerator.Lib.Infrastructure
         /// Tries to get a value from the underlying field collection.
         /// </summary>
         /// <param name="fieldName">The name of the field.</param>
-        /// <param name="field">The field object if found.</param>
-        /// <returns>True if the field was found; otherwise, false.</returns>
-        protected bool TryGet(string fieldName, out Field field)
+        /// <returns>The field object if found; otherwise, null.</returns>
+        protected Field? GetOptionalField(string fieldName)
         {
-            return _fields.TryGetValue(fieldName, out field);
+            _ = _fields.TryGetValue(fieldName, out Field field);
+            return field;
         }
     }
 }

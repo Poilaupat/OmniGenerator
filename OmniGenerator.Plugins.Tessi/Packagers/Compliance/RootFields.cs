@@ -75,6 +75,6 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance
         /// Used for tracking and traceability in the compliance system.
         /// </summary>
         [FieldInfo("numlot", "Lot number", isRequired: true)]
-        public Field Numlot => GetRequired("numlot");
+        public Field Numlot => GetRequiredField("numlot");
     }
 }

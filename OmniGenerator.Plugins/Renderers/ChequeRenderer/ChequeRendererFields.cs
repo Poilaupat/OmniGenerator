@@ -8,7 +8,7 @@ namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
     /// Provides type-safe access to all cheque-related fields.
     /// </summary>
     [FieldEntity(EPluginFieldEntityType.Document, "cheque")]
-    public class ChequeRendererFields : FieldExtractorBase
+    public sealed class ChequeRendererFields : FieldExtractorBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ChequeRendererFields"/> class.
@@ -19,9 +19,9 @@ namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
         }
 
         /// <summary>
-        /// Gets the CMC7 code with separator chars.
+        /// Gets the CMC7 line.
         /// </summary>
-        [FieldInfo("dataread", "CMC7 code with separator chars", isRequired: true)]
+        [FieldInfo("dataread", "CMC7 line", isRequired: true)]
         public string Dataread => GetRequiredString("dataread");
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
         /// Gets the cheque amount field (for formatting).
         /// </summary>
         [FieldInfo("amount", "Cheque amount", isRequired: true)]
-        public Field Amount => GetRequired("amount");
+        public Field Amount => GetRequiredField("amount");
 
         /// <summary>
         /// Gets the payee name.
@@ -94,7 +94,7 @@ namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
         /// Gets the date when the cheque was issued.
         /// </summary>
         [FieldInfo("date", "Date when the cheque was issued", isRequired: true)]
-        public string Date => GetRequiredString("date");
+        public DateTime Date => (DateTime)GetRequiredField("date").Value;
 
         /// <summary>
         /// Gets the deposit account number (verso).

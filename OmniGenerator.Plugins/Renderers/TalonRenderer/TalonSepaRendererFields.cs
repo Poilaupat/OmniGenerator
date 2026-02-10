@@ -9,7 +9,7 @@ namespace OmniGenerator.Plugins.Renderers.TalonRenderer
     /// required for rendering payment authorization slips.
     /// </summary>
     [FieldEntity(EPluginFieldEntityType.Document, "talon")]
-    public class TalonSepaRendererFields : FieldExtractorBase
+    public sealed class TalonSepaRendererFields : FieldExtractorBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TalonSepaRendererFields"/> class.
@@ -24,7 +24,7 @@ namespace OmniGenerator.Plugins.Renderers.TalonRenderer
         /// The amount is typically stored in cents (e.g., 12345 for 123.45 EUR).
         /// </summary>
         [FieldInfo("amount", "Amount to be debited", isRequired: true)]
-        public Field Amount => GetRequired("amount");
+        public Field Amount => GetRequiredField("amount");
 
         /// <summary>
         /// Gets the low OCRB (Optical Character Recognition-B) machine-readable line.
