@@ -36,13 +36,13 @@
         }
 
         /// <summary>
-        /// Generates a random <see cref="DateTime"/> value within the specified day difference range relative to today.
+        /// Generates a random <see cref="DateTime"/> value within the specified day difference range relative to now.
         /// </summary>
         /// <returns>A <see cref="DateTime"/> value representing a random date within the specified range.</returns>
         protected override DateTime GenerateValue()
         {
             int diff = _random.Next(DayDiffMin, DayDiffMax);
-            return DateTime.Today.AddDays(diff);
+            return DateTime.Now.AddDays(diff);
         }
     }
 }

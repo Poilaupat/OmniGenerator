@@ -1,5 +1,6 @@
 {
-  "packager":  "packager.tessi.eligibility",
+  "$schema": "../omnigenerator-schema.json",
+  "packager": "packager.tessi.eligibility",
   "hierarchy": {
     "fields": [
       {

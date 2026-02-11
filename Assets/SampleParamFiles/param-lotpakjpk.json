@@ -1,4 +1,5 @@
 {
+  "$schema": "../omnigenerator-schema.json",
   "packager": "packager.tessi.lotpakjpk",
   "hierarchy": {
     "fields": [
@@ -43,52 +44,69 @@
         "$type": "composite",
         "name": "packet-name",
         "dependent-upon": "packet-date,organization-code,organization-unit-code,scanner-code,scanner-serial-number,packet-number",
-        "format": "{{packet-date | format:\"yyMMddHHmmss\"}}{{organization-code}}{{organization-unit-code}}{{scanner-code}}{{scanner-serial-number}}{{packet-number | pad_left:4 }}"
+        "format": "{{packet-date | format:\"yyMMddHHmmss\"}}{{organization-code}}{{organization-unit-code}}{{scanner-code}}{{scanner-serial-number}}{{packet-number | pad_left:4,'0' }}"
       }
     ],
     "root": {
       "$type": "group",
-      "name": "remittance",
+      "name": "batch",
       "min-occurs": 1,
       "max-occurs": 1,
-      "fields": [
-        {
-          "$type": "aggregate",
-          "name": "total-amount",
-          "aggregate-type": "Sum",
-          "scope": "DirectChildren",
-          "target-element": "cheque",
-          "dependent-upon": "amount"
-
-        },
-        {
-          "$type": "aggregate",
-          "name": "total-cheque",
-          "aggregate-type": "Count",
-          "scope": "DirectChildren",
-          "target-element": "cheque",
-          "dependent-upon": ""
-
-        }
-      ],
+      "fields": [],
       "elements": [
         {
           "$type": "document",
-          "renderer": "renderer.omni.deposit-slip",
-          "name": "slip",
+          "name": "batch-ticket",
+          "renderer": "renderer.omni.batch-ticket",
           "min-occurs": 1,
           "max-occurs": 1,
-          "field-configuration-file": "DocsAndGroups\\fields-deposit-slip.json",
-          "fields": []
+          "field-configuration-file": "DocsAndGroups/fields-batch-ticket.json"
         },
         {
-          "$type": "document",
-          "renderer": "renderer.omni.cheque",
-          "name": "cheque",
-          "min-occurs": 1,
-          "max-occurs": 3,
-          "field-configuration-file": "DocsAndGroups\\fields-cheque.json",
-          "fields": []
+          "$type": "group",
+          "name": "remittance",
+          "min-occurs": 2,
+          "max-occurs": 2,
+          "fields": [
+            {
+              "$type": "aggregate",
+              "name": "total-amount",
+              "aggregate-type": "Sum",
+              "scope": "DirectChildren",
+              "target-element": "cheque",
+              "dependent-upon": "amount"
+
+            },
+            {
+              "$type": "aggregate",
+              "name": "total-cheque",
+              "aggregate-type": "Count",
+              "scope": "DirectChildren",
+              "target-element": "cheque",
+              "dependent-upon": ""
+
+            }
+          ],
+          "elements": [
+            {
+              "$type": "document",
+              "renderer": "renderer.omni.deposit-slip",
+              "name": "slip",
+              "min-occurs": 1,
+              "max-occurs": 1,
+              "field-configuration-file": "DocsAndGroups\\fields-deposit-slip.json",
+              "fields": []
+            },
+            {
+              "$type": "document",
+              "renderer": "renderer.omni.cheque",
+              "name": "cheque",
+              "min-occurs": 1,
+              "max-occurs": 3,
+              "field-configuration-file": "DocsAndGroups\\fields-cheque.json",
+              "fields": []
+            }
+          ]
         }
       ]
     }

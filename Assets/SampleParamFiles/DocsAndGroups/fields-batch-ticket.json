@@ -1,0 +1,20 @@
+{
+  "$schema": "../omnigenerator-schema.json",
+  "fields": [
+    {
+      "$type": "constant",
+      "name": "encline",
+      "value": "01"
+    },
+    {
+      "$type": "constant",
+      "name": "title",
+      "value": "Ticket Lot"
+    },
+    {
+      "$type": "regex",
+      "name": "dataread",
+      "pattern": "\\d{7}"
+    }
+  ]
+}

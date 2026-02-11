@@ -1,11 +1,12 @@
 {
+  "$schema": "../omnigenerator-schema.json",
   "packager": "packager.omni.sql",
   "hierarchy": {
     "fields": [
       {
         "$type": "constant",
         "name": "truncate-before-insert",
-        "value":  "true"
+        "value": "true"
       }
     ],
     "root": {

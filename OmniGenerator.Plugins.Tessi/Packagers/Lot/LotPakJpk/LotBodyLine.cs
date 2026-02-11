@@ -134,13 +134,13 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
             ICRAmount = documentFields.ICRAmount;
             Free = string.Empty;
             LengthRectoPak = bwRecto.Length.ToString();
-            OffsetRectoPak = bwRecto.Offset.ToString();
+            OffsetRectoPak = (bwRecto.Offset + 1).ToString();
             LengthVersoPak = bwVerso.Length.ToString();
-            OffsetVersoPak = bwVerso.Offset.ToString();
+            OffsetVersoPak = (bwVerso.Offset + 1).ToString();
             LengthRectoJpk = gsRecto.Length.ToString();
-            OffsetRectoJpk = gsRecto.Offset.ToString();
+            OffsetRectoJpk = (gsRecto.Offset + 1).ToString();
             LengthVersoJpk = gsVerso.Length.ToString();
-            OffsetVersoJpk = gsVerso.Offset.ToString();
+            OffsetVersoJpk = (gsVerso.Offset + 1).ToString();
             SortError = documentFields.SortError;
             ImageQuality = documentFields.ImageQuality;
             Deleted = documentFields.Deleted;

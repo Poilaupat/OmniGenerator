@@ -1,4 +1,5 @@
 {
+  "$schema": "../omnigenerator-schema.json",
   "packager": "packager.omni.zip",
   "hierarchy": {
     "fields": [],
