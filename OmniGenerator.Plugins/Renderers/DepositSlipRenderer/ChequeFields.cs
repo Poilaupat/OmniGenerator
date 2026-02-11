@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OmniGenerator.Plugins.Renderers.GenericRemittanceRenderer
+namespace OmniGenerator.Plugins.Renderers.DepositSlipRenderer
 {
     /// <summary>
     /// Strongly-typed field accessor for cheque document fields in generic remittance rendering.

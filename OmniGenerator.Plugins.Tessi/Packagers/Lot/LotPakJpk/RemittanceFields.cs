@@ -7,7 +7,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
     /// Strongly-typed field accessor for remittance-level fields in <see cref="LotPakJpkPackager"/>.
     /// Provides type-safe access to remittance (group) fields required for LOT+PAK+JPK format.
     /// </summary>
-    [FieldEntity(EPluginFieldEntityType.Group)]
+    [FieldEntity(EPluginFieldEntityType.Group, "remittance")]
     public class RemittanceFields : FieldExtractorBase
     {
         /// <summary>

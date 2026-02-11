@@ -1,21 +1,21 @@
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 
-namespace OmniGenerator.Plugins.Renderers.TalonRenderer
+namespace OmniGenerator.Plugins.Renderers.PaymentSlipRenderer
 {
     /// <summary>
-    /// Strongly-typed field accessor for <see cref="TalonSepaRenderer"/>.
+    /// Strongly-typed field accessor for <see cref="PaymentSlipRenderer"/>.
     /// Provides type-safe access to all TIP SEPA (Titre Interbancaire de Paiement SEPA) related fields
     /// required for rendering payment authorization slips.
     /// </summary>
     [FieldEntity(EPluginFieldEntityType.Document, "talon")]
-    public sealed class TalonSepaRendererFields : FieldExtractorBase
+    public sealed class PaymentSlipFields : FieldExtractorBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TalonSepaRendererFields"/> class.
+        /// Initializes a new instance of the <see cref="PaymentSlipFields"/> class.
         /// </summary>
         /// <param name="fields">The field collection from the document.</param>
-        public TalonSepaRendererFields(FieldCollection fields) : base(fields)
+        public PaymentSlipFields(FieldCollection fields) : base(fields)
         {
         }
 

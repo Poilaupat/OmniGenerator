@@ -5,20 +5,20 @@ using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Renderers;
 
-namespace OmniGenerator.Plugins.Renderers.TalonRenderer
+namespace OmniGenerator.Plugins.Renderers.PaymentSlipRenderer
 {
     /// <summary>
     /// A <see cref="IDocumentRenderer"/> for TIP SEPA (Titre Interbancaire de Paiement SEPA) optical slip image generation.
     /// Renders standardized payment authorization forms used in SEPA direct debit transactions.
     /// </summary>
-    [OmniGeneratorPluginMetadata("renderer.omni.talon", "Renders TIP SEPA images")]
-    public sealed class TalonSepaRenderer : DocumentRendererBase
+    [OmniGeneratorPluginMetadata("renderer.omni.payment-slip", "Renders TIP SEPA images")]
+    public sealed class PaymentSlipRenderer : DocumentRendererBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TalonSepaRenderer"/> class.
+        /// Initializes a new instance of the <see cref="PaymentSlipRenderer"/> class.
         /// Creates a renderer with standard TIP SEPA dimensions (175mm x 80mm).
         /// </summary>
-        public TalonSepaRenderer() : base(width: 175, height: 80)
+        public PaymentSlipRenderer() : base(width: 175, height: 80)
         {
         }
 
@@ -30,7 +30,7 @@ namespace OmniGenerator.Plugins.Renderers.TalonRenderer
         /// <returns>An <see cref="SvgDocument"/> representing the rendered TIP SEPA slip.</returns>
         public override SvgDocument RenderRecto(Document document)
         {
-            var fields = new TalonSepaRendererFields(document.Fields);
+            var fields = new PaymentSlipFields(document.Fields);
             var svg = SvgExtensions.NewBlankSvg(Width, Height);
 
             RenderRectoBackground(svg);

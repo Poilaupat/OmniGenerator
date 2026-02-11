@@ -79,7 +79,7 @@
               "name": "talon-optique",
               "min-occurs": 1,
               "max-occurs": 1,
-              "field-configuration-file": "DocsAndGroups/fields-talon-optique.json",
+              "field-configuration-file": "DocsAndGroups/fields-payment-slip.json",
               "fields": []
             },
             {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OmniGenerator.Plugins.Renderers.GenericDepositSlipRenderer
+namespace OmniGenerator.Plugins.Renderers.DepositSlipRenderer
 {
     /// <summary>
     /// Strongly-typed field accessor for generic deposit slip document fields.
@@ -15,13 +15,13 @@ namespace OmniGenerator.Plugins.Renderers.GenericDepositSlipRenderer
     /// summarizing the deposit transaction details.
     /// </summary>
     [FieldEntity(EPluginFieldEntityType.Document, "deposit-slip")]
-    public sealed class GenericDepositSlipFields : FieldExtractorBase
+    public sealed class DepositSlipFields : FieldExtractorBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericDepositSlipFields"/> class.
+        /// Initializes a new instance of the <see cref="DepositSlipFields"/> class.
         /// </summary>
         /// <param name="fields">The field collection from the deposit slip document.</param>
-        public GenericDepositSlipFields(FieldCollection fields) : base(fields)
+        public DepositSlipFields(FieldCollection fields) : base(fields)
         {
         }
 

@@ -1,11 +1,11 @@
 ﻿using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Renderers;
-using OmniGenerator.Plugins.Renderers.GenericRemittanceRenderer;
+using OmniGenerator.Plugins.Renderers.DepositSlipRenderer;
 using Svg;
 using System.Drawing;
 
-namespace OmniGenerator.Plugins.Renderers.GenericDepositSlipRenderer
+namespace OmniGenerator.Plugins.Renderers.DepositSlipRenderer
 {
     /// <summary>
     /// Renders generic cheque deposit slips (bordereaux de remise) for the French banking system.
@@ -13,13 +13,13 @@ namespace OmniGenerator.Plugins.Renderers.GenericDepositSlipRenderer
     /// and a list of individual cheques with a CMC7 machine-readable line for automated processing.
     /// </summary>
     [OmniGeneratorPluginMetadata("renderer.omni.deposit-slip", "Renders a neutral cheque deposit slip for french banking system")]
-    public sealed class GenericDepositSlipRenderer : DocumentRendererBase
+    public sealed class DepositSlipRenderer : DocumentRendererBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericDepositSlipRenderer"/> class.
+        /// Initializes a new instance of the <see cref="DepositSlipRenderer"/> class.
         /// Creates a renderer with standard deposit slip dimensions (175mm x 90mm).
         /// </summary>
-        public GenericDepositSlipRenderer() : base(width: 175, height: 90)
+        public DepositSlipRenderer() : base(width: 175, height: 90)
         {
         }
 
@@ -33,7 +33,7 @@ namespace OmniGenerator.Plugins.Renderers.GenericDepositSlipRenderer
         public override SvgDocument RenderRecto(Document document)
         {
 
-            var depositSlipfields = new GenericDepositSlipFields(document.Fields);
+            var depositSlipfields = new DepositSlipFields(document.Fields);
             var remittanceFields = new RemittanceFields(document.Parent.Fields);
             var svg = SvgExtensions.NewBlankSvg(Width, Height);
             RenderRectoBackground(svg);

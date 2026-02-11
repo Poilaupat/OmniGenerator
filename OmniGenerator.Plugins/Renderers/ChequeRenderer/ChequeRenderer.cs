@@ -19,7 +19,7 @@ namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
 
         public override SvgDocument RenderRecto(Document document)
         {
-            var fields = new ChequeRendererFields(document.Fields);
+            var fields = new ChequeFields(document.Fields);
             var svg = SvgExtensions.NewBlankSvg(Width, Height);
 
             RenderRectoBackground(svg);
@@ -145,7 +145,7 @@ namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
 
         public override SvgDocument RenderVerso(Document document)
         {
-            var fields = new ChequeRendererFields(document.Fields);
+            var fields = new ChequeFields(document.Fields);
             var svg = SvgExtensions.NewBlankSvg(Width, Height);
 
             svg.DrawText("N° compte : ", "deposit-account-title", 8f, 39f, "Arial", 5f, Color.Black);
