@@ -23,14 +23,14 @@ namespace OmniGenerator.Cli.Commands
     /// the business logic to the <see cref="IGenerationOrchestrator"/>.
     /// </summary>
     /// <remarks>
-    /// Initializes a new instance of the <see cref="GenerateCommand"/> class.
+    /// Initializes a new instance of the <see cref="GenerateOneCommand"/> class.
     /// </remarks>
     /// <param name="orchestrator">Orchestrator responsible for the generation pipeline.</param>
     /// <param name="logger">Logger instance for this command.</param>
-    internal class GenerateCommand(
+    internal class GenerateOneCommand(
         IGenerationOrchestrator orchestrator,
-        ILogger<GenerateCommand> logger
-        ) : AsyncCommand<GenerateCommandSettings>
+        ILogger<GenerateOneCommand> logger
+        ) : AsyncCommand<GenerateOneCommandSettings>
     {
         private readonly Table _layout = new Table()
                 .Border(TableBorder.None)
@@ -61,7 +61,7 @@ namespace OmniGenerator.Cli.Commands
         /// <param name="settings">Command-line arguments parsed into settings.</param>
         /// <param name="ct">Cancellation token.</param>
         /// <returns>0 if successful, -1 if an error occurred.</returns>
-        public override async Task<int> ExecuteAsync(CommandContext context, GenerateCommandSettings settings, CancellationToken ct)
+        public override async Task<int> ExecuteAsync(CommandContext context, GenerateOneCommandSettings settings, CancellationToken ct)
         {
             try
             {
@@ -109,7 +109,7 @@ namespace OmniGenerator.Cli.Commands
         /// Updates the console UI with the current progress and status of each generation step.
         /// </summary>
         /// <param name="settings">The current command settings.</param>
-        private void UpdateUI(GenerateCommandSettings settings)
+        private void UpdateUI(GenerateOneCommandSettings settings)
         {
             _layout.UpdateCell(0, 0,
                 new Panel(new TextPath(Path.GetFullPath(settings.SettingsFilePath)).LeafColor(Color.Red))
@@ -159,7 +159,7 @@ namespace OmniGenerator.Cli.Commands
         /// <param name="settings">The current command settings.</param>
         /// <param name="ldc">The live display context for UI updates.</param>
         /// <param name="progress">Progress information from the orchestrator.</param>
-        private void HandleProgress(GenerateCommandSettings settings, LiveDisplayContext ldc, GenerationProgress progress)
+        private void HandleProgress(GenerateOneCommandSettings settings, LiveDisplayContext ldc, GenerationProgress progress)
         {
             var taskKey = progress.Step switch
             {

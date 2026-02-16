@@ -8,11 +8,11 @@ namespace OmniGenerator.Cli.Commands
     /// Represents the command-line settings for the "generate" command.
     /// </summary>
     /// <remarks>
-    /// Initializes a new instance of the <see cref="GenerateCommandSettings"/> class.
+    /// Initializes a new instance of the <see cref="GenerateOneCommandSettings"/> class.
     /// </remarks>
     /// <param name="settingsFilePath">The path to the settings file used for generation.</param>
     /// <param name="outputFolderPath">The path to the output directory.</param>
-    internal class GenerateCommandSettings(string settingsFilePath, string outputFolderPath) : CommandSettings
+    internal class GenerateOneCommandSettings(string settingsFilePath, string outputFolderPath) : GenerateCommandSettingsBase
     {
 
         /// <summary>

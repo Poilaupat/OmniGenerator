@@ -49,7 +49,18 @@ try
             .WithDescription("Provides info about OmniGenerator")
             .WithExample("about");
 
-        commands.AddCommand<GenerateCommand>("generate");
+        commands.AddBranch<GenerateCommandSettingsBase>("generate", generate =>
+        {
+            generate.AddCommand<GenerateOneCommand>("one")
+                .WithDescription("Executes the generation process based on a configuration file and command-line settings")
+                .WithExample("generate", "one", "config.json")
+                .WithExample("generate", "one", "config.json", "C:\\output");
+
+            generate.AddCommand<GenerateManyCommand>("many")
+                .WithDescription("Executes the generation process based on a configuration file and command-line settings and a cron expression")
+                .WithExample("generate", "many", "config.json")
+                .WithExample("generate", "many", "config.json", "C:\\output");
+        });
 
         commands.AddBranch<PluginCommandSettingsBase>("plugin", plugin =>
         {
