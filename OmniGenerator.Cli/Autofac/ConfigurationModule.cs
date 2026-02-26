@@ -2,6 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Quartz;
 
 namespace OmniGenerator.Cli.Autofac
 {
@@ -38,6 +39,17 @@ namespace OmniGenerator.Cli.Autofac
             // Register strongly-typed configuration section (AppSettings) using Microsoft.Extensions.Options pattern
             var services = new ServiceCollection();
             services.Configure<AppSettings>(_configuration.GetSection("AppSettings"));
+
+            // Quartz.NET registration (so Quartz services can be injected via Autofac)
+            services.AddQuartz(static q =>
+            {
+                q.UseSimpleTypeLoader();
+                q.UseInMemoryStore();
+            });
+            services.AddQuartzHostedService(static o =>
+            {
+                o.WaitForJobsToComplete = true;
+            });
 
             // Populate the Autofac container with Microsoft.Extensions.DependencyInjection services
             builder.Populate(services);

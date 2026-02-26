@@ -12,7 +12,7 @@ namespace OmniGenerator.Cli.Commands
     /// </remarks>
     /// <param name="settingsFilePath">The path to the settings file used for generation.</param>
     /// <param name="outputFolderPath">The path to the output directory.</param>
-    internal class GenerateOneCommandSettings(string settingsFilePath, string outputFolderPath) : GenerateCommandSettingsBase
+    internal sealed class GenerateOneCommandSettings(string settingsFilePath, string outputFolderPath) : GenerateCommandSettingsBase
     {
 
         /// <summary>
