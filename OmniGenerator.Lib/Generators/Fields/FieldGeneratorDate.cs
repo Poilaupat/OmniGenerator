@@ -31,7 +31,10 @@
         public FieldGeneratorDate(string name, int dayDiffMin, int dayDiffMax) : base(name)
         {
             DayDiffMin = Math.Min(dayDiffMin, dayDiffMax);
-            DayDiffMax = Math.Max(dayDiffMin, dayDiffMax) + 1;
+            DayDiffMax = Math.Max(dayDiffMin, dayDiffMax);
+            if (DayDiffMax > 0) DayDiffMax++; // To make the upper bound inclusive
+            if (DayDiffMin < 0) DayDiffMin--; // To make the lower bound inclusive
+
             _random = new Random();
         }
 

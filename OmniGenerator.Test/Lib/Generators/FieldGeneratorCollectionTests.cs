@@ -1,8 +1,8 @@
 using NUnit.Framework;
 using OmniGenerator.Lib.Generators;
 using OmniGenerator.Lib.Generators.Fields;
+using OmniGenerator.Lib.Generators.Interfaces;
 using OmniGenerator.Lib.Hierarchy;
-using OmniGenerator.Lib.Interfaces.FieldGenerators;
 using System.Collections.Generic;
 using System.Linq;
 

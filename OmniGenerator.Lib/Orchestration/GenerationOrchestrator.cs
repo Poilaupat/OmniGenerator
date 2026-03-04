@@ -4,7 +4,9 @@ using OmniGenerator.Lib.Renderers;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
-using OmniGenerator.Lib.Interfaces.Infrastructure;
+using OmniGenerator.Lib.Hierarchy.Interfaces;
+using OmniGenerator.Lib.Orchestration.Interfaces;
+using OmniGenerator.Lib.Renderers.Interfaces;
 
 namespace OmniGenerator.Lib.Orchestration
 {

@@ -13,12 +13,12 @@ namespace OmniGenerator.Test.Lib.Generators
     [TestFixture]
     public class FieldGeneratorContainerTests
     {
-        private FieldConfigurationMapper _mapper = null!;
+        private FieldMapper _mapper = null!;
 
         [SetUp]
         public void SetUp()
         {
-            _mapper = new FieldConfigurationMapper();
+            _mapper = new FieldMapper();
         }
 
         #region Constructor Tests

@@ -1,6 +1,6 @@
 using NUnit.Framework;
+using OmniGenerator.Lib.Generators;
 using OmniGenerator.Lib.Generators.Fields;
-using OmniGenerator.Lib.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace OmniGenerator.Test.Lib.FieldGenerators
         {
             var items = new[] { new WeightedValue("A", 1.0), new WeightedValue("B", 1.0), new WeightedValue("C", 1.0) };
             var values = items.Select(i => i.Value).ToArray();
-            var generator = new FieldGeneratorWeightedList("TestList", items);
+            var generator = new FieldGeneratorFromWeightedList("TestList", items);
 
             for (int i = 0; i < 20; i++)
             {
@@ -27,7 +27,7 @@ namespace OmniGenerator.Test.Lib.FieldGenerators
         [Test]
         public void GenerateValue_EmptyList_ReturnsEmptyString()
         {
-            var generator = new FieldGeneratorWeightedList("EmptyList", Array.Empty<WeightedValue>());
+            var generator = new FieldGeneratorFromWeightedList("EmptyList", Array.Empty<WeightedValue>());
             var value = generator.GenerateNextValue();
             Assert.That(value, Is.EqualTo(string.Empty));
         }
@@ -37,7 +37,7 @@ namespace OmniGenerator.Test.Lib.FieldGenerators
         {
             var items = new[] { new WeightedValue("A", 0.0), new WeightedValue("B", 0.0), new WeightedValue("C", 0.0) };
 
-            var generator = new FieldGeneratorWeightedList("ZeroWeight", items);
+            var generator = new FieldGeneratorFromWeightedList("ZeroWeight", items);
             var value = generator.GenerateNextValue();
             Assert.That(value, Is.EqualTo(string.Empty));
         }
@@ -46,7 +46,7 @@ namespace OmniGenerator.Test.Lib.FieldGenerators
         public void Name_Property_IsSetCorrectly()
         {
             var items = new[] { new WeightedValue("X", 1.0) };
-            var generator = new FieldGeneratorWeightedList("MyList", items);
+            var generator = new FieldGeneratorFromWeightedList("MyList", items);
             Assert.That(generator.Name, Is.EqualTo("MyList"));
         }
 
@@ -54,7 +54,7 @@ namespace OmniGenerator.Test.Lib.FieldGenerators
         public void GenerateValue_DistributionIsUniform()
         {
             var items = new[] { new WeightedValue("A", 1.0), new WeightedValue("B", 1.0), new WeightedValue("C", 1.0) };
-            var generator = new FieldGeneratorWeightedList("UniformList", items);
+            var generator = new FieldGeneratorFromWeightedList("UniformList", items);
             var counts = items.ToDictionary(x => x.Value, x => 0);
             int iterations = 10000;
 
@@ -77,7 +77,7 @@ namespace OmniGenerator.Test.Lib.FieldGenerators
         {
             var items = new[] { new WeightedValue("A", 1.0), new WeightedValue("B", 3.0) };
 
-            var generator = new FieldGeneratorWeightedList("WeightedList", items);
+            var generator = new FieldGeneratorFromWeightedList("WeightedList", items);
             var counts = items.ToDictionary(x => x.Value, x => 0);
             int iterations = 8000;
 

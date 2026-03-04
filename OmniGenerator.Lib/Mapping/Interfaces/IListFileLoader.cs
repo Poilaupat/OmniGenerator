@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace OmniGenerator.Lib.Interfaces
+namespace OmniGenerator.Lib.Mapping.Interfaces
 {
     /// <summary>
     /// Interface for loading and parsing collection items from files

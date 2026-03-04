@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OmniGenerator.Lib.Interfaces.FieldGenerators
+namespace OmniGenerator.Lib.Generators.Interfaces
 {
     internal interface IFieldGeneratorFromList<TCollection> : IFieldGenerator
         where TCollection : notnull

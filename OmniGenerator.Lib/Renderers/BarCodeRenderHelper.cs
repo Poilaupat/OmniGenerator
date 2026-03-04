@@ -8,7 +8,6 @@ using Barcoder.Ean;
 using Barcoder.Kix;
 using Barcoder.Pdf417;
 using Barcoder.Qr;
-using Barcoder.Renderer.Svg;
 using Barcoder.RoyalMail;
 using Barcoder.TwoToFive;
 using Barcoder.UpcA;
@@ -116,7 +115,7 @@ namespace OmniGenerator.Lib.Renderers
         public static string Generate(EBarCodeType type, string data)
         {
             var barcode = Encode(type, data);
-            var renderer = new SvgRenderer();
+            var renderer = new Barcoder.Renderer.Svg.SvgRenderer();
 
             using (var stream = new MemoryStream())
             using (var reader = new StreamReader(stream))

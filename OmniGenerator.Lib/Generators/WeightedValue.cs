@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OmniGenerator.Lib.Tools
+namespace OmniGenerator.Lib.Generators
 {
     public class WeightedValue(string value, double weight)
     {

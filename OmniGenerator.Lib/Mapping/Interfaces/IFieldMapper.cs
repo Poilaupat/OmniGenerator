@@ -1,7 +1,7 @@
 using OmniGenerator.Lib.Configuration.Fields;
-using OmniGenerator.Lib.Interfaces.FieldGenerators;
+using OmniGenerator.Lib.Generators.Interfaces;
 
-namespace OmniGenerator.Lib.Interfaces
+namespace OmniGenerator.Lib.Mapping.Interfaces
 {
     /// <summary>
     /// Interface for mapping field configurations to field generators.

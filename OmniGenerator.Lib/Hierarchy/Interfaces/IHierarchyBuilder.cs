@@ -1,8 +1,7 @@
 ﻿using OmniGenerator.Lib.Configuration;
-using OmniGenerator.Lib.Interfaces.Infrastructure;
-using OmniGenerator.Lib.Hierarchy;
+using OmniGenerator.Lib.Interfaces;
 
-namespace OmniGenerator.Lib.Interfaces
+namespace OmniGenerator.Lib.Hierarchy.Interfaces
 {
 
     /// <summary>

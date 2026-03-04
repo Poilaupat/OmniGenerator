@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OmniGenerator.Lib.Tools
+namespace OmniGenerator.Lib.Renderers
 {
     /// <summary>
     /// Provides functionality to render SVG documents to bitmap images and convert them to various formats.

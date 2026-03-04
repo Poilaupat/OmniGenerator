@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using OmniGenerator.Lib.Hierarchy;
-using OmniGenerator.Lib.Orchestration;
 using OmniGenerator.Lib.Renderers;
 using OmniGenerator.Cli.Quartz;
 using Quartz;
@@ -11,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OmniGenerator.Lib.Orchestration.Interfaces;
 
 namespace OmniGenerator.Cli.Commands
 {
@@ -40,13 +40,13 @@ namespace OmniGenerator.Cli.Commands
                     await scheduler.Start(cancellationToken);
                 }
 
-                var jobKey = new JobKey(nameof(GenerateManyJob));
-                var triggerKey = new TriggerKey($"{nameof(GenerateManyJob)}-trigger");
+                var jobKey = new JobKey(nameof(GenerateJob));
+                var triggerKey = new TriggerKey($"{nameof(GenerateJob)}-trigger");
 
-                var job = JobBuilder.Create<GenerateManyJob>()
+                var job = JobBuilder.Create<GenerateJob>()
                     .WithIdentity(jobKey)
-                    .UsingJobData(GenerateManyJob.SettingsFilePathKey, settings.SettingsFilePath)
-                    .UsingJobData(GenerateManyJob.OutputFolderPathKey, settings.OutputFolderPath)
+                    .UsingJobData(GenerateJob.SettingsFilePathKey, settings.SettingsFilePath)
+                    .UsingJobData(GenerateJob.OutputFolderPathKey, settings.OutputFolderPath)
                     .Build();
 
                 var trigger = TriggerBuilder.Create()

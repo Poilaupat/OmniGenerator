@@ -1,11 +1,11 @@
-﻿using OmniGenerator.Lib.Infrastructure;
+﻿using OmniGenerator.Lib.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OmniGenerator.Lib.Interfaces.Infrastructure
+namespace OmniGenerator.Lib.Infrastructure
 {
     /// <summary>
     /// Defines the contract for a service that manages plugins in the application.

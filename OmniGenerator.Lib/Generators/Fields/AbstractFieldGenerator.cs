@@ -1,4 +1,4 @@
-﻿using OmniGenerator.Lib.Interfaces.FieldGenerators;
+﻿using OmniGenerator.Lib.Generators.Interfaces;
 
 namespace OmniGenerator.Lib.Generators.Fields
 {

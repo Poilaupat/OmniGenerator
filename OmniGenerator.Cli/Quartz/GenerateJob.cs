@@ -1,14 +1,14 @@
 using Microsoft.Extensions.Logging;
 using OmniGenerator.Cli.Tools;
-using OmniGenerator.Lib.Orchestration;
 using OmniGenerator.Lib.Configuration;
 using Quartz;
+using OmniGenerator.Lib.Orchestration.Interfaces;
 
 namespace OmniGenerator.Cli.Quartz
 {
-    internal sealed class GenerateManyJob(
+    internal sealed class GenerateJob(
         IGenerationOrchestrator orchestrator,
-        ILogger<GenerateManyJob> logger) : IJob
+        ILogger<GenerateJob> logger) : IJob
     {
         public const string SettingsFilePathKey = "SettingsFilePath";
         public const string OutputFolderPathKey = "OutputFolderPath";

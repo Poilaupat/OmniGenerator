@@ -1,5 +1,4 @@
 ﻿using OmniGenerator.Lib.Hierarchy;
-using OmniGenerator.Lib.Interfaces.Infrastructure;
 using Svg;
 
 namespace OmniGenerator.Lib.Interfaces

@@ -1,11 +1,10 @@
 ﻿using OmniGenerator.Lib.Configuration;
 using System.Collections.Concurrent;
-using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Generators;
-using OmniGenerator.Lib.Tools;
 using OmniGenerator.Lib.Infrastructure;
-using OmniGenerator.Lib.Interfaces.Infrastructure;
+using OmniGenerator.Lib.Hierarchy.Interfaces;
+using OmniGenerator.Lib.Mapping.Interfaces;
 
 /// <summary>
 /// Provides functionality to build a document generation hierarchy (a <see cref="Root"/>)

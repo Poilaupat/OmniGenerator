@@ -1,7 +1,7 @@
 ﻿using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
-using OmniGenerator.Lib.Tools;
+using OmniGenerator.Lib.Renderers;
 
 namespace OmniGenerator.Plugins.Packagers.ImageOnlyPackager
 {

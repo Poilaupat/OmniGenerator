@@ -2,10 +2,10 @@
 using OmniGenerator.Lib.Exceptions;
 using OmniGenerator.Lib.Configuration;
 using System.Data;
-using OmniGenerator.Lib.Interfaces.FieldGenerators;
+using OmniGenerator.Lib.Generators.Interfaces;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Generators.Fields;
-using OmniGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Mapping.Interfaces;
 
 namespace OmniGenerator.Lib.Generators
 {

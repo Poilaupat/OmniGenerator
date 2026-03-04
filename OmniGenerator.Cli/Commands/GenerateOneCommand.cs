@@ -5,13 +5,12 @@ using OmniGenerator.Cli.Widgets;
 using OmniGenerator.Lib.Configuration;
 using OmniGenerator.Lib.Renderers;
 using OmniGenerator.Lib.Hierarchy;
-using OmniGenerator.Lib.Interfaces;
-using OmniGenerator.Lib.Interfaces.Infrastructure;
 using OmniGenerator.Lib.Orchestration;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using Spectre.Console.Rendering;
 using System.Diagnostics;
+using OmniGenerator.Lib.Orchestration.Interfaces;
 
 namespace OmniGenerator.Cli.Commands
 {

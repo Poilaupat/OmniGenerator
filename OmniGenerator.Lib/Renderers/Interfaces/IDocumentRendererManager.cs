@@ -1,8 +1,7 @@
-﻿using OmniGenerator.Lib.Renderers;
-using OmniGenerator.Lib.Hierarchy;
-using OmniGenerator.Lib.Interfaces.Infrastructure;
+﻿using OmniGenerator.Lib.Hierarchy;
+using OmniGenerator.Lib.Interfaces;
 
-namespace OmniGenerator.Lib.Interfaces
+namespace OmniGenerator.Lib.Renderers.Interfaces
 {
     /// <summary>
     /// The interface that defines objects responsible of image generation

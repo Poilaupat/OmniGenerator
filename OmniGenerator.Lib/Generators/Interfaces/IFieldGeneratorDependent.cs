@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using OmniGenerator.Lib.Exceptions;
 using OmniGenerator.Lib.Hierarchy;
 
-namespace OmniGenerator.Lib.Interfaces.FieldGenerators
+namespace OmniGenerator.Lib.Generators.Interfaces
 {
     /// <summary>
     /// Represents a field generator that depends on other field generators to provide values.

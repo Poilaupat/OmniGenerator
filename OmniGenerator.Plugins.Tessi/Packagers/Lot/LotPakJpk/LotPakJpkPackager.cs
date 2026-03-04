@@ -1,13 +1,7 @@
 ﻿using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
-using OmniGenerator.Lib.Tools;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OmniGenerator.Lib.Renderers;
 
 namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
 {

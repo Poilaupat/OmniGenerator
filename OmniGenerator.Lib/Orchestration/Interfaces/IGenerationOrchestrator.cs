@@ -1,8 +1,8 @@
 using OmniGenerator.Lib.Configuration;
 using OmniGenerator.Lib.Hierarchy;
-using OmniGenerator.Lib.Interfaces.Infrastructure;
+using OmniGenerator.Lib.Interfaces;
 
-namespace OmniGenerator.Lib.Orchestration
+namespace OmniGenerator.Lib.Orchestration.Interfaces
 {
     public interface IGenerationOrchestrator : INotifier<GenerationProgress>
     {

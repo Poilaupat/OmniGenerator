@@ -1,6 +1,6 @@
 ﻿using OmniGenerator.Lib.Exceptions;
+using OmniGenerator.Lib.Generators.Interfaces;
 using OmniGenerator.Lib.Hierarchy;
-using OmniGenerator.Lib.Interfaces.FieldGenerators;
 using OmniGenerator.Lib.Tools;
 using System.Text.RegularExpressions;
 

@@ -32,7 +32,7 @@ namespace OmniGenerator.Test.Lib.FieldGenerators
             var generator = new FieldGeneratorDate("TestDate", min, max);
             var today = DateTime.Today;
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 100; i++)
             {
                 var value = generator.GenerateNextValue();
                 var diff = (value - today).Days;

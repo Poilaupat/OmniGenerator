@@ -4,11 +4,13 @@ using Microsoft.Extensions.Configuration;
 using OmniGenerator.Lib.Renderers;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
-using OmniGenerator.Lib.Interfaces;
-using OmniGenerator.Lib.Interfaces.Infrastructure;
 using OmniGenerator.Lib.Liquid;
 using OmniGenerator.Lib.Mapping;
 using OmniGenerator.Lib.Orchestration;
+using OmniGenerator.Lib.Hierarchy.Interfaces;
+using OmniGenerator.Lib.Mapping.Interfaces;
+using OmniGenerator.Lib.Orchestration.Interfaces;
+using OmniGenerator.Lib.Renderers.Interfaces;
 
 namespace OmniGenerator.Lib.Autofac
 {
@@ -55,7 +57,7 @@ namespace OmniGenerator.Lib.Autofac
             builder.AddSerilog(_configuration);
 
             // Register Mapperly mapper instance
-            builder.RegisterType<FieldConfigurationMapper>().As<IFieldMapper>().SingleInstance();
+            builder.RegisterType<FieldMapper>().As<IFieldMapper>().SingleInstance();
 
             // Register core OmniGenerator services and interfaces
             builder.RegisterType<HierarchyBuilder>().As<IHierarchyBuilder>().InstancePerLifetimeScope();

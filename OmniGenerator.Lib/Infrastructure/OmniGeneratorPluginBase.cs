@@ -1,4 +1,4 @@
-﻿using OmniGenerator.Lib.Interfaces.Infrastructure;
+﻿using OmniGenerator.Lib.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

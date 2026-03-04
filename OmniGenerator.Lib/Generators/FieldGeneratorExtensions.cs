@@ -1,6 +1,6 @@
 ﻿using OmniGenerator.Lib.Exceptions;
 using OmniGenerator.Lib.Generators.Fields;
-using OmniGenerator.Lib.Interfaces.FieldGenerators;
+using OmniGenerator.Lib.Generators.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

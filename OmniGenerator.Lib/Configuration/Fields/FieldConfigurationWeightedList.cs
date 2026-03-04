@@ -1,5 +1,5 @@
 ﻿using OmniGenerator.Lib.Configuration.Serialization;
-using OmniGenerator.Lib.Tools;
+using OmniGenerator.Lib.Generators;
 using System;
 using System.Collections.Generic;
 using System.Linq;

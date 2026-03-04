@@ -2,7 +2,7 @@
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 
-namespace OmniGenerator.Lib.Tools
+namespace OmniGenerator.Lib.Generators
 {
     /// <summary>
     /// Provides utility methods to compute various types of checksums and keys, such as RIB, RLMC, TIP, and SEPA group 6 keys.
@@ -86,7 +86,7 @@ namespace OmniGenerator.Lib.Tools
         /// <returns>The computed checksum key as a two digits string</returns>
         public static string ComputeIcsKey(string ics)
         {
-            var key = ComputeModulo(String.Concat(ics, "00"), 100, replaceLetters: true, reverseString: true, withRankMultiplier: true);
+            var key = ComputeModulo(string.Concat(ics, "00"), 100, replaceLetters: true, reverseString: true, withRankMultiplier: true);
             return key.ToString("00");
         }
 

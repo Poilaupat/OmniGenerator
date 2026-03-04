@@ -1,14 +1,7 @@
-﻿using Microsoft.ProgramSynthesis.Utils.JetBrains.Annotations;
-using OmniGenerator.Lib.Renderers;
+﻿using OmniGenerator.Lib.Renderers;
 using OmniGenerator.Lib.Hierarchy;
-using OmniGenerator.Lib.Interfaces.Infrastructure;
 using Spectre.Console;
 using Spectre.Console.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OmniGenerator.Cli.Widgets
 {

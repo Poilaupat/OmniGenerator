@@ -1,15 +1,14 @@
-﻿using OmniGenerator.Lib.Tools;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace OmniGenerator.Lib.Generators.Fields
 {
     /// <summary>
-    /// The <see cref="FieldGeneratorWeightedList"/> class picks a random value from a collection,
+    /// The <see cref="FieldGeneratorFromWeightedList"/> class picks a random value from a collection,
     /// where each item has a probability of being picked proportional to its weight (density).
     /// </summary>
-    internal class FieldGeneratorWeightedList : AbstractFieldGeneratorFromListBase<string, WeightedValue>
+    internal class FieldGeneratorFromWeightedList : AbstractFieldGeneratorFromListBase<string, WeightedValue>
     {
         private readonly Random _random;
         private double? _totalWeight;
@@ -48,11 +47,11 @@ namespace OmniGenerator.Lib.Generators.Fields
 
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FieldGeneratorWeightedList"/> class.
+        /// Initializes a new instance of the <see cref="FieldGeneratorFromWeightedList"/> class.
         /// </summary>
         /// <param name="name">The name of the generator.</param>
         /// <param name="list">The collection of value-weight pairs to pick from.</param>
-        public FieldGeneratorWeightedList(string name, IEnumerable<WeightedValue> list)
+        public FieldGeneratorFromWeightedList(string name, IEnumerable<WeightedValue> list)
             : base(name, list) => _random = new Random();
 
         /// <summary>
