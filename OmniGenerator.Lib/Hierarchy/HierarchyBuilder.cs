@@ -2,9 +2,9 @@
 using System.Collections.Concurrent;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Generators;
-using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Hierarchy.Interfaces;
 using OmniGenerator.Lib.Mapping.Interfaces;
+using OmniGenerator.Lib.Reporting;
 
 /// <summary>
 /// Provides functionality to build a document generation hierarchy (a <see cref="Root"/>)
@@ -12,27 +12,22 @@ using OmniGenerator.Lib.Mapping.Interfaces;
 /// </summary>
 internal sealed class HierarchyBuilder : IHierarchyBuilder
 {
+    public const string HubKey = nameof(HierarchyBuilder);
+
     private readonly IFieldMapper _mapper;
+    private readonly IProgressHub<HierarchyBuildingProgress> _hub;
     private readonly Random _random;
-    private long _countDoc = 0;
-    private long _countProcessedDoc = 0;
-    private long _countGroup = 0;
-    private long _countProcessedGroup = 0;
-    private long _countField = 0;
+    private long DocCount = 0;
+    private long _processedDocCount = 0;
+    private long _groupCount = 0;
+    private long _orocessedGroupCount = 0;
+    private long _fieldCount = 0;
 
-    public Notifier<HierarchyBuilderProgress> Notifier { get; }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="HierarchyBuilder"/> class.
-    /// </summary>
-    /// <param name="mapper">
-    /// An instance of <see cref="IFieldMapper"/> used to map field configurations to field generators.
-    /// </param>
-    public HierarchyBuilder(IFieldMapper mapper, Notifier<HierarchyBuilderProgress> notifier)
+    public HierarchyBuilder(IFieldMapper mapper, IProgressHub<HierarchyBuildingProgress> hub)
     {
         _mapper = mapper;
+        _hub = hub;
         _random = new Random();
-        Notifier = notifier;
     }
 
     /// <summary>
@@ -55,7 +50,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
             root.AddFields(fields);
         }
 
-        Notifier.SendNotification(GetHierarchyBuilderProgress());
+        _hub.Report(HubKey, GetHierarchyBuilderProgress());
         return await Task.FromResult(root);
     }
 
@@ -68,7 +63,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
     private Group[] GenerateGroups(GroupConfiguration groupConfiguration, FieldGeneratorContainer fgc)
     {
         int groupCount = GetRandomOccurence(groupConfiguration.MinOccurs, groupConfiguration.MaxOccurs);
-        Interlocked.Add(ref _countGroup, groupCount);
+        Interlocked.Add(ref _groupCount, groupCount);
 
         ConcurrentQueue<Group> groups = new();
 #if DEBUG
@@ -88,11 +83,11 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
 
             var group = new Group(groupConfiguration.Name, subGroups, subdocuments);
             group.GenerateFields(fgc);
-            Interlocked.Increment(ref _countProcessedGroup);
-            Interlocked.Add(ref _countField, group.Fields.Count);
+            Interlocked.Increment(ref _orocessedGroupCount);
+            Interlocked.Add(ref _fieldCount, group.Fields.Count);
             groups.Enqueue(group);
 
-            Notifier.SendNotification(GetHierarchyBuilderProgress());
+            _hub.Report(HubKey, GetHierarchyBuilderProgress());
         }
 #if !DEBUG
         );
@@ -109,7 +104,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
     private Document[] GenerateDocuments(DocumentConfiguration documentConfiguration, FieldGeneratorContainer fgc)
     {
         int docCount = GetRandomOccurence(documentConfiguration.MinOccurs, documentConfiguration.MaxOccurs);
-        Interlocked.Add(ref _countDoc, docCount);
+        Interlocked.Add(ref DocCount, docCount);
 
         ConcurrentQueue<Document> documents = new();
 #if DEBUG
@@ -120,11 +115,11 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
         {
             var document = new Document(documentConfiguration.Name, documentConfiguration.ImageRenderer);
             document.GenerateFields(fgc);
-            Interlocked.Increment(ref _countProcessedDoc);
-            Interlocked.Add(ref _countField, document.Fields.Count);
+            Interlocked.Increment(ref _processedDocCount);
+            Interlocked.Add(ref _fieldCount, document.Fields.Count);
             documents.Enqueue(document);
 
-            Notifier.SendNotification(GetHierarchyBuilderProgress());
+            _hub.Report(HubKey, GetHierarchyBuilderProgress());
         }
 #if !DEBUG
         );
@@ -145,15 +140,15 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
         return Math.Max(_random.Next(minOccurs, maxOccurs + 1), 0);
     }
 
-    private HierarchyBuilderProgress GetHierarchyBuilderProgress()
+    private HierarchyBuildingProgress GetHierarchyBuilderProgress()
     {
-        return new HierarchyBuilderProgress()
+        return new HierarchyBuildingProgress()
         {
-            CountField = Interlocked.Read(ref _countField),
-            CountGroup = Interlocked.Read(ref _countGroup),
-            CountDocument = Interlocked.Read(ref _countDoc),
-            CountProcessedGroup = Interlocked.Read(ref _countProcessedGroup),
-            CountProcessedDocument = Interlocked.Read(ref _countProcessedDoc),
+            FieldCount = Interlocked.Read(ref _fieldCount),
+            GroupCount = Interlocked.Read(ref _groupCount),
+            DocumentCount = Interlocked.Read(ref DocCount),
+            ProcessedGroupCount = Interlocked.Read(ref _orocessedGroupCount),
+            ProcessedDocumentCount = Interlocked.Read(ref _processedDocCount),
         };
     }
 }

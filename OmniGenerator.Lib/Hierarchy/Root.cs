@@ -27,7 +27,7 @@
         /// Gets the <see cref="Document"/> of the root
         /// </summary>
         /// <returns>The list of <see cref="Document"/></returns>
-        public IEnumerable<Document> GetDocuments()
+        public IEnumerable<Document> GetAllDocuments()
         {
             return Groups
                 .SelectMany(x => x.GetDocuments(null, true));
@@ -38,7 +38,7 @@
         /// </summary>
         /// <param name="recursive"></param>
         /// <returns>The list of <see cref="Group"/></returns>
-        public IEnumerable<Group> GetGroups()
+        public IEnumerable<Group> GetAllGroups()
         {
             return Groups
                 .Union(Groups

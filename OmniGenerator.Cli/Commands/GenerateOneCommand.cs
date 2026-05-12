@@ -1,36 +1,35 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using OmniGenerator.Cli.Tools;
 using OmniGenerator.Cli.Widgets;
 using OmniGenerator.Lib.Configuration;
-using OmniGenerator.Lib.Renderers;
-using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Orchestration;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using Spectre.Console.Rendering;
 using System.Diagnostics;
 using OmniGenerator.Lib.Orchestration.Interfaces;
+using OmniGenerator.Lib.Reporting;
+using Microsoft.Extensions.Configuration;
 
 namespace OmniGenerator.Cli.Commands
 {
-
     /// <summary>
     /// CLI command responsible for executing the document and image generation process
     /// based on a provided configuration file and command-line settings.
     /// This command provides real-time progress updates in the console and delegates
     /// the business logic to the <see cref="IGenerationOrchestrator"/>.
     /// </summary>
-    /// <remarks>
-    /// Initializes a new instance of the <see cref="GenerateOneCommand"/> class.
-    /// </remarks>
-    /// <param name="orchestrator">Orchestrator responsible for the generation pipeline.</param>
-    /// <param name="logger">Logger instance for this command.</param>
     internal class GenerateOneCommand(
         IGenerationOrchestrator orchestrator,
+        IProgressHub<GenerationProgress> generationHub,
+        IProgressHub<HierarchyBuildingProgress> hierarchyHub,
+        IProgressHub<RenderingProgress> renderingHub,
+        IConfiguration configuration,
         ILogger<GenerateOneCommand> logger
         ) : AsyncCommand<GenerateOneCommandSettings>
     {
+        private readonly int _uiResolutionMs = configuration.GetValue<int>("AppSettings:progress-resolution");
+
         private readonly Table _layout = new Table()
                 .Border(TableBorder.None)
                 .AddColumns("column")
@@ -46,20 +45,12 @@ namespace OmniGenerator.Cli.Commands
                 .AddTask(new TaskItem("package", new Markup("[blue]Package Generation[/]")));
 
         private readonly Stopwatch _watch = new();
+        private DateTime _lastUiRefresh = DateTime.MinValue;
 
         private Exception? _error;
-        private HierarchyBuilderProgress? _hierarchyProgress;
-        private DocumentRendererManagerProgress? _imageProgress;
+        private HierarchyBuildingProgress? _hierarchyProgress;
+        private RenderingProgress? _imageProgress;
 
-        /// <summary>
-        /// Executes the generate command asynchronously, reading input settings,
-        /// building the hierarchy, generating images, and packaging output.
-        /// Displays real-time UI updates based on orchestrator progress events.
-        /// </summary>
-        /// <param name="context">The Spectre CLI command context.</param>
-        /// <param name="settings">Command-line arguments parsed into settings.</param>
-        /// <param name="ct">Cancellation token.</param>
-        /// <returns>0 if successful, -1 if an error occurred.</returns>
         public override async Task<int> ExecuteAsync(CommandContext context, GenerateOneCommandSettings settings, CancellationToken ct)
         {
             try
@@ -75,10 +66,12 @@ namespace OmniGenerator.Cli.Commands
                     .Overflow(VerticalOverflow.Crop)
                     .StartAsync(async ldc =>
                     {
+                        generationHub.DataChanged += (_, progress) => HandleGenerationProgress(settings, ldc, progress);
+                        hierarchyHub.DataChanged += (_, progress) => { _hierarchyProgress = progress; ThrottledRefresh(settings, ldc); };
+                        renderingHub.DataChanged += (_, progress) => { _imageProgress = progress; ThrottledRefresh(settings, ldc); };
+
                         try
                         {
-                            orchestrator.Notifier.Progress = new Progress<GenerationProgress>(progress => HandleProgress(settings, ldc, progress));
-
                             await orchestrator.ExecuteAsync(generatorConfig, settings.OutputFolderPath, ct);
 
                             // Final UI refresh to ensure all updates are visible
@@ -104,10 +97,50 @@ namespace OmniGenerator.Cli.Commands
             return 0;
         }
 
-        /// <summary>
-        /// Updates the console UI with the current progress and status of each generation step.
-        /// </summary>
-        /// <param name="settings">The current command settings.</param>
+        private void ThrottledRefresh(GenerateOneCommandSettings settings, LiveDisplayContext ldc)
+        {
+            var now = DateTime.UtcNow;
+            if ((now - _lastUiRefresh).TotalMilliseconds < _uiResolutionMs) return;
+            _lastUiRefresh = now;
+            UpdateUI(settings);
+            ldc.Refresh();
+        }
+
+        private void HandleGenerationProgress(GenerateOneCommandSettings settings, LiveDisplayContext ldc, GenerationProgress progress)
+        {
+            var taskKey = progress.Step switch
+            {
+                GenerationStep.Hierarchy => "hierarchy",
+                GenerationStep.Images => "images",
+                GenerationStep.Package => "package",
+                _ => throw new ArgumentOutOfRangeException($"Unknown step : {progress.Step}")
+            };
+
+            switch (progress.Status)
+            {
+                case StepStatus.Processing:
+                    _tasks[taskKey].SetProcessing();
+                    break;
+
+                case StepStatus.Succeeded:
+                    _tasks[taskKey].SetSucceeded();
+                    break;
+
+                case StepStatus.Failed:
+                    _tasks[taskKey].SetFailed();
+                    if (progress.Error is not null)
+                        _error = progress.Error;
+                    break;
+
+                case StepStatus.Skipped:
+                    _tasks[taskKey].SetSkipped();
+                    break;
+            }
+
+            UpdateUI(settings);
+            ldc.Refresh();
+        }
+
         private void UpdateUI(GenerateOneCommandSettings settings)
         {
             _layout.UpdateCell(0, 0,
@@ -120,18 +153,13 @@ namespace OmniGenerator.Cli.Commands
                     .ConfigurePanel("Tasks")
             );
 
-            // Build combined progress view
             var progressWidgets = new List<IRenderable>();
 
             if (_hierarchyProgress is not null)
-            {
                 progressWidgets.Add(_hierarchyProgress.ToWidget());
-            }
 
             if (_imageProgress is not null)
-            {
                 progressWidgets.Add(_imageProgress.ToWidget());
-            }
 
             IRenderable progressContent = progressWidgets.Count switch
             {
@@ -150,60 +178,6 @@ namespace OmniGenerator.Cli.Commands
                 new Panel(executionContent)
                     .ConfigurePanel("Execution")
             );
-        }
-
-        /// <summary>
-        /// Handles progress events from the orchestrator and updates the UI accordingly.
-        /// </summary>
-        /// <param name="settings">The current command settings.</param>
-        /// <param name="ldc">The live display context for UI updates.</param>
-        /// <param name="progress">Progress information from the orchestrator.</param>
-        private void HandleProgress(GenerateOneCommandSettings settings, LiveDisplayContext ldc, GenerationProgress progress)
-        {
-            var taskKey = progress.Step switch
-            {
-                GenerationStep.Hierarchy => "hierarchy",
-                GenerationStep.Images => "images",
-                GenerationStep.Package => "package",
-                _ => throw new ArgumentOutOfRangeException($"Unknown step : {progress.Step}")
-            };
-
-            // Update progress data if provided
-            switch (progress.Data)
-            {
-                case HierarchyBuilderProgress hbp:
-                    _hierarchyProgress = hbp;
-                    break;
-                case DocumentRendererManagerProgress drmp:
-                    _imageProgress = drmp;
-                    break;
-            }
-
-            switch (progress.Status)
-            {
-                case StepStatus.Processing:
-                    _tasks[taskKey].SetProcessing();
-                    break;
-
-                case StepStatus.Succeeded:
-                    _tasks[taskKey].SetSucceeded();
-                    break;
-
-                case StepStatus.Failed:
-                    _tasks[taskKey].SetFailed();
-                    if (progress.Error is not null)
-                    {
-                        _error = progress.Error;
-                    }
-                    break;
-
-                case StepStatus.Skipped:
-                    _tasks[taskKey].SetSkipped();
-                    break;
-            }
-
-            UpdateUI(settings);
-            ldc.Refresh();
         }
     }
 }

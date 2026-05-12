@@ -1,112 +1,92 @@
 using Microsoft.Extensions.Logging;
 using OmniGenerator.Lib.Configuration;
-using OmniGenerator.Lib.Renderers;
 using OmniGenerator.Lib.Hierarchy;
-using OmniGenerator.Lib.Infrastructure;
-using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Hierarchy.Interfaces;
+using OmniGenerator.Lib.Interfaces;
+using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Orchestration.Interfaces;
 using OmniGenerator.Lib.Renderers.Interfaces;
+using OmniGenerator.Lib.Reporting;
 
 namespace OmniGenerator.Lib.Orchestration
 {
     public class GenerationOrchestrator : IGenerationOrchestrator
     {
+        public const string DefaultJobId = "generate-one";
+
         private readonly IPluginService _pluginService;
         private readonly IHierarchyBuilder _hierarchyBuilder;
         private readonly IDocumentRendererManager _imageRendererProcessor;
+        private readonly IProgressHub<GenerationProgress> _hub;
         private readonly ILogger<GenerationOrchestrator> _logger;
-
-        public Notifier<GenerationProgress> Notifier { get; }
 
         public GenerationOrchestrator(
             IPluginService pluginService,
             IHierarchyBuilder hierarchyBuilder,
             IDocumentRendererManager imageRendererProcessor,
-            Notifier<GenerationProgress> notifier,
+            IProgressHub<GenerationProgress> hub,
             ILogger<GenerationOrchestrator> logger)
         {
             _pluginService = pluginService;
             _hierarchyBuilder = hierarchyBuilder;
             _imageRendererProcessor = imageRendererProcessor;
+            _hub = hub;
             _logger = logger;
-
-            Notifier = notifier;
-            Notifier.UseRegulation = true;
         }
 
         public async Task<Root> ExecuteAsync(
             OmniGeneratorConfiguration configuration,
             string outputFolderPath,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default,
+            string jobId = DefaultJobId)
         {
-            var root = await BuildHierarchyAsync(configuration, cancellationToken);
-            await RenderImagesAsync(root, cancellationToken);
-            await PackageAsync(root, configuration, outputFolderPath, cancellationToken);
+            var root = await BuildHierarchyAsync(configuration, jobId, cancellationToken);
+            await RenderImagesAsync(root, jobId, cancellationToken);
+            await PackageAsync(root, configuration, outputFolderPath, jobId, cancellationToken);
 
             return root;
         }
 
         private async Task<Root> BuildHierarchyAsync(
             OmniGeneratorConfiguration configuration,
+            string jobId,
             CancellationToken cancellationToken)
         {
-            ReportProgress(GenerationStep.Hierarchy, StepStatus.Processing, force: true);
-
-            HierarchyBuilderProgress? lastProgress = null;
+            Report(jobId, GenerationStep.Hierarchy, StepStatus.Processing);
 
             try
             {
-                _hierarchyBuilder.Notifier.Progress = new Progress<HierarchyBuilderProgress>(progress =>
-                {
-                    lastProgress = progress;
-                    ReportProgress(GenerationStep.Hierarchy, StepStatus.Processing, progress);
-                });
-
                 var root = await _hierarchyBuilder.BuildAsync(configuration);
-
-                // Report final progress with Succeeded status
-                ReportProgress(GenerationStep.Hierarchy, StepStatus.Succeeded, lastProgress, force: true);
+                Report(jobId, GenerationStep.Hierarchy, StepStatus.Succeeded);
                 return root;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while building the hierarchy.");
-                ReportProgress(GenerationStep.Hierarchy, StepStatus.Failed, error: ex, force: true);
+                Report(jobId, GenerationStep.Hierarchy, StepStatus.Failed, ex);
                 throw;
             }
         }
 
-        private async Task RenderImagesAsync(Root root, CancellationToken cancellationToken)
+        private async Task RenderImagesAsync(Root root, string jobId, CancellationToken cancellationToken)
         {
-            if (_imageRendererProcessor is null || root.GetDocuments().All(d => string.IsNullOrWhiteSpace(d.ImageComposer)))
+            if (_imageRendererProcessor is null || root.GetAllDocuments().All(d => string.IsNullOrWhiteSpace(d.ImageComposer)))
             {
-                ReportProgress(GenerationStep.Images, StepStatus.Skipped, force: true);
+                Report(jobId, GenerationStep.Images, StepStatus.Skipped);
                 return;
             }
 
-            ReportProgress(GenerationStep.Images, StepStatus.Processing, force: true);
-
-            DocumentRendererManagerProgress? lastProgress = null;
+            Report(jobId, GenerationStep.Images, StepStatus.Processing);
 
             try
             {
-                //_imageRendererProcessor.ProgressResolution = ProgressResolution;
-                _imageRendererProcessor.Notifier.Progress = new Progress<DocumentRendererManagerProgress>(progress =>
-                {
-                    lastProgress = progress;
-                    ReportProgress(GenerationStep.Images, StepStatus.Processing, progress);
-                });
-
                 await _imageRendererProcessor.RenderImagesAsync(root);
-
-                // Report final progress with Succeeded status
-                ReportProgress(GenerationStep.Images, StepStatus.Succeeded, lastProgress, force: true);
+                Report(jobId, GenerationStep.Images, StepStatus.Succeeded);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while rendering images.");
-                ReportProgress(GenerationStep.Images, StepStatus.Failed, error: ex, force: true);
+                Report(jobId, GenerationStep.Images, StepStatus.Failed, ex);
                 throw;
             }
         }
@@ -115,39 +95,39 @@ namespace OmniGenerator.Lib.Orchestration
             Root root,
             OmniGeneratorConfiguration configuration,
             string outputFolderPath,
+            string jobId,
             CancellationToken cancellationToken)
         {
             var packager = _pluginService.GetPlugin<IPackager>(configuration.PackagerName);
             if (packager is null)
             {
-                ReportProgress(GenerationStep.Package, StepStatus.Skipped, force: true);
+                Report(jobId, GenerationStep.Package, StepStatus.Skipped);
                 return;
             }
 
-            ReportProgress(GenerationStep.Package, StepStatus.Processing, force: true);
+            Report(jobId, GenerationStep.Package, StepStatus.Processing);
 
             try
             {
                 await packager.ProcessAsync(root, outputFolderPath, configuration.RenderResolutionDPI);
-                ReportProgress(GenerationStep.Package, StepStatus.Succeeded, force: true);
+                Report(jobId, GenerationStep.Package, StepStatus.Succeeded);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while packaging the output.");
-                ReportProgress(GenerationStep.Package, StepStatus.Failed, error: ex, force: true);
+                Report(jobId, GenerationStep.Package, StepStatus.Failed, ex);
                 throw;
             }
         }
 
-        private void ReportProgress(GenerationStep step, StepStatus status, object? data = null, Exception? error = null, bool force = false)
+        private void Report(string jobId, GenerationStep step, StepStatus status, Exception? error = null)
         {
-            Notifier.SendNotification(new GenerationProgress
+            _hub.Report(jobId, new GenerationProgress
             {
                 Step = step,
                 Status = status,
-                Data = data,
                 Error = error
-            }, force);
+            });
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using OmniGenerator.Lib.Hierarchy;
-using OmniGenerator.Lib.Renderers;
 using OmniGenerator.Cli.Quartz;
 using Quartz;
 using Spectre.Console.Cli;
@@ -11,34 +9,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OmniGenerator.Lib.Orchestration.Interfaces;
+using OmniGenerator.Lib.Reporting;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace OmniGenerator.Cli.Commands
 {
     internal sealed class GenerateManyCommand(
         IGenerationOrchestrator orchestrator,
         ISchedulerFactory schedulerFactory,
+        IProgressHub<GenerationProgressNew> progressHub,
         ILogger<GenerateManyCommand> logger)
         : AsyncCommand<GenerateManyCommandSettings>
     {
         private readonly Stopwatch _watch = new();
 
         private Exception? _error;
-        private HierarchyBuilderProgress? _hierarchyProgress;
-        private DocumentRendererManagerProgress? _imageProgress;
+        private HierarchyBuildingProgress? _hierarchyProgress;
+        private RenderingProgress? _imageProgress;
 
         public override async Task<int> ExecuteAsync(CommandContext context, GenerateManyCommandSettings settings, CancellationToken cancellationToken)
         {
+            logger.LogInformation("Starting generation (many mode)");
             try
             {
                 _watch.Start();
 
-                // Résolution du scheduler via DI. (L'implémentation est configurée dans `ConfigurationModule`.)
                 var scheduler = await schedulerFactory.GetScheduler(cancellationToken);
-
-                if (!scheduler.InStandbyMode && !scheduler.IsStarted)
-                {
-                    await scheduler.Start(cancellationToken);
-                }
+                await scheduler.Start(cancellationToken);
 
                 var jobKey = new JobKey(nameof(GenerateJob));
                 var triggerKey = new TriggerKey($"{nameof(GenerateJob)}-trigger");
@@ -49,6 +47,12 @@ namespace OmniGenerator.Cli.Commands
                     .UsingJobData(GenerateJob.OutputFolderPathKey, settings.OutputFolderPath)
                     .Build();
 
+                job.JobDataMap["progress"] = new GenerationProgressNew
+                {
+                    StartTime = DateTime.UtcNow,
+                    BatchCount = 0,
+                };
+
                 var trigger = TriggerBuilder.Create()
                     .WithIdentity(triggerKey)
                     .ForJob(jobKey)
@@ -56,17 +60,12 @@ namespace OmniGenerator.Cli.Commands
                     .StartNow()
                     .Build();
 
-                var existingJob = await scheduler.CheckExists(jobKey, cancellationToken);
-                if (existingJob)
-                {
-                    await scheduler.DeleteJob(jobKey, cancellationToken);
-                }
-
                 await scheduler.ScheduleJob(job, trigger, cancellationToken);
 
+                // Keeping the command running to allow the scheduled job(s) to execute. Command can be stopped by hitting Ctrl+C.
                 await Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken);
 
-                return 0;
+                return -1; // Not supposed to hit this point. 
             }
             catch (OperationCanceledException)
             {

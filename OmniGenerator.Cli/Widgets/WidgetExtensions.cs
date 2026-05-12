@@ -1,21 +1,20 @@
-﻿using OmniGenerator.Lib.Renderers;
-using OmniGenerator.Lib.Hierarchy;
-using Spectre.Console;
+﻿using Spectre.Console;
 using Spectre.Console.Rendering;
+using OmniGenerator.Lib.Reporting;
 
 namespace OmniGenerator.Cli.Widgets
 {
     public static class WidgetExtensions
     {
-        public static IRenderable ToWidget(this HierarchyBuilderProgress progress)
+        public static IRenderable ToWidget(this HierarchyBuildingProgress progress)
         {
             var grid = new Grid();
             grid.AddColumn();
             grid.AddColumn();
 
-            grid.AddRow(new Markup("[blue]Groups builded[/]"), new Markup($"{progress.CountProcessedGroup} / {progress.CountGroup}"));
-            grid.AddRow(new Markup("[blue]Documents builded[/]"), new Markup($"{progress.CountProcessedDocument} / {progress.CountDocument}"));
-            grid.AddRow(new Markup("[blue]Fields generated[/]"), new Markup($"{progress.CountField}"));
+            grid.AddRow(new Markup("[blue]Groups builded[/]"), new Markup($"{progress.ProcessedGroupCount} / {progress.GroupCount}"));
+            grid.AddRow(new Markup("[blue]Documents builded[/]"), new Markup($"{progress.ProcessedDocumentCount} / {progress.DocumentCount}"));
+            grid.AddRow(new Markup("[blue]Fields generated[/]"), new Markup($"{progress.FieldCount}"));
 
             var panel = new Panel(grid)
                 .ConfigurePanel("Data generation");
@@ -23,7 +22,7 @@ namespace OmniGenerator.Cli.Widgets
             return panel;
         }
 
-        public static IRenderable ToWidget(this DocumentRendererManagerProgress progress)
+        public static IRenderable ToWidget(this RenderingProgress progress)
         {
             var grid = new Grid();
             grid.AddColumn();

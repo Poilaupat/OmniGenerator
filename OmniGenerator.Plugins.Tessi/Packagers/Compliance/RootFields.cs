@@ -38,7 +38,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance
         public string ProviderCode => GetRequiredString("providerCode");
 
         /// <summary>
-        /// Gets the culture/language code (e.g., "fr-FR", "en-US") 
+        /// Gets the culture/language code (e.g., "fr-FR", "en-US")
         /// </summary>
         [FieldInfo("culture", "Culture/language code", isRequired: true)]
         public string Culture => GetRequiredString("culture");

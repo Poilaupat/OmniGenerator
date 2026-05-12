@@ -15,7 +15,7 @@ namespace OmniGenerator.Lib.Configuration
     /// </summary>
     /// <remarks>
     /// This configuration type is typically used for satellite field files referenced by
-    /// <see cref="ElementConfiguration.FieldConfigurationFile"/> or 
+    /// <see cref="ElementConfiguration.FieldConfigurationFile"/> or
     /// <see cref="HierarchyConfiguration.FieldConfigurationFile"/> properties.
     /// The fields defined in these external files are merged into the parent element's field collection
     /// during configuration loading by <see cref="ConfigurationReader"/>

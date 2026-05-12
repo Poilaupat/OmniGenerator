@@ -23,7 +23,7 @@ namespace OmniGenerator.Plugins.Packagers.ZipPackager
             using var archive = new ZipArchive(fs, ZipArchiveMode.Create);
 
             // Documents CSV generation
-            foreach (var docsByType in root.GetDocuments().GroupBy(x => x.Name))
+            foreach (var docsByType in root.GetAllDocuments().GroupBy(x => x.Name))
             {
                 var entry = archive.CreateEntry($"{docsByType.Key}.csv");
 
@@ -43,7 +43,7 @@ namespace OmniGenerator.Plugins.Packagers.ZipPackager
             }
 
             // Groups CSV generation
-            foreach (var grpByType in root.GetGroups().GroupBy(x => x.Name))
+            foreach (var grpByType in root.GetAllGroups().GroupBy(x => x.Name))
             {
                 var entry = archive.CreateEntry($"{grpByType.Key}.csv");
 
@@ -63,7 +63,7 @@ namespace OmniGenerator.Plugins.Packagers.ZipPackager
             }
 
             var documents = root
-            .GetDocuments()
+            .GetAllDocuments()
             .ToArray();
 
             for (var i = 0; i < documents.Length; i++)

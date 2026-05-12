@@ -1,9 +1,11 @@
-﻿namespace OmniGenerator.Lib.Renderers
+﻿using System.Text.Json.Serialization;
+
+namespace OmniGenerator.Lib.Reporting
 {
     /// <summary>
     /// Represents the progress of the document renderer manager.
     /// </summary>
-    public sealed class DocumentRendererManagerProgress
+    public sealed class RenderingProgress
     {
         /// <summary>
         /// Gets or sets the total number of documents to process.
@@ -18,8 +20,9 @@
         /// <summary>
         /// Gets the percentage of completion (0-100).
         /// </summary>
+        [JsonIgnore]
         public int Percentage => TotalDocuments > 0
-            ? (int)((ProcessedDocuments * 100) / TotalDocuments)
+            ? (int)(ProcessedDocuments * 100 / TotalDocuments)
             : 0;
     }
 }

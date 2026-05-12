@@ -20,7 +20,6 @@ namespace OmniGenerator.Lib.Orchestration
     {
         public GenerationStep Step { get; init; }
         public StepStatus Status { get; init; }
-        public object? Data { get; init; }
         public Exception? Error { get; init; }
     }
 }

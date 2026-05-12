@@ -3,11 +3,15 @@ using OmniGenerator.Cli.Tools;
 using OmniGenerator.Lib.Configuration;
 using Quartz;
 using OmniGenerator.Lib.Orchestration.Interfaces;
+using OmniGenerator.Lib.Reporting;
+using System.Text.Json;
+using OmniGenerator.Lib.Hierarchy;
 
 namespace OmniGenerator.Cli.Quartz
 {
     internal sealed class GenerateJob(
         IGenerationOrchestrator orchestrator,
+        IProgressHub<GenerationProgressNew> progressHub,
         ILogger<GenerateJob> logger) : IJob
     {
         public const string SettingsFilePathKey = "SettingsFilePath";
@@ -15,7 +19,7 @@ namespace OmniGenerator.Cli.Quartz
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var ct = context.CancellationToken;
+            logger.LogInformation("Starting scheduled generation job '{JobKey}'.", context.JobDetail.Key);
 
             try
             {
@@ -23,6 +27,7 @@ namespace OmniGenerator.Cli.Quartz
 
                 var settingsFilePath = data.GetString(SettingsFilePathKey);
                 var outputFolderPath = data.GetString(OutputFolderPathKey);
+                var progress = (GenerationProgressNew)data["progress"];
 
                 if (string.IsNullOrWhiteSpace(settingsFilePath))
                 {
@@ -37,7 +42,15 @@ namespace OmniGenerator.Cli.Quartz
                 var generatorConfig = await ConfigurationReader.ReadConfigurationAsync(settingsFilePath);
                 ConfigurationReader.CheckConfiguration(generatorConfig);
 
-                await orchestrator.ExecuteAsync(generatorConfig, outputFolderPath, ct);
+                var root  = await orchestrator.ExecuteAsync(generatorConfig, outputFolderPath, context.CancellationToken, context.JobDetail.Key.Name);
+
+                progress.BatchCount++;
+                progress.DocumentCount += root.GetAllDocuments().Count();
+                progress.GroupCount += root.GetAllGroups().Count();
+                progress.FieldCount += root.Fields.Count + root.GetAllGroups().Sum(g => g.Fields.Count) + root.GetAllDocuments().Sum(d => d.Fields.Count);
+
+                context.MergedJobDataMap["progress"] = progress;
+                progressHub.Report(context.JobDetail.Key.Name, progress);
             }
             catch (OperationCanceledException)
             {

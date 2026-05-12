@@ -2,7 +2,6 @@
 using DotLiquid;
 using Microsoft.Extensions.Configuration;
 using OmniGenerator.Lib.Renderers;
-using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Liquid;
 using OmniGenerator.Lib.Mapping;
@@ -11,6 +10,7 @@ using OmniGenerator.Lib.Hierarchy.Interfaces;
 using OmniGenerator.Lib.Mapping.Interfaces;
 using OmniGenerator.Lib.Orchestration.Interfaces;
 using OmniGenerator.Lib.Renderers.Interfaces;
+using OmniGenerator.Lib.Reporting;
 
 namespace OmniGenerator.Lib.Autofac
 {
@@ -65,18 +65,10 @@ namespace OmniGenerator.Lib.Autofac
             builder.RegisterType<PluginService>().As<IPluginService>().InstancePerLifetimeScope();
             builder.RegisterType<GenerationOrchestrator>().As<IGenerationOrchestrator>().InstancePerLifetimeScope();
 
-            // Register open generic type for progress reporting
-            builder.RegisterGeneric(typeof(Notifier<>))
-                .WithParameters(new[]
-                {
-                    new NamedParameter("resolution", _configuration.GetValue<int>("AppSettings:progress-resolution")),
-                    new NamedParameter("isEnabled", true)
-                })
-                .InstancePerLifetimeScope();
-
-            // Register concrete progress report types
-            builder.RegisterType<HierarchyBuilderProgress>().InstancePerDependency();
-            builder.RegisterType<DocumentRendererManagerProgress>().InstancePerDependency();
+            // Register open generic progress hub (singleton: stores last known state per jobId)
+            builder.RegisterGeneric(typeof(ProgressHub<>))
+                .As(typeof(IProgressHub<>))
+                .SingleInstance();
         }
     }
 }

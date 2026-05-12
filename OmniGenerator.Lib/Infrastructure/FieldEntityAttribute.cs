@@ -14,7 +14,7 @@ namespace OmniGenerator.Lib.Infrastructure
         public EPluginFieldEntityType EntityType { get; }
 
         /// <summary>
-        /// Gets the name of the entity that owns the field. 
+        /// Gets the name of the entity that owns the field.
         /// Null for Root entities, required for Document and Group entities.
         /// </summary>
         public string? EntityName { get; }

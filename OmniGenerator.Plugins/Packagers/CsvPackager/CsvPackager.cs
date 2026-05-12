@@ -30,7 +30,7 @@ namespace OmniGenerator.Plugins.Packagers.CsvPackager
                 Directory.CreateDirectory(packagepath);
 
             // Documents CSV generation
-            foreach (var docsByType in root.GetDocuments().GroupBy(x => x.Name))
+            foreach (var docsByType in root.GetAllDocuments().GroupBy(x => x.Name))
             {
                 await using var writer = new StringWriter();
                 await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
@@ -51,7 +51,7 @@ namespace OmniGenerator.Plugins.Packagers.CsvPackager
             }
 
             // Groups CSV generation
-            foreach (var grpByType in root.GetGroups().GroupBy(x => x.Name))
+            foreach (var grpByType in root.GetAllGroups().GroupBy(x => x.Name))
             {
                 await using var writer = new StringWriter();
                 await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
@@ -72,7 +72,7 @@ namespace OmniGenerator.Plugins.Packagers.CsvPackager
 
             // Document images generation
             var documents = root
-                .GetDocuments()
+                .GetAllDocuments()
                 .ToArray();
 
             for (var i = 0; i < documents.Length; i++)

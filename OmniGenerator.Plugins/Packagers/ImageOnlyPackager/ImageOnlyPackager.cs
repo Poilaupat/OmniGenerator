@@ -30,7 +30,7 @@ namespace OmniGenerator.Plugins.Packagers.ImageOnlyPackager
                 Directory.CreateDirectory(packagepath);
 
             var documents = root
-                .GetDocuments()
+                .GetAllDocuments()
                 .ToArray();
 
             for (var i = 0; i < documents.Count(); i++)

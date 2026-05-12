@@ -3,6 +3,7 @@ using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Lib.Renderers.Interfaces;
+using OmniGenerator.Lib.Reporting;
 
 namespace OmniGenerator.Lib.Renderers
 {
@@ -12,35 +13,26 @@ namespace OmniGenerator.Lib.Renderers
     /// </summary>
     internal sealed class DocumentRendererManager : IDocumentRendererManager
     {
-        #region Interface properties
-
-        public Notifier<DocumentRendererManagerProgress> Notifier { get; }
-
-        #endregion
+        public const string HubKey = nameof(DocumentRendererManager);
 
         private readonly IPluginService _pluginService;
+        private readonly IProgressHub<RenderingProgress> _hub;
         private long _totalDocuments = 0;
         private long _processedDocuments = 0;
 
-        /// <summary>
-        /// Creates a new <see cref="DocumentRendererManager"/>
-        /// </summary>
-        /// <param name="pluginService">The plugin service used to retrieve document renderers</param>
-        public DocumentRendererManager(IPluginService pluginService, Notifier<DocumentRendererManagerProgress> notifier)
+        public DocumentRendererManager(IPluginService pluginService, IProgressHub<RenderingProgress> hub)
         {
             _pluginService = pluginService;
-            Notifier = notifier;
+            _hub = hub;
         }
 
         /// <summary>
         /// Generates images for all documents in the given root
         /// If a document has no <see cref="IDocumentRenderer"/> it will be ignored
         /// </summary>
-        /// <param name="root">The root containing the documents</param>
-        /// <returns></returns>
         public async Task RenderImagesAsync(Root root)
         {
-            var docsByComposer = root.GetDocuments()
+            var docsByComposer = root.GetAllDocuments()
                 .Where(d => !string.IsNullOrWhiteSpace(d.ImageComposer))
                 .ToList();
 
@@ -48,7 +40,7 @@ namespace OmniGenerator.Lib.Renderers
             _totalDocuments = docsByComposer.Count;
             _processedDocuments = 0;
 
-            Notifier.SendNotification(GetNotificationData());
+            _hub.Report(HubKey, GetProgress());
 
             // Group documents by composer type for efficient parallel processing
             var groupedDocs = docsByComposer
@@ -76,22 +68,19 @@ namespace OmniGenerator.Lib.Renderers
                         doc.VersoVectorImage = verso;
 
                         Interlocked.Increment(ref _processedDocuments);
-                        Notifier.SendNotification(GetNotificationData());
+                        _hub.Report(HubKey, GetProgress());
                     });
                 }
             }
 
-            Notifier.SendNotification(GetNotificationData());
+            _hub.Report(HubKey, GetProgress());
             await Task.CompletedTask;
         }
 
-        private DocumentRendererManagerProgress GetNotificationData()
+        private RenderingProgress GetProgress() => new()
         {
-            return new DocumentRendererManagerProgress()
-            {
-                TotalDocuments = Interlocked.Read(ref _totalDocuments),
-                ProcessedDocuments = Interlocked.Read(ref _processedDocuments)
-            };
-        }
+            TotalDocuments = Interlocked.Read(ref _totalDocuments),
+            ProcessedDocuments = Interlocked.Read(ref _processedDocuments)
+        };
     }
 }

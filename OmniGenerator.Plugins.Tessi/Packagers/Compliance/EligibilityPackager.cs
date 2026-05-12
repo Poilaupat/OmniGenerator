@@ -30,7 +30,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance
                 );
 
             var cheques = root
-                .GetDocuments()
+                .GetAllDocuments()
                 .ToArray();
 
             for (var i = 0; i < cheques.Count(); i++)
