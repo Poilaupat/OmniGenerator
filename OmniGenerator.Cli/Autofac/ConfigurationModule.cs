@@ -2,6 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OmniGenerator.Cli.Quartz;
 using Quartz;
 
 namespace OmniGenerator.Cli.Autofac
@@ -53,6 +54,9 @@ namespace OmniGenerator.Cli.Autofac
 
             // Populate the Autofac container with Microsoft.Extensions.DependencyInjection services
             builder.Populate(services);
+
+            // Register JobStateListener as a singleton so it is shared between GenerateManyCommand and the Quartz listener registration
+            builder.RegisterType<JobStateListener>().AsSelf().SingleInstance();
         }
     }
 }

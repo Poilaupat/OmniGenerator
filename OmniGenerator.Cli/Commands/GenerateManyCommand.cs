@@ -1,7 +1,14 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using OmniGenerator.Cli.Quartz;
+using OmniGenerator.Cli.Tools;
+using OmniGenerator.Cli.Widgets;
+using OmniGenerator.Lib.Reporting;
 using Quartz;
+using Spectre.Console;
 using Spectre.Console.Cli;
+using Spectre.Console.Rendering;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -9,37 +16,71 @@ namespace OmniGenerator.Cli.Commands
 {
     internal sealed class GenerateManyCommand(
         ISchedulerFactory schedulerFactory,
+        IProgressHub<GenerationProgressNew> progressHub,
+        JobStateListener jobStateListener,
+        IConfiguration configuration,
         ILogger<GenerateManyCommand> logger)
         : AsyncCommand<GenerateManyCommandSettings>
     {
         private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
 
+        private readonly int _uiResolutionMs = Math.Max(500, configuration.GetValue<int>("AppSettings:progress-resolution"));
         private readonly Stopwatch _watch = new();
+
+        private readonly Table _layout = new Table()
+            .Border(TableBorder.None)
+            .AddColumns("column")
+            .HideHeaders()
+            .AddEmptyRow()
+            .AddEmptyRow()
+            .AddEmptyRow();
+
+        private readonly ConcurrentDictionary<string, DateTimeOffset?> _nextFireTimes = new();
+
+        private SchedulePlan? _plan;
+        private IScheduler? _scheduler;
+        private GenerateManyCommandSettings? _settings;
 
         public override async Task<int> ExecuteAsync(CommandContext context, GenerateManyCommandSettings settings, CancellationToken cancellationToken)
         {
-            logger.LogInformation("Starting generation (many mode)");
             try
             {
                 _watch.Start();
+                _settings = settings;
 
-                var plan = await LoadSchedulePlanAsync(settings.SchedulePlanFilePath, cancellationToken);
+                _plan = await LoadSchedulePlanAsync(settings.SchedulePlanFilePath, cancellationToken);
 
-                var scheduler = await schedulerFactory.GetScheduler(cancellationToken);
-                await scheduler.Start(cancellationToken);
+                _scheduler = await schedulerFactory.GetScheduler(cancellationToken);
+                _scheduler.ListenerManager.AddJobListener(jobStateListener);
+                await _scheduler.Start(cancellationToken);
 
-                foreach (var entry in plan.Jobs)
+                foreach (var entry in _plan.Jobs)
                 {
-                    await ScheduleJobAsync(scheduler, entry, cancellationToken);
+                    await ScheduleJobAsync(_scheduler, entry, cancellationToken);
+                    _nextFireTimes[entry.Name] = null;
                     logger.LogInformation("Scheduled job '{JobName}' with cron '{Cron}'.", entry.Name, entry.CronSchedule);
                 }
 
-                logger.LogInformation("{Count} job(s) scheduled. Waiting for executions. Press Ctrl+C to stop.", plan.Jobs.Count);
+                await AnsiConsole
+                    .Live(_layout)
+                    .AutoClear(false)
+                    .Overflow(VerticalOverflow.Crop)
+                    .StartAsync(async ldc =>
+                    {
+                        using var timer = new PeriodicTimer(TimeSpan.FromMilliseconds(_uiResolutionMs));
+                        try
+                        {
+                            while (await timer.WaitForNextTickAsync(cancellationToken))
+                            {
+                                RefreshNextFireTimes();
+                                UpdateUI();
+                                ldc.Refresh();
+                            }
+                        }
+                        catch (OperationCanceledException) { }
+                    });
 
-                // Keep the command running until the user cancels.
-                await Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken);
-
-                return -1; // Not supposed to hit this point.
+                return 0;
             }
             catch (OperationCanceledException)
             {
@@ -54,6 +95,112 @@ namespace OmniGenerator.Cli.Commands
             {
                 _watch.Stop();
             }
+        }
+
+        private void RefreshNextFireTimes()
+        {
+            if (_plan is null) return;
+
+            foreach (var entry in _plan.Jobs)
+            {
+                try
+                {
+                    var cron = new CronExpression(entry.CronSchedule);
+                    _nextFireTimes[entry.Name] = cron.GetNextValidTimeAfter(DateTimeOffset.UtcNow);
+                }
+                catch
+                {
+                    _nextFireTimes[entry.Name] = null;
+                }
+            }
+        }
+
+        private void UpdateUI()
+        {
+            if (_plan is null || _settings is null) return;
+
+            _layout.UpdateCell(0, 0,
+                new Panel(new TextPath(Path.GetFullPath(_settings.SchedulePlanFilePath)).LeafColor(Color.Red))
+                    .ConfigurePanel("Configuration")
+            );
+
+            _layout.UpdateCell(1, 0,
+                new Panel(BuildJobsTable())
+                    .ConfigurePanel("Jobs")
+            );
+
+            var executionLines = new List<string>
+            {
+                $"[blue]Elapsed time[/] : {_watch.Elapsed.ToFluidUnitString()}"
+            };
+
+            foreach (var (jobName, errorMessage) in jobStateListener.Errors)
+                executionLines.Add($"[red]{jobName.EscapeMarkup()}:[/] {errorMessage.EscapeMarkup()}");
+
+            _layout.UpdateCell(2, 0,
+                new Panel(new Markup(string.Join("\n", executionLines)))
+                    .ConfigurePanel("Execution")
+            );
+        }
+
+        private Table BuildJobsTable()
+        {
+            var table = new Table()
+                .Border(TableBorder.Rounded)
+                .AddColumn(new TableColumn("[blue]Name[/]"))
+                .AddColumn(new TableColumn("[blue]State[/]"))
+                .AddColumn(new TableColumn("[blue]Paths[/]"))
+                .AddColumn(new TableColumn("[blue]Stats[/]"));
+
+            foreach (var job in _plan!.Jobs)
+            {
+                IRenderable stateCell;
+                if (jobStateListener.IsRunning(job.Name))
+                {
+                    stateCell = new Markup("[yellow]:gear:  Running[/]");
+                }
+                else
+                {
+                    _nextFireTimes.TryGetValue(job.Name, out var nextFire);
+                    stateCell = nextFire.HasValue
+                        ? new Markup($"[grey]:hourglass_not_done:  Idle[/]\nNext: {nextFire.Value.ToLocalTime():HH:mm:ss}")
+                        : new Markup("[grey]Idle[/]");
+                }
+
+                var pathsMarkup = $"{TruncatePath(job.SettingsFilePath).EscapeMarkup()}\n[grey]{TruncatePath(job.OutputFolderPath).EscapeMarkup()}[/]";
+
+                progressHub.TryGetLatest(job.Name, out var progress);
+                IRenderable statsCell = progress is null
+                    ? new Markup("[grey]-[/]")
+                    : BuildStatsCell(progress);
+
+                table.AddRow(
+                    new Markup(job.Name.EscapeMarkup()),
+                    stateCell,
+                    new Markup(pathsMarkup),
+                    statsCell
+                );
+            }
+
+            return table;
+        }
+
+        private static IRenderable BuildStatsCell(GenerationProgressNew progress)
+        {
+            var elapsed = DateTime.UtcNow - progress.StartTime;
+            var dpm = elapsed.TotalMinutes > 0
+                ? (int)(progress.DocumentCount / elapsed.TotalMinutes)
+                : 0;
+
+            return new Markup(
+                $"[blue]Batches[/] {progress.BatchCount}   [blue]Docs[/] {progress.DocumentCount}   [blue]Speed[/] {dpm} dpm"
+            );
+        }
+
+        private static string TruncatePath(string path, int maxLength = 45)
+        {
+            var full = Path.GetFullPath(path);
+            return full.Length <= maxLength ? full : $"…{full[^(maxLength - 1)..]}";
         }
 
         private static async Task<SchedulePlan> LoadSchedulePlanAsync(string filePath, CancellationToken cancellationToken)
@@ -99,4 +246,3 @@ namespace OmniGenerator.Cli.Commands
         }
     }
 }
-

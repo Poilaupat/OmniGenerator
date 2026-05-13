@@ -7,6 +7,9 @@ using OmniGenerator.Lib.Autofac;
 using Serilog;
 using Spectre.Console;
 using Spectre.Console.Cli;
+using System.Text;
+
+Console.OutputEncoding = Encoding.UTF8;
 
 //Configuration file
 var configuration = new ConfigurationBuilder()
