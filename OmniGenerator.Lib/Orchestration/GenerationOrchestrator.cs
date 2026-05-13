@@ -109,6 +109,7 @@ namespace OmniGenerator.Lib.Orchestration
 
             try
             {
+                Directory.CreateDirectory(outputFolderPath);
                 await packager.ProcessAsync(root, outputFolderPath, configuration.RenderResolutionDPI);
                 Report(jobId, GenerationStep.Package, StepStatus.Succeeded);
             }

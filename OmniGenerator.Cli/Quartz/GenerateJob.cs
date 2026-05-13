@@ -19,7 +19,8 @@ namespace OmniGenerator.Cli.Quartz
 
         public async Task Execute(IJobExecutionContext context)
         {
-            logger.LogInformation("Starting scheduled generation job '{JobKey}'.", context.JobDetail.Key);
+            var jobId = context.JobDetail.Key.Name;
+            logger.LogInformation("Starting scheduled generation job '{JobKey}'.", jobId);
 
             try
             {
@@ -27,30 +28,27 @@ namespace OmniGenerator.Cli.Quartz
 
                 var settingsFilePath = data.GetString(SettingsFilePathKey);
                 var outputFolderPath = data.GetString(OutputFolderPathKey);
-                var progress = (GenerationProgressNew)data["progress"];
 
                 if (string.IsNullOrWhiteSpace(settingsFilePath))
-                {
                     throw new JobExecutionException($"Missing job data '{SettingsFilePathKey}'.");
-                }
 
                 if (string.IsNullOrWhiteSpace(outputFolderPath))
-                {
                     throw new JobExecutionException($"Missing job data '{OutputFolderPathKey}'.");
-                }
 
                 var generatorConfig = await ConfigurationReader.ReadConfigurationAsync(settingsFilePath);
                 ConfigurationReader.CheckConfiguration(generatorConfig);
 
-                var root  = await orchestrator.ExecuteAsync(generatorConfig, outputFolderPath, context.CancellationToken, context.JobDetail.Key.Name);
+                var root = await orchestrator.ExecuteAsync(generatorConfig, outputFolderPath, context.CancellationToken, jobId);
+
+                progressHub.TryGetLatest(jobId, out var previous);
+                var progress = previous ?? new GenerationProgressNew { StartTime = DateTime.UtcNow };
 
                 progress.BatchCount++;
                 progress.DocumentCount += root.GetAllDocuments().Count();
                 progress.GroupCount += root.GetAllGroups().Count();
                 progress.FieldCount += root.Fields.Count + root.GetAllGroups().Sum(g => g.Fields.Count) + root.GetAllDocuments().Sum(d => d.Fields.Count);
 
-                context.MergedJobDataMap["progress"] = progress;
-                progressHub.Report(context.JobDetail.Key.Name, progress);
+                progressHub.Report(jobId, progress);
             }
             catch (OperationCanceledException)
             {

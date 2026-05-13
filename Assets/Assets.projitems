@@ -23,5 +23,6 @@
     <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\param-lotpakjpk.json" />
     <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\param-remettant.json" />
     <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\param-sql.json" />
+    <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\schedule-plan-sample.json" />
   </ItemGroup>
 </Project>

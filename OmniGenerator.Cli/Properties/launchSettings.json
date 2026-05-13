@@ -62,7 +62,7 @@
     },
     "OmniGenerator.Cli.GenerateMany": {
       "commandName": "Project",
-      "commandLineArgs": "generate many \"..\\..\\..\\..\\Assets\\SampleParamFiles\\param-remettant.json\" \"..\\..\\..\\..\\Output\" \"0/15 * * ? * *\""
+      "commandLineArgs": "generate many \"..\\..\\..\\..\\Assets\\SampleParamFiles\\schedule-plan-sample.json\""
     }
   }
 }

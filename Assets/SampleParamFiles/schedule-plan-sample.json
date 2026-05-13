@@ -1,0 +1,16 @@
+{
+  "jobs": [
+    {
+      "name": "remettants",
+      "settingsFilePath": "../../../../Assets/SampleParamFiles/param-remettant.json",
+      "outputFolderPath": "../../../../Output/remettants",
+      "cronSchedule": "0/30 * * ? * *"
+    },
+    {
+      "name": "lotpakjpk",
+      "settingsFilePath": "../../../../Assets/SampleParamFiles/param-lotpakjpk.json",
+      "outputFolderPath": "../../../../Output/lotpakjpk",
+      "cronSchedule": "0/15 * * ? * *"
+    }
+  ]
+}

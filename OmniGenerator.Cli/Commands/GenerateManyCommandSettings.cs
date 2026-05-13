@@ -1,35 +1,16 @@
-﻿using Microsoft.ProgramSynthesis.Utils.JetBrains.Annotations;
-using Spectre.Console.Cli;
-using System;
-using System.Collections.Generic;
+﻿using Spectre.Console.Cli;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OmniGenerator.Cli.Commands
 {
-    internal sealed class GenerateManyCommandSettings(string settingsFilePath, string outputFolderPath, string cronSchedule) : GenerateCommandSettingsBase
+    internal sealed class GenerateManyCommandSettings : GenerateCommandSettingsBase
     {
         /// <summary>
-        /// Gets or sets the path to the generation settings file.
+        /// Gets or sets the path to the schedule plan JSON file.
+        /// The file must contain a <see cref="SchedulePlan"/> object with one or more <see cref="ScheduledJobEntry"/> items.
         /// </summary>
-        [Description("The path of the generation setting file")]
-        [CommandArgument(0, "<SettingsFilePath>")]
-        public string SettingsFilePath { get; set; } = settingsFilePath;
-
-        /// <summary>
-        /// Gets or sets the path to the output folder where generated content will be saved.
-        /// </summary>
-        [Description("The path of the output folder")]
-        [CommandArgument(1, "<OutputFolder>")]
-        public string OutputFolderPath { get; set; } = outputFolderPath;
-
-        /// <summary>
-        /// Gets or sets the cron schedule for the generation task, which determines when the task will be executed.
-        /// </summary>
-        [Description("The cron schedule for the generation task")]
-        [CommandArgument(2, "<CronSchedule>")]
-        public string CronSchedule { get; set; } = cronSchedule;
+        [Description("The path to the schedule plan JSON file")]
+        [CommandArgument(0, "<SchedulePlanFile>")]
+        public string SchedulePlanFilePath { get; set; } = string.Empty;
     }
 }

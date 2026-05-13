@@ -2,31 +2,19 @@
 using OmniGenerator.Cli.Quartz;
 using Quartz;
 using Spectre.Console.Cli;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OmniGenerator.Lib.Orchestration.Interfaces;
-using OmniGenerator.Lib.Reporting;
-using System.Text.Json.Serialization;
 using System.Text.Json;
 
 namespace OmniGenerator.Cli.Commands
 {
     internal sealed class GenerateManyCommand(
-        IGenerationOrchestrator orchestrator,
         ISchedulerFactory schedulerFactory,
-        IProgressHub<GenerationProgressNew> progressHub,
         ILogger<GenerateManyCommand> logger)
         : AsyncCommand<GenerateManyCommandSettings>
     {
-        private readonly Stopwatch _watch = new();
+        private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
 
-        private Exception? _error;
-        private HierarchyBuildingProgress? _hierarchyProgress;
-        private RenderingProgress? _imageProgress;
+        private readonly Stopwatch _watch = new();
 
         public override async Task<int> ExecuteAsync(CommandContext context, GenerateManyCommandSettings settings, CancellationToken cancellationToken)
         {
@@ -35,37 +23,23 @@ namespace OmniGenerator.Cli.Commands
             {
                 _watch.Start();
 
+                var plan = await LoadSchedulePlanAsync(settings.SchedulePlanFilePath, cancellationToken);
+
                 var scheduler = await schedulerFactory.GetScheduler(cancellationToken);
                 await scheduler.Start(cancellationToken);
 
-                var jobKey = new JobKey(nameof(GenerateJob));
-                var triggerKey = new TriggerKey($"{nameof(GenerateJob)}-trigger");
-
-                var job = JobBuilder.Create<GenerateJob>()
-                    .WithIdentity(jobKey)
-                    .UsingJobData(GenerateJob.SettingsFilePathKey, settings.SettingsFilePath)
-                    .UsingJobData(GenerateJob.OutputFolderPathKey, settings.OutputFolderPath)
-                    .Build();
-
-                job.JobDataMap["progress"] = new GenerationProgressNew
+                foreach (var entry in plan.Jobs)
                 {
-                    StartTime = DateTime.UtcNow,
-                    BatchCount = 0,
-                };
+                    await ScheduleJobAsync(scheduler, entry, cancellationToken);
+                    logger.LogInformation("Scheduled job '{JobName}' with cron '{Cron}'.", entry.Name, entry.CronSchedule);
+                }
 
-                var trigger = TriggerBuilder.Create()
-                    .WithIdentity(triggerKey)
-                    .ForJob(jobKey)
-                    .WithCronSchedule(settings.CronSchedule)
-                    .StartNow()
-                    .Build();
+                logger.LogInformation("{Count} job(s) scheduled. Waiting for executions. Press Ctrl+C to stop.", plan.Jobs.Count);
 
-                await scheduler.ScheduleJob(job, trigger, cancellationToken);
-
-                // Keeping the command running to allow the scheduled job(s) to execute. Command can be stopped by hitting Ctrl+C.
+                // Keep the command running until the user cancels.
                 await Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken);
 
-                return -1; // Not supposed to hit this point. 
+                return -1; // Not supposed to hit this point.
             }
             catch (OperationCanceledException)
             {
@@ -73,7 +47,7 @@ namespace OmniGenerator.Cli.Commands
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "An error occurred while scheduling the generation job.");
+                logger.LogError(ex, "An error occurred while scheduling generation jobs.");
                 return -1;
             }
             finally
@@ -81,5 +55,48 @@ namespace OmniGenerator.Cli.Commands
                 _watch.Stop();
             }
         }
+
+        private static async Task<SchedulePlan> LoadSchedulePlanAsync(string filePath, CancellationToken cancellationToken)
+        {
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException($"Schedule plan file not found: '{filePath}'.");
+
+            var json = await File.ReadAllTextAsync(filePath, cancellationToken);
+            var plan = JsonSerializer.Deserialize<SchedulePlan>(json, _jsonOptions)
+                ?? throw new InvalidOperationException($"Failed to deserialize schedule plan from '{filePath}'.");
+
+            var duplicates = plan.Jobs
+                .GroupBy(j => j.Name)
+                .Where(g => g.Count() > 1)
+                .Select(g => g.Key)
+                .ToList();
+
+            if (duplicates.Count > 0)
+                throw new InvalidOperationException($"Duplicate job names in schedule plan: {string.Join(", ", duplicates)}.");
+
+            return plan;
+        }
+
+        private static async Task ScheduleJobAsync(IScheduler scheduler, ScheduledJobEntry entry, CancellationToken cancellationToken)
+        {
+            var jobKey = new JobKey(entry.Name);
+            var triggerKey = new TriggerKey($"{entry.Name}-trigger");
+
+            var job = JobBuilder.Create<GenerateJob>()
+                .WithIdentity(jobKey)
+                .UsingJobData(GenerateJob.SettingsFilePathKey, entry.SettingsFilePath)
+                .UsingJobData(GenerateJob.OutputFolderPathKey, entry.OutputFolderPath)
+                .Build();
+
+            var trigger = TriggerBuilder.Create()
+                .WithIdentity(triggerKey)
+                .ForJob(jobKey)
+                .WithCronSchedule(entry.CronSchedule)
+                .StartNow()
+                .Build();
+
+            await scheduler.ScheduleJob(job, trigger, cancellationToken);
+        }
     }
 }
+
