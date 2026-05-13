@@ -21,7 +21,7 @@ namespace OmniGenerator.Cli.Commands
     /// </summary>
     internal class GenerateOneCommand(
         IGenerationOrchestrator orchestrator,
-        IProgressHub<GenerationProgress> generationHub,
+        IProgressHub<GenerationStepEvent> generationHub,
         IProgressHub<HierarchyBuildingProgress> hierarchyHub,
         IProgressHub<RenderingProgress> renderingHub,
         IConfiguration configuration,
@@ -66,7 +66,7 @@ namespace OmniGenerator.Cli.Commands
                     .Overflow(VerticalOverflow.Crop)
                     .StartAsync(async ldc =>
                     {
-                        generationHub.DataChanged += (_, progress) => HandleGenerationProgress(settings, ldc, progress);
+                        generationHub.DataChanged += (_, progress) => HandleGenerationStepEvent(settings, ldc, progress);
                         hierarchyHub.DataChanged += (_, progress) => { _hierarchyProgress = progress; ThrottledRefresh(settings, ldc); };
                         renderingHub.DataChanged += (_, progress) => { _imageProgress = progress; ThrottledRefresh(settings, ldc); };
 
@@ -106,7 +106,7 @@ namespace OmniGenerator.Cli.Commands
             ldc.Refresh();
         }
 
-        private void HandleGenerationProgress(GenerateOneCommandSettings settings, LiveDisplayContext ldc, GenerationProgress progress)
+        private void HandleGenerationStepEvent(GenerateOneCommandSettings settings, LiveDisplayContext ldc, GenerationStepEvent progress)
         {
             var taskKey = progress.Step switch
             {

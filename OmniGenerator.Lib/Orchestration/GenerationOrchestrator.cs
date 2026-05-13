@@ -17,14 +17,14 @@ namespace OmniGenerator.Lib.Orchestration
         private readonly IPluginService _pluginService;
         private readonly IHierarchyBuilder _hierarchyBuilder;
         private readonly IDocumentRendererManager _imageRendererProcessor;
-        private readonly IProgressHub<GenerationProgress> _hub;
+        private readonly IProgressHub<GenerationStepEvent> _hub;
         private readonly ILogger<GenerationOrchestrator> _logger;
 
         public GenerationOrchestrator(
             IPluginService pluginService,
             IHierarchyBuilder hierarchyBuilder,
             IDocumentRendererManager imageRendererProcessor,
-            IProgressHub<GenerationProgress> hub,
+            IProgressHub<GenerationStepEvent> hub,
             ILogger<GenerationOrchestrator> logger)
         {
             _pluginService = pluginService;
@@ -123,7 +123,7 @@ namespace OmniGenerator.Lib.Orchestration
 
         private void Report(string jobId, GenerationStep step, StepStatus status, Exception? error = null)
         {
-            _hub.Report(jobId, new GenerationProgress
+            _hub.Report(jobId, new GenerationStepEvent
             {
                 Step = step,
                 Status = status,

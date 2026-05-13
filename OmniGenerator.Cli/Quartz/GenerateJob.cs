@@ -11,7 +11,7 @@ namespace OmniGenerator.Cli.Quartz
 {
     internal sealed class GenerateJob(
         IGenerationOrchestrator orchestrator,
-        IProgressHub<GenerationProgressNew> progressHub,
+        IProgressHub<JobExecutionStats> progressHub,
         ILogger<GenerateJob> logger) : IJob
     {
         public const string SettingsFilePathKey = "SettingsFilePath";
@@ -41,7 +41,7 @@ namespace OmniGenerator.Cli.Quartz
                 var root = await orchestrator.ExecuteAsync(generatorConfig, outputFolderPath, context.CancellationToken, jobId);
 
                 progressHub.TryGetLatest(jobId, out var previous);
-                var progress = previous ?? new GenerationProgressNew { StartTime = DateTime.UtcNow };
+                var progress = previous ?? new JobExecutionStats { StartTime = DateTime.UtcNow };
 
                 progress.BatchCount++;
                 progress.DocumentCount += root.GetAllDocuments().Count();

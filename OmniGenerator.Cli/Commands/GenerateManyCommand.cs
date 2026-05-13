@@ -16,7 +16,7 @@ namespace OmniGenerator.Cli.Commands
 {
     internal sealed class GenerateManyCommand(
         ISchedulerFactory schedulerFactory,
-        IProgressHub<GenerationProgressNew> progressHub,
+        IProgressHub<JobExecutionStats> progressHub,
         JobStateListener jobStateListener,
         IConfiguration configuration,
         ILogger<GenerateManyCommand> logger)
@@ -185,7 +185,7 @@ namespace OmniGenerator.Cli.Commands
             return table;
         }
 
-        private static IRenderable BuildStatsCell(GenerationProgressNew progress)
+        private static IRenderable BuildStatsCell(JobExecutionStats progress)
         {
             var elapsed = DateTime.UtcNow - progress.StartTime;
             var dpm = elapsed.TotalMinutes > 0
