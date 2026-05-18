@@ -49,6 +49,67 @@ namespace OmniGenerator.Lib.Renderers
         }
 
         /// <summary>
+        /// Generates and adds a pseudo-handwritten signature path to the SVG document.
+        /// </summary>
+        /// <param name="svg">The SVG document to draw on.</param>
+        /// <param name="areaX">The x position of the signature area in millimeters.</param>
+        /// <param name="areaY">The y position of the signature area in millimeters.</param>
+        /// <param name="areaWidth">The width of the signature area in millimeters.</param>
+        /// <param name="areaHeight">The height of the signature area in millimeters.</param>
+        /// <param name="color">The stroke color of the signature.</param>
+        public static void DrawSignature(this SvgDocument svg, float areaX, float areaY, float areaWidth, float areaHeight, Color color)
+        {
+            var rng = new Random();
+            int segments = 3;
+
+            float totalWidth = 28f + (float)rng.NextDouble() * 8f;   // 28 to 36 mm
+            float totalHeight = 7f + (float)rng.NextDouble() * 4f;   // 7 to 11 mm
+            float margin = Math.Max(0f, areaWidth - totalWidth);
+            float startX = areaX + (float)rng.NextDouble() * margin;
+            float midY = areaY + areaHeight * 0.5f + 10f;
+            float startY = midY + ((float)rng.NextDouble() - 0.5f) * totalHeight * 0.3f;
+
+            var pathData = new System.Text.StringBuilder();
+            pathData.Append(FormattableString.Invariant($"M {startX:F2},{startY:F2}"));
+
+            float cx = startX;
+            float cy = startY;
+            float segWidth = totalWidth / segments;
+
+            for (int i = 0; i < segments; i++)
+            {
+                float verticalBias = ((float)rng.NextDouble() > 0.5f) ? 1f : -1f;
+
+                float dx = i == 0
+                    ? segWidth * (0.6f + (float)rng.NextDouble() * 0.4f)
+                    : segWidth * ((float)rng.NextDouble() * 1.6f - 0.6f);
+
+                float ex = cx + dx;
+                float ey = cy + ((float)rng.NextDouble() - 0.5f) * totalHeight * 1.2f;
+
+                float cp1x = cx + (float)rng.NextDouble() * Math.Abs(dx) * 0.5f * Math.Sign(dx);
+                float cp1y = cy - verticalBias * (totalHeight * 1.2f + (float)rng.NextDouble() * totalHeight * 0.8f);
+                float cp2x = ex - (float)rng.NextDouble() * Math.Abs(dx) * 0.5f * Math.Sign(dx);
+                float cp2y = ey + verticalBias * (totalHeight * 1.2f + (float)rng.NextDouble() * totalHeight * 0.8f);
+
+                pathData.Append(FormattableString.Invariant($" C {cp1x:F2},{cp1y:F2} {cp2x:F2},{cp2y:F2} {ex:F2},{ey:F2}"));
+                cx = ex;
+                cy = ey;
+            }
+
+            svg.Children.Add(new SvgPath
+            {
+                ID = "signature-draw",
+                PathData = SvgPathBuilder.Parse(pathData.ToString()),
+                Fill = SvgPaintServer.None,
+                Stroke = new SvgColourServer(color),
+                StrokeWidth = new SvgUnit(0.4f),
+                StrokeLineCap = SvgStrokeLineCap.Round,
+                StrokeLineJoin = SvgStrokeLineJoin.Round
+            });
+        }
+
+        /// <summary>
         /// Draws a barcode in the given SVG document at the specified position.
         /// Supports both 1D linear barcodes (Code128, EAN, UPC) and 2D matrix codes (QR Code, DataMatrix, Aztec).
         /// </summary>

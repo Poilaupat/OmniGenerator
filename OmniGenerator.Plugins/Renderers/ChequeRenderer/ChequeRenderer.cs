@@ -73,6 +73,9 @@ namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
             //Date
             svg.DrawText($"{fields.Date:dd/MM/yyyy}", "date", 132f, 44f, "Arial", 2f, Color.Black);
 
+            //Signature
+            svg.DrawSignature(areaX: 131f, areaY: 52f, areaWidth: 38f, areaHeight: 5f, color: Color.DarkBlue);
+
             return svg;
         }
 
