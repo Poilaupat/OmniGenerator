@@ -47,7 +47,6 @@ namespace OmniGenerator.Plugins.Packagers.CsvPackager
 
                     await File.WriteAllTextAsync(filefullpath, writer.ToString());
                 }
-                await File.WriteAllTextAsync(filefullpath, writer.ToString());
             }
 
             // Groups CSV generation
