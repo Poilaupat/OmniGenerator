@@ -21,12 +21,14 @@
 		<None Remove="Resources\Cmc7.ttf" />
 		<None Remove="Resources\Fonts\Cmc7.ttf" />
 		<None Remove="Resources\Fonts\OcrbRegular.ttf" />
+		<None Remove="Resources\Fonts\CaveatRegular.ttf" />
 		<None Remove="Resources\OCRB Regular.ttf" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<EmbeddedResource Include="Resources\Fonts\Cmc7.ttf" />
 		<EmbeddedResource Include="Resources\Fonts\OcrbRegular.ttf" />
+		<EmbeddedResource Include="Resources\Fonts\CaveatRegular.ttf" />
 	</ItemGroup>
 
 	<ItemGroup>

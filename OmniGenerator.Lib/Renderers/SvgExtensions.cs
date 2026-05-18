@@ -166,6 +166,39 @@ namespace OmniGenerator.Lib.Renderers
         }
 
         /// <summary>
+        /// Draws text with a handwritten appearance using the Caveat font
+        /// </summary>
+        /// <param name="svg">The SVG document to draw on.</param>
+        /// <param name="text">The text content to insert.</param>
+        /// <param name="id">The unique ID tag for the text element in the SVG document.</param>
+        /// <param name="x">The x position of the text in millimeters.</param>
+        /// <param name="y">The y position of the text in millimeters.</param>
+        /// <param name="fontSize">The font size in millimeters.</param>
+        /// <param name="color">The color of the text.</param>
+        public static void DrawHandwrittenText(this SvgDocument svg, string text, string id, float x, float y, float fontSize, Color color, SvgFontWeight fontWeight = SvgFontWeight.Normal)
+        {
+            // Slight random rotation to simulate natural hand tilt (-1.2° to +1.2°)
+            var rng = new Random();
+            float rotationDeg = -1.2f + (float)rng.NextDouble() * 2.4f;
+
+            var tag = new SvgText()
+            {
+                ID = id,
+                FontFamily = "Caveat",
+                FontSize = new SvgUnit(fontSize),
+                FontStyle = SvgFontStyle.Normal,
+                FontWeight = fontWeight,
+                Fill = new SvgColourServer(color)
+            };
+            tag.X.Add(new SvgUnit(x));
+            tag.Y.Add(new SvgUnit(y));
+            tag.Transforms = [new SvgRotate(rotationDeg, x, y)];
+            tag.Nodes.Add(new SvgContentNode { Content = text });
+
+            svg.Children.Add(tag);
+        }
+
+        /// <summary>
         /// Copies style attributes from a source SVG element to a target SVG element.
         /// Includes fill, stroke, opacity, and other visual style properties.
         /// </summary>

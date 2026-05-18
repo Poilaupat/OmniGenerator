@@ -37,6 +37,7 @@ namespace OmniGenerator.Lib.Renderers
         /// The special font available are :
         ///  - CMC7
         ///  - OCRB
+        ///  - Caveat
         ///
         /// Other system fonts can be used without having to load them
         /// </summary>
@@ -67,8 +68,25 @@ namespace OmniGenerator.Lib.Renderers
         /// </summary>
         private static void LoadFonts()
         {
-            SvgFontManager.PrivateFontDataList.Add(SvgExtensions.GetFontBytes("Cmc7.ttf"));
-            SvgFontManager.PrivateFontDataList.Add(SvgExtensions.GetFontBytes("OcrbRegular.ttf"));
+            RegisterFont("Cmc7.ttf");
+            RegisterFont("OcrbRegular.ttf");
+            RegisterFont("CaveatRegular.ttf");
+        }
+
+        /// <summary>
+        /// Extracts an embedded font to a persistent temp file and registers it via
+        /// <see cref="SvgFontManager.PrivateFontPathList"/> so svg.net reloads it from
+        /// disk on every render call, avoiding GDI+ invalidation caused by PrivateFontCollection.Dispose().
+        /// </summary>
+        private static void RegisterFont(string fontFileName)
+        {
+            byte[] data = SvgExtensions.GetFontBytes(fontFileName);
+            if (data.Length == 0)
+                return;
+
+            string tempPath = Path.Combine(Path.GetTempPath(), fontFileName);
+            File.WriteAllBytes(tempPath, data);
+            SvgFontManager.PrivateFontPathList.Add(tempPath);
         }
     }
 }
