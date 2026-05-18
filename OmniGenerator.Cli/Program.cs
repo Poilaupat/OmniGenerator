@@ -14,6 +14,7 @@ Console.OutputEncoding = Encoding.UTF8;
 //Configuration file
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
+    .AddJsonFile("appsettings.Development.json", optional: true)
     .Build();
 
 //Dependency injection registar (Spectre needs a registrar not a container)

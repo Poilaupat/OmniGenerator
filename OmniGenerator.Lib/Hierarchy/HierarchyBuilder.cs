@@ -16,16 +16,18 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
 
     private readonly IFieldMapper _mapper;
     private readonly IProgressHub<HierarchyBuildingProgress> _hub;
+    private readonly int _maxParallelism;
     private long _docCount = 0;
     private long _processedDocCount = 0;
     private long _groupCount = 0;
     private long _processedGroupCount = 0;
     private long _fieldCount = 0;
 
-    public HierarchyBuilder(IFieldMapper mapper, IProgressHub<HierarchyBuildingProgress> hub)
+    public HierarchyBuilder(IFieldMapper mapper, IProgressHub<HierarchyBuildingProgress> hub, int maxParallelism = -1)
     {
         _mapper = mapper;
         _hub = hub;
+        _maxParallelism = maxParallelism;
     }
 
     /// <summary>
@@ -64,11 +66,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
         Interlocked.Add(ref _groupCount, groupCount);
 
         ConcurrentQueue<Group> groups = new();
-#if DEBUG
-        for (int i = 0; i < groupCount; i++)
-#else
-        Parallel.For(0, groupCount, i =>
-#endif
+        Parallel.For(0, groupCount, new ParallelOptions { MaxDegreeOfParallelism = _maxParallelism }, i =>
         {
             List<Document> subdocuments = new();
             List<Group> subGroups = new();
@@ -86,10 +84,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
             groups.Enqueue(group);
 
             _hub.Report(HubKey, GetHierarchyBuilderProgress());
-        }
-#if !DEBUG
-        );
-#endif
+        });
         return groups.ToArray();
     }
 
@@ -105,11 +100,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
         Interlocked.Add(ref _docCount, docCount);
 
         ConcurrentQueue<Document> documents = new();
-#if DEBUG
-        for (int i = 0; i < docCount; i++)
-#else
-        Parallel.For(0, docCount, i =>
-#endif
+        Parallel.For(0, docCount, new ParallelOptions { MaxDegreeOfParallelism = _maxParallelism }, i =>
         {
             var document = new Document(documentConfiguration.Name, documentConfiguration.ImageRenderer);
             document.GenerateFields(fgc);
@@ -118,10 +109,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
             documents.Enqueue(document);
 
             _hub.Report(HubKey, GetHierarchyBuilderProgress());
-        }
-#if !DEBUG
-        );
-#endif
+        });
 
         return documents.ToArray();
     }

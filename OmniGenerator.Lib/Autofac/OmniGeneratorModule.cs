@@ -45,7 +45,10 @@ namespace OmniGenerator.Lib.Autofac
             builder.RegisterType<FieldMapper>().As<IFieldMapper>().SingleInstance();
 
             // Register core OmniGenerator services and interfaces
-            builder.RegisterType<HierarchyBuilder>().As<IHierarchyBuilder>().InstancePerLifetimeScope();
+            var maxParallelism = _configuration.GetValue<int>("AppSettings:max-parallelism", -1);
+            builder.RegisterType<HierarchyBuilder>().As<IHierarchyBuilder>()
+                .WithParameter("maxParallelism", maxParallelism)
+                .InstancePerLifetimeScope();
             builder.RegisterType<DocumentRendererManager>().As<IDocumentRendererManager>().InstancePerLifetimeScope();
             builder.RegisterType<PluginService>().As<IPluginService>().InstancePerLifetimeScope();
             builder.RegisterType<GenerationOrchestrator>().As<IGenerationOrchestrator>().InstancePerLifetimeScope();
