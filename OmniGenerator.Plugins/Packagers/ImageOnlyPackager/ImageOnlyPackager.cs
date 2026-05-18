@@ -53,18 +53,18 @@ namespace OmniGenerator.Plugins.Packagers.ImageOnlyPackager
         {
             if (document.RectoVectorImage is not null)
             {
-                //document.RectoVectorImage.Write(Path.Combine(path, $"{i:000000}R.svg"));
+                document.RectoVectorImage.Write(Path.Combine(path, $"{i:000000}R.svg"));
                 var renderer = new SvgRenderer(document.RectoVectorImage, imageRenderingResolution);
                 await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}R.jpg"), renderer.ToJpeg());
-                //await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}R.tiff"), renderer.ToTiffGroup4());
+                await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}R.tiff"), renderer.ToTiffGroup4());
             }
 
             if (document.VersoVectorImage is not null)
             {
-                //document.VersoVectorImage.Write(Path.Combine(path, $"{i:000000}V.svg"));
-                //var renderer = new SvgRenderer(document.VersoVectorImage, imageRenderingResolution);
-                //await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}V.jpg"), renderer.ToJpeg());
-                //await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}V.tiff"), renderer.ToTiffGroup4());
+                document.VersoVectorImage.Write(Path.Combine(path, $"{i:000000}V.svg"));
+                var renderer = new SvgRenderer(document.VersoVectorImage, imageRenderingResolution);
+                await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}V.jpg"), renderer.ToJpeg());
+                await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}V.tiff"), renderer.ToTiffGroup4());
             }
         }
     }
