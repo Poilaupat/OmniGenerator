@@ -69,6 +69,12 @@ namespace OmniGenerator.Lib.Generators
         /// </returns>
         public IDictionary<string, Field> GenerateAggregateFields(Group group)
         {
+            // IMPORTANT: The lock is mandatory here and must never be removed.
+            // FieldGeneratorAggregate instances are shared across all groups of the same type
+            // (one FieldGeneratorCollection per element name in FieldGeneratorContainer).
+            // In Release mode, groups are generated in parallel (Parallel.For in HierarchyBuilder).
+            // The lock serializes access so that Group is set and consumed atomically,
+            // preventing a race condition where one thread overwrites Group before another thread reads it.
             lock (_lock)
             {
                 var fields = new Dictionary<string, Field>();
