@@ -63,7 +63,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         /// <param name="rootFields">The root-level fields containing batch metadata.</param>
         /// <param name="lot">The LOT file stream writer.</param>
         /// <returns>A task representing the asynchronous write operation.</returns>
-        public async Task WriteHeaderAsync(RootFields rootFields, StreamWriter lot)
+        private async Task WriteHeaderAsync(RootFields rootFields, StreamWriter lot)
         {
             LotHeaderLine line = new(rootFields);
             await lot.WriteLineAsync(line.ToFixedLengthString());
@@ -82,7 +82,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         /// <param name="bwOffset">The current byte offset in the PAK file.</param>
         /// <param name="gsOffset">The current byte offset in the JPK file.</param>
         /// <returns>A tuple containing the updated PAK and JPK byte offsets after writing the document.</returns>
-        public async Task<(int newBwOffset, int newGsOffset)> WriteBodyAsync(
+        private async Task<(int newBwOffset, int newGsOffset)> WriteBodyAsync(
             int index,
             Document document,
             RootFields rootFields,
@@ -144,7 +144,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         /// <param name="rootFields">The root-level fields containing batch metadata.</param>
         /// <param name="lot">The LOT file stream writer.</param>
         /// <returns>A task representing the asynchronous write operation.</returns>
-        public async Task WritePacketEndLine(RootFields rootFields, StreamWriter lot)
+        private async Task WritePacketEndLine(RootFields rootFields, StreamWriter lot)
         {
             LotPacketEnd line = new(rootFields);
             await lot.WriteLineAsync(line.ToFixedLengthString());
@@ -157,7 +157,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         /// <param name="rootFields">The root-level fields containing batch metadata.</param>
         /// <param name="lot">The LOT file stream writer.</param>
         /// <returns>A task representing the asynchronous write operation.</returns>
-        public async Task WriteStatisticsLine(RootFields rootFields, StreamWriter lot)
+        private async Task WriteStatisticsLine(RootFields rootFields, StreamWriter lot)
         {
             LotStatisticLine line = new(rootFields);
             await lot.WriteLineAsync(line.ToFixedLengthString());
@@ -169,7 +169,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         /// </summary>
         /// <param name="lot">The LOT file stream writer.</param>
         /// <returns>A task representing the asynchronous write operation.</returns>
-        public async Task WriteScannerStatisticsLine(StreamWriter lot)
+        private async Task WriteScannerStatisticsLine(StreamWriter lot)
         {
             LotScannerStatisticsLine line = new();
             await lot.WriteLineAsync(line.ToFixedLengthString());
@@ -181,7 +181,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         /// </summary>
         /// <param name="lot">The LOT file stream writer.</param>
         /// <returns>A task representing the asynchronous write operation.</returns>
-        public async Task WriteNavetteLine(StreamWriter lot)
+        private async Task WriteNavetteLine(StreamWriter lot)
         {
             LotNavetteLine line = new();
             await lot.WriteLineAsync(line.ToFixedLengthString());

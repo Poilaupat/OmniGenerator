@@ -70,7 +70,7 @@ namespace OmniGenerator.Lib.Orchestration
 
         private async Task RenderImagesAsync(Root root, string jobId, CancellationToken cancellationToken)
         {
-            if (_imageRendererProcessor is null || root.GetAllDocuments().All(d => string.IsNullOrWhiteSpace(d.ImageComposer)))
+            if (root.GetAllDocuments().All(d => string.IsNullOrWhiteSpace(d.ImageComposer)))
             {
                 Report(jobId, GenerationStep.Images, StepStatus.Skipped);
                 return;
