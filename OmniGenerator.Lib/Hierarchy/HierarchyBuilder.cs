@@ -16,7 +16,6 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
 
     private readonly IFieldMapper _mapper;
     private readonly IProgressHub<HierarchyBuildingProgress> _hub;
-    private readonly Random _random;
     private long DocCount = 0;
     private long _processedDocCount = 0;
     private long _groupCount = 0;
@@ -27,7 +26,6 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
     {
         _mapper = mapper;
         _hub = hub;
-        _random = new Random();
     }
 
     /// <summary>
@@ -137,7 +135,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
     /// <returns>A random number of occurrences between min and max.</returns>
     private int GetRandomOccurence(int minOccurs, int maxOccurs)
     {
-        return Math.Max(_random.Next(minOccurs, maxOccurs + 1), 0);
+        return Math.Max(Random.Shared.Next(minOccurs, maxOccurs + 1), 0);
     }
 
     private HierarchyBuildingProgress GetHierarchyBuilderProgress()
