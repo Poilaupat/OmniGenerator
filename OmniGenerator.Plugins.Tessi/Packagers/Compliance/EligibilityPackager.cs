@@ -33,7 +33,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance
                 .GetAllDocuments()
                 .ToArray();
 
-            for (var i = 0; i < cheques.Count(); i++)
+            for (var i = 0; i < cheques.Length; i++)
             {
                 var cheque = new ChequeFields(cheques[i].Fields);
 
