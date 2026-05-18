@@ -21,22 +21,21 @@ namespace OmniGenerator.Lib.Infrastructure
         /// <summary>
         /// Initializes a new instance of the <see cref="PluginService"/> class.
         /// Scans the Plugins directory for available plugins.
+        /// If the Plugins directory does not exist, the service starts with no plugins loaded.
         /// </summary>
-        /// <exception cref="DirectoryNotFoundException">
-        /// Thrown if the Plugins directory does not exist.
-        /// </exception>
         public PluginService() => LoadPlugins();
 
         /// <summary>
         /// Loads plugins from the Plugins directory.
         /// Each plugin is expected to be in a folder with the same name as its DLL file.
+        /// If the Plugins directory does not exist, no plugins are loaded and the method returns silently.
         /// </summary>
-        /// <exception cref="DirectoryNotFoundException">
-        /// Thrown if the Plugins directory does not exist.
-        /// </exception>
         private void LoadPlugins()
         {
             var pluginsDir = Path.Combine(AppContext.BaseDirectory, "plugins");
+            if (!Directory.Exists(pluginsDir))
+                return;
+
             foreach (var directory in Directory.GetDirectories(pluginsDir))
             {
                 var dll = Path.Combine(directory, Path.GetFileName(directory) + ".dll"); // Plugin folder MUST have the same name as the dll  
