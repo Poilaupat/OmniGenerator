@@ -16,10 +16,10 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
 
     private readonly IFieldMapper _mapper;
     private readonly IProgressHub<HierarchyBuildingProgress> _hub;
-    private long DocCount = 0;
+    private long _docCount = 0;
     private long _processedDocCount = 0;
     private long _groupCount = 0;
-    private long _orocessedGroupCount = 0;
+    private long _processedGroupCount = 0;
     private long _fieldCount = 0;
 
     public HierarchyBuilder(IFieldMapper mapper, IProgressHub<HierarchyBuildingProgress> hub)
@@ -81,7 +81,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
 
             var group = new Group(groupConfiguration.Name, subGroups, subdocuments);
             group.GenerateFields(fgc);
-            Interlocked.Increment(ref _orocessedGroupCount);
+            Interlocked.Increment(ref _processedGroupCount);
             Interlocked.Add(ref _fieldCount, group.Fields.Count);
             groups.Enqueue(group);
 
@@ -102,7 +102,7 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
     private Document[] GenerateDocuments(DocumentConfiguration documentConfiguration, FieldGeneratorContainer fgc)
     {
         int docCount = GetRandomOccurence(documentConfiguration.MinOccurs, documentConfiguration.MaxOccurs);
-        Interlocked.Add(ref DocCount, docCount);
+        Interlocked.Add(ref _docCount, docCount);
 
         ConcurrentQueue<Document> documents = new();
 #if DEBUG
@@ -144,8 +144,8 @@ internal sealed class HierarchyBuilder : IHierarchyBuilder
         {
             FieldCount = Interlocked.Read(ref _fieldCount),
             GroupCount = Interlocked.Read(ref _groupCount),
-            DocumentCount = Interlocked.Read(ref DocCount),
-            ProcessedGroupCount = Interlocked.Read(ref _orocessedGroupCount),
+            DocumentCount = Interlocked.Read(ref _docCount),
+            ProcessedGroupCount = Interlocked.Read(ref _processedGroupCount),
             ProcessedDocumentCount = Interlocked.Read(ref _processedDocCount),
         };
     }
