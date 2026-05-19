@@ -30,7 +30,7 @@ namespace OmniGenerator.Lib.Renderers
         /// Generates images for all documents in the given root
         /// If a document has no <see cref="IDocumentRenderer"/> it will be ignored
         /// </summary>
-        public async Task RenderImagesAsync(Root root)
+        public Task RenderImagesAsync(Root root)
         {
             var docsByComposer = root.GetAllDocuments()
                 .Where(d => !string.IsNullOrWhiteSpace(d.ImageComposer))
@@ -74,7 +74,7 @@ namespace OmniGenerator.Lib.Renderers
             }
 
             _hub.Report(HubKey, GetProgress());
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
         private RenderingProgress GetProgress() => new()
