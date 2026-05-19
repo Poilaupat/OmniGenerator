@@ -83,22 +83,20 @@ namespace OmniGenerator.Lib.Infrastructure
         /// <param name="pluginType">The type of the plugin to add.</param>
         private void TryAddPlugin(Type pluginType)
         {
-            var instance = Activator.CreateInstance(pluginType) as IOmniGeneratorPlugin;
+            var attribute = pluginType.GetCustomAttribute<OmniGeneratorPluginMetadataAttribute>();
+            if (attribute is null) return;
 
-            if (instance is not null)
-            {
-                var assembly = pluginType.Assembly;
-                var pi = new PluginInfo(
-                    instance.PluginName,
-                    instance.PluginDescription,
-                    pluginType,
-                    assembly.Location,
-                    assembly.GetName().Version
-                );
+            var assembly = pluginType.Assembly;
+            var pi = new PluginInfo(
+                attribute.PluginName,
+                attribute.PluginDescription,
+                pluginType,
+                assembly.Location,
+                assembly.GetName().Version
+            );
 
-                if (!_repository.ContainsKey(pi.PluginName))
-                    _repository.Add(instance.PluginName, pi);
-            }
+            if (!_repository.ContainsKey(pi.PluginName))
+                _repository.Add(pi.PluginName, pi);
         }
 
         /// <summary>
