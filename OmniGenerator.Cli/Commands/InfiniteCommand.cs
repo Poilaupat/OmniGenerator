@@ -23,7 +23,7 @@ namespace OmniGenerator.Cli.Commands
         /// <param name="settings">The command settings provided via CLI.</param>
         /// <param name="cancellation">A token that indicates if the operation should be cancelled.</param>
         /// <returns>A task representing the result of the execution: -1 if cancelled and cancellable, otherwise it never returns.</returns>
-        public override Task<int> ExecuteAsync(CommandContext context, InfiniteCommandSettings settings, CancellationToken cancellation)
+        public override async Task<int> ExecuteAsync(CommandContext context, InfiniteCommandSettings settings, CancellationToken cancellation)
         {
             while (true)
             {
@@ -32,7 +32,7 @@ namespace OmniGenerator.Cli.Commands
                     if (settings.IsCancellable)
                     {
                         AnsiConsole.Console.MarkupLine("[green]Cancelling infinite command gracefully ![/]");
-                        return Task.FromResult(-1);
+                        return -1;
                     }
                     else
                     {
@@ -41,7 +41,7 @@ namespace OmniGenerator.Cli.Commands
                 }
 
                 AnsiConsole.Console.MarkupLine("[green]I'm alive![/]");
-                Thread.Sleep(2000);
+                await Task.Delay(2000, cancellation);
             }
         }
     }
