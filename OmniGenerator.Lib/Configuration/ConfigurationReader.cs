@@ -42,33 +42,25 @@ namespace OmniGenerator.Lib.Configuration
         /// </remarks>
         public static async Task<OmniGeneratorConfiguration> ReadConfigurationAsync(string filePath)
         {
-            try
+            var directory = Path.GetDirectoryName(filePath);
+            var config = await ConfigurationReader.DeserializeAsync<OmniGeneratorConfiguration>(filePath);
+
+            if (!string.IsNullOrWhiteSpace(config.Hierarchy.FieldConfigurationFile))
             {
-                var directory = Path.GetDirectoryName(filePath);
-                var config = await ConfigurationReader.DeserializeAsync<OmniGeneratorConfiguration>(filePath);
-
-                if (!string.IsNullOrWhiteSpace(config.Hierarchy.FieldConfigurationFile))
-                {
-                    var root = await ConfigurationReader.DeserializeAsync<OmniGeneratorFieldConfiguration>(directory ?? string.Empty, config.Hierarchy.FieldConfigurationFile);
-                    config.Hierarchy.Fields.Merge(root.Fields);
-                }
-
-                foreach (var configElement in config.Hierarchy.Root.GetElementsConfiguration(true))
-                {
-                    if (!string.IsNullOrWhiteSpace(configElement.FieldConfigurationFile))
-                    {
-                        var file = await ConfigurationReader.DeserializeAsync<OmniGeneratorFieldConfiguration>(directory ?? string.Empty, configElement.FieldConfigurationFile);
-                        configElement.Fields.Merge(file.Fields);
-                    }
-                }
-
-                return config;
+                var root = await ConfigurationReader.DeserializeAsync<OmniGeneratorFieldConfiguration>(directory ?? string.Empty, config.Hierarchy.FieldConfigurationFile);
+                config.Hierarchy.Fields.Merge(root.Fields);
             }
-            catch (ConfigurationException ex)
+
+            foreach (var configElement in config.Hierarchy.Root.GetElementsConfiguration(true))
             {
-                Console.WriteLine(ex.Message);
-                throw;
+                if (!string.IsNullOrWhiteSpace(configElement.FieldConfigurationFile))
+                {
+                    var file = await ConfigurationReader.DeserializeAsync<OmniGeneratorFieldConfiguration>(directory ?? string.Empty, configElement.FieldConfigurationFile);
+                    configElement.Fields.Merge(file.Fields);
+                }
             }
+
+            return config;
         }
 
         /// <summary>
