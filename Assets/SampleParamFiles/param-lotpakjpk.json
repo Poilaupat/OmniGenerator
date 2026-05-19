@@ -1,6 +1,6 @@
 {
   "$schema": "../omnigenerator-schema.json",
-  "packager": "packager.omni.imageonly",
+  "packager": "packager.tessi.lotpakjpk",
   "hierarchy": {
     "fields": [
       {
@@ -101,8 +101,8 @@
               "$type": "document",
               "renderer": "renderer.omni.cheque",
               "name": "cheque",
-              "min-occurs": 25,
-              "max-occurs": 25,
+              "min-occurs": 1,
+              "max-occurs": 5,
               "field-configuration-file": "DocsAndGroups\\fields-cheque.json",
               "fields": []
             }

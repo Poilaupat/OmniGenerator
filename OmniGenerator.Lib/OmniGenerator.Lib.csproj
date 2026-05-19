@@ -13,11 +13,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<InternalsVisibleTo Include="OmniGenerator.Cli" />
-		<InternalsVisibleTo Include="OmniGenerator.Test" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Remove="Resources\Cmc7.ttf" />
 		<None Remove="Resources\Fonts\Cmc7.ttf" />
 		<None Remove="Resources\Fonts\OcrbRegular.ttf" />
