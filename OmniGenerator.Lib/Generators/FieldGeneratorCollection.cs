@@ -17,7 +17,7 @@ namespace OmniGenerator.Lib.Generators
     internal class FieldGeneratorCollection
     {
         private readonly object _lock = new object();
-        private IEnumerable<IFieldGenerator> _generators;
+        private readonly IReadOnlyList<IFieldGenerator> _generators;
 
         /// <summary>
         /// Gets the name of the field generator collection. This is the name of the element owning the field generators
@@ -36,7 +36,8 @@ namespace OmniGenerator.Lib.Generators
 
             _generators = generators
                 .SetCollateralDependencies()
-                .TopologicalSort();
+                .TopologicalSort()
+                .ToList();
         }
 
         /// <summary>

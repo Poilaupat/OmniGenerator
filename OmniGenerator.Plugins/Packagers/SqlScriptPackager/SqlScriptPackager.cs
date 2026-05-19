@@ -74,12 +74,10 @@ namespace OmniGenerator.Plugins.Packagers.SqlScriptPackager
                 .Keys
                 .Select(fn => fields[fn].Value switch
                 {
-                    DateTime => $"'{((DateTime)fields[fn].Value).ToString("yyyyMMdd HH:mm:ss")}'",
-                    string => $"'{fields[fn].StringValue}'",
-                    _ => fields[fn].Value
-                }
-                )
-            );
+                    DateTime dt => $"'{dt:yyyyMMdd HH:mm:ss}'",
+                    string s    => $"'{s.Replace("'", "''")}'",
+                    _           => fields[fn].Value
+                }));
         }
     }
 }
