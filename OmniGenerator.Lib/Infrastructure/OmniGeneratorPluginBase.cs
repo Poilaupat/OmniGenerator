@@ -1,5 +1,6 @@
 ﻿using OmniGenerator.Lib.Interfaces;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,10 +38,15 @@ namespace OmniGenerator.Lib.Infrastructure
         /// Override this method to provide custom documentation or specify a different fields class.
         /// </summary>
         /// <returns>An enumerable collection of <see cref="FieldInfo"/> describing the fields.</returns>
+        private static readonly ConcurrentDictionary<Type, IEnumerable<FieldInfo>> _fieldsDocCache = new();
+
         public virtual IEnumerable<FieldInfo> GetFieldsDocumentation()
         {
-            var pluginType = GetType();
+            return _fieldsDocCache.GetOrAdd(GetType(), BuildFieldsDocumentation);
+        }
 
+        private static IEnumerable<FieldInfo> BuildFieldsDocumentation(Type pluginType)
+        {
             // Search in the same assembly + namespace for classes deriving from FieldExtractorBase
             var fieldsTypes = pluginType
                 .Assembly
@@ -51,16 +57,14 @@ namespace OmniGenerator.Lib.Infrastructure
                     !t.IsAbstract);
 
             if (!fieldsTypes.Any())
-            {
                 return Enumerable.Empty<FieldInfo>();
-            }
 
             List<FieldInfo> result = new();
             foreach (var fieldsType in fieldsTypes)
             {
                 var method = typeof(FieldExtractorBase)
-                .GetMethod(nameof(FieldExtractorBase.ExtractFieldsInfos))
-                ?.MakeGenericMethod(fieldsType);
+                    .GetMethod(nameof(FieldExtractorBase.ExtractFieldsInfos))
+                    ?.MakeGenericMethod(fieldsType);
 
                 if (method is not null)
                 {
