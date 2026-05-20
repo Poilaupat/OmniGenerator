@@ -184,7 +184,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         /// </summary>
         [Test]
         [Category("ProductionBugSuspected")]
-        [Ignore("ProductionBugSuspected")]
+        //[Ignore("ProductionBugSuspected")]
         public void ProcessAsync_WithEmptyPath_ThrowsException()
         {
             // Arrange

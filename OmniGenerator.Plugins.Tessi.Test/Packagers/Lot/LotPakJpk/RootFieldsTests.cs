@@ -697,7 +697,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
             var result = rootFields.PacketName;
 
             // Assert
-            Assert.That(result, Is.EqualTo(dateTime.ToString()));
+            Assert.That(result, Is.EqualTo(dateTime.ToString(System.Globalization.CultureInfo.InvariantCulture)));
         }
 
         /// <summary>
