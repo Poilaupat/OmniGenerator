@@ -21,7 +21,7 @@ namespace OmniGenerator.Lib.Hierarchy
         /// <summary>
         /// The field value as a string representation
         /// </summary>
-        public readonly string StringValue => Value?.ToString() ?? string.Empty;
+        public readonly string StringValue => Convert.ToString(Value, System.Globalization.CultureInfo.InvariantCulture) ?? string.Empty;
 
         /// <summary>
         /// Creates a new <see cref="Field"/>

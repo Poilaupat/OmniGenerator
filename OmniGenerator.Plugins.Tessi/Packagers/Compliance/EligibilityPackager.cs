@@ -234,7 +234,10 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance
     public class Micr
     {
         [JsonPropertyName("zone")]
-        public List<Zone> Zone { get; set; }
+        public List<Zone> Zone { get; set; } = new List<Zone>();
+
+        [JsonConstructor]
+        public Micr() { }
 
         public Micr(string z4, string z3, string z2) => Zone = new List<Zone>
             {
@@ -313,6 +316,9 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance
 
         [JsonPropertyName("checks")]
         public List<Check> Checks { get; set; }
+
+        [JsonConstructor]
+        public Transaction() { }
 
         public Transaction(int amount, string bankUnitCode, string deskCode, string accountNumber, Deposit deposit, Check cheque)
         {

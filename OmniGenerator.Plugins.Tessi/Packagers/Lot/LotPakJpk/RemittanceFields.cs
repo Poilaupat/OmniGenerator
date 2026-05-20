@@ -22,6 +22,6 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         /// Gets the remittance identifier.
         /// </summary>
         [FieldInfo("remittance-id", "Remittance identifier", isRequired: false, DefaultValue = "")]
-        public string RemittanceId => GetOptionalStringOrDefault("remittance-id", string.Empty);
+        public virtual string RemittanceId => GetOptionalStringOrDefault("remittance-id", string.Empty);
     }
 }

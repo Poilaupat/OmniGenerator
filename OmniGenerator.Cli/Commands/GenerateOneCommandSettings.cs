@@ -36,22 +36,7 @@ namespace OmniGenerator.Cli.Commands
         /// <returns>A <see cref="ValidationResult"/> indicating success or a validation error.</returns>
         public override ValidationResult Validate()
         {
-            if (!File.Exists(SettingsFilePath))
-            {
-                return ValidationResult.Error($"The file {SettingsFilePath} was not found");
-            }
-
-            if (File.Exists(OutputFolderPath))
-            {
-                return ValidationResult.Error("The output-folder must be a directory");
-            }
-
-            if (!Directory.Exists(OutputFolderPath))
-            {
-                Directory.CreateDirectory(OutputFolderPath);
-            }
-
-            return ValidationResult.Success();
+            return ValidateSettingsAndOutputFolder(SettingsFilePath, OutputFolderPath);
         }
     }
 }

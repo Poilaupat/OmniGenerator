@@ -110,7 +110,7 @@ namespace OmniGenerator.Lib.Hierarchy
         /// <param name="key">The field name to locate.</param>
         /// <param name="defaultValue">The default value to return if the field is not found or has a null value.</param>
         /// <returns>The string value of the field if found and non-null; otherwise, the specified <paramref name="defaultValue"/>.</returns>
-        public string GetStringValueOrDefault(string key, string defaultValue)
+        public virtual string GetStringValueOrDefault(string key, string defaultValue)
         {
             if (_fields.TryGetValue(key, out var field))
             {

@@ -9,7 +9,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot
     /// <summary>
     /// Represents an image with its offset and length information for fixed-length packaging.
     /// </summary>
-    internal class OffsetLengthImage
+    public class OffsetLengthImage
     {
         private int _offset = 0;
 
@@ -22,12 +22,12 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot
         /// Gets the offset of the image in the package.
         /// Returns zero if the image is empty.
         /// </summary>
-        public int Offset => Image.Length > 0 ? _offset : 0;
+        public virtual int Offset => Image.Length > 0 ? _offset : 0;
 
         /// <summary>
         /// Gets the length of the image data in bytes.
         /// </summary>
-        public int Length => Image.Length;
+        public virtual int Length => Image.Length;
 
         /// <summary>
         /// Sets the image data and updates the offset reference.
