@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+using System;
 
 using Moq;
 using NUnit.Framework;
@@ -45,11 +44,11 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// Tests that the Dataread property returns empty string when the field exists but has a null value.
         /// </summary>
         [Test]
-        public void Dataread_FieldExistsWithNullValue_ReturnsDefaultEmptyString()
+        public void Dataread_FieldExistsWithNullValue_ReturnsDefaultValue()
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            var field = new Field("dataread", null!);
+            var field = new Field("dataread", null);
             fieldCollection.Add(field);
             var documentFields = new DocumentFields(fieldCollection);
 
@@ -203,18 +202,18 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// This tests the behavior of Field.StringValue which converts null to string.Empty.
         /// </summary>
         [Test]
-        public void QualityCode_FieldPresentWithNullValue_ReturnsEmptyString()
+        public void QualityCode_FieldPresentWithNullValue_ReturnsDefaultValue()
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            fieldCollection.Add(new Field("quality-code", null!));
+            fieldCollection.Add(new Field("quality-code", null));
             var documentFields = new DocumentFields(fieldCollection);
 
             // Act
             var result = documentFields.QualityCode;
 
             // Assert
-            Assert.That(result, Is.EqualTo(string.Empty));
+            Assert.That(result, Is.EqualTo("0"));
         }
 
         /// <summary>
@@ -264,7 +263,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         [TestCase("こんにちは")]
         [TestCase("🎉🎊")]
         [TestCase("Ñoño")]
-        [TestCase("\u0000\u0001\u0002")]
+        [TestCase("\u0000\u0001\u0002", TestName = "QualityCode_FieldPresentWithUnicodeCharacters_ControlChars")]
         public void QualityCode_FieldPresentWithUnicodeCharacters_ReturnsUnicodeString(string unicodeValue)
         {
             // Arrange
@@ -363,21 +362,10 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// </summary>
         private static class FieldCollectionHelper
         {
-            /// <summary>
-            /// Creates a FieldCollection with a single field.
-            /// </summary>
-            /// <param name="fieldName">The name of the field to add.</param>
-            /// <param name="fieldValue">The value of the field to add.</param>
-            /// <returns>A populated FieldCollection instance.</returns>
             public static FieldCollection CreateWithField(string fieldName, object? fieldValue)
             {
                 var collection = new FieldCollection();
-                var field = new Field(fieldName, fieldValue!);
-
-                // Use reflection to call the internal Add method
-                var addMethod = typeof(FieldCollection).GetMethod("Add", BindingFlags.Instance | BindingFlags.NonPublic);
-                addMethod?.Invoke(collection, new object[] { field });
-
+                collection.Add(new Field(fieldName, fieldValue!));
                 return collection;
             }
         }
@@ -477,20 +465,18 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// Field.StringValue returns empty string when Value is null, and GetStringValueOrDefault returns empty string (not default).
         /// </summary>
         [Test]
-        public void Signature_FieldExistsWithNullValue_ReturnsEmptyString()
+        public void Signature_FieldExistsWithNullValue_ReturnsDefaultValue()
         {
             // Arrange
             var fieldCollection = new TestableFieldCollection();
-            fieldCollection.AddField(new Field("signature", null!));
+            fieldCollection.AddField(new Field("signature", null));
             var documentFields = new DocumentFields(fieldCollection);
 
             // Act
             var result = documentFields.Signature;
 
             // Assert
-            // When Field.Value is null, StringValue returns string.Empty (not null)
-            // GetStringValueOrDefault will return string.Empty since the field exists
-            Assert.That(result, Is.EqualTo(string.Empty));
+            Assert.That(result, Is.EqualTo("---SIGNATURE---"));
         }
 
         /// <summary>
@@ -536,17 +522,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// </summary>
         private class TestableFieldCollection : FieldCollection
         {
-            /// <summary>
-            /// Adds a field to the collection using reflection to access the internal Add method.
-            /// </summary>
-            /// <param name="field">The field to add.</param>
-            public void AddField(Field field)
-            {
-                // Use reflection to call the internal Add method
-                var addMethod = typeof(FieldCollection).GetMethod("Add",
-                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                addMethod?.Invoke(this, new object[] { field });
-            }
+            public void AddField(Field field) => Add(field);
         }
 
         /// <summary>
@@ -598,11 +574,11 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// The Field.StringValue property converts null to empty string.
         /// </summary>
         [Test]
-        public void Status_FieldExistsWithNullValue_ReturnsEmptyString()
+        public void Status_FieldExistsWithNullValue_ReturnsDefaultValue()
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            var field = new Field("status", null!);
+            var field = new Field("status", null);
             fieldCollection.Add(field);
             var documentFields = new DocumentFields(fieldCollection);
 
@@ -610,7 +586,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
             var result = documentFields.Status;
 
             // Assert
-            Assert.That(result, Is.EqualTo(string.Empty));
+            Assert.That(result, Is.EqualTo("0"));
         }
 
         /// <summary>
@@ -715,11 +691,11 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// This verifies that null values are properly handled by returning the default value.
         /// </summary>
         [Test]
-        public void Priority_FieldExistsWithNullValue_ReturnsEmptyString()
+        public void Priority_FieldExistsWithNullValue_ReturnsDefaultValue()
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            var priorityField = new Field("priority", null!);
+            var priorityField = new Field("priority", null);
             fieldCollection.Add(priorityField);
             var documentFields = new DocumentFields(fieldCollection);
 
@@ -1018,10 +994,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
             var expectedValue = "TestRIB123";
             var fieldCollection = new FieldCollection();
             var ribField = new Field("rib", expectedValue);
-            
-            // Use reflection to add the field since Add is internal
-            var addMethod = typeof(FieldCollection).GetMethod("Add", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            addMethod.Invoke(fieldCollection, new object[] { ribField });
+            fieldCollection.Add(ribField);
 
             var documentFields = new DocumentFields(fieldCollection);
 
@@ -1081,11 +1054,11 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// Tests that NbChecks returns empty string when the field exists with a null value.
         /// </summary>
         [Test]
-        public void NbChecks_FieldExistsWithNullValue_ReturnsEmptyString()
+        public void NbChecks_FieldExistsWithNullValue_ReturnsDefaultValue()
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            var field = new Field("nb-checks", null!);
+            var field = new Field("nb-checks", null);
             fieldCollection.Add(field);
             var documentFields = new DocumentFields(fieldCollection);
 
@@ -1175,7 +1148,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// </summary>
         [TestCase("こんにちは", "こんにちは")]
         [TestCase("😀😁", "😀😁")]
-        [TestCase("\u0000\u0001", "\u0000\u0001")]
+        [TestCase("\u0000\u0001", "\u0000\u0001", TestName = "NbChecks_FieldExistsWithUnicodeCharacters_ControlChars")]
         [TestCase("test\u200Bvalue", "test\u200Bvalue")]
         public void NbChecks_FieldExistsWithUnicodeCharacters_ReturnsValue(string value, string expectedResult)
         {
@@ -1275,7 +1248,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// Tests that ICRConfAmount returns the default empty string when the field exists with a null value.
         /// </summary>
         [Test]
-        public void ICRConfAmount_FieldPresentWithNullValue_ReturnsEmptyString()
+        public void ICRConfAmount_FieldPresentWithNullValue_ReturnsDefaultValue()
         {
             // Arrange
             var fieldCollection = new FieldCollection();
@@ -1362,12 +1335,8 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// <param name="collection">The field collection to add to.</param>
         /// <param name="name">The field name.</param>
         /// <param name="value">The field value.</param>
-        private void AddFieldToCollection(FieldCollection collection, string name, object value)
-        {
-            var field = new Field(name, value);
-            var addMethod = typeof(FieldCollection).GetMethod("Add", BindingFlags.Instance | BindingFlags.NonPublic);
-            addMethod?.Invoke(collection, new object[] { field });
-        }
+        private static void AddFieldToCollection(FieldCollection collection, string name, object value)
+            => collection.Add(new Field(name, value));
 
         /// <summary>
         /// Tests that the ICRAmount property returns the expected value when the field exists
@@ -1481,14 +1450,10 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// <param name="fieldName">The name of the field to add.</param>
         /// <param name="fieldValue">The value of the field to add.</param>
         /// <returns>A FieldCollection containing the specified field.</returns>
-        private FieldCollection CreateFieldCollectionWithField(string fieldName, object fieldValue)
+        private static FieldCollection CreateFieldCollectionWithField(string fieldName, object fieldValue)
         {
             var fieldCollection = new FieldCollection();
-            var field = new Field(fieldName, fieldValue);
-
-            var addMethod = typeof(FieldCollection).GetMethod("Add", BindingFlags.Instance | BindingFlags.NonPublic);
-            addMethod?.Invoke(fieldCollection, new object[] { field });
-
+            fieldCollection.Add(new Field(fieldName, fieldValue));
             return fieldCollection;
         }
 
@@ -1523,18 +1488,18 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// This verifies that Field.StringValue returns empty string for null values, not the default.
         /// </summary>
         [Test]
-        public void ImageQuality_FieldExistsWithNullValue_ReturnsEmptyString()
+        public void ImageQuality_FieldExistsWithNullValue_ReturnsDefaultValue()
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            fieldCollection.Add(new Field("image-quality", null!));
+            fieldCollection.Add(new Field("image-quality", null));
             var documentFields = new DocumentFields(fieldCollection);
 
             // Act
             var result = documentFields.ImageQuality;
 
             // Assert
-            Assert.That(result, Is.EqualTo(string.Empty));
+            Assert.That(result, Is.EqualTo("0"));
         }
 
         /// <summary>
@@ -1739,11 +1704,11 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// This occurs because Field.StringValue returns empty string for null values, not the default value.
         /// </summary>
         [Test]
-        public void Deleted_FieldPresentWithNullValue_ReturnsEmptyString()
+        public void Deleted_FieldPresentWithNullValue_ReturnsDefaultValue()
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            var field = new Field("deleted", null!);
+            var field = new Field("deleted", null);
             fieldCollection.Add(field);
             var documentFields = new DocumentFields(fieldCollection);
 
@@ -1751,7 +1716,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
             var result = documentFields.Deleted;
 
             // Assert
-            Assert.That(result, Is.EqualTo(string.Empty));
+            Assert.That(result, Is.EqualTo("0"));
         }
 
         /// <summary>
@@ -1914,11 +1879,11 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// This tests the behavior of Field.StringValue which returns empty string for null values.
         /// </summary>
         [Test]
-        public void Encline_FieldExistsWithNullValue_ReturnsEmptyString()
+        public void Encline_FieldExistsWithNullValue_ReturnsDefaultValue()
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            fieldCollection.Add(new Field("encline", null!));
+            fieldCollection.Add(new Field("encline", null));
             var documentFields = new DocumentFields(fieldCollection);
 
             // Act
@@ -1995,20 +1960,16 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         }
 
         /// <summary>
-        /// Tests that the constructor accepts a null FieldCollection parameter.
-        /// Since the base class does not validate the parameter, passing null will succeed during construction
-        /// but may cause issues when accessing properties that rely on the field collection.
-        /// This test documents the actual runtime behavior with nullable reference types.
+        /// Tests that the constructor throws ArgumentNullException when a null FieldCollection is provided.
         /// </summary>
         [Test]
-        public void Constructor_WithNullFieldCollection_CreatesInstanceButMayFailOnPropertyAccess()
+        public void Constructor_WithNullFieldCollection_ThrowsArgumentNullException()
         {
             // Arrange
             FieldCollection? nullFieldCollection = null;
 
             // Act & Assert
-            // The constructor itself does not validate and will not throw
-            Assert.DoesNotThrow(() => new DocumentFields(nullFieldCollection!));
+            Assert.Throws<ArgumentNullException>(() => new DocumentFields(nullFieldCollection!));
         }
     }
 }

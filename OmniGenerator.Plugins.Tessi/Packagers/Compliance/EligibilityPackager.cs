@@ -11,10 +11,43 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance
 
     public class EligibilityPackager : OmniGeneratorPluginBase, IPackager
     {
+        private readonly IFileSystem _fileSystem;
+
+        public EligibilityPackager() : this(new PhysicalFileSystem()) { }
+
+        public EligibilityPackager(IFileSystem fileSystem)
+        {
+            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        }
+
         public async Task ProcessAsync(Root root, string path, int imageRenderingResolution)
         {
-            var rootFields = new RootFields(root.Fields);
+            if (path is null)
+                throw new ArgumentNullException(nameof(path));
 
+            if (path.Length == 0)
+                throw new ArgumentException("Path cannot be empty.", nameof(path));
+
+            var rootFields = new RootFields(root.Fields);
+            var jsonRoot = BuildJsonRoot(root, rootFields);
+
+            var packagename = $"BosComplianceEligibility.{rootFields.BankCode}.{rootFields.BankUnitCode}.{rootFields.ProviderCode}.{rootFields.Numlot.Value}.{DateTime.Now:yyyyMMddHHmmss}";
+            var packagepath = Path.Combine(path, packagename);
+
+            if (!_fileSystem.DirectoryExists(packagepath))
+                _fileSystem.CreateDirectory(packagepath);
+
+            var jsonContent = JsonSerializer.Serialize(jsonRoot, new JsonSerializerOptions
+            {
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            });
+
+            await _fileSystem.WriteAllTextAsync(Path.Combine(packagepath, $"{packagename}.json"), jsonContent);
+            await _fileSystem.WriteAllTextAsync(Path.Combine(packagepath, $"{packagename}.top"), string.Empty);
+        }
+
+        internal JsonRoot BuildJsonRoot(Root root, RootFields rootFields)
+        {
             var header = new Header(
                 rootFields.BankCode,
                 rootFields.BankUnitCode,
@@ -26,12 +59,9 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance
             var jsonRoot = new JsonRoot(
                 rootFields.Schema,
                 rootFields.Version,
-                header
-                );
+                header);
 
-            var cheques = root
-                .GetAllDocuments()
-                .ToArray();
+            var cheques = root.GetAllDocuments().ToArray();
 
             for (var i = 0; i < cheques.Length; i++)
             {
@@ -43,22 +73,19 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance
                     rootFields.ProviderCode,
                     cheque.Scanner,
                     cheque.ScanType,
-                    cheque.Chain
-                );
+                    cheque.Chain);
 
                 var micr = new Micr(
                     cheque.Z4,
                     cheque.Z3,
-                    cheque.Z2
-                    );
+                    cheque.Z2);
 
                 var check = new Check(
                     rootFields.Culture,
                     (int)cheque.Amount.Value,
                     cheque.ProviderId,
                     i,
-                    micr
-                );
+                    micr);
 
                 var transaction = new Transaction(
                     (int)cheque.Amount.Value,
@@ -66,27 +93,12 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance
                     cheque.DeskCode,
                     cheque.AccountNumber,
                     deposit,
-                    check
-                );
+                    check);
 
                 jsonRoot.Transactions.Add(transaction);
             }
 
-            var packagename = $"BosComplianceEligibility.{rootFields.BankCode}.{rootFields.BankUnitCode}.{rootFields.ProviderCode}.{rootFields.Numlot.Value}.{DateTime.Now:yyyyMMddHHmmss}";
-            var packagepath = Path.Combine(path, packagename);
-
-            if (!Directory.Exists(packagepath))
-                Directory.CreateDirectory(packagepath);
-
-            var jsonfilename = Path.Combine(packagepath, $"{packagename}.json");
-            var topfilename = Path.Combine(packagepath, $"{packagename}.top");
-            var jsonContent = JsonSerializer.Serialize(jsonRoot, new JsonSerializerOptions
-            {
-                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-            });
-
-            await File.WriteAllTextAsync(jsonfilename, jsonContent);
-            await File.WriteAllTextAsync(topfilename, string.Empty);
+            return jsonRoot;
         }
     }
 

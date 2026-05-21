@@ -28,10 +28,10 @@ namespace OmniGenerator.Lib.Hierarchy
         /// </summary>
         /// <param name="name">The name of the field</param>
         /// <param name="value">The value of the field</param>
-        public Field(string name, object value)
+        public Field(string name, object? value)
         {
             Name = name;
-            Value = value;
+            Value = value!;
         }
     }
 }

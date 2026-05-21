@@ -114,7 +114,7 @@ namespace OmniGenerator.Lib.Hierarchy
         {
             if (_fields.TryGetValue(key, out var field))
             {
-                return field.StringValue ?? defaultValue;
+                return field.Value is null ? defaultValue : field.StringValue;
             }
             return defaultValue;
         }

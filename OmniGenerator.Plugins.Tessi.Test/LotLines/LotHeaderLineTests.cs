@@ -1,7 +1,7 @@
 using OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk;
 using OmniGenerator.Lib.Hierarchy;
 
-namespace OmniGenerator.Plugins.Tessi.Test.LotLines
+namespace OmniGenerator.Plugins.Tessi.LotLines.UnitTests
 {
     [TestFixture]
     public class LotHeaderLineTests

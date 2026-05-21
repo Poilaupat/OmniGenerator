@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 
 using NUnit.Framework;
@@ -369,7 +369,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            var field = new Field("bankCode", null!);
+            var field = new Field("bankCode", null);
             fieldCollection.Add(field);
             var rootFields = new RootFields(fieldCollection);
 
@@ -465,9 +465,9 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         /// <summary>
         /// Tests that the BankCode property handles control characters correctly.
         /// </summary>
-        [TestCase("\0")]
-        [TestCase("\b")]
-        [TestCase("\f")]
+        [TestCase("\0", TestName = "BankCode_WithControlCharacters_NullChar")]
+        [TestCase("\b", TestName = "BankCode_WithControlCharacters_Backspace")]
+        [TestCase("\f", TestName = "BankCode_WithControlCharacters_FormFeed")]
         public void BankCode_WithControlCharacters_ReturnsValue(string controlChar)
         {
             // Arrange
@@ -634,13 +634,13 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         /// but any subsequent property access will fail with NullReferenceException.
         /// </summary>
         [Test]
-        public void Constructor_WithNullFieldCollection_DoesNotThrowDuringConstruction()
+        public void Constructor_WithNullFieldCollection_ThrowsArgumentNullException()
         {
             // Arrange
             FieldCollection? nullFieldCollection = null;
 
             // Act & Assert
-            Assert.DoesNotThrow(() => new RootFields(nullFieldCollection!));
+            Assert.Throws<ArgumentNullException>(() => new RootFields(nullFieldCollection!));
         }
 
         /// <summary>
@@ -807,29 +807,10 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         /// <param name="fieldName">The name of the field to add.</param>
         /// <param name="fieldValue">The value of the field to add.</param>
         /// <returns>A FieldCollection containing the specified field.</returns>
-        private FieldCollection CreateFieldCollectionWithField(string fieldName, object? fieldValue)
+        private static FieldCollection CreateFieldCollectionWithField(string fieldName, object? fieldValue)
         {
             var fieldCollection = new FieldCollection();
-            var field = new Field(fieldName, fieldValue!);
-
-            // Using reflection to access internal Add method if InternalsVisibleTo is not configured
-            var addMethod = typeof(FieldCollection).GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-            if (addMethod != null)
-            {
-                addMethod.Invoke(fieldCollection, new object[] { field });
-            }
-            else
-            {
-                // If InternalsVisibleTo is configured, this direct call should work:
-                // fieldCollection.Add(field);
-
-                // Fallback: If neither works, tests will fail with clear error messages
-                throw new InvalidOperationException(
-                    "Cannot access FieldCollection.Add method. " +
-                    "Please ensure InternalsVisibleTo attribute is configured in OmniGenerator.Lib assembly " +
-                    "to grant access to this test assembly, or modify the test approach.");
-            }
-
+            fieldCollection.Add(new Field(fieldName, fieldValue!));
             return fieldCollection;
         }
 
@@ -872,7 +853,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            fieldCollection.Add(new Field("culture", null!));
+            fieldCollection.Add(new Field("culture", null));
             var rootFields = new RootFields(fieldCollection);
 
             // Act

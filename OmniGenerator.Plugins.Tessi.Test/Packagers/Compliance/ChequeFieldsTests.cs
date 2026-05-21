@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Linq;
-using System.Reflection;
 
 using NUnit.Framework;
 using OmniGenerator.Lib.Exceptions;
@@ -47,19 +46,16 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         }
 
         /// <summary>
-        /// Tests that the constructor behavior when passed a null FieldCollection.
-        /// Since the parameter is non-nullable and the base class does not validate,
-        /// this documents the runtime behavior when nullability constraints are bypassed.
+        /// Tests that the constructor throws ArgumentNullException when a null FieldCollection is provided.
         /// </summary>
         [Test]
-        public void Constructor_WithNullFieldCollection_DoesNotThrowAtConstruction()
+        public void Constructor_WithNullFieldCollection_ThrowsArgumentNullException()
         {
             // Arrange
             FieldCollection? nullFieldCollection = null;
 
             // Act & Assert
-            // The constructor itself doesn't validate, so it doesn't throw at construction time
-            Assert.DoesNotThrow(() => new ChequeFields(nullFieldCollection!));
+            Assert.Throws<ArgumentNullException>(() => new ChequeFields(nullFieldCollection!));
         }
 
         /// <summary>
@@ -252,7 +248,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddField(fieldCollection, "providerId", "PROVIDER123");
+            fieldCollection.Add(new Field("providerId", "PROVIDER123"));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -289,7 +285,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddField(fieldCollection, "providerId", null);
+            fieldCollection.Add(new Field("providerId", null));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -309,7 +305,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddField(fieldCollection, "providerId", string.Empty);
+            fieldCollection.Add(new Field("providerId", string.Empty));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -329,7 +325,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddField(fieldCollection, "providerId", "   ");
+            fieldCollection.Add(new Field("providerId", "   "));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -349,7 +345,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddField(fieldCollection, "providerId", "PROV!@#$%^&*()123");
+            fieldCollection.Add(new Field("providerId", "PROV!@#$%^&*()123"));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -370,7 +366,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             // Arrange
             var fieldCollection = new FieldCollection();
             var longValue = new string('A', 10000);
-            AddField(fieldCollection, "providerId", longValue);
+            fieldCollection.Add(new Field("providerId", longValue));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -390,7 +386,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddField(fieldCollection, "providerId", 12345);
+            fieldCollection.Add(new Field("providerId", 12345));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -401,28 +397,14 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         }
 
         /// <summary>
-        /// Helper method to add a field to a FieldCollection using reflection.
-        /// Required because FieldCollection.Add is internal and cannot be directly accessed.
-        /// </summary>
-        /// <param name="fieldCollection">The FieldCollection to add the field to.</param>
-        /// <param name="name">The name of the field.</param>
-        /// <param name="value">The value of the field.</param>
-        private static void AddField(FieldCollection fieldCollection, string name, object? value)
-        {
-            var field = new Field(name, value!);
-            var addMethod = typeof(FieldCollection).GetMethod("Add", BindingFlags.Instance | BindingFlags.NonPublic);
-            addMethod?.Invoke(fieldCollection, new object[] { field });
-        }
-
-        /// <summary>
-        /// Tests that Z4 property returns the correct value when the field exists with a valid string.
+        /// Tests that Z4 property
         /// </summary>
         [Test]
         public void Z4_WhenFieldExistsWithValidString_ReturnsCorrectValue()
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddField(fieldCollection, "z4", "validZ4Value");
+            fieldCollection.Add(new Field("z4", "validZ4Value"));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -455,7 +437,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddField(fieldCollection, "z4", null);
+            fieldCollection.Add(new Field("z4", null));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -473,7 +455,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddField(fieldCollection, "z4", string.Empty);
+            fieldCollection.Add(new Field("z4", string.Empty));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -491,7 +473,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddField(fieldCollection, "z4", "   ");
+            fieldCollection.Add(new Field("z4", "   "));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -510,7 +492,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             // Arrange
             var longString = new string('A', 10000);
             var fieldCollection = new FieldCollection();
-            AddField(fieldCollection, "z4", longString);
+            fieldCollection.Add(new Field("z4", longString));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -531,7 +513,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddField(fieldCollection, "z4", specialValue);
+            fieldCollection.Add(new Field("z4", specialValue));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -550,7 +532,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             // Arrange
             var unicodeString = "Héllo Wörld 你好 🎉";
             var fieldCollection = new FieldCollection();
-            AddField(fieldCollection, "z4", unicodeString);
+            fieldCollection.Add(new Field("z4", unicodeString));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -568,7 +550,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddField(fieldCollection, "z4", 12345);
+            fieldCollection.Add(new Field("z4", 12345));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -587,7 +569,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddField(fieldCollection, "z4", value);
+            fieldCollection.Add(new Field("z4", value));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -630,7 +612,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            fieldCollection.Add(new Field("scanType", null!));
+            fieldCollection.Add(new Field("scanType", null));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -693,7 +675,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            var field = new Field("z3", null!);
+            var field = new Field("z3", null);
             fieldCollection.Add(field);
             var chequeFields = new ChequeFields(fieldCollection);
 
@@ -917,7 +899,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             // Arrange
             var fieldCollection = new FieldCollection();
             var expectedField = new Field("amount", 12345.67m);
-            AddFieldToCollection(fieldCollection, expectedField);
+            fieldCollection.Add(expectedField);
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -936,8 +918,8 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            var expectedField = new Field("amount", null!);
-            AddFieldToCollection(fieldCollection, expectedField);
+            var expectedField = new Field("amount", null);
+            fieldCollection.Add(expectedField);
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -962,7 +944,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             // Arrange
             var fieldCollection = new FieldCollection();
             var expectedField = new Field("amount", value);
-            AddFieldToCollection(fieldCollection, expectedField);
+            fieldCollection.Add(expectedField);
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -982,7 +964,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             // Arrange
             var fieldCollection = new FieldCollection();
             var expectedField = new Field("amount", "1234.56");
-            AddFieldToCollection(fieldCollection, expectedField);
+            fieldCollection.Add(expectedField);
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -1019,8 +1001,8 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddFieldToCollection(fieldCollection, new Field("scanner", "SCANNER001"));
-            AddFieldToCollection(fieldCollection, new Field("chain", "CHAIN001"));
+            fieldCollection.Add(new Field("scanner", "SCANNER001"));
+            fieldCollection.Add(new Field("chain", "CHAIN001"));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act & Assert
@@ -1045,7 +1027,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             // Arrange
             var fieldCollection = new FieldCollection();
             var expectedField = new Field("amount", value);
-            AddFieldToCollection(fieldCollection, expectedField);
+            fieldCollection.Add(expectedField);
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -1057,30 +1039,14 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         }
 
         /// <summary>
-        /// Helper method to add a field to a FieldCollection using reflection.
-        /// This is necessary because the Add method is internal and not accessible from test code.
-        /// </summary>
-        /// <param name="collection">The FieldCollection to add the field to.</param>
-        /// <param name="field">The Field to add.</param>
-        private static void AddFieldToCollection(FieldCollection collection, Field field)
-        {
-            var addMethod = typeof(FieldCollection).GetMethod("Add", BindingFlags.Instance | BindingFlags.NonPublic);
-            if (addMethod == null)
-            {
-                throw new InvalidOperationException("Unable to find the internal Add method on FieldCollection.");
-            }
-            addMethod.Invoke(collection, new object[] { field });
-        }
-
-        /// <summary>
-        /// Tests that the Chain property returns the correct field value when the field exists with a valid string.
+        /// Tests that the Chain property
         /// </summary>
         [Test]
         public void Chain_WhenFieldExists_ReturnsFieldValue()
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddFieldToCollection(fieldCollection, "chain", "processing-chain-value");
+            fieldCollection.Add(new Field("chain", "processing-chain-value"));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -1113,7 +1079,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddFieldToCollection(fieldCollection, "chain", null);
+            fieldCollection.Add(new Field("chain", null));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -1131,7 +1097,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddFieldToCollection(fieldCollection, "chain", string.Empty);
+            fieldCollection.Add(new Field("chain", string.Empty));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -1152,7 +1118,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddFieldToCollection(fieldCollection, "chain", whitespace);
+            fieldCollection.Add(new Field("chain", whitespace));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -1193,7 +1159,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddFieldToCollection(fieldCollection, "chain", value);
+            fieldCollection.Add(new Field("chain", value));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -1214,7 +1180,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddFieldToCollection(fieldCollection, "chain", value);
+            fieldCollection.Add(new Field("chain", value));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -1233,7 +1199,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             // Arrange
             var longValue = new string('x', 10000);
             var fieldCollection = new FieldCollection();
-            AddFieldToCollection(fieldCollection, "chain", longValue);
+            fieldCollection.Add(new Field("chain", longValue));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -1259,7 +1225,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddFieldToCollection(fieldCollection, "chain", value);
+            fieldCollection.Add(new Field("chain", value));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -1270,21 +1236,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         }
 
         /// <summary>
-        /// Helper method to add a field to a FieldCollection using reflection.
-        /// This is necessary because the Add method is internal.
-        /// </summary>
-        /// <param name="collection">The field collection to add to.</param>
-        /// <param name="name">The field name.</param>
-        /// <param name="value">The field value.</param>
-        private static void AddFieldToCollection(FieldCollection collection, string name, object? value)
-        {
-            var field = new Field(name, value);
-            var addMethod = typeof(FieldCollection).GetMethod("Add", BindingFlags.NonPublic | BindingFlags.Instance);
-            addMethod?.Invoke(collection, new object[] { field });
-        }
-
-        /// <summary>
-        /// Tests that AccountNumber returns the field value when the field exists with a valid string.
+        /// Tests that AccountNumber
         /// </summary>
         [Test]
         public void AccountNumber_WhenFieldExists_ReturnsFieldValue()
@@ -1292,7 +1244,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             // Arrange
             var fieldCollection = new FieldCollection();
             var expectedValue = "123456789";
-            AddFieldToCollection(fieldCollection, "accountNumber", expectedValue);
+            fieldCollection.Add(new Field("accountNumber", expectedValue));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -1311,7 +1263,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddFieldToCollection(fieldCollection, "accountNumber", null);
+            fieldCollection.Add(new Field("accountNumber", null));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -1329,7 +1281,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddFieldToCollection(fieldCollection, "accountNumber", string.Empty);
+            fieldCollection.Add(new Field("accountNumber", string.Empty));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -1348,7 +1300,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             // Arrange
             var fieldCollection = new FieldCollection();
             var whitespaceValue = "   ";
-            AddFieldToCollection(fieldCollection, "accountNumber", whitespaceValue);
+            fieldCollection.Add(new Field("accountNumber", whitespaceValue));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -1367,7 +1319,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             // Arrange
             var fieldCollection = new FieldCollection();
             var longValue = new string('A', 10000);
-            AddFieldToCollection(fieldCollection, "accountNumber", longValue);
+            fieldCollection.Add(new Field("accountNumber", longValue));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -1386,7 +1338,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             // Arrange
             var fieldCollection = new FieldCollection();
             var specialValue = "!@#$%^&*()_+-=[]{}|;':\",./<>?`~";
-            AddFieldToCollection(fieldCollection, "accountNumber", specialValue);
+            fieldCollection.Add(new Field("accountNumber", specialValue));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -1406,7 +1358,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             // Arrange
             var fieldCollection = new FieldCollection();
             var numericValue = 987654321;
-            AddFieldToCollection(fieldCollection, "accountNumber", numericValue);
+            fieldCollection.Add(new Field("accountNumber", numericValue));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act
@@ -1439,7 +1391,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddFieldToCollection(fieldCollection, "otherField", "someValue");
+            fieldCollection.Add(new Field("otherField", "someValue"));
             var chequeFields = new ChequeFields(fieldCollection);
 
             // Act & Assert

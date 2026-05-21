@@ -184,7 +184,7 @@ namespace OmniGenerator.Test.Lib.Hierarchy
         {
             // Arrange
             var collection = new FieldCollection();
-            collection.Add(new Field("NullField", null!));
+            collection.Add(new Field("NullField", null));
 
             // Act
             var result = collection.TryGetStringValue("NullField", out var stringValue);
@@ -285,7 +285,7 @@ namespace OmniGenerator.Test.Lib.Hierarchy
         {
             // Arrange
             var collection = new FieldCollection();
-            collection.Add(new Field("NullField", null!));
+            collection.Add(new Field("NullField", null));
 
             // Act
             var result = collection.GetStringValue("NullField");
@@ -326,18 +326,18 @@ namespace OmniGenerator.Test.Lib.Hierarchy
         }
 
         [Test]
-        public void GetStringValueOrDefault_FieldWithNullValue_ReturnsEmptyString()
+        public void GetStringValueOrDefault_FieldWithNullValue_ReturnsDefaultValue()
         {
             // Arrange
             var collection = new FieldCollection();
-            collection.Add(new Field("NullField", null!));
+            collection.Add(new Field("NullField", null));
 
             // Act
             var result = collection.GetStringValueOrDefault("NullField", "DefaultValue");
 
             // Assert
             // Field.StringValue returns string.Empty for null values, not null
-            Assert.That(result, Is.EqualTo(string.Empty));
+            Assert.That(result, Is.EqualTo("DefaultValue"));
         }
 
         [Test]
@@ -567,7 +567,7 @@ namespace OmniGenerator.Test.Lib.Hierarchy
         {
             // Arrange
             var collection = new FieldCollection();
-            collection.Add(new Field("NullField", null!));
+            collection.Add(new Field("NullField", null));
 
             // Act
             dynamic expando = collection.ToDynamic();

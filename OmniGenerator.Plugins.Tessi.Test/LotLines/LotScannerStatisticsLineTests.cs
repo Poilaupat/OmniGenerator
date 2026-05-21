@@ -8,7 +8,7 @@ using OmniGenerator.Lib.FixedLengthLine;
 using OmniGenerator.Plugins.Tessi.Packagers.Lot;
 using OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk;
 
-namespace OmniGenerator.Plugins.Tessi.Test.LotLines
+namespace OmniGenerator.Plugins.Tessi.LotLines.UnitTests
 {
     [TestFixture]
     public class LotScannerStatisticsLineTests

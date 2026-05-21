@@ -50,6 +50,7 @@ namespace OmniGenerator.Lib.Autofac
                 .WithParameter("maxParallelism", maxParallelism)
                 .InstancePerLifetimeScope();
             builder.RegisterType<DocumentRendererManager>().As<IDocumentRendererManager>().InstancePerLifetimeScope();
+            builder.RegisterType<PhysicalFileSystem>().As<IFileSystem>().SingleInstance();
             builder.RegisterType<PluginService>().As<IPluginService>().InstancePerLifetimeScope();
             builder.RegisterType<GenerationOrchestrator>().As<IGenerationOrchestrator>().InstancePerLifetimeScope();
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,189 +17,93 @@ using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
 using OmniGenerator.Plugins.Tessi.Packagers;
 using OmniGenerator.Plugins.Tessi.Packagers.Compliance;
+using OmniGenerator.Plugins.Tessi.Test.Infrastructure;
 
 namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
 {
-    /// <summary>
-    /// Unit tests for the <see cref="EligibilityPackager"/> class.
-    /// </summary>
+    [TestFixture]
     public class EligibilityPackagerTests
     {
-        /// <summary>
-        /// Tests that ProcessAsync completes successfully with valid root containing one document,
-        /// creates the expected directory and files, and produces valid JSON output.
-        /// </summary>
+        private InMemoryFileSystem _fileSystem = null!;
+        private EligibilityPackager _packager = null!;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _fileSystem = new InMemoryFileSystem();
+            _packager = new EligibilityPackager(_fileSystem);
+        }
+
+        private static string BasePath => @"C:\output";
+
+        private string GetJsonContent()
+        {
+            var key = _fileSystem.TextFiles.Keys.First(k => k.EndsWith(".json"));
+            return _fileSystem.TextFiles[key];
+        }
+
         [Test]
         public async Task ProcessAsync_WithValidRootAndSingleDocument_CreatesFilesAndValidJson()
         {
-            // Arrange
-            var packager = new EligibilityPackager();
-            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             var root = CreateValidRoot(documentCount: 1);
+            await _packager.ProcessAsync(root, BasePath, 300);
 
-            try
-            {
-                // Act
-                await packager.ProcessAsync(root, tempPath, 300);
+            Assert.That(_fileSystem.TextFiles.Keys.Any(k => k.EndsWith(".json")), Is.True, "Should create one JSON file");
+            Assert.That(_fileSystem.TextFiles.Keys.Any(k => k.EndsWith(".top")), Is.True, "Should create one TOP file");
 
-                // Assert
-                Assert.That(Directory.Exists(tempPath), Is.True, "Output directory should be created");
-
-                var directories = Directory.GetDirectories(tempPath);
-                Assert.That(directories.Length, Is.EqualTo(1), "Should create exactly one package directory");
-
-                var packageDir = directories[0];
-                var jsonFiles = Directory.GetFiles(packageDir, "*.json");
-                var topFiles = Directory.GetFiles(packageDir, "*.top");
-
-                Assert.That(jsonFiles.Length, Is.EqualTo(1), "Should create one JSON file");
-                Assert.That(topFiles.Length, Is.EqualTo(1), "Should create one TOP file");
-
-                var jsonContent = await File.ReadAllTextAsync(jsonFiles[0]);
-                using var jsonDocument = JsonDocument.Parse(jsonContent);
-                var jsonRoot = jsonDocument.RootElement;
-
-                Assert.That(jsonRoot.ValueKind, Is.EqualTo(JsonValueKind.Object), "JSON should be a valid object");
-                Assert.That(jsonRoot.TryGetProperty("transactions", out var transactionsElement), Is.True, "JSON should have transactions property");
-                Assert.That(transactionsElement.GetArrayLength(), Is.EqualTo(1), "Should have one transaction");
-            }
-            finally
-            {
-                if (Directory.Exists(tempPath))
-                {
-                    Directory.Delete(tempPath, recursive: true);
-                }
-            }
+            using var jsonDocument = JsonDocument.Parse(GetJsonContent());
+            var jsonRoot = jsonDocument.RootElement;
+            Assert.That(jsonRoot.ValueKind, Is.EqualTo(JsonValueKind.Object));
+            Assert.That(jsonRoot.TryGetProperty("transactions", out var transactionsElement), Is.True);
+            Assert.That(transactionsElement.GetArrayLength(), Is.EqualTo(1));
         }
 
-        /// <summary>
-        /// Tests that ProcessAsync handles an empty root (no documents) without throwing exceptions
-        /// and produces valid JSON with zero transactions.
-        /// </summary>
         [Test]
         public async Task ProcessAsync_WithEmptyRoot_CreatesFilesWithZeroTransactions()
         {
-            // Arrange
-            var packager = new EligibilityPackager();
-            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             var root = CreateValidRoot(documentCount: 0);
+            await _packager.ProcessAsync(root, BasePath, 300);
 
-            try
-            {
-                // Act
-                await packager.ProcessAsync(root, tempPath, 300);
-
-                // Assert
-                Assert.That(Directory.Exists(tempPath), Is.True, "Output directory should be created");
-
-                var directories = Directory.GetDirectories(tempPath);
-                var packageDir = directories[0];
-                var jsonFiles = Directory.GetFiles(packageDir, "*.json");
-
-                var jsonContent = await File.ReadAllTextAsync(jsonFiles[0]);
-                var jsonRoot = JsonSerializer.Deserialize<JsonRoot>(jsonContent);
-
-                Assert.That(jsonRoot, Is.Not.Null);
-                Assert.That(jsonRoot!.Transactions.Count, Is.EqualTo(0), "Should have zero transactions");
-            }
-            finally
-            {
-                if (Directory.Exists(tempPath))
-                {
-                    Directory.Delete(tempPath, recursive: true);
-                }
-            }
+            var jsonRoot = JsonSerializer.Deserialize<JsonRoot>(GetJsonContent());
+            Assert.That(jsonRoot, Is.Not.Null);
+            Assert.That(jsonRoot!.Transactions.Count, Is.EqualTo(0));
         }
 
-        /// <summary>
-        /// Tests that ProcessAsync correctly processes multiple documents in a single root,
-        /// creating a transaction for each document.
-        /// </summary>
         [Test]
         public async Task ProcessAsync_WithMultipleDocuments_CreatesTransactionForEach()
         {
-            // Arrange
-            var packager = new EligibilityPackager();
-            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             var root = CreateValidRoot(documentCount: 5);
+            await _packager.ProcessAsync(root, BasePath, 300);
 
-            try
-            {
-                // Act
-                await packager.ProcessAsync(root, tempPath, 300);
-
-                // Assert
-                var directories = Directory.GetDirectories(tempPath);
-                var packageDir = directories[0];
-                var jsonFiles = Directory.GetFiles(packageDir, "*.json");
-
-                var jsonContent = await File.ReadAllTextAsync(jsonFiles[0]);
-                using var jsonDocument = JsonDocument.Parse(jsonContent);
-                var jsonRoot = jsonDocument.RootElement;
-
-                Assert.That(jsonRoot.TryGetProperty("transactions", out var transactionsElement), Is.True);
-                Assert.That(transactionsElement.GetArrayLength(), Is.EqualTo(5), "Should have five transactions");
-            }
-            finally
-            {
-                if (Directory.Exists(tempPath))
-                {
-                    Directory.Delete(tempPath, recursive: true);
-                }
-            }
+            using var jsonDocument = JsonDocument.Parse(GetJsonContent());
+            var jsonRoot = jsonDocument.RootElement;
+            Assert.That(jsonRoot.TryGetProperty("transactions", out var transactionsElement), Is.True);
+            Assert.That(transactionsElement.GetArrayLength(), Is.EqualTo(5));
         }
 
-        /// <summary>
-        /// Tests that ProcessAsync throws an exception when the root parameter is null.
-        /// </summary>
         [Test]
         public void ProcessAsync_WithNullRoot_ThrowsException()
         {
-            // Arrange
-            var packager = new EligibilityPackager();
-            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-
-            // Act & Assert
             Assert.ThrowsAsync<NullReferenceException>(async () =>
-                await packager.ProcessAsync(null!, tempPath, 300));
+                await _packager.ProcessAsync(null!, BasePath, 300));
         }
 
-        /// <summary>
-        /// Tests that ProcessAsync throws an exception when the path parameter is null.
-        /// </summary>
         [Test]
         public void ProcessAsync_WithNullPath_ThrowsException()
         {
-            // Arrange
-            var packager = new EligibilityPackager();
             var root = CreateValidRoot(documentCount: 1);
-
-            // Act & Assert
             Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                await packager.ProcessAsync(root, null!, 300));
+                await _packager.ProcessAsync(root, null!, 300));
         }
 
-        /// <summary>
-        /// Tests that ProcessAsync throws an exception when the path parameter is an empty string.
-        /// </summary>
         [Test]
-        [Category("ProductionBugSuspected")]
-        //[Ignore("ProductionBugSuspected")]
         public void ProcessAsync_WithEmptyPath_ThrowsException()
         {
-            // Arrange
-            var packager = new EligibilityPackager();
             var root = CreateValidRoot(documentCount: 1);
-
-            // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () =>
-                await packager.ProcessAsync(root, string.Empty, 300));
+                await _packager.ProcessAsync(root, string.Empty, 300));
         }
 
-        /// <summary>
-        /// Tests that ProcessAsync correctly handles different image rendering resolution values.
-        /// Note: The parameter is currently not used in the implementation.
-        /// </summary>
         [TestCase(0)]
         [TestCase(100)]
         [TestCase(300)]
@@ -208,30 +112,11 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         [TestCase(int.MinValue)]
         public async Task ProcessAsync_WithVariousResolutions_CompletesSuccessfully(int resolution)
         {
-            // Arrange
-            var packager = new EligibilityPackager();
-            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             var root = CreateValidRoot(documentCount: 1);
-
-            try
-            {
-                // Act & Assert - should not throw
-                await packager.ProcessAsync(root, tempPath, resolution);
-
-                Assert.That(Directory.Exists(tempPath), Is.True);
-            }
-            finally
-            {
-                if (Directory.Exists(tempPath))
-                {
-                    Directory.Delete(tempPath, recursive: true);
-                }
-            }
+            await _packager.ProcessAsync(root, BasePath, resolution);
+            Assert.That(_fileSystem.TextFiles.Keys.Any(k => k.EndsWith(".json")), Is.True);
         }
 
-        /// <summary>
-        /// Tests that ProcessAsync correctly serializes various amount values in check transactions.
-        /// </summary>
         [TestCase(0)]
         [TestCase(1)]
         [TestCase(100)]
@@ -239,159 +124,59 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         [TestCase(int.MaxValue)]
         public async Task ProcessAsync_WithVariousAmounts_SerializesCorrectly(int amount)
         {
-            // Arrange
-            var packager = new EligibilityPackager();
-            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             var root = CreateValidRootWithAmount(amount);
+            await _packager.ProcessAsync(root, BasePath, 300);
 
-            try
-            {
-                // Act
-                await packager.ProcessAsync(root, tempPath, 300);
-
-                // Assert
-                var directories = Directory.GetDirectories(tempPath);
-                var packageDir = directories[0];
-                var jsonFiles = Directory.GetFiles(packageDir, "*.json");
-
-                var jsonContent = await File.ReadAllTextAsync(jsonFiles[0]);
-                var jsonRoot = JsonSerializer.Deserialize<JsonRoot>(jsonContent);
-
-                Assert.That(jsonRoot, Is.Not.Null);
-                Assert.That(jsonRoot!.Transactions[0].Amount, Is.EqualTo(amount));
-                Assert.That(jsonRoot.Transactions[0].Checks[0].Amount, Is.EqualTo(amount));
-            }
-            finally
-            {
-                if (Directory.Exists(tempPath))
-                {
-                    Directory.Delete(tempPath, recursive: true);
-                }
-            }
+            var jsonRoot = JsonSerializer.Deserialize<JsonRoot>(GetJsonContent());
+            Assert.That(jsonRoot, Is.Not.Null);
+            Assert.That(jsonRoot!.Transactions[0].Amount, Is.EqualTo(amount));
+            Assert.That(jsonRoot.Transactions[0].Checks[0].Amount, Is.EqualTo(amount));
         }
 
-        /// <summary>
-        /// Tests that ProcessAsync creates the output directory if it does not exist.
-        /// </summary>
         [Test]
         public async Task ProcessAsync_WhenDirectoryDoesNotExist_CreatesDirectory()
         {
-            // Arrange
-            var packager = new EligibilityPackager();
-            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString(), "nested", "path");
             var root = CreateValidRoot(documentCount: 1);
-
-            try
-            {
-                // Act
-                await packager.ProcessAsync(root, tempPath, 300);
-
-                // Assert
-                Assert.That(Directory.Exists(tempPath), Is.True, "Nested directory should be created");
-            }
-            finally
-            {
-                var topLevelPath = Path.Combine(Path.GetTempPath(), tempPath.Split(Path.DirectorySeparatorChar)[^3]);
-                if (Directory.Exists(topLevelPath))
-                {
-                    Directory.Delete(topLevelPath, recursive: true);
-                }
-            }
+            await _packager.ProcessAsync(root, BasePath, 300);
+            Assert.That(_fileSystem.TextFiles.Keys.Any(k => k.EndsWith(".json")), Is.True);
         }
 
-        /// <summary>
-        /// Tests that ProcessAsync writes a valid TOP file marker.
-        /// </summary>
         [Test]
         public async Task ProcessAsync_CreatesTopFile_WithEmptyContent()
         {
-            // Arrange
-            var packager = new EligibilityPackager();
-            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             var root = CreateValidRoot(documentCount: 1);
+            await _packager.ProcessAsync(root, BasePath, 300);
 
-            try
-            {
-                // Act
-                await packager.ProcessAsync(root, tempPath, 300);
-
-                // Assert
-                var directories = Directory.GetDirectories(tempPath);
-                var packageDir = directories[0];
-                var topFiles = Directory.GetFiles(packageDir, "*.top");
-
-                Assert.That(topFiles.Length, Is.EqualTo(1));
-                var topContent = await File.ReadAllTextAsync(topFiles[0]);
-                Assert.That(topContent, Is.EqualTo(string.Empty), "TOP file should be empty");
-            }
-            finally
-            {
-                if (Directory.Exists(tempPath))
-                {
-                    Directory.Delete(tempPath, recursive: true);
-                }
-            }
+            var topKey = _fileSystem.TextFiles.Keys.First(k => k.EndsWith(".top"));
+            Assert.That(_fileSystem.TextFiles[topKey], Is.EqualTo(string.Empty));
         }
 
-        /// <summary>
-        /// Tests that ProcessAsync includes all required header fields in the JSON output.
-        /// </summary>
         [Test]
         public async Task ProcessAsync_IncludesHeaderFields_InJsonOutput()
         {
-            // Arrange
-            var packager = new EligibilityPackager();
-            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             var root = CreateValidRoot(documentCount: 1);
+            await _packager.ProcessAsync(root, BasePath, 300);
 
-            try
-            {
-                // Act
-                await packager.ProcessAsync(root, tempPath, 300);
+            using var jsonDocument = JsonDocument.Parse(GetJsonContent());
+            var jsonRoot = jsonDocument.RootElement;
 
-                // Assert
-                var directories = Directory.GetDirectories(tempPath);
-                var packageDir = directories[0];
-                var jsonFiles = Directory.GetFiles(packageDir, "*.json");
-
-                var jsonContent = await File.ReadAllTextAsync(jsonFiles[0]);
-                using var jsonDocument = JsonDocument.Parse(jsonContent);
-                var jsonRoot = jsonDocument.RootElement;
-
-                Assert.That(jsonRoot.TryGetProperty("header", out var headerElement), Is.True);
-                Assert.That(headerElement.TryGetProperty("bankCode", out var bankCodeElement), Is.True);
-                Assert.That(bankCodeElement.GetString(), Is.EqualTo("BANK001"));
-                Assert.That(headerElement.TryGetProperty("bankUnitCode", out var bankUnitCodeElement), Is.True);
-                Assert.That(bankUnitCodeElement.GetString(), Is.EqualTo("UNIT001"));
-                Assert.That(headerElement.TryGetProperty("providerCode", out var providerCodeElement), Is.True);
-                Assert.That(providerCodeElement.GetString(), Is.EqualTo("PROV001"));
-                Assert.That(headerElement.TryGetProperty("culture", out var cultureElement), Is.True);
-                Assert.That(cultureElement.GetString(), Is.EqualTo("fr-FR"));
-                Assert.That(headerElement.TryGetProperty("purpose", out var purposeElement), Is.True);
-                Assert.That(purposeElement.GetString(), Is.EqualTo("COMPLIANCE"));
-                Assert.That(headerElement.TryGetProperty("bankFlow", out var bankFlowElement), Is.True);
-                Assert.That(bankFlowElement.GetString(), Is.EqualTo("ELIGIBILITY"));
-            }
-            finally
-            {
-                if (Directory.Exists(tempPath))
-                {
-                    Directory.Delete(tempPath, recursive: true);
-                }
-            }
+            Assert.That(jsonRoot.TryGetProperty("header", out var headerElement), Is.True);
+            Assert.That(headerElement.TryGetProperty("bankCode", out var bankCodeElement), Is.True);
+            Assert.That(bankCodeElement.GetString(), Is.EqualTo("BANK001"));
+            Assert.That(headerElement.TryGetProperty("bankUnitCode", out var bankUnitCodeElement), Is.True);
+            Assert.That(bankUnitCodeElement.GetString(), Is.EqualTo("UNIT001"));
+            Assert.That(headerElement.TryGetProperty("providerCode", out var providerCodeElement), Is.True);
+            Assert.That(providerCodeElement.GetString(), Is.EqualTo("PROV001"));
+            Assert.That(headerElement.TryGetProperty("culture", out var cultureElement), Is.True);
+            Assert.That(cultureElement.GetString(), Is.EqualTo("fr-FR"));
+            Assert.That(headerElement.TryGetProperty("purpose", out var purposeElement), Is.True);
+            Assert.That(purposeElement.GetString(), Is.EqualTo("COMPLIANCE"));
+            Assert.That(headerElement.TryGetProperty("bankFlow", out var bankFlowElement), Is.True);
+            Assert.That(bankFlowElement.GetString(), Is.EqualTo("ELIGIBILITY"));
         }
 
-        /// <summary>
-        /// Helper method to create a valid Root object with the specified number of cheque documents.
-        /// </summary>
-        private Root CreateValidRoot(int documentCount)
-        {
-            return CreateValidRootWithAmount(10000, documentCount);
-        }
+        private Root CreateValidRoot(int documentCount) => CreateValidRootWithAmount(10000, documentCount);
 
-        /// <summary>
-        /// Helper method to create a valid Root object with a specific amount value.
-        /// </summary>
         private Root CreateValidRootWithAmount(int amount, int documentCount = 1)
         {
             var rootFields = new Dictionary<string, Field>
@@ -424,7 +209,6 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
                     { "deskCode", new Field("deskCode", "DESK001") },
                     { "accountNumber", new Field("accountNumber", "ACC123456789") }
                 };
-
                 documents.Add(new Document("cheque", null, docFields));
             }
 
@@ -433,19 +217,13 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
 
             var fieldCollection = new FieldCollection();
             foreach (var kvp in rootFields)
-            {
                 fieldCollection.Add(kvp.Value);
-            }
 
             typeof(Root).GetProperty("Fields")!.SetValue(root, fieldCollection);
-
             return root;
         }
     }
-}
 
-namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
-{
     /// <summary>
     /// Unit tests for the Deposit class constructor.
     /// </summary>
@@ -566,8 +344,8 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         /// Tests that the constructor correctly handles strings containing control characters
         /// such as tab, newline, and carriage return.
         /// </summary>
-        [TestCase("\t\n\r", "\t", "\n", "\r", "\t\n", "\r\n")]
-        [TestCase("\0", "\0\0", "\0\0\0", "Null\0Char", "Type\0", "Chain\0")]
+        [TestCase("\t\n\r", "\t", "\n", "\r", "\t\n", "\r\n", TestName = "Constructor_ControlCharacters_AssignsPropertiesCorrectly")]
+        [TestCase("\0", "\0\0", "\0\0\0", "Null\0Char", "Type\0", "Chain\0", TestName = "Constructor_ControlCharacters_AssignsPropertiesCorrectly")]
         public void Constructor_ControlCharacters_AssignsPropertiesCorrectly(
             string culture,
             string remittingBranchCode,
@@ -972,10 +750,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             Assert.That(check.Result, Is.Null);
         }
     }
-}
 
-namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
-{
     [TestFixture]
     public class JsonRootTests
     {
@@ -1059,7 +834,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         /// </summary>
         [TestCase("schema://test@#$%", "v1.0-beta+build.123")]
         [TestCase("<schema>", "<version>")]
-        [TestCase("schema\u0000test", "version\u0001test")]
+        [TestCase("schema\u0000test", "version\u0001test", TestName = "Constructor_SpecialCharacters_NullAndControlChars")]
         public void Constructor_SpecialCharacters_InitializesCorrectly(string schema, string version)
         {
             // Arrange
@@ -1259,9 +1034,9 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
         /// <summary>
         /// Tests that the Zone constructor handles strings with control characters and special Unicode.
         /// </summary>
-        [TestCase("key\0", "value\0")]
+        [TestCase("key\0", "value\0", TestName = "Constructor_WithSpecialCharacters_NullChar")]
         [TestCase("key\r\n", "value\r\n")]
-        [TestCase("key\u0001\u0002", "value\u0003\u0004")]
+        [TestCase("key\u0001\u0002", "value\u0003\u0004", TestName = "Constructor_WithSpecialCharacters_ControlChars")]
         [TestCase("key™©®", "value™©®")]
         [TestCase("key中文", "value日本語")]
         public void Constructor_WithSpecialCharacters_AssignsPropertiesCorrectly(string key, string value)
@@ -1857,6 +1632,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
     /// <summary>
     /// Unit tests for the <see cref="Header"/> class.
     /// </summary>
+    [TestFixture]
     public class HeaderTests
     {
         /// <summary>

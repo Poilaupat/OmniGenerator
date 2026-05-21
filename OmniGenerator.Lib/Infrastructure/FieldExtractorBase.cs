@@ -21,7 +21,7 @@ namespace OmniGenerator.Lib.Infrastructure
         /// <param name="fields">The field collection to wrap.</param>
         protected FieldExtractorBase(FieldCollection fields)
         {
-            _fields = fields;
+            _fields = fields ?? throw new ArgumentNullException(nameof(fields));
         }
 
         /// <summary>

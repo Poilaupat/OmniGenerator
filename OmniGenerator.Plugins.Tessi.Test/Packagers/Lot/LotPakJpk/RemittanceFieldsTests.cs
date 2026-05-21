@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Moq;
 using NUnit.Framework;
@@ -65,7 +65,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            fieldCollection.Add(new Field("remittance-id", null!));
+            fieldCollection.Add(new Field("remittance-id", null));
             var remittanceFields = new RemittanceFields(fieldCollection);
 
             // Act
@@ -198,8 +198,6 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// Expected: ArgumentNullException is thrown.
         /// </summary>
         [Test]
-        [Category("ProductionBugSuspected")]
-        [Ignore("ProductionBugSuspected")]
         public void Constructor_WithNullFieldCollection_ShouldThrowArgumentNullException()
         {
             // Arrange

@@ -79,8 +79,6 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// Expected result: An exception is thrown (ArgumentException or similar).
         /// </summary>
         [Test]
-        [Category("ProductionBugSuspected")]
-        [Ignore("ProductionBugSuspected")]
         public void ProcessAsync_EmptyBasepath_ThrowsException()
         {
             // Arrange
@@ -100,8 +98,6 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// Expected result: ArgumentException is thrown.
         /// </summary>
         [Test]
-        [Category("ProductionBugSuspected")]
-        [Ignore("ProductionBugSuspected")]
         public void ProcessAsync_InvalidPathCharacters_ThrowsArgumentException()
         {
             // Arrange

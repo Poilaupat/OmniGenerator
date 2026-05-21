@@ -1,4 +1,4 @@
-﻿using Moq;
+using Moq;
 using NUnit.Framework;
 using OmniGenerator.Plugins.Tessi.Packagers.Lot;
 using OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk;
@@ -18,29 +18,21 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
             // Arrange
             var docFieldCollection = new OmniGenerator.Lib.Hierarchy.FieldCollection();
             // DocumentFields requires 'encline' as a required field
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection).GetMethod("Add", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                ?.Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("encline", "1") });
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("encline", "1"));
             var docFields = new DocumentFields(docFieldCollection);
 
             var remFieldCollection = new OmniGenerator.Lib.Hierarchy.FieldCollection();
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection).GetMethod("Add", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                ?.Invoke(remFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("remittance-id", "REM999") });
+            remFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("remittance-id", "REM999"));
             var remFields = new RemittanceFields(remFieldCollection);
 
             var rootFieldCollection = new OmniGenerator.Lib.Hierarchy.FieldCollection();
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection).GetMethod("Add", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                ?.Invoke(rootFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("packet-number", "PKT999") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection).GetMethod("Add", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                ?.Invoke(rootFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("organization-code", "ORG999") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection).GetMethod("Add", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                ?.Invoke(rootFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("process-code", "PROC99") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection).GetMethod("Add", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                ?.Invoke(rootFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("reconciliation", "0") });
+            rootFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("packet-number", "PKT999"));
+            rootFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("organization-code", "ORG999"));
+            rootFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("process-code", "PROC99"));
+            rootFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("reconciliation", "0"));
             // RootFields also requires 'capture-point-code' and 'organization-unit-code' as required fields
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection).GetMethod("Add", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                ?.Invoke(rootFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("capture-point-code", "CP001") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection).GetMethod("Add", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                ?.Invoke(rootFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("organization-unit-code", "OU001") });
+            rootFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("capture-point-code", "CP001"));
+            rootFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("organization-unit-code", "OU001"));
             var rootFields = new RootFields(rootFieldCollection);
 
             var bwRecto = new OffsetLengthImage();
@@ -210,69 +202,31 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         {
             // Arrange
             var docFieldCollection = new OmniGenerator.Lib.Hierarchy.FieldCollection();
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("encline", "TestEncline") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("dataread", "") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("quality-code", "0") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("ref-doc", "") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("signature", "---SIGNATURE---") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("status", "0") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("priority", "") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("rib", "") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("nb-checks", "") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("icr-conf-amount", "") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("icr-amount", "") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("sort-error", "0") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("image-quality", "0") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("deleted", "0") });
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("encline", "TestEncline"));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("dataread", ""));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("quality-code", "0"));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("ref-doc", ""));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("signature", "---SIGNATURE---"));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("status", "0"));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("priority", ""));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("rib", ""));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("nb-checks", ""));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("icr-conf-amount", ""));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("icr-amount", ""));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("sort-error", "0"));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("image-quality", "0"));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("deleted", "0"));
             var docFields = new DocumentFields(docFieldCollection);
 
             var remFieldCollection = new OmniGenerator.Lib.Hierarchy.FieldCollection();
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(remFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("remittance-id", "") });
+            remFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("remittance-id", ""));
             var remFields = new RemittanceFields(remFieldCollection);
 
             var rootFieldCollection = new OmniGenerator.Lib.Hierarchy.FieldCollection();
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(rootFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("packet-number", "0001") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(rootFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("organization-code", "ORG123") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(rootFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("process-code", "000") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(rootFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("reconciliation", "0") });
+            rootFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("packet-number", "0001"));
+            rootFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("organization-code", "ORG123"));
+            rootFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("process-code", "000"));
+            rootFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("reconciliation", "0"));
             var rootFields = new RootFields(rootFieldCollection);
 
             var bwRecto = new OffsetLengthImage();
@@ -327,27 +281,17 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         {
             // Arrange
             var docFieldCollection = new OmniGenerator.Lib.Hierarchy.FieldCollection();
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("encline", "TestEncline") });
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("encline", "TestEncline"));
             var docFields = new DocumentFields(docFieldCollection);
 
             var remFieldCollection = new OmniGenerator.Lib.Hierarchy.FieldCollection();
             var remFields = new RemittanceFields(remFieldCollection);
 
             var rootFieldCollection = new OmniGenerator.Lib.Hierarchy.FieldCollection();
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .Invoke(rootFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("packet-number", "0001") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .Invoke(rootFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("organization-code", "ORG") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .Invoke(rootFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("process-code", "000") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .Invoke(rootFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("reconciliation", "0") });
+            rootFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("packet-number", "0001"));
+            rootFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("organization-code", "ORG"));
+            rootFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("process-code", "000"));
+            rootFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("reconciliation", "0"));
             var rootFields = new RootFields(rootFieldCollection);
 
             var bwRecto = new OffsetLengthImage();
@@ -434,69 +378,31 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         {
             // Arrange
             var docFieldCollection = new OmniGenerator.Lib.Hierarchy.FieldCollection();
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("encline", "TestEncline") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("dataread", "") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("quality-code", "0") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("ref-doc", "") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("signature", "---SIGNATURE---") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("status", "0") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("priority", "") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("rib", "") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("nb-checks", "") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("icr-conf-amount", "") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("icr-amount", "") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("sort-error", "0") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("image-quality", "0") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(docFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("deleted", "0") });
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("encline", "TestEncline"));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("dataread", ""));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("quality-code", "0"));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("ref-doc", ""));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("signature", "---SIGNATURE---"));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("status", "0"));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("priority", ""));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("rib", ""));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("nb-checks", ""));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("icr-conf-amount", ""));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("icr-amount", ""));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("sort-error", "0"));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("image-quality", "0"));
+            docFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("deleted", "0"));
             var mockDocFields = new DocumentFields(docFieldCollection);
 
             var remFieldCollection = new OmniGenerator.Lib.Hierarchy.FieldCollection();
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(remFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("remittance-id", "") });
+            remFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("remittance-id", ""));
             var mockRemFields = new RemittanceFields(remFieldCollection);
 
             var rootFieldCollection = new OmniGenerator.Lib.Hierarchy.FieldCollection();
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(rootFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("packet-number", "0001") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(rootFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("organization-code", "ORG123") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(rootFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("process-code", "000") });
-            typeof(OmniGenerator.Lib.Hierarchy.FieldCollection)
-                .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .Invoke(rootFieldCollection, new object[] { new OmniGenerator.Lib.Hierarchy.Field("reconciliation", "0") });
+            rootFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("packet-number", "0001"));
+            rootFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("organization-code", "ORG123"));
+            rootFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("process-code", "000"));
+            rootFieldCollection.Add(new OmniGenerator.Lib.Hierarchy.Field("reconciliation", "0"));
             var mockRootFields = new RootFields(rootFieldCollection);
 
             var mockBwRecto = new OffsetLengthImage();

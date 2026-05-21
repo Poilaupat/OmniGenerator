@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+using System;
 
 using NUnit.Framework;
 using OmniGenerator.Lib.Hierarchy;
@@ -41,7 +40,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddFieldToCollection(fieldCollection, new Field("packet-date", "2024-01-01"));
+            fieldCollection.Add(new Field("packet-date", "2024-01-01"));
             var rootFields = new RootFields(fieldCollection);
             var before = DateTime.Now;
 
@@ -62,7 +61,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddFieldToCollection(fieldCollection, new Field("packet-date", 12345));
+            fieldCollection.Add(new Field("packet-date", 12345));
             var rootFields = new RootFields(fieldCollection);
             var before = DateTime.Now;
 
@@ -83,7 +82,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddFieldToCollection(fieldCollection, new Field("packet-date", null!));
+            fieldCollection.Add(new Field("packet-date", null));
             var rootFields = new RootFields(fieldCollection);
             var before = DateTime.Now;
 
@@ -105,7 +104,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
             // Arrange
             var expectedDate = new DateTime(2024, 6, 15, 10, 30, 45);
             var fieldCollection = new FieldCollection();
-            AddFieldToCollection(fieldCollection, new Field("packet-date", expectedDate));
+            fieldCollection.Add(new Field("packet-date", expectedDate));
             var rootFields = new RootFields(fieldCollection);
 
             // Act
@@ -123,7 +122,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddFieldToCollection(fieldCollection, new Field("packet-date", DateTime.MinValue));
+            fieldCollection.Add(new Field("packet-date", DateTime.MinValue));
             var rootFields = new RootFields(fieldCollection);
 
             // Act
@@ -141,7 +140,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            AddFieldToCollection(fieldCollection, new Field("packet-date", DateTime.MaxValue));
+            fieldCollection.Add(new Field("packet-date", DateTime.MaxValue));
             var rootFields = new RootFields(fieldCollection);
 
             // Act
@@ -152,18 +151,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         }
 
         /// <summary>
-        /// Helper method to add a field to a FieldCollection using reflection.
-        /// </summary>
-        /// <param name="collection">The FieldCollection to add the field to.</param>
-        /// <param name="field">The Field to add.</param>
-        private void AddFieldToCollection(FieldCollection collection, Field field)
-        {
-            var addMethod = typeof(FieldCollection).GetMethod("Add", BindingFlags.Instance | BindingFlags.NonPublic);
-            addMethod?.Invoke(collection, new object[] { field });
-        }
-
-        /// <summary>
-        /// Tests that ProcessCode returns the default value "000" when the field is not present in the collection.
+        /// Tests that ProcessCode
         /// </summary>
         [Test]
         public void ProcessCode_WhenFieldNotPresent_ReturnsDefaultValue()
@@ -205,18 +193,18 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// Note: Field.StringValue converts null to empty string.
         /// </summary>
         [Test]
-        public void ProcessCode_WhenFieldPresentWithNullValue_ReturnsEmptyString()
+        public void ProcessCode_WhenFieldPresentWithNullValue_ReturnsDefaultValue()
         {
             // Arrange
             var fieldCollection = new FieldCollection();
-            fieldCollection.Add(new Field("process-code", null!));
+            fieldCollection.Add(new Field("process-code", null));
             var rootFields = new RootFields(fieldCollection);
 
             // Act
             var result = rootFields.ProcessCode;
 
             // Assert
-            Assert.That(result, Is.EqualTo(string.Empty));
+            Assert.That(result, Is.EqualTo("000"));
         }
 
         /// <summary>
@@ -343,9 +331,9 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// <summary>
         /// Tests that ProcessCode handles control characters in the field value.
         /// </summary>
-        [TestCase("\0")]
-        [TestCase("\u0001")]
-        [TestCase("\u001F")]
+        [TestCase("\0", TestName = "ProcessCode_WhenFieldPresentWithControlCharacters_NullChar")]
+        [TestCase("\u0001", TestName = "ProcessCode_WhenFieldPresentWithControlCharacters_ControlOne")]
+        [TestCase("\u001F", TestName = "ProcessCode_WhenFieldPresentWithControlCharacters_UnitSeparator")]
         public void ProcessCode_WhenFieldPresentWithControlCharacters_ReturnsControlCharacters(string controlChars)
         {
             // Arrange
@@ -460,8 +448,6 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// Tests that Reconciliation property returns default value when field value is null.
         /// </summary>
         [Test]
-        [Category("ProductionBugSuspected")]
-        [Ignore("ProductionBugSuspected")]
         public void Reconciliation_WhenFieldValueIsNull_ReturnsDefaultValue()
         {
             // Arrange
@@ -504,7 +490,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         private FieldCollection CreateFieldCollectionWithReconciliation(object? value)
         {
             var fieldCollection = new FieldCollection();
-            var field = new Field("reconciliation", value!);
+            var field = new Field("reconciliation", value);
             fieldCollection.Add(field);
             return fieldCollection;
         }
@@ -584,7 +570,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         /// Field.StringValue returns empty string for null values.
         /// </summary>
         [Test]
-        public void PacketName_FieldWithNullValue_ReturnsEmptyString()
+        public void PacketName_FieldWithNullValue_ReturnsDefaultValue()
         {
             // Arrange
             var fieldCollection = new FieldCollectionBuilder()
@@ -596,7 +582,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
             var result = rootFields.PacketName;
 
             // Assert
-            Assert.That(result, Is.EqualTo(string.Empty));
+            Assert.That(result, Is.EqualTo("DefaultName"));
         }
 
         /// <summary>
