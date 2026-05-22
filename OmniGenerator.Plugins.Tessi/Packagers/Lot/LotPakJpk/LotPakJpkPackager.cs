@@ -34,18 +34,6 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk
         /// <returns>A task representing the asynchronous operation.</returns>
         public async Task ProcessAsync(Root root, string basepath, int imageRenderingResolution)
         {
-            if (basepath is null)
-                throw new ArgumentNullException(nameof(basepath));
-
-            if (basepath.Length == 0)
-                throw new ArgumentException("Path cannot be empty.", nameof(basepath));
-
-            if (basepath.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
-                throw new ArgumentException("Path contains invalid characters.", nameof(basepath));
-
-            if (!_fileSystem.DirectoryExists(basepath))
-                throw new DirectoryNotFoundException($"Directory not found: {basepath}");
-
             _resolution = imageRenderingResolution;
 
             var rootFields = new RootFields(root.Fields);

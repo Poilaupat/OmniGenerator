@@ -36,82 +36,6 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
         }
 
         /// <summary>
-        /// Tests that ProcessAsync throws an ArgumentNullException when the basepath parameter is null.
-        /// This test verifies that null path validation occurs in Path.Combine or FileStream constructor.
-        /// Expected result: ArgumentNullException is thrown.
-        /// </summary>
-        [Test]
-        public void ProcessAsync_NullBasepath_ThrowsArgumentNullException()
-        {
-            // Arrange
-            var packager = new LotPakJpkPackager();
-            var root = CreateValidRoot();
-            string? basepath = null;
-            var resolution = 300;
-
-            // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                await packager.ProcessAsync(root, basepath!, resolution));
-        }
-
-        /// <summary>
-        /// Tests that ProcessAsync throws DirectoryNotFoundException when basepath points to a non-existent directory.
-        /// This test verifies that the method fails appropriately when trying to create files in an invalid location.
-        /// Expected result: DirectoryNotFoundException is thrown.
-        /// </summary>
-        [Test]
-        public void ProcessAsync_NonExistentDirectory_ThrowsDirectoryNotFoundException()
-        {
-            // Arrange
-            var packager = new LotPakJpkPackager();
-            var root = CreateValidRoot();
-            var basepath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString(), "nonexistent", "path");
-            var resolution = 300;
-
-            // Act & Assert
-            Assert.ThrowsAsync<DirectoryNotFoundException>(async () =>
-                await packager.ProcessAsync(root, basepath, resolution));
-        }
-
-        /// <summary>
-        /// Tests that ProcessAsync handles empty basepath string.
-        /// This test verifies behavior when an empty string is provided as the base path.
-        /// Expected result: An exception is thrown (ArgumentException or similar).
-        /// </summary>
-        [Test]
-        public void ProcessAsync_EmptyBasepath_ThrowsException()
-        {
-            // Arrange
-            var packager = new LotPakJpkPackager();
-            var root = CreateValidRoot();
-            var basepath = string.Empty;
-            var resolution = 300;
-
-            // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-                await packager.ProcessAsync(root, basepath, resolution));
-        }
-
-        /// <summary>
-        /// Tests that ProcessAsync handles basepath with invalid characters.
-        /// This test verifies that the method throws an appropriate exception when the path contains invalid characters.
-        /// Expected result: ArgumentException is thrown.
-        /// </summary>
-        [Test]
-        public void ProcessAsync_InvalidPathCharacters_ThrowsArgumentException()
-        {
-            // Arrange
-            var packager = new LotPakJpkPackager();
-            var root = CreateValidRoot();
-            var basepath = "C:\\Invalid<>Path|With?Chars";
-            var resolution = 300;
-
-            // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-                await packager.ProcessAsync(root, basepath, resolution));
-        }
-
-        /// <summary>
         /// Tests ProcessAsync with various boundary values for imageRenderingResolution parameter.
         /// This test verifies that the resolution parameter is accepted across its full range including edge cases.
         /// Expected result: The method completes without throwing for resolution assignment.
@@ -239,25 +163,6 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Lot.LotPakJpk.UnitTests
                 // Cleanup
                 CleanupTempDirectory(tempDir);
             }
-        }
-
-        /// <summary>
-        /// Tests that ProcessAsync handles whitespace-only basepath.
-        /// This test verifies that the method properly validates basepath input.
-        /// Expected result: An exception is thrown for invalid path.
-        /// </summary>
-        [Test]
-        public void ProcessAsync_WhitespaceBasepath_ThrowsException()
-        {
-            // Arrange
-            var packager = new LotPakJpkPackager();
-            var root = CreateValidRoot();
-            var basepath = "   ";
-            var resolution = 300;
-
-            // Act & Assert
-            Assert.ThrowsAsync<DirectoryNotFoundException>(async () =>
-                await packager.ProcessAsync(root, basepath, resolution));
         }
 
         #region Helper Methods

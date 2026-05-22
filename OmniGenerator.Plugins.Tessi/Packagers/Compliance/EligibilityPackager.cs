@@ -22,12 +22,6 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance
 
         public async Task ProcessAsync(Root root, string path, int imageRenderingResolution)
         {
-            if (path is null)
-                throw new ArgumentNullException(nameof(path));
-
-            if (path.Length == 0)
-                throw new ArgumentException("Path cannot be empty.", nameof(path));
-
             var rootFields = new RootFields(root.Fields);
             var jsonRoot = BuildJsonRoot(root, rootFields);
 

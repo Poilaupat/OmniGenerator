@@ -14,9 +14,6 @@ namespace OmniGenerator.Plugins.Packagers.SqlScriptPackager
         {
             var packagename = $"{DateTime.Now:yyyyMMddHHmmss}_Script.sql";
 
-            if (!Directory.Exists(basepath))
-                Directory.CreateDirectory(basepath);
-
             var filefullpath = Path.Combine(basepath, packagename);
 
             await using (var fs = new FileStream(filefullpath, FileMode.Create, FileAccess.ReadWrite))

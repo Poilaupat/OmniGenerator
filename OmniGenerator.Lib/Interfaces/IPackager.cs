@@ -19,7 +19,7 @@ namespace OmniGenerator.Lib.Interfaces
         /// </param>
         /// <param name="basepath">
         /// The absolute or relative path to the directory where the generated files should be written.
-        /// Implementations should ensure this directory exists or create it as needed.
+        /// The directory is guaranteed to exist when this method is called.
         /// </param>
         /// <param name="imageRenderingResolution">
         /// The resolution (in DPI or pixels per inch) to use when rendering images associated with the documents.

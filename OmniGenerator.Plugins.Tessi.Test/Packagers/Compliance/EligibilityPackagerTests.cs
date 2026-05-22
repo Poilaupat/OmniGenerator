@@ -88,22 +88,6 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
                 await _packager.ProcessAsync(null!, BasePath, 300));
         }
 
-        [Test]
-        public void ProcessAsync_WithNullPath_ThrowsException()
-        {
-            var root = CreateValidRoot(documentCount: 1);
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                await _packager.ProcessAsync(root, null!, 300));
-        }
-
-        [Test]
-        public void ProcessAsync_WithEmptyPath_ThrowsException()
-        {
-            var root = CreateValidRoot(documentCount: 1);
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-                await _packager.ProcessAsync(root, string.Empty, 300));
-        }
-
         [TestCase(0)]
         [TestCase(100)]
         [TestCase(300)]
