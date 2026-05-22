@@ -1,13 +1,15 @@
-﻿namespace OmniGenerator.Lib.Generators.Fields
+﻿using OmniGenerator.Lib.Hierarchy;
+
+namespace OmniGenerator.Lib.Generators.Fields
 {
     /// <summary>
     /// The <see cref="FieldGeneratorAggregate"/> is a kind of generator that computes aggregates on <see cref="Group"/> content
     /// </summary>
-    internal class FieldGeneratorAggregate : AbstractFieldGeneratorOneFieldDependant<int>
+    internal class FieldGeneratorAggregate : AbstractFieldGeneratorSingleFieldDependant<int>
     {
         /// <summary>
         /// The aggregate type. Its configures how the aggregate is computed (count, sum, ...)
-        /// <see cref="EFFieldAggregateType"/> for complete list 
+        /// <see cref="EFFieldAggregateType"/> for complete list
         /// </summary>
         public EFFieldAggregateType AggregateType { get; set; }
 
@@ -33,7 +35,7 @@
         /// <param name="name">The name of the generator</param>
         /// <param name="dependentUpon">If aggregate type is set to Sum, name of the numeric field to sum. String.Empty either</param>
         /// <param name="aggregateType">The aggregate type. Either Sum or Count</param>
-        /// <param name="scope">The scope. Either DirectChildren or Overall</param>
+        /// <param name="scope">The scope. Either DirectChildren or AllChildren</param>
         /// <param name="targetElement">The name of the target element. Either a <see cref="Document"/> name or a <see cref="Group"/> name</param>
         public FieldGeneratorAggregate(string name, string dependentUpon, EFFieldAggregateType aggregateType, EScope scope, string targetElement)
             : base(name, dependentUpon)
@@ -71,7 +73,7 @@
         private int ComputeSumAggregate()
         {
             return Group
-                ?.GetElements(TargetElement, Scope == EScope.Overall)
+                ?.GetElements(TargetElement, Scope == EScope.AllChildren)
                 .Sum(x => Convert.ToInt32(x.Fields[DependenceNames.Single()].Value))
                 ?? 0;
         }
@@ -83,7 +85,7 @@
         private int ComputeCountAggregate()
         {
             return Group
-                ?.GetElements(TargetElement, Scope == EScope.Overall)
+                ?.GetElements(TargetElement, Scope == EScope.AllChildren)
                 .Count() ?? 0;
         }
     }

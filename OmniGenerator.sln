@@ -4,25 +4,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniGenerator.Cli", "OmniGenerator.Cli\OmniGenerator.Cli.csproj", "{1DFA7A9C-2B0C-4007-B06F-CCB8A512B269}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0D00A240-F9F5-430D-B93D-7BF948038245} = {0D00A240-F9F5-430D-B93D-7BF948038245}
+		{EC36842D-000A-4273-B98E-CC3BFA2A9B97} = {EC36842D-000A-4273-B98E-CC3BFA2A9B97}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniGenerator.Lib", "OmniGenerator.Lib\OmniGenerator.Lib.csproj", "{2C34E6E8-DAC2-43B8-B8AC-F3A72CC1891A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniGenerator.Test", "OmniGenerator.Test\OmniGenerator.Test.csproj", "{19D213D8-9DD7-4B94-8ADF-C5006907F7B9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ParamFiles", "ParamFiles", "{D1F10929-6948-4062-906D-D4E9F7C4F731}"
-	ProjectSection(SolutionItems) = preProject
-		ParamFiles\fields-cheque.json = ParamFiles\fields-cheque.json
-		ParamFiles\fields-payment.json = ParamFiles\fields-payment.json
-		ParamFiles\fields-slip.json = ParamFiles\fields-slip.json
-		ParamFiles\fields-talon-optique.json = ParamFiles\fields-talon-optique.json
-		ParamFiles\param-compliance-eligibility.json = ParamFiles\param-compliance-eligibility.json
-		ParamFiles\param-debug.json = ParamFiles\param-debug.json
-		ParamFiles\param.json = ParamFiles\param.json
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniGenerator.Plugins.Tessi", "OmniGenerator.Plugins.Tessi\OmniGenerator.Plugins.Tessi.csproj", "{EC36842D-000A-4273-B98E-CC3BFA2A9B97}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmniGenerator.Plugins", "OmniGenerator.Plugins\OmniGenerator.Plugins.csproj", "{0D00A240-F9F5-430D-B93D-7BF948038245}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmniGenerator.Plugins.Tessi.Test", "OmniGenerator.Plugins.Tessi.Test\OmniGenerator.Plugins.Tessi.Test.csproj", "{A90C47FD-C559-4B24-BF7D-6DEF330AAB69}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Assets", "Assets\Assets.shproj", "{B4C82661-B68F-481D-BF68-68C4F4948AA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,11 +47,18 @@ Global
 		{0D00A240-F9F5-430D-B93D-7BF948038245}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D00A240-F9F5-430D-B93D-7BF948038245}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D00A240-F9F5-430D-B93D-7BF948038245}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A90C47FD-C559-4B24-BF7D-6DEF330AAB69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A90C47FD-C559-4B24-BF7D-6DEF330AAB69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A90C47FD-C559-4B24-BF7D-6DEF330AAB69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A90C47FD-C559-4B24-BF7D-6DEF330AAB69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B380405C-EC37-4774-9865-2308ECD6113F}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Assets\Assets.projitems*{b4c82661-b68f-481d-bf68-68c4f4948aa0}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

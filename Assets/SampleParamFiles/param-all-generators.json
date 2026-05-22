@@ -1,0 +1,82 @@
+{
+  "$schema": "../omnigenerator-schema.json",
+  "packager": "packager.omni.csv",
+  "hierarchy": {
+    "fields": [],
+    "root": {
+      "$type": "group",
+      "name": "pli",
+      "min-occurs": 10,
+      "max-occurs": 15,
+      "fields": [
+        {
+          "$type": "aggregate",
+          "name": "aggregate-sum",
+          "aggregate-type": "Sum",
+          "scope": "DirectChildren",
+          "target-element": "feuille",
+          "dependent-upon": "three"
+        },
+        {
+          "$type": "aggregate",
+          "name": "aggragate-count",
+          "aggregate-type": "Count",
+          "scope": "DirectChildren",
+          "target-element": "feuille",
+          "dependent-upon": ""
+        }
+      ],
+      "elements": [
+        {
+          "$type": "document",
+          "name": "feuille",
+          "min-occurs": 1,
+          "max-occurs": 9,
+          "fields": [
+            {
+              "$type": "constant",
+              "name": "one",
+              "value": "01"
+            },
+            {
+              "$type": "increment",
+              "name": "two",
+              "start": 42,
+              "increment": 1
+            },
+            {
+              "$type": "numeric",
+              "name": "three",
+              "min": 100,
+              "max": 10000
+            },
+            {
+              "$type": "regex",
+              "name": "four",
+              "pattern": "\\d{7}"
+            },
+            {
+              "$type": "key",
+              "name": "five",
+              "dependent-upon": "four",
+              "key-type": "dummy"
+            },
+            {
+              "$type": "date",
+              "name": "six",
+              "day-diff-min": -5,
+              "day-diff-max": 0
+            },
+            {
+              "$type": "composite",
+              "name": "composite",
+              "dependent-upon": "one,two,three,four,five,six",
+              "format": "{{one}} *-* {{two}} *-* {{three | currency}} *-* {{four}} *-* {{five}} *-* {{six | date:\"yyyyMMdd\"}}"
+            }
+          ]
+        }
+
+      ]
+    }
+  }
+}

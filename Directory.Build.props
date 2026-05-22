@@ -1,9 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <!-- Shared assembly / package metadata. NB.GV will inject Version / AssemblyVersion / FileVersion / InformationalVersion. -->
+    <Company>Poilaupat</Company>
+    <Authors>Poilaupat</Authors>
+    <Product>OmniGenerator</Product>
+    <Copyright>Copyright © $([System.DateTime]::UtcNow.Year) Poilaupat</Copyright>
+    <RepositoryUrl>https://github.com/Poilaupat/OmniGenerator</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Condition="!Exists('packages.config')">
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.7.115" Condition="!Exists('packages.config')">
       <PrivateAssets>all</PrivateAssets>
-      <Version>3.6.139</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+
 </Project>

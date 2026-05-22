@@ -1,0 +1,49 @@
+{
+  "$schema": "../omnigenerator-schema.json",
+  "packager": "packager.omni.zip",
+  "hierarchy": {
+    "fields": [],
+    "root": {
+      "$type": "group",
+      "name": "remittance",
+      "min-occurs": 10,
+      "max-occurs": 10,
+      "fields": [
+        {
+          "$type": "list",
+          "name": "test1",
+          "list": [],
+          "list-file": "..\\..\\..\\Resources\\Lists\\onedice.txt"
+        },
+        {
+          "$type": "list",
+          "name": "test2",
+          "list": {},
+          "list-file": "..\\..\\..\\Resources\\Lists\\twodices.txt"
+        },
+        {
+          "$type": "increment",
+          "name": "incr",
+          "start": 2,
+          "increment": 3
+        }
+      ],
+      "elements": [
+        {
+          "$type": "document",
+          "name": "slip",
+          "min-occurs": 1,
+          "max-occurs": 1,
+          "fields": [
+            {
+              "$type": "increment",
+              "name": "incr2",
+              "start": 10,
+              "increment": 5
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

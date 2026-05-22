@@ -7,10 +7,10 @@ namespace OmniGenerator.Lib.Configuration.Fields
         private string _format = default!;
 
         [JsonPropertyName("format")]
-        public required string Format 
-        { 
+        public required string Format
+        {
             get { return _format; }
-            set { _format = value.Replace("-", "_"); }
+            set { _format = value; }
         }
     }
 }

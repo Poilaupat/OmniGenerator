@@ -1,0 +1,8 @@
+title: OmniGenerator
+description: Generate files in any format filled with smart random data.
+theme: jekyll-theme-cayman
+show_downloads: false
+
+# Exclude the repository-level files that may be copied into _site
+exclude:
+  - README.md

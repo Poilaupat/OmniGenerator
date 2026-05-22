@@ -7,7 +7,7 @@ namespace OmniGenerator.Lib.Configuration.Fields
     {
         [JsonPropertyName("min")]
         public required float Min { get; set; } = 0.01f;
-        
+
         [JsonPropertyName("max")]
         public required float Max { get; set; } = 10000000f;
     }

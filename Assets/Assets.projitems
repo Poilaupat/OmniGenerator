@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>b4c82661-b68f-481d-bf68-68c4f4948aa0</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Assets</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)omnigenerator-schema.json" />
+    <Content Include="$(MSBuildThisFileDirectory)sampleparamfiles\docsandgroups\fields-batch-ticket.json" />
+    <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\DocsAndGroups\fields-cheque.json" />
+    <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\DocsAndGroups\fields-payment.json" />
+    <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\DocsAndGroups\fields-deposit-slip.json" />
+    <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\DocsAndGroups\fields-payment-slip.json" />
+    <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\omnigenerator-schema.json" />
+    <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\param-all-generators.json" />
+    <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\param-compliance-eligibility.json" />
+    <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\param-debug.json" />
+    <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\param-lists.json" />
+    <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\param-lotpakjpk.json" />
+    <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\param-remettant.json" />
+    <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\param-sql.json" />
+    <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\schedule-plan-sample.json" />
+  </ItemGroup>
+</Project>

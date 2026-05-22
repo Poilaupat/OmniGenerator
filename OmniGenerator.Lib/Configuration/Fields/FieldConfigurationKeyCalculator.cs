@@ -1,4 +1,4 @@
-﻿using OmniGenerator.Lib.Generators.Fields;
+﻿using OmniGenerator.Lib.Generators;
 using System.Text.Json.Serialization;
 
 namespace OmniGenerator.Lib.Configuration.Fields

@@ -1,0 +1,48 @@
+{
+  "$schema": "../omnigenerator-schema.json",
+  "packager": "packager.omni.csv",
+  "hierarchy": {
+    "fields": [],
+    "root": {
+      "$type": "group",
+      "name": "remittance",
+      "min-occurs": 10,
+      "max-occurs": 10,
+      "fields": [
+        {
+          "$type": "list",
+          "name": "one-dice-inner-list",
+          "list": [ "one", "two", "three", "four", "five", "six" ]
+        },
+        {
+          "$type": "list",
+          "name": "one-dice-external-list",
+          "list-file": "..\\..\\..\\..\\OmniGenerator.Lib\\Resources\\Lists\\onedice.txt"
+        },
+        {
+          "$type": "list",
+          "name": "two-dices-inner-list",
+          "list": {
+            "two": 1,
+            "three": 2,
+            "four": 3,
+            "five": 4,
+            "six": 5,
+            "seven": 6,
+            "eight": 5,
+            "nine": 4,
+            "ten": 3,
+            "eleven": 2,
+            "twelve": 1
+          }
+        },
+        {
+          "$type": "list",
+          "name": "two-dices-external-list",
+          "list-file": "..\\..\\..\\..\\OmniGenerator.Lib\\Resources\\Lists\\twodices.txt"
+        }
+      ],
+      "elements": []
+    }
+  }
+}

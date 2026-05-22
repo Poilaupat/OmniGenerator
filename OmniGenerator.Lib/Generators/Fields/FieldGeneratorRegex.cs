@@ -8,7 +8,7 @@ namespace OmniGenerator.Lib.Generators.Fields
     /// </summary>
     internal class FieldGeneratorRegex : AbstractFieldGenerator<string>
     {
-        private readonly Xeger _xeger;
+        private readonly ThreadLocal<Xeger> _xeger;
 
         /// <summary>
         /// Creates a new <see cref="FieldGeneratorRegex"/>
@@ -16,14 +16,11 @@ namespace OmniGenerator.Lib.Generators.Fields
         /// <param name="name">The name of the generator</param>
         /// <param name="pattern">The regular expression pattern</param>
         public FieldGeneratorRegex(string name, string pattern)
-            : base(name)
-        {
-            _xeger = new Xeger(pattern);
-        }
+            : base(name) => _xeger = new ThreadLocal<Xeger>(() => new Xeger(pattern));
 
         protected override string GenerateValue()
         {
-            return _xeger.Generate();
+            return _xeger.Value!.Generate();
         }
     }
 }

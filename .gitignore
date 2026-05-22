@@ -146,6 +146,7 @@ _TeamCity*
 coverage*.json
 coverage*.xml
 coverage*.info
+[Cc]overage[Rr]eport/
 
 # Visual Studio code coverage results
 *.coverage
@@ -399,3 +400,6 @@ FodyWeavers.xsd
 /Output/20231106105201_653368123.zip
 /Output/20231106105308_964385439.zip
 /Output
+
+# Local development overrides
+OmniGenerator.Cli/appsettings.Development.json

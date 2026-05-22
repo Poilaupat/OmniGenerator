@@ -1,48 +1,45 @@
-﻿using OmniGenerator.Lib.Interfaces.FieldGenerators;
+﻿using OmniGenerator.Lib.Generators.Interfaces;
 
 namespace OmniGenerator.Lib.Generators.Fields
 {
     /// <summary>
-    /// Base type for all field generators
+    /// Base type for all field generators.
+    /// Provides a framework for generating typed values and managing the last generated value.
     /// </summary>
-    /// <typeparam name="T">The type of the values produced by the <see cref="AbstractFieldGenerator"/></typeparam>
+    /// <typeparam name="T">The type of the values produced by the <see cref="AbstractFieldGenerator{T}"/>.</typeparam>
     internal abstract class AbstractFieldGenerator<T> : IFieldGenerator
         where T : notnull
     {
+        private readonly object _lock = new();
         private T? _lastValue;
 
         /// <summary>
-        /// The typed last value produced by the <see cref="AbstractFieldGenerator{T}"/>
-        /// If no value was was ever generated, throw a <see cref="InvalidOperationException"/>
-        /// </summary>
-        /// <exception cref="InvalidOperationException"/>
-        public T LastValue 
-        { 
-            get
-            {
-                if (_lastValue is null)
-                    throw new InvalidOperationException($"{ this.Name } : No value was generated. Call {nameof(RefreshValue)} first.");
-                return _lastValue;
-            }
-        }
-
-        /// <summary>
-        /// The boxed last value produced by the <see cref="AbstractFieldGenerator{T}"/>
-        /// If no value was was ever generated, throw a <see cref="InvalidOperationException"/>
-        /// </summary>
-        object IFieldGenerator.LastValue => LastValue;
-
-        /// <summary>
-        /// The <see cref="AbstractFieldGenerator{T}" name/>
+        /// Gets the name of the generator.
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// Creates a new <see cref="AbstractFieldGenerator{T}"/>
-        /// If the provided name is not valid, throws a <see cref="ArgumentException"/>
+        /// Gets the last value produced by the generator, boxed as an object.
+        /// If no value was ever generated, throws a <see cref="InvalidOperationException"/>.
         /// </summary>
-        /// <param name="name">The name of the generator</param>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="InvalidOperationException">Thrown if no value was generated.</exception>
+        object IFieldGenerator.LastValue => LastValue;
+
+        /// <summary>
+        /// Generates the next value and returns it, boxed as an object.
+        /// </summary>
+        /// <returns>The next generated value, boxed as an object.</returns>
+        object IFieldGenerator.GenerateNextValue()
+        {
+            return GenerateNextValue();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractFieldGenerator{T}"/> class.
+        /// If the provided name is not valid, throws a <see cref="ArgumentException"/>.
+        /// </summary>
+        /// <param name="name">The name of the generator.</param>
+        /// <exception cref="ArgumentException">Thrown if the name is null, empty, or whitespace.</exception>
         protected AbstractFieldGenerator(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -52,17 +49,38 @@ namespace OmniGenerator.Lib.Generators.Fields
         }
 
         /// <summary>
-        /// Affects a new value to LastValue 
+        /// Gets the last value produced by the generator.
+        /// If no value was ever generated, throws a <see cref="InvalidOperationException"/>.
         /// </summary>
-        public virtual void RefreshValue()
+        /// <exception cref="InvalidOperationException">Thrown if no value was generated.</exception>
+        public T LastValue
         {
-            _lastValue = GenerateValue();
+            get
+            {
+                if (_lastValue is null)
+                    throw new InvalidOperationException($"{this.Name} : No value was generated. Call a value generation method first.");
+                return _lastValue;
+            }
         }
 
         /// <summary>
-        /// Generates a new value;
+        /// Generates the next value and returns it.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The next generated value.</returns>
+        public T GenerateNextValue()
+        {
+            lock (_lock)
+            {
+                _lastValue = GenerateValue();
+                return _lastValue;
+            }
+        }
+
+        /// <summary>
+        /// Generates a new value.
+        /// This method must be implemented by derived classes to define the logic for value generation.
+        /// </summary>
+        /// <returns>The generated value.</returns>
         protected abstract T GenerateValue();
     }
 }

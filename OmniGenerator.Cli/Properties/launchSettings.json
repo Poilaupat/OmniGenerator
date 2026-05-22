@@ -1,0 +1,68 @@
+{
+  "profiles": {
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    },
+    "PmniGenerator.Cli.Help": {
+      "commandName": "Project",
+      "commandLineArgs": "--help"
+    },
+    "Omnigenerator.Cli.Infinite": {
+      "commandName": "Project",
+      "commandLineArgs": "infinite"
+    },
+    "OmniGenerator.Cli.About": {
+      "commandName": "Project",
+      "commandLineArgs": "about"
+    },
+    "OmniGenerator.Cli.Help": {
+      "commandName": "Project",
+      "commandLineArgs": "-h"
+    },
+    "OmniGenerator.Cli.PluginDetails": {
+      "commandName": "Project",
+      "commandLineArgs": "plugin details \"renderer.omni.cheque\""
+    },
+    "OmniGenerator.Cli.PluginList": {
+      "commandName": "Project",
+      "commandLineArgs": "plugin list -r -p"
+    },
+    "OmniGenerator.Cli.Generate.Eligibility": {
+      "commandName": "Project",
+      "commandLineArgs": "generate one \"..\\..\\..\\..\\Assets\\SampleParamFiles\\param-compliance-eligibility.json\" \"..\\..\\..\\..\\Output\""
+    },
+    "OmniGenerator.Cli.Generate.Default": {
+      "commandName": "Project",
+      "commandLineArgs": "generate one \"..\\..\\..\\..\\Assets\\SampleParamFiles\\param.json\" \"..\\..\\..\\..\\Output\""
+    },
+    "OmniGenerator.Cli.Generate.Debug": {
+      "commandName": "Project",
+      "commandLineArgs": "generate one \"..\\..\\..\\..\\Assets\\SampleParamFiles\\param-debug.json\" \"..\\..\\..\\..\\Output\""
+    },
+    "OmniGenerator.Cli.Generate.AllGenerators": {
+      "commandName": "Project",
+      "commandLineArgs": "generate one \"..\\..\\..\\..\\Assets\\SampleParamFiles\\param-all-generators.json\" \"..\\..\\..\\..\\Output\""
+    },
+    "OmniGenerator.Cli.Generate.List": {
+      "commandName": "Project",
+      "commandLineArgs": "generate one \"..\\..\\..\\..\\Assets\\SampleParamFiles\\param-lists.json\" \"..\\..\\..\\..\\Output\""
+    },
+    "OmniGenerator.Cli.Generate.LotPakJpk": {
+      "commandName": "Project",
+      "commandLineArgs": "generate one \"..\\..\\..\\..\\Assets\\SampleParamFiles\\param-lotpakjpk.json\" \"..\\..\\..\\..\\Output\""
+    },
+    "OmniGenerator.Cli.Generate.Remettant": {
+      "commandName": "Project",
+      "commandLineArgs": "generate one \"..\\..\\..\\..\\Assets\\SampleParamFiles\\param-remettant.json\" \"..\\..\\..\\..\\Output\""
+    },
+    "OmniGenerator.Cli.Generate.Sql": {
+      "commandName": "Project",
+      "commandLineArgs": "generate one \"..\\..\\..\\..\\Assets\\SampleParamFiles\\param-sql.json\" \"..\\..\\..\\..\\Output\""
+    },
+    "OmniGenerator.Cli.GenerateMany": {
+      "commandName": "Project",
+      "commandLineArgs": "generate many \"..\\..\\..\\..\\Assets\\SampleParamFiles\\schedule-plan-sample.json\""
+    }
+  }
+}

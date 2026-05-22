@@ -1,0 +1,116 @@
+{
+  "$schema": "../../omnigenerator-schema.json",
+  "fields": [
+    {
+      "$type": "constant",
+      "name": "encline",
+      "value": "03"
+    },
+    {
+      "$type": "numeric",
+      "name": "amount",
+      "min": 100,
+      "max": 99999
+    },
+    {
+      "$type": "regex",
+      "name": "dataread",
+      "pattern": "\\d{7} \\d{9}908 \\d{12}"
+    },
+    {
+      "$type": "regex",
+      "name": "deposit-account",
+      "pattern": "\\d{11}"
+    },
+    {
+      "$type": "key",
+      "name": "rlmc",
+      "dependent-upon": "dataread",
+      "key-type": "rlmc"
+    },
+    {
+      "$type": "constant",
+      "name": "bank-name",
+      "value": "Banque Specimen"
+    },
+    {
+      "$type": "list",
+      "name": "bank-zip-city",
+      "list-file": "./Resources/Lists/zipcodes_cities.txt"
+    },
+    {
+      "$type": "list",
+      "name": "bank-lane",
+      "list-file": "./Resources/Lists/addresses.txt"
+    },
+    {
+      "$type": "regex",
+      "name": "bank-lane-number",
+      "pattern": "\\d{1,3}"
+    },
+    {
+      "$type": "composite",
+      "name": "bank-address",
+      "dependent-upon": "bank-lane,bank-lane-number",
+      "format": " {{bank-lane-number}} {{bank-lane}}"
+    },
+    {
+      "$type": "regex",
+      "name": "bank-phone",
+      "pattern": "0(2|3|4|5) \\d{2} \\d{2} \\d{2} \\d{2}"
+    },
+    {
+      "$type": "constant",
+      "name": "payee-name",
+      "value": "Simon Delapille"
+    },
+    {
+      "$type": "list",
+      "name": "place",
+      "list-file": "./Resources/Lists/zipcodes_cities.txt"
+    },
+    {
+      "$type": "list",
+      "name": "payor-last-name",
+      "list-file": "./Resources/Lists/last_names.txt"
+    },
+    {
+      "$type": "list",
+      "name": "payor-first-name",
+      "list-file": "./Resources/Lists/first_names.txt"
+    },
+    {
+      "$type": "composite",
+      "name": "payor-name",
+      "dependent-upon": "payor-first-name,payor-last-name",
+      "format": "{{payor-first-name}} {{payor-last-name}}"
+    },
+    {
+      "$type": "list",
+      "name": "payor-zip-city",
+      "list-file": "./Resources/Lists/zipcodes_cities.txt"
+    },
+    {
+      "$type": "list",
+      "name": "payor-lane",
+      "list-file": "./Resources/Lists/addresses.txt"
+    },
+    {
+      "$type": "regex",
+      "name": "payor-lane-number",
+      "pattern": "\\d{1,3}"
+    },
+    {
+      "$type": "composite",
+      "name": "payor-address",
+      "dependent-upon": "payor-lane,payor-lane-number",
+      "format": " {{payor-lane-number}} {{payor-lane}}"
+    },
+    {
+      "$type": "date",
+      "name": "date",
+      "day-diff-min": -400,
+      "day-diff-max": -3
+    }
+  ]
+}

@@ -1,21 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<EnableDynamicLoading>true</EnableDynamicLoading>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.ComponentModel.Composition" Version="8.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<InternalsVisibleTo Include="OmniGenerator.Plugins.Tessi.Test" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\OmniGenerator.Lib\OmniGenerator.Lib.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\OmniGenerator.Lib\OmniGenerator.Lib.csproj">
+			<ExcludeAssets>runtime</ExcludeAssets>
+		</ProjectReference>
+	</ItemGroup>
 
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-	    <Exec Command="call $(ProjectDir)Scripts\DeployPlugins.bat $(ProjectName) $(SolutionDir) $(OutDir)" />
-    </Target>
+	<ItemGroup>
+		<PackageReference Update="Nerdbank.GitVersioning" Version="3.9.50" />
+		<PackageReference Include="Roslynator.Analyzers" Version="4.15.0" PrivateAssets="all" />
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="call $(ProjectDir)Scripts\DeployPlugins.bat $(ProjectName) $(SolutionDir) $(OutDir)" />
+	</Target>
 
 </Project>

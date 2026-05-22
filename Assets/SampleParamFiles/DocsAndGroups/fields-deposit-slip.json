@@ -1,0 +1,42 @@
+{
+  "$schema": "../../omnigenerator-schema.json",
+  "fields": [
+    {
+      "$type": "constant",
+      "name": "encline",
+      "value": "02"
+    },
+    {
+      "$type": "constant",
+      "name": "title",
+      "value": "BORDEREAU DE REMISE GENERIQUE"
+    },
+    {
+      "$type": "regex",
+      "name": "remittance-number",
+      "pattern": "\\d{7}"
+    },
+    {
+      "$type": "regex",
+      "name": "z3",
+      "pattern": "\\d{12}"
+    },
+    {
+      "$type": "regex",
+      "name": "z2",
+      "pattern": "\\d{12}"
+    },
+    {
+      "$type": "composite",
+      "name": "dataread",
+      "dependent-upon": "remittance-number,z3,z2",
+      "format": "{{remittance-number}} {{z3}} {{z2}}"
+    },
+    {
+      "$type": "date",
+      "name": "date-remise",
+      "day-diff-min": -5,
+      "day-diff-max": 0
+    }
+  ]
+}

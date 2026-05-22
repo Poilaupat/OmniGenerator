@@ -1,0 +1,99 @@
+{
+  "$schema": "../omnigenerator-schema.json",
+  "packager": "packager.omni.imageonly",
+  "render-resolution": 300,
+  "hierarchy": {
+    "fields": [
+      {
+        "$type": "regex",
+        "name": "numlot",
+        "pattern": "\\d{9}"
+      },
+      {
+        "$type": "constant",
+        "name": "code-org",
+        "value": "30002"
+      },
+      {
+        "$type": "constant",
+        "name": "code-ou",
+        "value": "00001"
+      },
+      {
+        "$type": "constant",
+        "name": "code-cp",
+        "value": "00002"
+      },
+      {
+        "$type": "constant",
+        "name": "code-scanner",
+        "value": "002"
+      },
+      {
+        "$type": "date",
+        "name": "seed-date",
+        "day-diff-min": 1,
+        "day-diff-max": 5
+      },
+      {
+        "$type": "constant",
+        "name": "scanner-serial-number",
+        "value": "666666666"
+      }
+    ],
+    "root": {
+      "$type": "group",
+      "name": "remittance",
+      "min-occurs": 1,
+      "max-occurs": 1,
+      "fields": [
+        {
+          "$type": "aggregate",
+          "name": "total",
+          "aggregate-type": "Sum",
+          "scope": "AllChildren",
+          "target-element": "cheque",
+          "dependent-upon": "amount"
+        },
+        {
+          "$type": "aggregate",
+          "name": "count",
+          "aggregate-type": "Count",
+          "scope": "AllChildren",
+          "target-element": "cheque",
+          "dependent-upon": ""
+        }
+      ],
+      "elements": [
+        {
+          "$type": "group",
+          "name": "payment",
+          "min-occurs": 1,
+          "max-occurs": 1,
+          "field-configuration-file": "DocsAndGroups/fields-payment.json",
+          "fields": [],
+          "elements": [
+            {
+              "$type": "document",
+              "renderer": "renderer.omni.talon",
+              "name": "talon-optique",
+              "min-occurs": 1,
+              "max-occurs": 1,
+              "field-configuration-file": "DocsAndGroups/fields-payment-slip.json",
+              "fields": []
+            },
+            {
+              "$type": "document",
+              "renderer": "renderer.omni.cheque",
+              "name": "cheque",
+              "min-occurs": 1,
+              "max-occurs": 1,
+              "field-configuration-file": "DocsAndGroups/fields-cheque.json",
+              "fields": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,92 +1,98 @@
-﻿using OmniGenerator.Lib.Generators;
+﻿using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
+using OmniGenerator.Plugins.Tessi.Packagers.Compliance;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
-namespace OmniGenerator.Plugin.Tessi.Packagers.Compliance
+namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance
 {
-    [Export(typeof(IPackager))]
-    [PluginMetadata("tessi.eligibility-packager")]
+    [OmniGeneratorPluginMetadata("packager.tessi.eligibility", "A packager that produces eligibility resquest for Wecheck Compliance")]
 
-    public class EligibilityPackager : IPackager
+    public class EligibilityPackager : OmniGeneratorPluginBase, IPackager
     {
-        public async Task ProcessAsync(Root root, string path)
+        private readonly IFileSystem _fileSystem;
+
+        public EligibilityPackager() : this(new PhysicalFileSystem()) { }
+
+        public EligibilityPackager(IFileSystem fileSystem)
         {
-            var header = new Header(
-                root.Fields["bankCode"].StringValue,
-                root.Fields["bankUnitCode"].StringValue,
-                root.Fields["providerCode"].StringValue,
-                root.Fields["culture"].StringValue,
-                root.Fields["purpose"].StringValue,
-                root.Fields["bankFlow"].StringValue);
+            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        }
 
-            var jsonRoot = new JsonRoot(
-                root.Fields["schema"].StringValue,
-                root.Fields["version"].StringValue,
-                header
-                );
+        public async Task ProcessAsync(Root root, string path, int imageRenderingResolution)
+        {
+            var rootFields = new RootFields(root.Fields);
+            var jsonRoot = BuildJsonRoot(root, rootFields);
 
-            foreach (var document in root.GetDocuments(true))
-            {
-                var deposit = new Deposit(
-                    root.Fields["culture"].StringValue,
-                    document.Fields["remittingBranchCode"].StringValue,
-                    document.Fields["scanBranchCode"].StringValue,
-                    document.Fields["scanner"].StringValue,
-                    document.Fields["scanType"].StringValue,
-                    document.Fields["chain"].StringValue
-                );
-
-                var micr = new Micr(
-                    document.Fields["z4"].StringValue,
-                    document.Fields["z3"].StringValue,
-                    document.Fields["z2"].StringValue
-                    );
-
-                var check = new Check(
-                    root.Fields["culture"].StringValue,
-                    (int)document.Fields["amount"].Value,
-                    document.Fields["providerId"].StringValue,
-                    (int)document.Id,
-                    micr
-                );
-
-                var transaction = new Transaction(
-                    (int)document.Fields["amount"].Value,
-                    document.Fields["remittingBranchCode"].StringValue,
-                    document.Fields["deskCode"].StringValue,
-                    document.Fields["accountNumber"].StringValue,
-                    deposit,
-                    check
-                );
-
-                jsonRoot.Transactions.Add(transaction);
-            }
-
-            var packagename = $"BosComplianceEligibility.{root.Fields["bankCode"].StringValue}.{root.Fields["bankUnitCode"].StringValue}.{root.Fields["providerCode"].StringValue}.{root.Fields["numlot"].Value}.{DateTime.Now:yyyyMMddHHmmss}";
+            var packagename = $"BosComplianceEligibility.{rootFields.BankCode}.{rootFields.BankUnitCode}.{rootFields.ProviderCode}.{rootFields.Numlot.Value}.{DateTime.Now:yyyyMMddHHmmss}";
             var packagepath = Path.Combine(path, packagename);
 
-            if (!Directory.Exists(packagepath))
-                Directory.CreateDirectory(packagepath);
+            if (!_fileSystem.DirectoryExists(packagepath))
+                _fileSystem.CreateDirectory(packagepath);
 
-            var jsonfilename = Path.Combine(packagepath, $"{packagename}.json");
-            var topfilename = Path.Combine(packagepath, $"{packagename}.top");
             var jsonContent = JsonSerializer.Serialize(jsonRoot, new JsonSerializerOptions
             {
                 Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             });
 
-            File.WriteAllText(jsonfilename, jsonContent);
-            File.WriteAllText(topfilename, string.Empty);
+            await _fileSystem.WriteAllTextAsync(Path.Combine(packagepath, $"{packagename}.json"), jsonContent);
+            await _fileSystem.WriteAllTextAsync(Path.Combine(packagepath, $"{packagename}.top"), string.Empty);
+        }
 
-            await Task.CompletedTask;
+        internal JsonRoot BuildJsonRoot(Root root, RootFields rootFields)
+        {
+            var header = new Header(
+                rootFields.BankCode,
+                rootFields.BankUnitCode,
+                rootFields.ProviderCode,
+                rootFields.Culture,
+                rootFields.Purpose,
+                rootFields.BankFlow);
+
+            var jsonRoot = new JsonRoot(
+                rootFields.Schema,
+                rootFields.Version,
+                header);
+
+            var cheques = root.GetAllDocuments().ToArray();
+
+            for (var i = 0; i < cheques.Length; i++)
+            {
+                var cheque = new ChequeFields(cheques[i].Fields);
+
+                var deposit = new Deposit(
+                    rootFields.Culture,
+                    rootFields.BankUnitCode,
+                    rootFields.ProviderCode,
+                    cheque.Scanner,
+                    cheque.ScanType,
+                    cheque.Chain);
+
+                var micr = new Micr(
+                    cheque.Z4,
+                    cheque.Z3,
+                    cheque.Z2);
+
+                var check = new Check(
+                    rootFields.Culture,
+                    (int)cheque.Amount.Value,
+                    cheque.ProviderId,
+                    i,
+                    micr);
+
+                var transaction = new Transaction(
+                    (int)cheque.Amount.Value,
+                    cheque.RemittingBranchCode,
+                    cheque.DeskCode,
+                    cheque.AccountNumber,
+                    deposit,
+                    check);
+
+                jsonRoot.Transactions.Add(transaction);
+            }
+
+            return jsonRoot;
         }
     }
 
@@ -234,17 +240,17 @@ namespace OmniGenerator.Plugin.Tessi.Packagers.Compliance
     public class Micr
     {
         [JsonPropertyName("zone")]
-        public List<Zone> Zone { get; set; }
+        public List<Zone> Zone { get; set; } = new List<Zone>();
 
-        public Micr(string z4, string z3, string z2)
-        {
-            Zone = new List<Zone>
+        [JsonConstructor]
+        public Micr() { }
+
+        public Micr(string z4, string z3, string z2) => Zone = new List<Zone>
             {
                 new Zone("Z4", z4),
                 new Zone("Z3", z3),
                 new Zone("Z2", z2),
             };
-        }
     }
 
     public class OtherReference
@@ -255,10 +261,7 @@ namespace OmniGenerator.Plugin.Tessi.Packagers.Compliance
         [JsonPropertyName("value")]
         public string? Value { get; set; }
 
-        public OtherReference(string key)
-        {
-            Key = key;
-        }
+        public OtherReference(string key) => Key = key;
     }
 
     public class JsonRoot
@@ -319,6 +322,9 @@ namespace OmniGenerator.Plugin.Tessi.Packagers.Compliance
 
         [JsonPropertyName("checks")]
         public List<Check> Checks { get; set; }
+
+        [JsonConstructor]
+        public Transaction() { }
 
         public Transaction(int amount, string bankUnitCode, string deskCode, string accountNumber, Deposit deposit, Check cheque)
         {

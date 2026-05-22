@@ -1,4 +1,4 @@
-﻿using OmniGenerator.Lib.Generators.Fields;
+﻿using OmniGenerator.Lib.Generators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
