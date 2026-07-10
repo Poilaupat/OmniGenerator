@@ -906,8 +906,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             var result = chequeFields.Amount;
 
             // Assert
-            Assert.That(result.Name, Is.EqualTo("amount"));
-            Assert.That(result.Value, Is.EqualTo(12345.67m));
+            Assert.That(result, Is.EqualTo(12345.67m));
         }
 
         /// <summary>
@@ -926,8 +925,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             var result = chequeFields.Amount;
 
             // Assert
-            Assert.That(result.Name, Is.EqualTo("amount"));
-            Assert.That(result.Value, Is.Null);
+            Assert.That(result, Is.Null);
         }
 
         /// <summary>
@@ -951,8 +949,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             var result = chequeFields.Amount;
 
             // Assert
-            Assert.That(result.Name, Is.EqualTo("amount"));
-            Assert.That(result.Value, Is.EqualTo(value));
+            Assert.That(result, Is.EqualTo(value));
         }
 
         /// <summary>
@@ -971,8 +968,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             var result = chequeFields.Amount;
 
             // Assert
-            Assert.That(result.Name, Is.EqualTo("amount"));
-            Assert.That(result.Value, Is.EqualTo("1234.56"));
+            Assert.That(result, Is.EqualTo("1234.56"));
         }
 
         /// <summary>
@@ -1034,8 +1030,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             var result = chequeFields.Amount;
 
             // Assert
-            Assert.That(result.Name, Is.EqualTo("amount"));
-            Assert.That(result.Value, Is.EqualTo(value));
+            Assert.That(result, Is.EqualTo(value));
         }
 
         /// <summary>

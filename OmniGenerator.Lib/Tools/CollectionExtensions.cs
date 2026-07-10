@@ -97,7 +97,7 @@ namespace OmniGenerator.Lib.Tools
 
             foreach (var kvp in fields)
             {
-                expandoAsDic.Add(kvp.Key, kvp.Value.StringValue);
+                expandoAsDic.Add(kvp.Key, kvp.Value.DataStringValue);
             }
 
             return expando;

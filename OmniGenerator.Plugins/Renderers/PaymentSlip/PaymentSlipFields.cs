@@ -15,7 +15,7 @@ namespace OmniGenerator.Plugins.Renderers.PaymentSlipRenderer
         /// Initializes a new instance of the <see cref="PaymentSlipFields"/> class.
         /// </summary>
         /// <param name="fields">The field collection from the document.</param>
-        public PaymentSlipFields(FieldCollection fields) : base(fields)
+        public PaymentSlipFields(FieldCollection fields) : base(fields, FieldChannel.Image)
         {
         }
 
@@ -24,7 +24,7 @@ namespace OmniGenerator.Plugins.Renderers.PaymentSlipRenderer
         /// The amount is typically stored in cents (e.g., 12345 for 123.45 EUR).
         /// </summary>
         [FieldInfo("amount", "Amount to be debited", isRequired: true)]
-        public Field Amount => GetRequiredField("amount");
+        public object Amount => GetRequiredValue("amount")!;
 
         /// <summary>
         /// Gets the low OCRB (Optical Character Recognition-B) machine-readable line.

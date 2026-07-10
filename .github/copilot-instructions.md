@@ -1,7 +1,6 @@
 # Copilot Instructions – Argos (.NET)
 
-These instructions apply to all code suggestions made by GitHub Copilot
-for this repository.
+These instructions apply to all code suggestions made by GitHub Copilot for this repository.
 
 ## Project context
 
@@ -11,14 +10,12 @@ for this repository.
 - Application type: CLI Tool
 - Target OS: Cross-platform (Windows, Linux, macOS)
 
-
 ## Development environment
 
 - Primary OS: Windows
 - Shell: PowerShell
 - All command-line examples must use PowerShell syntax
 - Do not generate Bash, sh, zsh, or Linux-specific commands unless explicitly requested
-
 
 ## General principles
 
@@ -44,6 +41,7 @@ for this repository.
 - camelCase for private fields and locals
 - Do not use abbreviations unless well known (Id, Url, Http)
 - One concept = one name (avoid synonyms)
+- Prefer shorter and more elegant names for configuration properties
 
 ## Architecture rules
 
@@ -96,9 +94,10 @@ for this repository.
 - Do not generate migrations automatically in runtime code
 - Do not use static mutable state
 - Do not use singleton services for business logic
+- Avoid using the term 'kill-switch'
 
 ## Style
 
 - Keep methods under ~40 lines where possible
 - One responsibility per method
-- Prefer early returns over deep nesting
+- Prefer early returns over deep nesting- Prefer early returns over deep nesting

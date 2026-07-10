@@ -2,6 +2,30 @@
   "$schema": "../omnigenerator-schema.json",
   "packager": "packager.tessi.lotpakjpk",
   "hierarchy": {
+    "error-simulations": {
+      "enabled": true,
+      "disabled-errors": [],
+      "rules": [
+        {
+          "target-document": "cheque",
+          "target-field": "dataread",
+          "type": "Misread",
+          "probability": 1
+        },
+        {
+          "target-document": "slip",
+          "target-field": "dataread",
+          "type": "Substitution",
+          "probability": 1
+        },
+        {
+          "target-document": "cheque",
+          "target-field": "amount",
+          "type": "Inconsistency",
+          "probability": 1
+        }
+      ]
+    },
     "fields": [
       {
         "$type": "constant",

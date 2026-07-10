@@ -25,7 +25,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance
             var rootFields = new RootFields(root.Fields);
             var jsonRoot = BuildJsonRoot(root, rootFields);
 
-            var packagename = $"BosComplianceEligibility.{rootFields.BankCode}.{rootFields.BankUnitCode}.{rootFields.ProviderCode}.{rootFields.Numlot.Value}.{DateTime.Now:yyyyMMddHHmmss}";
+            var packagename = $"BosComplianceEligibility.{rootFields.BankCode}.{rootFields.BankUnitCode}.{rootFields.ProviderCode}.{rootFields.Numlot}.{DateTime.Now:yyyyMMddHHmmss}";
             var packagepath = Path.Combine(path, packagename);
 
             if (!_fileSystem.DirectoryExists(packagepath))
@@ -76,13 +76,13 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance
 
                 var check = new Check(
                     rootFields.Culture,
-                    (int)cheque.Amount.Value,
+                    (int)cheque.Amount,
                     cheque.ProviderId,
                     i,
                     micr);
 
                 var transaction = new Transaction(
-                    (int)cheque.Amount.Value,
+                    (int)cheque.Amount,
                     cheque.RemittingBranchCode,
                     cheque.DeskCode,
                     cheque.AccountNumber,

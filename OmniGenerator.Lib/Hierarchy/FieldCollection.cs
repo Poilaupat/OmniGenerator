@@ -1,6 +1,7 @@
 using OmniGenerator.Lib.Exceptions;
 using System.Collections;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
 
 namespace OmniGenerator.Lib.Hierarchy
@@ -56,21 +57,31 @@ namespace OmniGenerator.Lib.Hierarchy
         /// Attempts to retrieve a field by name.
         /// </summary>
         /// <param name="key">The field name to locate.</param>
-        /// <param name="value">When this method returns, contains the field if found; otherwise, the default value.</param>
+        /// <param name="value">When this method returns, contains the field if found; otherwise, <c>null</c>.</param>
         /// <returns><c>true</c> if the field was found; otherwise, <c>false</c>.</returns>
-        public bool TryGetValue(string key, out Field value) => _fields.TryGetValue(key, out value);
+        public bool TryGetValue(string key, [MaybeNullWhen(false)] out Field value) => _fields.TryGetValue(key, out value);
 
         /// <summary>
-        /// Attempts to retrieve the string value of a field by name.
+        /// Attempts to retrieve the string value of a field by name (data channel).
         /// </summary>
         /// <param name="key">The field name to locate.</param>
         /// <param name="stringValue">When this method returns, contains the string value of the field if found; otherwise, <c>null</c>.</param>
         /// <returns><c>true</c> if the field was found; otherwise, <c>false</c>.</returns>
         public bool TryGetStringValue(string key, out string? stringValue)
+            => TryGetStringValue(key, out stringValue, FieldChannel.Data);
+
+        /// <summary>
+        /// Attempts to retrieve the string value of a field by name, read from the specified channel.
+        /// </summary>
+        /// <param name="key">The field name to locate.</param>
+        /// <param name="stringValue">When this method returns, contains the string value of the field if found; otherwise, <c>null</c>.</param>
+        /// <param name="channel">The output channel to read.</param>
+        /// <returns><c>true</c> if the field was found; otherwise, <c>false</c>.</returns>
+        public bool TryGetStringValue(string key, out string? stringValue, FieldChannel channel)
         {
             if (_fields.TryGetValue(key, out var field))
             {
-                stringValue = field.StringValue;
+                stringValue = field.GetStringValue(channel);
                 return true;
             }
             stringValue = null;
@@ -85,36 +96,50 @@ namespace OmniGenerator.Lib.Hierarchy
         /// <exception cref="FieldNotFoundException">Thrown when the field name does not exist in the collection.</exception>
         public Field GetValue(string key)
         {
-            if (!_fields.TryGetValue(key, out Field value))
+            if (!_fields.TryGetValue(key, out var value))
                 throw new FieldNotFoundException($"The field '{key}' was not found in the collection.");
 
             return value;
         }
 
         /// <summary>
-        /// Gets the string value of a field by name.
+        /// Gets the string value of a field by name (data channel).
         /// </summary>
         /// <param name="key">The field name to locate.</param>
         /// <returns>The string value of the field.</returns>
         /// <exception cref="FieldNotFoundException">Thrown when the field name does not exist in the collection.</exception>
-        public string GetStringValue(string key)
-        {
-            var value = GetValue(key);
-
-            return value.StringValue;
-        }
+        public string GetStringValue(string key) => GetStringValue(key, FieldChannel.Data);
 
         /// <summary>
-        /// Gets the string value of a field by name, or returns a default value if the field is not found or has a null value.
+        /// Gets the string value of a field by name, read from the specified channel.
+        /// </summary>
+        /// <param name="key">The field name to locate.</param>
+        /// <param name="channel">The output channel to read.</param>
+        /// <returns>The string value of the field.</returns>
+        /// <exception cref="FieldNotFoundException">Thrown when the field name does not exist in the collection.</exception>
+        public string GetStringValue(string key, FieldChannel channel) => GetValue(key).GetStringValue(channel);
+
+        /// <summary>
+        /// Gets the string value of a field by name, or returns a default value if the field is not found or has a null value (data channel).
         /// </summary>
         /// <param name="key">The field name to locate.</param>
         /// <param name="defaultValue">The default value to return if the field is not found or has a null value.</param>
         /// <returns>The string value of the field if found and non-null; otherwise, the specified <paramref name="defaultValue"/>.</returns>
         public virtual string GetStringValueOrDefault(string key, string defaultValue)
+            => GetStringValueOrDefault(key, defaultValue, FieldChannel.Data);
+
+        /// <summary>
+        /// Gets the string value of a field by name, or returns a default value if the field is not found or has a null value, read from the specified channel.
+        /// </summary>
+        /// <param name="key">The field name to locate.</param>
+        /// <param name="defaultValue">The default value to return if the field is not found or has a null value.</param>
+        /// <param name="channel">The output channel to read.</param>
+        /// <returns>The string value of the field if found and non-null; otherwise, the specified <paramref name="defaultValue"/>.</returns>
+        public virtual string GetStringValueOrDefault(string key, string defaultValue, FieldChannel channel)
         {
             if (_fields.TryGetValue(key, out var field))
             {
-                return field.Value is null ? defaultValue : field.StringValue;
+                return field.GetValue(channel) is null ? defaultValue : field.GetStringValue(channel);
             }
             return defaultValue;
         }
@@ -181,18 +206,27 @@ namespace OmniGenerator.Lib.Hierarchy
 
         /// <summary>
         /// Converts the field collection to a dynamic object (ExpandoObject).
-        /// Each field's name becomes a property on the dynamic object, with its string value as the property value.
+        /// Each field's name becomes a property on the dynamic object, with its data-channel string value as the property value.
         /// </summary>
         /// <returns>A dynamic <see cref="ExpandoObject"/> containing all fields as properties.</returns>
         /// <remarks>
         /// This is useful for scenarios requiring dynamic property access, such as templating or scripting.
+        /// The data channel is used so that metadata-oriented error simulations (MISREAD, SUBSTITUTION) are reflected.
         /// </remarks>
-        public dynamic ToDynamic()
+        public dynamic ToDynamic() => ToDynamic(FieldChannel.Data);
+
+        /// <summary>
+        /// Converts the field collection to a dynamic object (ExpandoObject), reading from the specified channel.
+        /// Each field's name becomes a property on the dynamic object, with its channel string value as the property value.
+        /// </summary>
+        /// <param name="channel">The output channel to read.</param>
+        /// <returns>A dynamic <see cref="ExpandoObject"/> containing all fields as properties.</returns>
+        public dynamic ToDynamic(FieldChannel channel)
         {
             var expando = new ExpandoObject() as IDictionary<string, object>;
             foreach (var field in _fields)
             {
-                expando.Add(field.Key, field.Value.StringValue);
+                expando.Add(field.Key, field.Value.GetStringValue(channel));
             }
             return expando;
         }

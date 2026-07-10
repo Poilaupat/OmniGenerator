@@ -32,8 +32,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             var result = rootFields.Numlot;
 
             // Assert
-            Assert.That(result.Name, Is.EqualTo("numlot"));
-            Assert.That(result.Value, Is.EqualTo("12345"));
+            Assert.That(result, Is.EqualTo("12345"));
         }
 
         /// <summary>
@@ -72,10 +71,8 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             var secondAccess = rootFields.Numlot;
 
             // Assert
-            Assert.That(firstAccess.Name, Is.EqualTo(secondAccess.Name));
-            Assert.That(firstAccess.Value, Is.EqualTo(secondAccess.Value));
-            Assert.That(firstAccess.Name, Is.EqualTo("numlot"));
-            Assert.That(firstAccess.Value, Is.EqualTo("LOT-2024-001"));
+            Assert.That(firstAccess, Is.EqualTo(secondAccess));
+            Assert.That(firstAccess, Is.EqualTo("LOT-2024-001"));
         }
 
         /// <summary>
@@ -98,8 +95,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance.UnitTests
             var result = rootFields.Numlot;
 
             // Assert
-            Assert.That(result.Name, Is.EqualTo("numlot"));
-            Assert.That(result.Value, Is.EqualTo(value));
+            Assert.That(result, Is.EqualTo(value));
         }
 
         /// <summary>

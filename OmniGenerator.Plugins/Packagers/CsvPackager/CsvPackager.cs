@@ -37,7 +37,7 @@ namespace OmniGenerator.Plugins.Packagers.CsvPackager
 
                 var filefullpath = Path.Combine(packagepath, $"{docsByType.Key}.csv");
                 var data = docsByType
-                    .Select(x => x.Fields.ToDynamic());
+                    .Select(x => x.Fields.ToDynamic(FieldChannel.Data));
 
                 if (data?.Any() == true)
                 {
@@ -57,7 +57,7 @@ namespace OmniGenerator.Plugins.Packagers.CsvPackager
 
                 var filefullpath = Path.Combine(packagepath, $"{grpByType.Key}.csv");
                 var data = grpByType
-                    .Select(x => x.Fields.ToDynamic());
+                    .Select(x => x.Fields.ToDynamic(FieldChannel.Data));
 
                 if (data?.Any() == true)
                 {

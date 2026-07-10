@@ -46,7 +46,7 @@ namespace OmniGenerator.Plugins.Renderers.PaymentSlipRenderer
             svg.DrawText($"{fields.PayorZipCity}", "payor-zip-city", 80f, 8.5f, "Calibri", 2.5f, Color.Black);
 
             // Upper Right - Amount
-            svg.DrawText($"Montant : {Convert.ToSingle(fields.Amount.Value) / 100f:C}", "amount", Width - 2f, 3.5f, "Calibri", 4.2f, Color.Black, SvgFontWeight.Bold, SvgTextAnchor.End);
+            svg.DrawText($"Montant : {Convert.ToSingle(fields.Amount) / 100f:C}", "amount", Width - 2f, 3.5f, "Calibri", 4.2f, Color.Black, SvgFontWeight.Bold, SvgTextAnchor.End);
 
             // Middle right - Payee/Creditor information - Optional, if provided in fields; otherwise, will be blank
             svg.DrawText($"{fields.PayeeName}", "payee-name", 110f, 36f, "Calibri", 3.8f, Color.Black);

@@ -38,7 +38,7 @@ namespace OmniGenerator.Plugins.Tessi.Packagers.Compliance
         public string Z2 => GetRequiredString("z2");
 
         [FieldInfo("amount", "Check amount", isRequired: true)]
-        public Field Amount => GetRequiredField("amount");
+        public object Amount => GetRequiredValue("amount")!;
 
         [FieldInfo("providerId", "Provider identifier", isRequired: true)]
         public string ProviderId => GetRequiredString("providerId");

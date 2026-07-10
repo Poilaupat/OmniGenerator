@@ -21,7 +21,7 @@ namespace OmniGenerator.Plugins.Renderers.BatchTicketRenderer
         /// Initializes a new instance of the <see cref="BatchTicketFields"/> class.
         /// </summary>
         /// <param name="fields">The field collection from the batch ticket document.</param>
-        public BatchTicketFields(FieldCollection fields) : base(fields)
+        public BatchTicketFields(FieldCollection fields) : base(fields, FieldChannel.Image)
         {
         }
 

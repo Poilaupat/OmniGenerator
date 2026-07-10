@@ -33,7 +33,7 @@ Renderers and packagers are loaded as **plugins** from the `plugins/` folder pla
 | Page | Topic |
 |------|-------|
 | [CLI]({{ '/CLI' | relative_url }}) | Command-line interface reference |
-| [Configuration]({{ '/Configuration' | relative_url }}) | Configuration files: root, groups, documents, fields, renderer, packager |
+| [Configuration]({{ '/Configuration' | relative_url }}) | Configuration files: root, groups, documents, fields, renderer, packager, error simulation |
 | [Generators]({{ '/Generators' | relative_url }}) | All the available field generators |
 | [Liquid Filters]({{ '/Liquid-Filters' | relative_url }}) | Filters available inside composite fields |
 | [Plugin Development]({{ '/Plugin-Development' | relative_url }}) | Developer guide for writing your own renderers and packagers |

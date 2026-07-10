@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using OmniGenerator.Lib.Configuration;
+using OmniGenerator.Lib.ErrorSimulation;
 using OmniGenerator.Lib.Hierarchy;
 using OmniGenerator.Lib.Hierarchy.Interfaces;
 using OmniGenerator.Lib.Interfaces;
@@ -17,6 +18,7 @@ namespace OmniGenerator.Lib.Orchestration
         private readonly IPluginService _pluginService;
         private readonly IHierarchyBuilder _hierarchyBuilder;
         private readonly IDocumentRendererManager _imageRendererProcessor;
+        private readonly IErrorSimulator _errorSimulator;
         private readonly IProgressHub<GenerationStepEvent> _hub;
         private readonly ILogger<GenerationOrchestrator> _logger;
 
@@ -24,12 +26,14 @@ namespace OmniGenerator.Lib.Orchestration
             IPluginService pluginService,
             IHierarchyBuilder hierarchyBuilder,
             IDocumentRendererManager imageRendererProcessor,
+            IErrorSimulator errorSimulator,
             IProgressHub<GenerationStepEvent> hub,
             ILogger<GenerationOrchestrator> logger)
         {
             _pluginService = pluginService;
             _hierarchyBuilder = hierarchyBuilder;
             _imageRendererProcessor = imageRendererProcessor;
+            _errorSimulator = errorSimulator;
             _hub = hub;
             _logger = logger;
         }
@@ -41,6 +45,7 @@ namespace OmniGenerator.Lib.Orchestration
             string jobId = DefaultJobId)
         {
             var root = await BuildHierarchyAsync(configuration, jobId, cancellationToken);
+            ApplyErrorSimulations(root, configuration);
             await RenderImagesAsync(root, jobId, cancellationToken);
             await PackageAsync(root, configuration, outputFolderPath, jobId, cancellationToken);
 
@@ -66,6 +71,15 @@ namespace OmniGenerator.Lib.Orchestration
                 Report(jobId, GenerationStep.Hierarchy, StepStatus.Failed, ex);
                 throw;
             }
+        }
+
+        private void ApplyErrorSimulations(Root root, OmniGeneratorConfiguration configuration)
+        {
+            var errorSimulationConfig = configuration.Hierarchy.ErrorSimulations;
+            if (errorSimulationConfig is null || !errorSimulationConfig.Enabled)
+                return;
+
+            _errorSimulator.Apply(root, errorSimulationConfig);
         }
 
         private async Task RenderImagesAsync(Root root, string jobId, CancellationToken cancellationToken)

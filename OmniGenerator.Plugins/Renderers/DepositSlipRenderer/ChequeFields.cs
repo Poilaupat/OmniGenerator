@@ -19,7 +19,7 @@ namespace OmniGenerator.Plugins.Renderers.DepositSlipRenderer
         /// Initializes a new instance of the <see cref="ChequeFields"/> class.
         /// </summary>
         /// <param name="fields">The field collection from the cheque document.</param>
-        public ChequeFields(FieldCollection fields) : base(fields)
+        public ChequeFields(FieldCollection fields) : base(fields, FieldChannel.Image)
         {
         }
 
@@ -41,6 +41,6 @@ namespace OmniGenerator.Plugins.Renderers.DepositSlipRenderer
         /// For example, a value of 12345 represents 123.45 in the local currency.
         /// </summary>
         [FieldInfo("amount", "The amount of the cheque in cents", isRequired: true)]
-        public int Amount => (int)GetRequiredField("amount").Value;
+        public int Amount => (int)GetRequiredValue("amount")!;
     }
 }

@@ -22,6 +22,6 @@ namespace OmniGenerator.Plugins.Packagers.SqlScriptPackager
         /// Gets whether to truncate tables before inserting.
         /// </summary>
         [FieldInfo("truncate-before-insert", "Whether to truncate tables before inserting", isRequired: true)]
-        public Field TruncateBeforeInsert => GetRequiredField("truncate-before-insert");
+        public object TruncateBeforeInsert => GetRequiredValue("truncate-before-insert")!;
     }
 }

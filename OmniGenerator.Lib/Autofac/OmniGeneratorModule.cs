@@ -2,6 +2,8 @@
 using DotLiquid;
 using Microsoft.Extensions.Configuration;
 using OmniGenerator.Lib.Renderers;
+using OmniGenerator.Lib.ErrorSimulation;
+using OmniGenerator.Lib.ErrorSimulation.Mutators;
 using OmniGenerator.Lib.Infrastructure;
 using OmniGenerator.Lib.Liquid;
 using OmniGenerator.Lib.Mapping;
@@ -53,6 +55,12 @@ namespace OmniGenerator.Lib.Autofac
             builder.RegisterType<PhysicalFileSystem>().As<IFileSystem>().SingleInstance();
             builder.RegisterType<PluginService>().As<IPluginService>().InstancePerLifetimeScope();
             builder.RegisterType<GenerationOrchestrator>().As<IGenerationOrchestrator>().InstancePerLifetimeScope();
+
+            // Register error simulation engine and its channel-specific mutators
+            builder.RegisterType<MisreadMutator>().As<IFieldErrorMutator>().SingleInstance();
+            builder.RegisterType<SubstitutionMutator>().As<IFieldErrorMutator>().SingleInstance();
+            builder.RegisterType<InconsistencyMutator>().As<IFieldErrorMutator>().SingleInstance();
+            builder.RegisterType<ErrorSimulator>().As<IErrorSimulator>().InstancePerLifetimeScope();
 
             // Register open generic progress hub (singleton: stores last known state per jobId)
             builder.RegisterGeneric(typeof(ProgressHub<>))

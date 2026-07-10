@@ -8,6 +8,12 @@ namespace OmniGenerator.Lib.Infrastructure
     /// Base class for strongly-typed plugin field accessors.
     /// Derived classes define properties decorated with <see cref="FieldInfoAttribute"/> to provide typed access to fields.
     /// </summary>
+    /// <remarks>
+    /// Every read is routed through a <see cref="FieldChannel"/> so error simulation can make the
+    /// image and the data package diverge transparently. Renderer-side extractors pass
+    /// <see cref="FieldChannel.Image"/>; packager-side extractors keep the default
+    /// <see cref="FieldChannel.Data"/>. Plugins never need to know a simulation happened.
+    /// </remarks>
     public abstract class FieldExtractorBase
     {
         /// <summary>
@@ -16,12 +22,19 @@ namespace OmniGenerator.Lib.Infrastructure
         protected readonly FieldCollection _fields;
 
         /// <summary>
+        /// The channel used to read field values. Defaults to <see cref="FieldChannel.Data"/>.
+        /// </summary>
+        protected readonly FieldChannel _channel;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="FieldExtractorBase"/> class.
         /// </summary>
         /// <param name="fields">The field collection to wrap.</param>
-        protected FieldExtractorBase(FieldCollection fields)
+        /// <param name="channel">The output channel used to read field values. Defaults to <see cref="FieldChannel.Data"/>.</param>
+        protected FieldExtractorBase(FieldCollection fields, FieldChannel channel = FieldChannel.Data)
         {
             _fields = fields ?? throw new ArgumentNullException(nameof(fields));
+            _channel = channel;
         }
 
         /// <summary>
@@ -55,37 +68,37 @@ namespace OmniGenerator.Lib.Infrastructure
         }
 
         /// <summary>
-        /// Gets a required string value from the underlying field collection.
+        /// Gets a required string value from the underlying field collection, read from the active channel.
         /// </summary>
         /// <param name="fieldName">The name of the field.</param>
         /// <returns>The string value of the field.</returns>
         /// <exception cref="Exceptions.FieldNotFoundException">Thrown when the field is not found.</exception>
         protected string GetRequiredString(string fieldName)
         {
-            return _fields.GetStringValue(fieldName);
+            return _fields.GetStringValue(fieldName, _channel);
         }
 
         /// <summary>
-        /// Gets an optional string value from the underlying field collection.
+        /// Gets an optional string value from the underlying field collection, read from the active channel.
         /// Returns null if the field is not found.
         /// </summary>
         /// <param name="fieldName">The name of the field.</param>
         /// <returns>The string value of the field, or null if the field is not found.</returns>
         protected string? GetOptionalString(string fieldName)
         {
-            _ = _fields.TryGetStringValue(fieldName, out string value);
+            _ = _fields.TryGetStringValue(fieldName, out var value, _channel);
             return value;
         }
 
         /// <summary>
-        /// Gets an optional string value from the underlying field collection with a default value.
+        /// Gets an optional string value from the underlying field collection with a default value, read from the active channel.
         /// </summary>
         /// <param name="fieldName">The name of the field.</param>
-        /// <param name="defaultValue">The default value to return if the field is not found.</param>
+        /// <param name="defaultValue">The default value to return if the field is not found or the channel value is null.</param>
         /// <returns>The string value of the field or the default value.</returns>
         protected string GetOptionalStringOrDefault(string fieldName, string defaultValue)
         {
-            return _fields.GetStringValueOrDefault(fieldName, defaultValue);
+            return _fields.GetStringValueOrDefault(fieldName, defaultValue, _channel);
         }
 
         /// <summary>
@@ -106,8 +119,32 @@ namespace OmniGenerator.Lib.Infrastructure
         /// <returns>The field object if found; otherwise, null.</returns>
         protected Field? GetOptionalField(string fieldName)
         {
-            _ = _fields.TryGetValue(fieldName, out Field field);
-            return field;
+            return _fields.TryGetValue(fieldName, out var field) ? field : null;
+        }
+
+        /// <summary>
+        /// Gets the typed value carried by the active channel for a required field.
+        /// Prefer this over <see cref="GetRequiredField"/> when casting a value (for example to <c>int</c> or <c>DateTime</c>),
+        /// so that channel-specific error simulations are honored.
+        /// </summary>
+        /// <param name="fieldName">The name of the field.</param>
+        /// <returns>The channel value of the field.</returns>
+        /// <exception cref="Exceptions.FieldNotFoundException">Thrown when the field is not found.</exception>
+        protected object? GetRequiredValue(string fieldName)
+        {
+            return _fields.GetValue(fieldName).GetValue(_channel);
+        }
+
+        /// <summary>
+        /// Tries to get the typed value carried by the active channel for an optional field.
+        /// Prefer this over <see cref="GetOptionalField"/> when casting a value (for example to <c>int</c> or <c>DateTime</c>),
+        /// so that channel-specific error simulations are honored.
+        /// </summary>
+        /// <param name="fieldName">The name of the field.</param>
+        /// <returns>The channel value of the field, or null if the field is not found.</returns>
+        protected object? GetOptionalValue(string fieldName)
+        {
+            return _fields.TryGetValue(fieldName, out var field) ? field.GetValue(_channel) : null;
         }
     }
 }

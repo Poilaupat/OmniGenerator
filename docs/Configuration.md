@@ -38,6 +38,80 @@ The top-level object has three properties:
 
 ---
 
+## Error simulation
+
+Error simulation is configured at `hierarchy` level with the optional `error-simulations` section.
+It allows generated **data** (packager output) and **image** (renderer output) to diverge in a controlled way,
+while preserving the canonical field value for traceability.
+
+### `error-simulations`
+
+| Property | Required | Description |
+|----------|----------|-------------|
+| `enabled` | no | Enables/disables the full simulation pass. Default: `false`. |
+| `rules` | no | List of error rules evaluated for each generated document. |
+| `disabled-errors` | no | Global list of error types to disable without removing rules. |
+
+### Rule model (`rules[]`)
+
+| Property | Required | Description |
+|----------|----------|-------------|
+| `target-document` | yes | Document name to target (must match the document `name`). |
+| `target-field` | yes | Field name to target on matching documents. |
+| `type` | yes | Error type: `Misread`, `Substitution`, `Inconsistency`. |
+| `probability` | yes | Trigger probability in range `[0,1]` (for example `0.02` = 2%). |
+
+### Runtime behavior
+
+- Simulation runs **after hierarchy generation** and **before image rendering / packaging**.
+- Rules are evaluated per generated document instance.
+- A random draw is performed against each rule `probability`.
+- `Misread` and `Substitution` mutate the **data channel** only (metadata/package output).
+- `Inconsistency` mutates the **image channel** only (rendered image output).
+- Canonical `Field.Value` remains unchanged.
+- If multiple rules target the same field on the same document instance, only the **first triggered rule** is applied.
+- Error types listed in `disabled-errors` are ignored globally.
+
+### Example JSON
+
+```json
+{
+  "$schema": "../omnigenerator-schema.json",
+  "packager": "packager.omni.csv",
+  "render-resolution": 300,
+  "hierarchy": {
+    "fields": [],
+    "error-simulations": {
+      "enabled": true,
+      "disabled-errors": ["Substitution"],
+      "rules": [
+        {
+          "target-document": "cheque",
+          "target-field": "amount",
+          "type": "Misread",
+          "probability": 0.03
+        },
+        {
+          "target-document": "cheque",
+          "target-field": "beneficiary",
+          "type": "Inconsistency",
+          "probability": 0.01
+        }
+      ]
+    },
+    "root": {
+      "$type": "group",
+      "name": "remittance",
+      "min-occurs": 1,
+      "max-occurs": 1,
+      "elements": []
+    }
+  }
+}
+```
+
+---
+
 ## Elements
 
 The hierarchy is a tree of **elements**. Two element types exist, distinguished by the JSON `$type` property:

@@ -20,7 +20,7 @@ namespace OmniGenerator.Plugins.Renderers.DepositSlipRenderer
         /// Initializes a new instance of the <see cref="RemittanceFields"/> class.
         /// </summary>
         /// <param name="fields">The field collection from the remittance group.</param>
-        public RemittanceFields(FieldCollection fields) : base(fields)
+        public RemittanceFields(FieldCollection fields) : base(fields, FieldChannel.Image)
         {
         }
 
@@ -35,7 +35,7 @@ namespace OmniGenerator.Plugins.Renderers.DepositSlipRenderer
         {
             get
             {
-                if (GetOptionalField("total-cheque") is Field field && field.Value is int intValue)
+                if (GetOptionalValue("total-cheque") is int intValue)
                     return intValue;
                 return null;
             }
@@ -53,7 +53,7 @@ namespace OmniGenerator.Plugins.Renderers.DepositSlipRenderer
         {
             get
             {
-                if (GetOptionalField("total-amount") is Field field && field.Value is int intValue)
+                if (GetOptionalValue("total-amount") is int intValue)
                     return intValue;
                 return null;
             }

@@ -32,7 +32,7 @@ namespace OmniGenerator.Plugins.Packagers.ZipPackager
                 await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
 
                 var data = docsByType
-                    .Select(x => x.Fields.ToDynamic());
+                    .Select(x => x.Fields.ToDynamic(FieldChannel.Data));
 
                 if (data?.Any() == true)
                 {
@@ -52,7 +52,7 @@ namespace OmniGenerator.Plugins.Packagers.ZipPackager
                 await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
 
                 var data = grpByType
-                    .Select(x => x.Fields.ToDynamic());
+                    .Select(x => x.Fields.ToDynamic(FieldChannel.Data));
 
                 if (data?.Any() == true)
                 {

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using OmniGenerator.Lib.Tools;
 
@@ -21,6 +22,7 @@ namespace OmniGenerator.Lib.Configuration
         private static readonly JsonSerializerOptions _options = new()
         {
             TypeInfoResolver = new PolymorphicTypeResolver(),
+            Converters = { new JsonStringEnumConverter() },
         };
 
         /// <summary>
@@ -181,9 +183,62 @@ namespace OmniGenerator.Lib.Configuration
             if (config.Hierarchy.Root.GetElementsConfiguration(true).Any(e => e.Name.Equals("omni.generator.hierarchy")))
                 exception.Errors.Add("omni.generator.hierarchy is a reserved name");
 
+            // Check : error simulation rules are valid
+            CheckErrorSimulations(config, documents, exception);
+
             if (exception.Errors.Count > 0)
             {
                 throw exception;
+            }
+        }
+
+        /// <summary>
+        /// Validates the centralized error simulation configuration, accumulating any error into <paramref name="exception"/>.
+        /// </summary>
+        /// <param name="config">The configuration being validated.</param>
+        /// <param name="documents">The documents declared in the hierarchy.</param>
+        /// <param name="exception">The exception accumulating validation errors.</param>
+        private static void CheckErrorSimulations(
+            OmniGeneratorConfiguration config,
+            IEnumerable<DocumentConfiguration> documents,
+            ConfigurationException exception)
+        {
+            var errorSimulations = config.Hierarchy.ErrorSimulations;
+            if (errorSimulations is null)
+                return;
+
+            var documentsByName = documents
+                .GroupBy(d => d.Name)
+                .ToDictionary(g => g.Key, g => g.First());
+
+            for (int i = 0; i < errorSimulations.Rules.Count; i++)
+            {
+                var rule = errorSimulations.Rules[i];
+                var prefix = $"Error simulation rule #{i + 1}";
+
+                if (string.IsNullOrWhiteSpace(rule.TargetDocument))
+                    exception.Errors.Add($"{prefix} : target-document is required");
+
+                if (string.IsNullOrWhiteSpace(rule.TargetField))
+                    exception.Errors.Add($"{prefix} : target-field is required");
+
+                if (rule.Probability < 0 || rule.Probability > 1)
+                    exception.Errors.Add($"{prefix} : probability {rule.Probability} must be within [0, 1]");
+
+                if (string.IsNullOrWhiteSpace(rule.TargetDocument))
+                    continue;
+
+                if (!documentsByName.TryGetValue(rule.TargetDocument, out var document))
+                {
+                    exception.Errors.Add($"{prefix} : target-document '{rule.TargetDocument}' does not exist");
+                    continue;
+                }
+
+                if (!string.IsNullOrWhiteSpace(rule.TargetField)
+                    && !document.Fields.Any(f => f.Name.Equals(rule.TargetField)))
+                {
+                    exception.Errors.Add($"{prefix} : target-field '{rule.TargetField}' does not exist on document '{rule.TargetDocument}'");
+                }
             }
         }
     }

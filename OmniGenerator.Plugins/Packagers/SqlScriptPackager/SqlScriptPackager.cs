@@ -50,7 +50,7 @@ namespace OmniGenerator.Plugins.Packagers.SqlScriptPackager
         private IEnumerable<string> GetDeletes(Root root)
         {
             var fields = new RootFields(root.Fields);
-            var truncateTableBefore = Convert.ToBoolean(fields.TruncateBeforeInsert.Value);
+            var truncateTableBefore = Convert.ToBoolean(fields.TruncateBeforeInsert);
 
             if (truncateTableBefore)
             {
@@ -69,11 +69,11 @@ namespace OmniGenerator.Plugins.Packagers.SqlScriptPackager
         {
             return string.Join(",", fields
                 .Keys
-                .Select(fn => fields[fn].Value switch
+                .Select(fn => fields[fn].DataValue switch
                 {
                     DateTime dt => $"'{dt:yyyyMMdd HH:mm:ss}'",
                     string s    => $"'{s.Replace("'", "''")}'",
-                    _           => fields[fn].Value
+                    _           => fields[fn].DataValue
                 }));
         }
     }

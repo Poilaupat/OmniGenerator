@@ -127,7 +127,8 @@ namespace OmniGenerator.Test.Lib.Hierarchy
 
             // Assert
             Assert.That(result, Is.True);
-            Assert.That(retrievedField.Name, Is.EqualTo("TestField"));
+            Assert.That(retrievedField, Is.Not.Null);
+            Assert.That(retrievedField!.Name, Is.EqualTo("TestField"));
             Assert.That(retrievedField.Value, Is.EqualTo("TestValue"));
         }
 
@@ -142,7 +143,7 @@ namespace OmniGenerator.Test.Lib.Hierarchy
 
             // Assert
             Assert.That(result, Is.False);
-            Assert.That(retrievedField, Is.EqualTo(default(Field)));
+            Assert.That(retrievedField, Is.Null);
         }
 
         #endregion

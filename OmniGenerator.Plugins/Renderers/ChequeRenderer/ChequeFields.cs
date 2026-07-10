@@ -14,7 +14,7 @@ namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
         /// Initializes a new instance of the <see cref="ChequeFields"/> class.
         /// </summary>
         /// <param name="fields">The field collection from the document.</param>
-        public ChequeFields(FieldCollection fields) : base(fields)
+        public ChequeFields(FieldCollection fields) : base(fields, FieldChannel.Image)
         {
         }
 
@@ -73,10 +73,10 @@ namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
         public string PayorZipCity => GetOptionalStringOrDefault("payor-zip-city", "75016 Paris");
 
         /// <summary>
-        /// Gets the cheque amount field (for formatting).
+        /// Gets the cheque amount value read from the active channel (for formatting).
         /// </summary>
         [FieldInfo("amount", "Cheque amount", isRequired: true)]
-        public Field Amount => GetRequiredField("amount");
+        public object Amount => GetRequiredValue("amount")!;
 
         /// <summary>
         /// Gets the payee name.
@@ -94,7 +94,7 @@ namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
         /// Gets the date when the cheque was issued.
         /// </summary>
         [FieldInfo("date", "Date when the cheque was issued", isRequired: true)]
-        public DateTime Date => (DateTime)GetRequiredField("date").Value;
+        public DateTime Date => (DateTime)GetRequiredValue("date")!;
 
         /// <summary>
         /// Gets the deposit account number (verso).

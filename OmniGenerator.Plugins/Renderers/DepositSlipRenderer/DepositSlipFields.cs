@@ -21,7 +21,7 @@ namespace OmniGenerator.Plugins.Renderers.DepositSlipRenderer
         /// Initializes a new instance of the <see cref="DepositSlipFields"/> class.
         /// </summary>
         /// <param name="fields">The field collection from the deposit slip document.</param>
-        public DepositSlipFields(FieldCollection fields) : base(fields)
+        public DepositSlipFields(FieldCollection fields) : base(fields, FieldChannel.Image)
         {
         }
 
@@ -46,6 +46,6 @@ namespace OmniGenerator.Plugins.Renderers.DepositSlipRenderer
         /// This date is used for tracking and reconciliation purposes in the banking system.
         /// </summary>
         [FieldInfo("date-remise", "The date of the remittance", isRequired: true)]
-        public DateTime DateRemise => (DateTime)GetRequiredField("date-remise").Value;
+        public DateTime DateRemise => (DateTime)GetRequiredValue("date-remise")!;
     }
 }
