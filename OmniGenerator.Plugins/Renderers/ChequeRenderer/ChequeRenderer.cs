@@ -55,7 +55,7 @@ namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
             svg.DrawText(fields.PayorZipCity, "payor-zipcity", 61f, 47.5f, "TimesNewRoman", 2f, Color.DimGray);
 
             //Lar
-            decimal amountEuros = Convert.ToDecimal(fields.Amount) / 100m;
+            decimal amountEuros = fields.Amount / 100m;
             int euros = (int)amountEuros;
             int centimes = (int)((amountEuros - euros) * 100);
             string lar = $"{NumberToWordsRenderHelper.Convert(euros)} euros";

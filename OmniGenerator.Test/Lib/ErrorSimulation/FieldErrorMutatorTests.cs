@@ -18,7 +18,7 @@ namespace OmniGenerator.Test.Lib.ErrorSimulation
             mutator.Mutate(field);
 
             // Assert
-            Assert.That(field.Value, Is.EqualTo("123456"), "Canonical value must never be mutated.");
+            Assert.That(field.StringValue, Is.EqualTo("123456"), "Canonical value must never be mutated.");
             Assert.That(field.ImageStringValue, Is.EqualTo("123456"), "Image channel must be untouched.");
             Assert.That(field.DataStringValue, Does.Contain("?"), "Data channel should contain misread characters.");
             Assert.That(field.DataStringValue, Has.Length.EqualTo(6));
@@ -49,7 +49,7 @@ namespace OmniGenerator.Test.Lib.ErrorSimulation
             mutator.Mutate(field);
 
             // Assert
-            Assert.That(field.Value, Is.EqualTo("000000"), "Canonical value must never be mutated.");
+            Assert.That(field.StringValue, Is.EqualTo("000000"), "Canonical value must never be mutated.");
             Assert.That(field.ImageStringValue, Is.EqualTo("000000"), "Image channel must be untouched.");
             Assert.That(field.DataStringValue, Has.Length.EqualTo(6));
             Assert.That(field.DataStringValue.Count(c => c == '8'), Is.EqualTo(1), "Exactly one '0' should become '8'.");
@@ -80,7 +80,7 @@ namespace OmniGenerator.Test.Lib.ErrorSimulation
             mutator.Mutate(field);
 
             // Assert
-            Assert.That(field.Value, Is.EqualTo("123456"), "Canonical value must never be mutated.");
+            Assert.That(field.StringValue, Is.EqualTo("123456"), "Canonical value must never be mutated.");
             Assert.That(field.DataStringValue, Is.EqualTo("123456"), "Data channel must be untouched.");
             Assert.That(field.ImageStringValue, Is.Not.EqualTo("123456"), "Image channel should diverge.");
             Assert.That(field.ImageStringValue, Has.Length.EqualTo(6));

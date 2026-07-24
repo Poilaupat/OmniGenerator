@@ -130,7 +130,7 @@ namespace OmniGenerator.Lib.Infrastructure
         /// <param name="fieldName">The name of the field.</param>
         /// <returns>The channel value of the field.</returns>
         /// <exception cref="Exceptions.FieldNotFoundException">Thrown when the field is not found.</exception>
-        protected object? GetRequiredValue(string fieldName)
+        protected FieldValue GetRequiredValue(string fieldName)
         {
             return _fields.GetValue(fieldName).GetValue(_channel);
         }
@@ -142,9 +142,9 @@ namespace OmniGenerator.Lib.Infrastructure
         /// </summary>
         /// <param name="fieldName">The name of the field.</param>
         /// <returns>The channel value of the field, or null if the field is not found.</returns>
-        protected object? GetOptionalValue(string fieldName)
+        protected FieldValue? GetOptionalValue(string fieldName)
         {
-            return _fields.TryGetValue(fieldName, out var field) ? field.GetValue(_channel) : null;
+            return _fields.TryGetValue(fieldName, out var field) ? field.GetValue(_channel) : (FieldValue?)null;
         }
     }
 }

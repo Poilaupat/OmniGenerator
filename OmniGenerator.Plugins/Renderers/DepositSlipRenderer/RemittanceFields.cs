@@ -35,7 +35,8 @@ namespace OmniGenerator.Plugins.Renderers.DepositSlipRenderer
         {
             get
             {
-                if (GetOptionalValue("total-cheque") is int intValue)
+                var fieldValue = GetOptionalValue("total-cheque");
+                if (fieldValue.HasValue && fieldValue.Value.TryConvert<int>(out var intValue))
                     return intValue;
                 return null;
             }
@@ -53,7 +54,8 @@ namespace OmniGenerator.Plugins.Renderers.DepositSlipRenderer
         {
             get
             {
-                if (GetOptionalValue("total-amount") is int intValue)
+                var fieldValue = GetOptionalValue("total-amount");
+                if (fieldValue.HasValue && fieldValue.Value.TryConvert<int>(out var intValue))
                     return intValue;
                 return null;
             }

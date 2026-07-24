@@ -41,6 +41,6 @@ namespace OmniGenerator.Plugins.Renderers.DepositSlipRenderer
         /// For example, a value of 12345 represents 123.45 in the local currency.
         /// </summary>
         [FieldInfo("amount", "The amount of the cheque in cents", isRequired: true)]
-        public int Amount => (int)GetRequiredValue("amount")!;
+        public int Amount => GetRequiredValue("amount").Convert<int>();
     }
 }

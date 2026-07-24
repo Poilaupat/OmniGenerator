@@ -166,7 +166,7 @@ namespace OmniGenerator.Test.Lib.Generators
 
             Assert.That(fields, Has.Count.EqualTo(1));
             Assert.That(fields.ContainsKey("DocField"), Is.True);
-            Assert.That(fields["DocField"].Value, Is.EqualTo("DocValue"));
+            Assert.That(fields["DocField"].StringValue, Is.EqualTo("DocValue"));
         }
 
         [Test]
@@ -212,9 +212,9 @@ namespace OmniGenerator.Test.Lib.Generators
             var fields2 = container.GenerateRegularFields("TestDoc");
             var fields3 = container.GenerateRegularFields("TestDoc");
 
-            Assert.That(fields1["Counter"].Value, Is.EqualTo(0));
-            Assert.That(fields2["Counter"].Value, Is.EqualTo(1));
-            Assert.That(fields3["Counter"].Value, Is.EqualTo(2));
+            Assert.That(fields1["Counter"].Value.Convert<int>(), Is.EqualTo(0));
+            Assert.That(fields2["Counter"].Value.Convert<int>(), Is.EqualTo(1));
+            Assert.That(fields3["Counter"].Value.Convert<int>(), Is.EqualTo(2));
         }
 
         #endregion
@@ -243,8 +243,8 @@ namespace OmniGenerator.Test.Lib.Generators
             var fields = container.GenerateRootFields();
 
             Assert.That(fields, Has.Count.EqualTo(2));
-            Assert.That(fields["RootField1"].Value, Is.EqualTo("RootValue1"));
-            Assert.That(fields["RootField2"].Value, Is.EqualTo("RootValue2"));
+            Assert.That(fields["RootField1"].StringValue, Is.EqualTo("RootValue1"));
+            Assert.That(fields["RootField2"].StringValue, Is.EqualTo("RootValue2"));
         }
 
         [Test]
@@ -259,9 +259,9 @@ namespace OmniGenerator.Test.Lib.Generators
             var fields2 = container.GenerateRootFields();
             var fields3 = container.GenerateRootFields();
 
-            Assert.That(fields1["RootCounter"].Value, Is.EqualTo(100));
-            Assert.That(fields2["RootCounter"].Value, Is.EqualTo(105));
-            Assert.That(fields3["RootCounter"].Value, Is.EqualTo(110));
+            Assert.That(fields1["RootCounter"].Value.Convert<int>(), Is.EqualTo(100));
+            Assert.That(fields2["RootCounter"].Value.Convert<int>(), Is.EqualTo(105));
+            Assert.That(fields3["RootCounter"].Value.Convert<int>(), Is.EqualTo(110));
         }
 
         #endregion
@@ -325,9 +325,9 @@ namespace OmniGenerator.Test.Lib.Generators
             var fields = container.GenerateRegularFields("TestDoc");
 
             Assert.That(fields, Has.Count.EqualTo(2));
-            Assert.That(fields["Source"].Value, Is.EqualTo("TestValue"));
-            Assert.That(fields["Hash"].Value, Is.Not.Null);
-            Assert.That(fields["Hash"].Value, Is.Not.Empty);
+            Assert.That(fields["Source"].StringValue, Is.EqualTo("TestValue"));
+            Assert.That(fields["Hash"].Value.RawValue, Is.Not.Null);
+            Assert.That(fields["Hash"].StringValue, Is.Not.Empty);
         }
 
         #endregion

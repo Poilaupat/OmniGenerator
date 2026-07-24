@@ -81,7 +81,7 @@ namespace OmniGenerator.Test.Lib.ErrorSimulation
 
             // Assert
             var field = root.GetAllDocuments().Single().Fields["Amount"];
-            Assert.That(field.Value, Is.EqualTo("123456"));
+            Assert.That(field.StringValue, Is.EqualTo("123456"));
             Assert.That(field.DataStringValue, Does.Contain("?"));
         }
 

@@ -27,46 +27,57 @@ namespace OmniGenerator.Lib.Hierarchy
         /// The original generated value. This is the source of truth and is never mutated
         /// by the error simulation, so it can be used for traceability and logging.
         /// </summary>
-        public object Value { get; }
+        public FieldValue Value { get; }
 
         /// <summary>
         /// The value read by packagers (data package output). Defaults to <see cref="Value"/>
         /// and may be mutated by data-channel error simulations (e.g. MISREAD, SUBSTITUTION).
         /// </summary>
-        public object DataValue { get; set; }
+        public FieldValue DataValue { get; set; }
 
         /// <summary>
         /// The value read by renderers (image output). Defaults to <see cref="Value"/>
         /// and may be mutated by image-channel error simulations (e.g. INCONSISTENCY).
         /// </summary>
-        public object ImageValue { get; set; }
+        public FieldValue ImageValue { get; set; }
 
         /// <summary>
         /// The original value as a string representation (invariant culture).
         /// </summary>
-        public string StringValue => ToInvariantString(Value);
+        public string StringValue => Value.ToInvariantString();
 
         /// <summary>
         /// The data-channel value as a string representation (invariant culture).
         /// </summary>
-        public string DataStringValue => ToInvariantString(DataValue);
+        public string DataStringValue => DataValue.ToInvariantString();
 
         /// <summary>
         /// The image-channel value as a string representation (invariant culture).
         /// </summary>
-        public string ImageStringValue => ToInvariantString(ImageValue);
+        public string ImageStringValue => ImageValue.ToInvariantString();
 
         /// <summary>
         /// Creates a new <see cref="Field"/>. All channels are initialized to <paramref name="value"/>.
         /// </summary>
         /// <param name="name">The name of the field</param>
         /// <param name="value">The value of the field</param>
-        public Field(string name, object? value)
+        public Field(string name, FieldValue value)
         {
             Name = name;
-            Value = value!;
-            DataValue = value!;
-            ImageValue = value!;
+            Value = value;
+            DataValue = value;
+            ImageValue = value;
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="Field"/> from an <see cref="object"/> value.
+        /// All channels are initialized to the wrapped value.
+        /// </summary>
+        /// <param name="name">The name of the field</param>
+        /// <param name="value">The value of the field</param>
+        public Field(string name, object? value)
+            : this(name, FieldValue.FromObject(value))
+        {
         }
 
         /// <summary>
@@ -74,7 +85,7 @@ namespace OmniGenerator.Lib.Hierarchy
         /// </summary>
         /// <param name="channel">The output channel to read.</param>
         /// <returns>The value for the requested channel.</returns>
-        public object GetValue(FieldChannel channel) => channel switch
+        public FieldValue GetValue(FieldChannel channel) => channel switch
         {
             FieldChannel.Image => ImageValue,
             _ => DataValue,
@@ -90,8 +101,5 @@ namespace OmniGenerator.Lib.Hierarchy
             FieldChannel.Image => ImageStringValue,
             _ => DataStringValue,
         };
-
-        private static string ToInvariantString(object? value) =>
-            Convert.ToString(value, CultureInfo.InvariantCulture) ?? string.Empty;
     }
 }

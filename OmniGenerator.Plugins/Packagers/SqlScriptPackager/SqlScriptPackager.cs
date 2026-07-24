@@ -69,11 +69,11 @@ namespace OmniGenerator.Plugins.Packagers.SqlScriptPackager
         {
             return string.Join(",", fields
                 .Keys
-                .Select(fn => fields[fn].DataValue switch
+                .Select(fn => fields[fn].DataValue.RawValue switch
                 {
                     DateTime dt => $"'{dt:yyyyMMdd HH:mm:ss}'",
                     string s    => $"'{s.Replace("'", "''")}'",
-                    _           => fields[fn].DataValue
+                    _           => fields[fn].DataStringValue
                 }));
         }
     }

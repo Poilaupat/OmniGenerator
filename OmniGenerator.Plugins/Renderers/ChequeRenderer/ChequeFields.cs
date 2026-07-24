@@ -76,7 +76,7 @@ namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
         /// Gets the cheque amount value read from the active channel (for formatting).
         /// </summary>
         [FieldInfo("amount", "Cheque amount", isRequired: true)]
-        public object Amount => GetRequiredValue("amount")!;
+        public int Amount => GetRequiredValue("amount").Convert<int>();
 
         /// <summary>
         /// Gets the payee name.
@@ -94,7 +94,7 @@ namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
         /// Gets the date when the cheque was issued.
         /// </summary>
         [FieldInfo("date", "Date when the cheque was issued", isRequired: true)]
-        public DateTime Date => (DateTime)GetRequiredValue("date")!;
+        public DateTime Date => GetRequiredValue("date").Convert<DateTime>();
 
         /// <summary>
         /// Gets the deposit account number (verso).

@@ -89,7 +89,7 @@ namespace OmniGenerator.Cli.Commands
             catch (Exception ex)
             {
                 logger.LogError(ex, "An error occurred while scheduling generation jobs.");
-                return -1;
+                return 1;
             }
             finally
             {

@@ -87,11 +87,12 @@ try
     });
 
     //Spectre.Cli app run
-    await app.RunAsync(args, cts.Token);
+    Environment.ExitCode = await app.RunAsync(args, cts.Token);
 }
 catch (Exception e)
 {
     Log.Error(e, "Error"); //TODO : Do not seems to log ??
+    Environment.ExitCode = 1;
 }
 finally
 {

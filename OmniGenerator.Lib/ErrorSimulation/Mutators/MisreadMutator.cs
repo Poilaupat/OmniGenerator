@@ -30,7 +30,7 @@ namespace OmniGenerator.Lib.ErrorSimulation.Mutators
                 characters[i] = MisreadChar;
 
             var mutated = new string(characters);
-            field.DataValue = FieldValueCoercion.Coerce(field.DataValue, mutated);
+            field.DataValue = field.DataValue.CoerceFromString(mutated);
         }
     }
 }

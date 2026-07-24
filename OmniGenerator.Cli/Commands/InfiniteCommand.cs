@@ -41,7 +41,7 @@ namespace OmniGenerator.Cli.Commands
                 }
 
                 AnsiConsole.Console.MarkupLine("[green]I'm alive![/]");
-                await Task.Delay(2000, cancellation);
+                await Task.Delay(2000, CancellationToken.None);
             }
         }
     }

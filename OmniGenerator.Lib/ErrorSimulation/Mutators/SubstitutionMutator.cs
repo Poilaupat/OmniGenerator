@@ -52,7 +52,7 @@ namespace OmniGenerator.Lib.ErrorSimulation.Mutators
             characters[position] = ConfusionTable[current[position]];
 
             var mutated = new string(characters);
-            field.DataValue = FieldValueCoercion.Coerce(field.DataValue, mutated);
+            field.DataValue = field.DataValue.CoerceFromString(mutated);
         }
     }
 }

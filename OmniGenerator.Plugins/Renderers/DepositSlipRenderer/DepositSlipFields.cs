@@ -46,6 +46,6 @@ namespace OmniGenerator.Plugins.Renderers.DepositSlipRenderer
         /// This date is used for tracking and reconciliation purposes in the banking system.
         /// </summary>
         [FieldInfo("date-remise", "The date of the remittance", isRequired: true)]
-        public DateTime DateRemise => (DateTime)GetRequiredValue("date-remise")!;
+        public DateTime DateRemise => GetRequiredValue("date-remise").Convert<DateTime>();
     }
 }

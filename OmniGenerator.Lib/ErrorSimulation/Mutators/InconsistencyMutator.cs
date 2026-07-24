@@ -40,7 +40,7 @@ namespace OmniGenerator.Lib.ErrorSimulation.Mutators
             }
 
             var mutated = new string(characters);
-            field.ImageValue = FieldValueCoercion.Coerce(field.ImageValue, mutated);
+            field.ImageValue = field.ImageValue.CoerceFromString(mutated);
         }
 
         private static char ShiftDigit(char digit)

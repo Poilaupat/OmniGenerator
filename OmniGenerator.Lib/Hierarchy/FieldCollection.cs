@@ -139,7 +139,8 @@ namespace OmniGenerator.Lib.Hierarchy
         {
             if (_fields.TryGetValue(key, out var field))
             {
-                return field.GetValue(channel) is null ? defaultValue : field.GetStringValue(channel);
+                var value = field.GetValue(channel);
+                return value.RawValue is null ? defaultValue : field.GetStringValue(channel);
             }
             return defaultValue;
         }

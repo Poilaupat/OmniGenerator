@@ -74,7 +74,7 @@ namespace OmniGenerator.Lib.Generators.Fields
         {
             return Group
                 ?.GetElements(TargetElement, Scope == EScope.AllChildren)
-                .Sum(x => Convert.ToInt32(x.Fields[DependenceNames.Single()].Value))
+                .Sum(x => x.Fields[DependenceNames.Single()].Value.Convert<int>())
                 ?? 0;
         }
 

@@ -121,7 +121,7 @@ namespace OmniGenerator.Test.Lib.Generators
             Assert.That(result, Has.Count.EqualTo(1));
             Assert.That(result.ContainsKey("TestField"), Is.True);
             Assert.That(result["TestField"].Name, Is.EqualTo("TestField"));
-            Assert.That(result["TestField"].Value, Is.EqualTo("TestValue"));
+            Assert.That(result["TestField"].StringValue, Is.EqualTo("TestValue"));
         }
 
         [Test]
@@ -138,9 +138,9 @@ namespace OmniGenerator.Test.Lib.Generators
             var result = collection.GenerateFields();
 
             Assert.That(result, Has.Count.EqualTo(3));
-            Assert.That(result["Field1"].Value, Is.EqualTo("Value1"));
-            Assert.That(result["Field2"].Value, Is.EqualTo("Value2"));
-            Assert.That(result["Field3"].Value, Is.EqualTo("Value3"));
+            Assert.That(result["Field1"].StringValue, Is.EqualTo("Value1"));
+            Assert.That(result["Field2"].StringValue, Is.EqualTo("Value2"));
+            Assert.That(result["Field3"].StringValue, Is.EqualTo("Value3"));
         }
 
         [Test]
@@ -155,8 +155,8 @@ namespace OmniGenerator.Test.Lib.Generators
             var result = collection.GenerateFields();
 
             Assert.That(result, Has.Count.EqualTo(1));
-            Assert.That(result["NumField"].Value, Is.TypeOf<int>());
-            var value = (int)result["NumField"].Value;
+            Assert.That(result["NumField"].Value.ValueType, Is.EqualTo(typeof(int)));
+            var value = result["NumField"].Value.Convert<int>();
             Assert.That(value, Is.GreaterThanOrEqualTo(10));
             Assert.That(value, Is.LessThan(20));
         }
@@ -193,7 +193,7 @@ namespace OmniGenerator.Test.Lib.Generators
             Assert.That(result, Has.Count.EqualTo(2));
             Assert.That(result.ContainsKey("SourceField"), Is.True);
             Assert.That(result.ContainsKey("KeyField"), Is.True);
-            Assert.That(result["KeyField"].Value, Is.Not.Null);
+            Assert.That(result["KeyField"].Value.RawValue, Is.Not.Null);
         }
 
         [Test]
@@ -209,9 +209,9 @@ namespace OmniGenerator.Test.Lib.Generators
             var result2 = collection.GenerateFields();
             var result3 = collection.GenerateFields();
 
-            Assert.That(result1["IncrementField"].Value, Is.EqualTo(1));
-            Assert.That(result2["IncrementField"].Value, Is.EqualTo(2));
-            Assert.That(result3["IncrementField"].Value, Is.EqualTo(3));
+            Assert.That(result1["IncrementField"].Value.Convert<int>(), Is.EqualTo(1));
+            Assert.That(result2["IncrementField"].Value.Convert<int>(), Is.EqualTo(2));
+            Assert.That(result3["IncrementField"].Value.Convert<int>(), Is.EqualTo(3));
         }
 
         [Test]
@@ -228,7 +228,7 @@ namespace OmniGenerator.Test.Lib.Generators
             var result = collection.GenerateFields();
 
             Assert.That(result, Has.Count.EqualTo(3));
-            Assert.That(result["FullName"].Value, Is.EqualTo("John Doe"));
+            Assert.That(result["FullName"].StringValue, Is.EqualTo("John Doe"));
         }
 
         [Test]
@@ -245,9 +245,9 @@ namespace OmniGenerator.Test.Lib.Generators
             var result = collection.GenerateFields();
 
             Assert.That(result, Has.Count.EqualTo(3));
-            Assert.That(result["A"].Value, Is.EqualTo("ValueA"));
-            Assert.That(result["B"].Value, Is.Not.Null);
-            Assert.That(result["C"].Value, Is.EqualTo("ValueA+ValueA"));
+            Assert.That(result["A"].StringValue, Is.EqualTo("ValueA"));
+            Assert.That(result["B"].Value.RawValue, Is.Not.Null);
+            Assert.That(result["C"].StringValue, Is.EqualTo("ValueA+ValueA"));
         }
 
         #endregion
@@ -324,7 +324,7 @@ namespace OmniGenerator.Test.Lib.Generators
 
             // Should generate 100 unique increments without crashes
             var finalResult = collection.GenerateFields();
-            var counterValue = Convert.ToInt32(finalResult["Counter"].Value);
+            var counterValue = finalResult["Counter"].Value.Convert<int>();
             Assert.That(counterValue, Is.EqualTo(101));
         }
 

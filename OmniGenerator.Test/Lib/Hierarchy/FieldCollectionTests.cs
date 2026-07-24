@@ -37,7 +37,7 @@ namespace OmniGenerator.Test.Lib.Hierarchy
             // Assert
             Assert.That(collection.Count, Is.EqualTo(1));
             Assert.That(collection.ContainsKey("TestField"), Is.True);
-            Assert.That(collection["TestField"].Value, Is.EqualTo("TestValue"));
+            Assert.That(collection["TestField"].StringValue, Is.EqualTo("TestValue"));
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace OmniGenerator.Test.Lib.Hierarchy
 
             // Assert
             Assert.That(collection.Count, Is.EqualTo(1));
-            Assert.That(collection["TestField"].Value, Is.EqualTo("FirstValue"));
+            Assert.That(collection["TestField"].StringValue, Is.EqualTo("FirstValue"));
         }
 
         [Test]
@@ -70,7 +70,7 @@ namespace OmniGenerator.Test.Lib.Hierarchy
 
             // Assert
             Assert.That(result.Name, Is.EqualTo("TestField"));
-            Assert.That(result.Value, Is.EqualTo(42));
+            Assert.That(result.Value.Convert<int>(), Is.EqualTo(42));
         }
 
         [Test]
@@ -129,7 +129,7 @@ namespace OmniGenerator.Test.Lib.Hierarchy
             Assert.That(result, Is.True);
             Assert.That(retrievedField, Is.Not.Null);
             Assert.That(retrievedField!.Name, Is.EqualTo("TestField"));
-            Assert.That(retrievedField.Value, Is.EqualTo("TestValue"));
+            Assert.That(retrievedField.StringValue, Is.EqualTo("TestValue"));
         }
 
         [Test]
@@ -226,7 +226,7 @@ namespace OmniGenerator.Test.Lib.Hierarchy
 
             // Assert
             Assert.That(result.Name, Is.EqualTo("TestField"));
-            Assert.That(result.Value, Is.EqualTo("TestValue"));
+            Assert.That(result.StringValue, Is.EqualTo("TestValue"));
         }
 
         [Test]
@@ -396,8 +396,8 @@ namespace OmniGenerator.Test.Lib.Hierarchy
 
             // Assert
             Assert.That(collection1.Count, Is.EqualTo(2));
-            Assert.That(collection1["Field1"].Value, Is.EqualTo("OriginalValue"));
-            Assert.That(collection1["Field2"].Value, Is.EqualTo("Value2"));
+            Assert.That(collection1["Field1"].StringValue, Is.EqualTo("OriginalValue"));
+            Assert.That(collection1["Field2"].StringValue, Is.EqualTo("Value2"));
         }
 
         [Test]
@@ -501,8 +501,8 @@ namespace OmniGenerator.Test.Lib.Hierarchy
 
             // Assert
             Assert.That(values.Count, Is.EqualTo(2));
-            Assert.That(values.Any(f => f.Name == "Field1" && (string)f.Value == "Value1"), Is.True);
-            Assert.That(values.Any(f => f.Name == "Field2" && (int)f.Value == 42), Is.True);
+            Assert.That(values.Any(f => f.Name == "Field1" && f.Value.Convert<string>() == "Value1"), Is.True);
+            Assert.That(values.Any(f => f.Name == "Field2" && f.Value.Convert<int>() == 42), Is.True);
         }
 
         #endregion
@@ -524,8 +524,8 @@ namespace OmniGenerator.Test.Lib.Hierarchy
             Assert.That(dictionary.Count, Is.EqualTo(2));
             Assert.That(dictionary.ContainsKey("Field1"), Is.True);
             Assert.That(dictionary.ContainsKey("Field2"), Is.True);
-            Assert.That(dictionary["Field1"].Value, Is.EqualTo("Value1"));
-            Assert.That(dictionary["Field2"].Value, Is.EqualTo("Value2"));
+            Assert.That(dictionary["Field1"].StringValue, Is.EqualTo("Value1"));
+            Assert.That(dictionary["Field2"].StringValue, Is.EqualTo("Value2"));
         }
 
         [Test]
@@ -612,7 +612,7 @@ namespace OmniGenerator.Test.Lib.Hierarchy
             // Try to add duplicate
             collection.Add(new Field("Field1", "NewValue"));
             Assert.That(collection.Count, Is.EqualTo(3));
-            Assert.That(collection["Field1"].Value, Is.EqualTo("Value1"));
+            Assert.That(collection["Field1"].StringValue, Is.EqualTo("Value1"));
 
             // Add range
             var otherCollection = new FieldCollection();
