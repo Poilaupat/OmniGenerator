@@ -4,10 +4,6 @@
       "commandName": "WSL2",
       "distributionName": ""
     },
-    "PmniGenerator.Cli.Help": {
-      "commandName": "Project",
-      "commandLineArgs": "--help"
-    },
     "Omnigenerator.Cli.Infinite": {
       "commandName": "Project",
       "commandLineArgs": "infinite --cancellable"
@@ -18,7 +14,7 @@
     },
     "OmniGenerator.Cli.Help": {
       "commandName": "Project",
-      "commandLineArgs": "-h"
+      "commandLineArgs": "--help"
     },
     "OmniGenerator.Cli.PluginDetails": {
       "commandName": "Project",

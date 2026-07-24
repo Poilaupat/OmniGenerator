@@ -41,7 +41,7 @@ namespace OmniGenerator.Cli.Commands
         private IScheduler? _scheduler;
         private GenerateManyCommandSettings? _settings;
 
-        public override async Task<int> ExecuteAsync(CommandContext context, GenerateManyCommandSettings settings, CancellationToken cancellationToken)
+        protected override async Task<int> ExecuteAsync(CommandContext context, GenerateManyCommandSettings settings, CancellationToken cancellationToken)
         {
             try
             {

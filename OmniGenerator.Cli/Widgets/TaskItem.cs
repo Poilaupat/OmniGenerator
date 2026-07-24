@@ -18,11 +18,11 @@ namespace OmniGenerator.Cli.Widgets
         private ETaskItemState _state = ETaskItemState.Pending;
         private readonly Dictionary<ETaskItemState, Markup> _states = new()
         {
-            { ETaskItemState.Pending, new Markup("Pending...") },
-            { ETaskItemState.Processing, new Markup("[yellow]Processing...[/]") },
-            { ETaskItemState.Skipped, new Markup("[yellow]Skipped[/]") },
-            { ETaskItemState.Failure, new Markup("[red]Failure[/]") },
-            { ETaskItemState.Success, new Markup("[green]Success[/]") }
+            { ETaskItemState.Pending, new Markup(":hourglass_not_done: Pending...") },
+            { ETaskItemState.Processing, new Markup("[yellow]:gear: Processing...[/]") },
+            { ETaskItemState.Skipped, new Markup("[yellow]:fast_forward_button: Skipped[/]") },
+            { ETaskItemState.Failure, new Markup("[red]:cross_mark: Failure[/]") },
+            { ETaskItemState.Success, new Markup("[green]:check_mark_button: Success[/]") }
         };
 
         public string Name { get; } = name;

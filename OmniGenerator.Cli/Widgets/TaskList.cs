@@ -24,8 +24,7 @@ namespace OmniGenerator.Cli.Widgets
         protected override IEnumerable<Segment> Render(RenderOptions options, int maxWidth)
         {
             var grid = new Grid()
-                .AddColumns(2)
-                .LeftAligned();
+                .AddColumns(2);
 
             foreach (var task in _tasks)
             {

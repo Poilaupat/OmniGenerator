@@ -7,8 +7,11 @@ using OmniGenerator.Lib.Autofac;
 using Serilog;
 using Spectre.Console;
 using Spectre.Console.Cli;
+using Spectre.Console.Cli.Help;
 using System.Text;
 
+// Setting Console encoding to unicode to support special characters and emojis in the console output
+Console.InputEncoding = Encoding.UTF8;
 Console.OutputEncoding = Encoding.UTF8;
 
 //Configuration file
@@ -47,13 +50,16 @@ try
 {
     //Spectre.Cli configuration
     var app = new CommandApp(registrar);
-    app.Configure(commands =>
+    app.Configure(config =>
     {
-        commands.AddCommand<AboutCommand>("about")
+        config.SetApplicationName("OmniGenerator");
+
+        // Commands configuration
+        config.AddCommand<AboutCommand>("about")
             .WithDescription("Provides info about OmniGenerator")
             .WithExample("about");
 
-        commands.AddBranch<GenerateCommandSettingsBase>("generate", generate =>
+        config.AddBranch<GenerateCommandSettingsBase>("generate", generate =>
         {
             generate.AddCommand<GenerateOneCommand>("one")
                 .WithDescription("Executes the generation process based on a configuration file and command-line settings")
@@ -66,7 +72,7 @@ try
                 .WithExample("generate", "many", "config.json", "C:\\output");
         });
 
-        commands.AddBranch<PluginCommandSettingsBase>("plugin", plugin =>
+        config.AddBranch<PluginCommandSettingsBase>("plugin", plugin =>
         {
             plugin.AddCommand<PluginListCommand>("list")
                 .WithDescription("List plugins installed")
@@ -79,7 +85,7 @@ try
         });
 
 #if DEBUG
-        commands.AddCommand<InfiniteCommand>("infinite")
+        config.AddCommand<InfiniteCommand>("infinite")
         .WithDescription("An command that takes an infinite amount of time to execute. Usefull to test CancellableAsyncCommand.")
         .WithExample("infinite")
         .WithExample("infinite", "--cancellable");

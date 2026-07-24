@@ -51,7 +51,7 @@ namespace OmniGenerator.Cli.Commands
         private HierarchyBuildingProgress? _hierarchyProgress;
         private RenderingProgress? _imageProgress;
 
-        public override async Task<int> ExecuteAsync(CommandContext context, GenerateOneCommandSettings settings, CancellationToken ct)
+        protected override async Task<int> ExecuteAsync(CommandContext context, GenerateOneCommandSettings settings, CancellationToken ct)
         {
             try
             {

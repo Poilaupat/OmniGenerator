@@ -29,7 +29,7 @@ namespace OmniGenerator.Cli.Commands
         /// <param name="settings">The settings containing the name of the plugin to inspect.</param>
         /// <param name="ct">Cancellation token.</param>
         /// <returns>A task representing the asynchronous execution, returning 0 on success.</returns>
-        public override Task<int> ExecuteAsync(CommandContext context, PluginDetailCommandSettings settings, CancellationToken ct)
+        protected override Task<int> ExecuteAsync(CommandContext context, PluginDetailCommandSettings settings, CancellationToken ct)
         {
             var plugin = pluginservice.GetAllPluginsInfo()
                 .SingleOrDefault(p => p.PluginName.Equals(settings.PluginName, StringComparison.InvariantCultureIgnoreCase));
@@ -87,7 +87,6 @@ namespace OmniGenerator.Cli.Commands
         {
             var table = new Table();
             table.Border(TableBorder.Rounded);
-            table.LeftAligned();
             table.ShowRowSeparators();
             table.HideHeaders();
             table.AddColumn(new TableColumn("Key"));
@@ -113,7 +112,6 @@ namespace OmniGenerator.Cli.Commands
 
             var table = new Table();
             table.Border(TableBorder.Rounded);
-            table.LeftAligned();
             table.ShowRowSeparators();
 
             if (plugin.ParentType == EPluginParentType.Packager)

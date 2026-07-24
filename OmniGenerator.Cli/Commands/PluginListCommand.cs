@@ -22,7 +22,7 @@ namespace OmniGenerator.Cli.Commands
         /// <param name="context">The current command context.</param>
         /// <param name="settings">The settings parsed from the command-line arguments.</param>
         /// <returns>A task representing the asynchronous execution, returning 0 on success.</returns>
-        public override Task<int> ExecuteAsync(CommandContext context, PluginListCommandSettings settings, CancellationToken ct)
+        protected override Task<int> ExecuteAsync(CommandContext context, PluginListCommandSettings settings, CancellationToken ct)
         {
             var plugins = new List<PluginInfo>();
 
@@ -34,7 +34,6 @@ namespace OmniGenerator.Cli.Commands
 
             var table = new Table();
             table.Border(TableBorder.Rounded);
-            table.LeftAligned();
             table.ShowRowSeparators();
             table.AddColumn(new TableColumn("[blue]Type[/]"));
             table.AddColumn(new TableColumn("[blue]Name[/]"));

@@ -34,7 +34,7 @@ namespace OmniGenerator.Cli.Commands
         /// </summary>
         /// <param name="context">The current command context.</param>
         /// <returns>Returns 0 if the command executed successfully.</returns>
-        public override Task<int> ExecuteAsync(CommandContext context, CancellationToken ct)
+        protected override Task<int> ExecuteAsync(CommandContext context, CancellationToken ct)
         {
             var assembly = Assembly
                 .GetExecutingAssembly()
