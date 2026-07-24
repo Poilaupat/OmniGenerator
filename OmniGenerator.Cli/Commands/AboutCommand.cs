@@ -34,7 +34,7 @@ namespace OmniGenerator.Cli.Commands
         /// </summary>
         /// <param name="context">The current command context.</param>
         /// <returns>Returns 0 if the command executed successfully.</returns>
-        public override async Task<int> ExecuteAsync(CommandContext context, CancellationToken ct)
+        public override Task<int> ExecuteAsync(CommandContext context, CancellationToken ct)
         {
             var assembly = Assembly
                 .GetExecutingAssembly()
@@ -43,7 +43,7 @@ namespace OmniGenerator.Cli.Commands
             AnsiConsole.MarkupLineInterpolated($"[bold blue]{assembly.Name}[/] Version {assembly.Version}");
             AnsiConsole.MarkupLine($":copyright:2025 Ruben Delapille");
 
-            return await Task.FromResult(0);
+            return Task.FromResult(0);
         }
     }
 }

@@ -91,7 +91,7 @@ namespace OmniGenerator.Cli.Commands
             catch (Exception ex)
             {
                 logger.LogError(ex, "An error occurred during the generation process.");
-                return -1;
+                return 1;
             }
 
             return 0;
