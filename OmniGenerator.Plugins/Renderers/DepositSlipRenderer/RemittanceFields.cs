@@ -20,7 +20,7 @@ namespace OmniGenerator.Plugins.Renderers.DepositSlipRenderer
         /// Initializes a new instance of the <see cref="RemittanceFields"/> class.
         /// </summary>
         /// <param name="fields">The field collection from the remittance group.</param>
-        public RemittanceFields(FieldCollection fields) : base(fields, FieldChannel.Image)
+        public RemittanceFields(FieldCollection fields) : base(fields, FieldChannel.Data) // Reading from the data channel here (even if it's in an image rendering context) is intended for remittance fields, to allow inconsistency simulation
         {
         }
 

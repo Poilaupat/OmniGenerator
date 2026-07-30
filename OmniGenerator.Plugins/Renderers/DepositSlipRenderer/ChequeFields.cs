@@ -19,7 +19,7 @@ namespace OmniGenerator.Plugins.Renderers.DepositSlipRenderer
         /// Initializes a new instance of the <see cref="ChequeFields"/> class.
         /// </summary>
         /// <param name="fields">The field collection from the cheque document.</param>
-        public ChequeFields(FieldCollection fields) : base(fields, FieldChannel.Image)
+        public ChequeFields(FieldCollection fields) : base(fields, FieldChannel.Data) // Reading from the data channel here (even if it's in an image rendering context) is intended for cheque fields, to allow inconsistency simulation
         {
         }
 
