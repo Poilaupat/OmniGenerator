@@ -76,6 +76,131 @@ The CLI command `plugin details <name>` reflects on these `[FieldInfo]` attribut
 
 ---
 
+## Field Channels and Error Simulation
+
+Every `Field` carries three independent values to support error simulation:
+
+```text
+Generation         Error Simulation              Plugin Consumption
+──────────         ────────────────              ──────────────────
+┌─────────┐        ┌──────────────┐             ┌──────────────┐
+│  Value  │───────>│  DataValue   │────────────>│  Packager    │
+│         │        │              │  (Data)     │  reads Data  │
+│ (truth) │        └──────────────┘             └──────────────┘
+│         │              ▲
+└─────────┘              │ Misread / Substitution
+                         │
+                    ┌──────────────┐             ┌──────────────┐
+                    │  ImageValue  │────────────>│  Renderer    │
+                    │              │  (Image)    │  reads Image │
+                    └──────────────┘             └──────────────┘
+                         ▲
+                         │ Inconsistency
+```
+
+- **`Value`** — the original generated value (source of truth, never mutated).
+- **`DataValue`** — read by packagers via `FieldChannel.Data`, mutated by `Misread` / `Substitution` errors.
+- **`ImageValue`** — read by renderers via `FieldChannel.Image`, mutated by `Inconsistency` errors.
+
+At generation time, all three are equal. The `ErrorSimulator` runs **after hierarchy generation** and **before rendering/packaging**, mutating only the relevant channel(s) according to configured rules.
+
+### Choosing the right channel
+
+When constructing a `FieldExtractorBase`, pass the appropriate `FieldChannel`:
+
+```csharp
+protected FieldExtractorBase(FieldCollection fields, FieldChannel channel = FieldChannel.Data)
+```
+
+**Decision rules**:
+
+| Use case | Channel | Rationale |
+|----------|---------|-----------|
+| **Packager** reading fields | `FieldChannel.Data` (default) | Packagers export metadata; they should see data-channel mutations. |
+| **Renderer** displaying its **own** fields | `FieldChannel.Image` | The document renders what is visually on the page (potentially mutated by `Inconsistency`). |
+| **Renderer** displaying **other documents' fields** | `FieldChannel.Data` | Reading the unmutated business value creates intentional inconsistency when the other document's image was mutated. |
+
+### Example: Simulating cross-document inconsistency
+
+Consider a deposit slip (bordereau) that lists cheque amounts. We want the cheque image to show "100.00 €" but the deposit slip to show "99.00 €" (a transcription error).
+
+**Configuration** (enable `Inconsistency` on `cheque/amount`):
+
+```json
+{
+  "hierarchy": {
+    "error-simulations": {
+      "enabled": true,
+      "rules": [
+        {
+          "target-document": "cheque",
+          "target-field": "amount",
+          "type": "Inconsistency",
+          "probability": 0.05
+        }
+      ]
+    }
+  }
+}
+```
+
+**Implementation**:
+
+```csharp
+// ChequeFields.cs — used by the deposit slip renderer to display cheque amounts
+[FieldEntity(EPluginFieldEntityType.Document, "cheque")]
+internal class ChequeFields : FieldExtractorBase
+{
+    // Reading from the Data channel (even in a rendering context) allows
+    // inconsistency simulation: the cheque image shows ImageValue (mutated),
+    // but the deposit slip shows DataValue (unmutated business truth).
+    public ChequeFields(FieldCollection fields) : base(fields, FieldChannel.Data)
+    {
+    }
+
+    [FieldInfo("amount", "Cheque amount in cents", isRequired: true)]
+    public int Amount => GetRequiredValue("amount").Convert<int>();
+}
+
+// RemittanceFields.cs — used by the deposit slip to show aggregate totals
+[FieldEntity(EPluginFieldEntityType.Group, "remittance")]
+internal class RemittanceFields : FieldExtractorBase
+{
+    // Same rationale: the deposit slip reads business data (Data channel),
+    // not the mutated image values, to create cross-document inconsistency.
+    public RemittanceFields(FieldCollection fields) : base(fields, FieldChannel.Data)
+    {
+    }
+
+    public int? Amount => GetOptionalValue("total-amount")?.Convert<int>();
+}
+
+// DepositSlipFields.cs — the deposit slip's own fields
+[FieldEntity(EPluginFieldEntityType.Document, "deposit-slip")]
+public sealed class DepositSlipFields : FieldExtractorBase
+{
+    // The deposit slip displays its OWN fields: use Image channel
+    // so mutations on the slip itself are rendered.
+    public DepositSlipFields(FieldCollection fields) : base(fields, FieldChannel.Image)
+    {
+    }
+
+    [FieldInfo("title", "Slip title", isRequired: false)]
+    public string Title => GetOptionalStringOrDefault("title", "BORDEREAU DE REMISE");
+}
+```
+
+**Result**: The cheque image shows the mutated `ImageValue` (e.g. "99.00 €"), while the deposit slip image shows the unmutated `DataValue` (e.g. "100.00 €"). The inconsistency is visible and traceable, since the canonical `Value` remains "100.00".
+
+### Best practices
+
+- **Always use `FieldChannel.Image` for a document's own fields** — this is the expected behaviour for visual documents.
+- **Use `FieldChannel.Data` when reading from `document.Parent` or child elements** — this creates realistic cross-document inconsistencies.
+- **Document your choice** with a comment if non-obvious (see examples above).
+- **Test with error simulation enabled** to verify the intended inconsistency appears correctly.
+
+---
+
 ## Writing a Renderer
 
 `IDocumentRenderer` produces an SVG document per side. Most implementations should derive from `DocumentRendererBase`, which:
