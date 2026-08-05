@@ -10,25 +10,35 @@ namespace OmniGenerator.Plugins.Packagers.SqlScriptPackager
     [OmniGeneratorPluginMetadata("packager.omni.sql", "A packager a builds SQL scripts from groups acting as tables and documents acting as table rows")]
     public class SqlScriptPackager : OmniGeneratorPluginBase, IPackager
     {
+        private readonly IFileSystem _fileSystem;
+
+        public SqlScriptPackager() : this(new PhysicalFileSystem()) { }
+
+        public SqlScriptPackager(IFileSystem fileSystem)
+        {
+            _fileSystem = fileSystem;
+        }
+
         public async Task ProcessAsync(Root root, string basepath, int imageRenderingResolution)
         {
             var packagename = $"{DateTime.Now:yyyyMMddHHmmss}_Script.sql";
 
             var filefullpath = Path.Combine(basepath, packagename);
 
-            await using (var fs = new FileStream(filefullpath, FileMode.Create, FileAccess.ReadWrite))
-            await using (var sw = new StreamWriter(fs))
+            await using (var script = new StringWriter())
             {
                 var deletes = GetDeletes(root);
                 foreach (var delete in deletes)
-                    await sw.WriteLineAsync(delete);
+                    await script.WriteLineAsync(delete);
 
                 foreach (var group in root.Groups)
                 {
                     var inserts = GetInserts(group);
                     foreach (var insert in inserts)
-                        await sw.WriteLineAsync(insert);
+                        await script.WriteLineAsync(insert);
                 }
+
+                await _fileSystem.WriteAllTextAsync(filefullpath, script.ToString());
             }
         }
 

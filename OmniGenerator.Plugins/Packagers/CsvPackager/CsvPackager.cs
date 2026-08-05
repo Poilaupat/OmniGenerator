@@ -13,6 +13,15 @@ namespace OmniGenerator.Plugins.Packagers.CsvPackager
     [OmniGeneratorPluginMetadata("packager.omni.csv", "A packager that exports images along with csv files containing each document fields")]
     public class CsvPackager : OmniGeneratorPluginBase, IPackager
     {
+        private readonly IFileSystem _fileSystem;
+
+        public CsvPackager() : this(new PhysicalFileSystem()) { }
+
+        public CsvPackager(IFileSystem fileSystem)
+        {
+            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        }
+
         /// <summary>
         /// Processes the specified <see cref="Root"/> object and exports its documents and groups as CSV files,
         /// and document images as JPEG and TIFF files, into a new package directory under the given base path.
@@ -45,7 +54,7 @@ namespace OmniGenerator.Plugins.Packagers.CsvPackager
                     csv.NextRecord();
                     csv.WriteRecords(data);
 
-                    await File.WriteAllTextAsync(filefullpath, writer.ToString());
+                    await _fileSystem.WriteAllTextAsync(filefullpath, writer.ToString());
                 }
             }
 
@@ -65,7 +74,7 @@ namespace OmniGenerator.Plugins.Packagers.CsvPackager
                     csv.NextRecord();
                     csv.WriteRecords(data);
 
-                    await File.WriteAllTextAsync(filefullpath, writer.ToString());
+                    await _fileSystem.WriteAllTextAsync(filefullpath, writer.ToString());
                 }
             }
 
@@ -88,20 +97,20 @@ namespace OmniGenerator.Plugins.Packagers.CsvPackager
         /// <param name="path">The directory path where images will be saved.</param>
         /// <param name="imageRenderingResolution">The resolution (in DPI) to use when rendering images.</param>
         /// <returns>A task representing the asynchronous file writing operation.</returns>
-        private static async Task WriteDocumentImagesAsync(int i, Document document, string path, int imageRenderingResolution)
+        private async Task WriteDocumentImagesAsync(int i, Document document, string path, int imageRenderingResolution)
         {
             if (document.RectoVectorImage is not null)
             {
                 var renderer = new SvgRenderer(document.RectoVectorImage, imageRenderingResolution);
-                await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}R.jpg"), renderer.ToJpeg());
-                await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}R.tiff"), renderer.ToTiffGroup4());
+                await _fileSystem.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}R.jpg"), renderer.ToJpeg());
+                await _fileSystem.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}R.tiff"), renderer.ToTiffGroup4());
             }
 
             if (document.VersoVectorImage is not null)
             {
                 var renderer = new SvgRenderer(document.VersoVectorImage, imageRenderingResolution);
-                await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}V.jpg"), renderer.ToJpeg());
-                await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}V.tiff"), renderer.ToTiffGroup4());
+                await _fileSystem.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}V.jpg"), renderer.ToJpeg());
+                await _fileSystem.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}V.tiff"), renderer.ToTiffGroup4());
             }
         }
     }

@@ -1,6 +1,6 @@
 {
   "$schema": "../omnigenerator-schema.json",
-  "packager": "packager.omni.zip",
+  "packager": "packager.omni.csv",
   "hierarchy": {
     "fields": [],
     "root": {

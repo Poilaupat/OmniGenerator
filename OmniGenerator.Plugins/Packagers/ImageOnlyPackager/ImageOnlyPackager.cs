@@ -13,6 +13,15 @@ namespace OmniGenerator.Plugins.Packagers.ImageOnlyPackager
     [OmniGeneratorPluginMetadata("packager.omni.imageonly", "A packager that only exports images of documents")]
     public class ImageOnlyPackager : OmniGeneratorPluginBase, IPackager
     {
+        private readonly IFileSystem _fileSystem;
+
+        public ImageOnlyPackager() : this(new PhysicalFileSystem()) { }
+
+        public ImageOnlyPackager(IFileSystem fileSystem)
+        {
+            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        }
+
         /// <summary>
         /// Processes the specified <see cref="Root"/> hierarchy and generates image files for each document.
         /// Images are saved in a directory named with the current date/time and the root's "numlot" field.
@@ -55,16 +64,16 @@ namespace OmniGenerator.Plugins.Packagers.ImageOnlyPackager
             {
                 document.RectoVectorImage.Write(Path.Combine(path, $"{i:000000}R.svg"));
                 var renderer = new SvgRenderer(document.RectoVectorImage, imageRenderingResolution);
-                await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}R.jpg"), renderer.ToJpeg());
-                await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}R.tiff"), renderer.ToTiffGroup4());
+                await _fileSystem.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}R.jpg"), renderer.ToJpeg());
+                await _fileSystem.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}R.tiff"), renderer.ToTiffGroup4());
             }
 
             if (document.VersoVectorImage is not null)
             {
                 document.VersoVectorImage.Write(Path.Combine(path, $"{i:000000}V.svg"));
                 var renderer = new SvgRenderer(document.VersoVectorImage, imageRenderingResolution);
-                await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}V.jpg"), renderer.ToJpeg());
-                await File.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}V.tiff"), renderer.ToTiffGroup4());
+                await _fileSystem.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}V.jpg"), renderer.ToJpeg());
+                await _fileSystem.WriteAllBytesAsync(Path.Combine(path, $"{i:000000}V.tiff"), renderer.ToTiffGroup4());
             }
         }
     }
