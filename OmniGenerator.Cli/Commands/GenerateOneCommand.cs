@@ -24,6 +24,7 @@ namespace OmniGenerator.Cli.Commands
         IProgressHub<GenerationStepEvent> generationHub,
         IProgressHub<HierarchyBuildingProgress> hierarchyHub,
         IProgressHub<RenderingProgress> renderingHub,
+        IProgressHub<PackagingProgress> packagingHub,
         IConfiguration configuration,
         ILogger<GenerateOneCommand> logger
         ) : AsyncCommand<GenerateOneCommandSettings>
@@ -50,6 +51,7 @@ namespace OmniGenerator.Cli.Commands
         private Exception? _error;
         private HierarchyBuildingProgress? _hierarchyProgress;
         private RenderingProgress? _imageProgress;
+        private PackagingProgress? _packagingProgress;
 
         protected override async Task<int> ExecuteAsync(CommandContext context, GenerateOneCommandSettings settings, CancellationToken ct)
         {
@@ -69,6 +71,7 @@ namespace OmniGenerator.Cli.Commands
                         generationHub.DataChanged += (_, progress) => HandleGenerationStepEvent(settings, ldc, progress);
                         hierarchyHub.DataChanged += (_, progress) => { _hierarchyProgress = progress; ThrottledRefresh(settings, ldc); };
                         renderingHub.DataChanged += (_, progress) => { _imageProgress = progress; ThrottledRefresh(settings, ldc); };
+                        packagingHub.DataChanged += (_, progress) => { _packagingProgress = progress; ThrottledRefresh(settings, ldc); };
 
                         try
                         {
@@ -160,6 +163,9 @@ namespace OmniGenerator.Cli.Commands
 
             if (_imageProgress is not null)
                 progressWidgets.Add(_imageProgress.ToWidget());
+
+            if (_packagingProgress is not null)
+                progressWidgets.Add(_packagingProgress.ToWidget());
 
             IRenderable progressContent = progressWidgets.Count switch
             {

@@ -21,6 +21,7 @@ namespace OmniGenerator.Lib.Orchestration
         private readonly IErrorSimulator _errorSimulator;
         private readonly IProgressHub<GenerationStepEvent> _hub;
         private readonly ILogger<GenerationOrchestrator> _logger;
+        private readonly IFileSystem _fileSystem;
 
         public GenerationOrchestrator(
             IPluginService pluginService,
@@ -28,7 +29,8 @@ namespace OmniGenerator.Lib.Orchestration
             IDocumentRendererManager imageRendererProcessor,
             IErrorSimulator errorSimulator,
             IProgressHub<GenerationStepEvent> hub,
-            ILogger<GenerationOrchestrator> logger)
+            ILogger<GenerationOrchestrator> logger,
+            IFileSystem fileSystem)
         {
             _pluginService = pluginService;
             _hierarchyBuilder = hierarchyBuilder;
@@ -36,6 +38,7 @@ namespace OmniGenerator.Lib.Orchestration
             _errorSimulator = errorSimulator;
             _hub = hub;
             _logger = logger;
+            _fileSystem = fileSystem;
         }
 
         public async Task<Root> ExecuteAsync(
@@ -123,8 +126,15 @@ namespace OmniGenerator.Lib.Orchestration
 
             try
             {
+                // Start packaging progress tracking
+                if (_fileSystem is PhysicalFileSystem physicalFs)
+                {
+                    physicalFs.StartPackagingJob(jobId);
+                }
+
                 Directory.CreateDirectory(outputFolderPath);
                 await packager.ProcessAsync(root, outputFolderPath, configuration.RenderResolutionDPI);
+
                 Report(jobId, GenerationStep.Package, StepStatus.Succeeded);
             }
             catch (Exception ex)
@@ -132,6 +142,14 @@ namespace OmniGenerator.Lib.Orchestration
                 _logger.LogError(ex, "An error occurred while packaging the output.");
                 Report(jobId, GenerationStep.Package, StepStatus.Failed, ex);
                 throw;
+            }
+            finally
+            {
+                // End packaging progress tracking
+                if (_fileSystem is PhysicalFileSystem physicalFs)
+                {
+                    physicalFs.EndPackagingJob();
+                }
             }
         }
 
