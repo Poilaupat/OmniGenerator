@@ -59,6 +59,10 @@
     "OmniGenerator.Cli.GenerateMany": {
       "commandName": "Project",
       "commandLineArgs": "generate many \"..\\..\\..\\..\\Assets\\SampleParamFiles\\schedule-plan-sample.json\""
+    },
+    "OmniGenerator.Cli.Generate.IotPostman": {
+      "commandName": "Project",
+      "commandLineArgs": "generate one \"..\\..\\..\\..\\Assets\\SampleParamFiles\\param-iot-postman.json\" \"..\\..\\..\\..\\Output\""
     }
   }
 }

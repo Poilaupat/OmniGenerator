@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)omnigenerator-schema.json" />
+    <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\param-iot-postman.json" />
     <Content Include="$(MSBuildThisFileDirectory)sampleparamfiles\docsandgroups\fields-batch-ticket.json" />
     <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\DocsAndGroups\fields-cheque.json" />
     <Content Include="$(MSBuildThisFileDirectory)SampleParamFiles\DocsAndGroups\fields-payment.json" />

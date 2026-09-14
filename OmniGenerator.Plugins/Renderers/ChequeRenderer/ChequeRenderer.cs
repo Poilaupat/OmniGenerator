@@ -68,7 +68,7 @@ namespace OmniGenerator.Plugins.Renderers.ChequeRenderer
             svg.DrawHandwrittenText($"{amountEuros:F2} €", "car", 132f, 31f, 3f, Color.DarkBlue, SvgFontWeight.Bold);
 
             //Payee
-            svg.DrawHandwrittenText(fields.PayeeName, "payee", 10f, 32f, 3f, Color.DarkBlue, SvgFontWeight.Bold);
+            svg.DrawHandwrittenText(fields.PayeeName.ToUpper(), "payee", 10f, 32f, 3f, Color.DarkBlue, SvgFontWeight.Bold);
 
             //Place
             svg.DrawHandwrittenText($"{string.Join(' ', fields.Place.Split(" ").Skip(1))}", "place-value", 132f, 39.5f, 3f, Color.DarkBlue, SvgFontWeight.Bold);

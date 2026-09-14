@@ -1,0 +1,114 @@
+{
+  "$schema": "../omnigenerator-schema.json",
+  "packager": "packager.tessi.iot.postman",
+  "render-resolution": 300,
+  "hierarchy": {
+    "fields": [
+      {
+        "$type": "constant",
+        "name": "code-org",
+        "value": "18715"
+      },
+      {
+        "$type": "constant",
+        "name": "code-unit-org",
+        "value": "00013"
+      },
+      {
+        "$type": "constant",
+        "name": "code-cs",
+        "value": "001"
+      }
+    ],
+    "root": {
+      "$type": "group",
+      "name": "batch",
+      "min-occurs": 1,
+      "max-occurs": 1,
+      "elements": [
+        {
+          "$type": "document",
+          "renderer": "renderer.omni.batch-ticket",
+          "name": "batch-ticket",
+          "min-occurs": 1,
+          "max-occurs": 1,
+          "fields": [
+            {
+              "$type": "constant",
+              "name": "title",
+              "value": "Ticket Lot IOT"
+            },
+            {
+              "$type": "constant",
+              "name": "z3",
+              "value": "888888888888"
+            },
+            {
+              "$type": "regex",
+              "name": "z4",
+              "pattern": "\\d{7}"
+            },
+            {
+              "$type": "composite",
+              "name": "dataread",
+              "dependent-upon": "z4,z3",
+              "format": "{{z4}} {{z3}}"
+            }
+          ]
+        },
+        {
+          "$type": "group",
+          "name": "remittance",
+          "min-occurs": 1,
+          "max-occurs": 1,
+          "fields": [
+            {
+              "$type": "aggregate",
+              "name": "total-amount",
+              "aggregate-type": "Sum",
+              "scope": "DirectChildren",
+              "target-element": "cheque",
+              "dependent-upon": "amount"
+
+            },
+            {
+              "$type": "aggregate",
+              "name": "total-cheque",
+              "aggregate-type": "Count",
+              "scope": "DirectChildren",
+              "target-element": "cheque",
+              "dependent-upon": ""
+
+            }
+          ],
+          "elements": [
+            {
+              "$type": "document",
+              "renderer": "renderer.omni.deposit-slip",
+              "name": "deposit-slip",
+              "min-occurs": 1,
+              "max-occurs": 1,
+              "field-configuration-file": "DocsAndGroups\\fields-deposit-slip.json",
+              "fields": [
+                {
+                  "$type": "constant",
+                  "name": "z3",
+                  "value": "999999999999"
+                }
+              ]
+            },
+            {
+              "$type": "document",
+              "renderer": "renderer.omni.cheque",
+              "name": "cheque",
+              "min-occurs": 1,
+              "max-occurs": 1,
+              "field-configuration-file": "DocsAndGroups\\fields-cheque.json",
+              "fields": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

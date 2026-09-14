@@ -13,7 +13,7 @@
     },
     {
       "$type": "regex",
-      "name": "remittance-number",
+      "name": "z4",
       "pattern": "\\d{7}"
     },
     {
@@ -29,8 +29,8 @@
     {
       "$type": "composite",
       "name": "dataread",
-      "dependent-upon": "remittance-number,z3,z2",
-      "format": "{{remittance-number}} {{z3}} {{z2}}"
+      "dependent-upon": "z4,z3,z2",
+      "format": "{{z4}} {{z3}} {{z2}}"
     },
     {
       "$type": "date",

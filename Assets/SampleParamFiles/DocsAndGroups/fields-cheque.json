@@ -60,9 +60,20 @@
       "pattern": "0(2|3|4|5) \\d{2} \\d{2} \\d{2} \\d{2}"
     },
     {
-      "$type": "constant",
+      "$type": "list",
+      "name": "payee-last-name",
+      "list-file": "./Resources/Lists/last_names.txt"
+    },
+    {
+      "$type": "list",
+      "name": "payee-first-name",
+      "list-file": "./Resources/Lists/first_names.txt"
+    },
+    {
+      "$type": "composite",
       "name": "payee-name",
-      "value": "Simon Delapille"
+      "dependent-upon": "payee-first-name,payee-last-name",
+      "format": "{{payee-first-name}} {{payee-last-name}}"
     },
     {
       "$type": "list",
